@@ -1,0 +1,1296 @@
+{
+  "generated": "2026-11-12",
+  "capacityHours": 609.0,
+  "neededHours": 546.7,
+  "bufferHours": 62.3,
+  "weeks": [
+    {
+      "week": 1,
+      "start": "2026-11-16",
+      "end": "2026-11-22",
+      "hours": 11.25,
+      "mds": [
+        "Block 3 (DSCI 513, 522, 561, 573)"
+      ],
+      "allocations": [
+        {
+          "id": "induction",
+          "title": "Induction: first week at the facility",
+          "hours": 2.2,
+          "status": "start+finish"
+        },
+        {
+          "id": "python-mle",
+          "title": "Python for ML engineering",
+          "hours": 9.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 2,
+      "start": "2026-11-23",
+      "end": "2026-11-29",
+      "hours": 11.25,
+      "mds": [
+        "Block 3 (DSCI 513, 522, 561, 573)"
+      ],
+      "allocations": [
+        {
+          "id": "python-mle",
+          "title": "Python for ML engineering",
+          "hours": 4.2,
+          "status": "finish"
+        },
+        {
+          "id": "linear-algebra",
+          "title": "Linear algebra for ML",
+          "hours": 7.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 3,
+      "start": "2026-11-30",
+      "end": "2026-12-06",
+      "hours": 11.25,
+      "mds": [
+        "Block 3 (DSCI 513, 522, 561, 573)"
+      ],
+      "allocations": [
+        {
+          "id": "linear-algebra",
+          "title": "Linear algebra for ML",
+          "hours": 6.1,
+          "status": "finish"
+        },
+        {
+          "id": "calculus-optimization",
+          "title": "Calculus and continuous optimization",
+          "hours": 5.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 4,
+      "start": "2026-12-07",
+      "end": "2026-12-13",
+      "hours": 11.25,
+      "mds": [
+        "Block 3 (DSCI 513, 522, 561, 573)"
+      ],
+      "allocations": [
+        {
+          "id": "calculus-optimization",
+          "title": "Calculus and continuous optimization",
+          "hours": 5.9,
+          "status": "finish"
+        },
+        {
+          "id": "probability-statistics",
+          "title": "Probability and statistics",
+          "hours": 5.4,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 5,
+      "start": "2026-12-14",
+      "end": "2026-12-20",
+      "hours": 17.5,
+      "mds": [
+        "Block 3 week 5 / end of Semester 1 (Dec 21)"
+      ],
+      "allocations": [
+        {
+          "id": "probability-statistics",
+          "title": "Probability and statistics",
+          "hours": 5.6,
+          "status": "finish"
+        },
+        {
+          "id": "information-theory",
+          "title": "Information theory",
+          "hours": 4.4,
+          "status": "start+finish"
+        },
+        {
+          "id": "linear-models",
+          "title": "Linear and logistic regression from scratch",
+          "hours": 7.5,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 6,
+      "start": "2026-12-21",
+      "end": "2026-12-27",
+      "hours": 13.0,
+      "mds": [
+        "Block 3 week 5 / end of Semester 1 (Dec 21)",
+        "Winter break"
+      ],
+      "allocations": [
+        {
+          "id": "linear-models",
+          "title": "Linear and logistic regression from scratch",
+          "hours": 7.9,
+          "status": "finish"
+        },
+        {
+          "id": "model-evaluation",
+          "title": "Model evaluation",
+          "hours": 5.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 7,
+      "start": "2026-12-28",
+      "end": "2027-01-03",
+      "hours": 16.0,
+      "mds": [
+        "Winter break"
+      ],
+      "allocations": [
+        {
+          "id": "model-evaluation",
+          "title": "Model evaluation",
+          "hours": 3.7,
+          "status": "finish"
+        },
+        {
+          "id": "trees-boosting",
+          "title": "Trees, random forests and gradient boosting",
+          "hours": 12.3,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 8,
+      "start": "2027-01-04",
+      "end": "2027-01-10",
+      "hours": 13.0,
+      "mds": [
+        "Winter break",
+        "Block 4 (DSCI 524, 541, 562, 572)"
+      ],
+      "allocations": [
+        {
+          "id": "trees-boosting",
+          "title": "Trees, random forests and gradient boosting",
+          "hours": 3.1,
+          "status": "finish"
+        },
+        {
+          "id": "feature-pipelines",
+          "title": "Feature engineering and data pipelines",
+          "hours": 9.9,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 9,
+      "start": "2027-01-11",
+      "end": "2027-01-17",
+      "hours": 11.25,
+      "mds": [
+        "Block 4 (DSCI 524, 541, 562, 572)"
+      ],
+      "allocations": [
+        {
+          "id": "feature-pipelines",
+          "title": "Feature engineering and data pipelines",
+          "hours": 1.1,
+          "status": "finish"
+        },
+        {
+          "id": "kernels-knn",
+          "title": "SVMs, kernels and k-NN",
+          "hours": 5.5,
+          "status": "start+finish"
+        },
+        {
+          "id": "unsupervised",
+          "title": "Unsupervised learning",
+          "hours": 4.6,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 10,
+      "start": "2027-01-18",
+      "end": "2027-01-24",
+      "hours": 11.25,
+      "mds": [
+        "Block 4 (DSCI 524, 541, 562, 572)"
+      ],
+      "allocations": [
+        {
+          "id": "unsupervised",
+          "title": "Unsupervised learning",
+          "hours": 7.5,
+          "status": "finish"
+        },
+        {
+          "id": "project-1",
+          "title": "Milestone project 1: Energy Desk forecaster",
+          "hours": 3.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 11,
+      "start": "2027-01-25",
+      "end": "2027-01-31",
+      "hours": 11.25,
+      "mds": [
+        "Block 4 (DSCI 524, 541, 562, 572)"
+      ],
+      "allocations": [
+        {
+          "id": "project-1",
+          "title": "Milestone project 1: Energy Desk forecaster",
+          "hours": 9.4,
+          "status": "finish"
+        },
+        {
+          "id": "autograd",
+          "title": "Autograd engine from scratch",
+          "hours": 1.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 12,
+      "start": "2027-02-01",
+      "end": "2027-02-07",
+      "hours": 17.5,
+      "mds": [
+        "Block 4 week 5"
+      ],
+      "allocations": [
+        {
+          "id": "autograd",
+          "title": "Autograd engine from scratch",
+          "hours": 13.6,
+          "status": "finish"
+        },
+        {
+          "id": "training-deep-nets",
+          "title": "Training deep networks",
+          "hours": 3.9,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 13,
+      "start": "2027-02-08",
+      "end": "2027-02-14",
+      "hours": 20.0,
+      "mds": [
+        "Semester 2 midterm break"
+      ],
+      "allocations": [
+        {
+          "id": "training-deep-nets",
+          "title": "Training deep networks",
+          "hours": 10.4,
+          "status": "finish"
+        },
+        {
+          "id": "pytorch",
+          "title": "PyTorch fluency",
+          "hours": 9.6,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 14,
+      "start": "2027-02-15",
+      "end": "2027-02-21",
+      "hours": 12.5,
+      "mds": [
+        "Block 5 (DSCI 525, 553, 563, 574)"
+      ],
+      "allocations": [
+        {
+          "id": "pytorch",
+          "title": "PyTorch fluency",
+          "hours": 1.4,
+          "status": "finish"
+        },
+        {
+          "id": "time-series",
+          "title": "Time series and probabilistic forecasting",
+          "hours": 11.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 15,
+      "start": "2027-02-22",
+      "end": "2027-02-28",
+      "hours": 11.25,
+      "mds": [
+        "Block 5 (DSCI 525, 553, 563, 574)"
+      ],
+      "allocations": [
+        {
+          "id": "time-series",
+          "title": "Time series and probabilistic forecasting",
+          "hours": 11.2,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 16,
+      "start": "2027-03-01",
+      "end": "2027-03-07",
+      "hours": 11.25,
+      "mds": [
+        "Block 5 (DSCI 525, 553, 563, 574)"
+      ],
+      "allocations": [
+        {
+          "id": "time-series",
+          "title": "Time series and probabilistic forecasting",
+          "hours": 1.8,
+          "status": "finish"
+        },
+        {
+          "id": "optimization-or",
+          "title": "Optimization and operations research",
+          "hours": 9.4,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 17,
+      "start": "2027-03-08",
+      "end": "2027-03-14",
+      "hours": 11.25,
+      "mds": [
+        "Block 5 (DSCI 525, 553, 563, 574)"
+      ],
+      "allocations": [
+        {
+          "id": "optimization-or",
+          "title": "Optimization and operations research",
+          "hours": 6.0,
+          "status": "finish"
+        },
+        {
+          "id": "bayesian-uq",
+          "title": "Bayesian methods and uncertainty quantification",
+          "hours": 5.3,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 18,
+      "start": "2027-03-15",
+      "end": "2027-03-21",
+      "hours": 17.5,
+      "mds": [
+        "Block 5 week 5"
+      ],
+      "allocations": [
+        {
+          "id": "bayesian-uq",
+          "title": "Bayesian methods and uncertainty quantification",
+          "hours": 5.7,
+          "status": "finish"
+        },
+        {
+          "id": "project-2",
+          "title": "Milestone project 2: Capacity and power planner",
+          "hours": 11.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 19,
+      "start": "2027-03-22",
+      "end": "2027-03-28",
+      "hours": 12.5,
+      "mds": [
+        "Block 6 (DSCI 532, 542, 554, 575)"
+      ],
+      "allocations": [
+        {
+          "id": "project-2",
+          "title": "Milestone project 2: Capacity and power planner",
+          "hours": 1.4,
+          "status": "finish"
+        },
+        {
+          "id": "anomaly-fdd",
+          "title": "Anomaly detection and fault diagnosis",
+          "hours": 11.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 20,
+      "start": "2027-03-29",
+      "end": "2027-04-04",
+      "hours": 12.5,
+      "mds": [
+        "Block 6 (DSCI 532, 542, 554, 575)"
+      ],
+      "allocations": [
+        {
+          "id": "anomaly-fdd",
+          "title": "Anomaly detection and fault diagnosis",
+          "hours": 6.5,
+          "status": "finish"
+        },
+        {
+          "id": "causal",
+          "title": "Causal inference",
+          "hours": 6.0,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 21,
+      "start": "2027-04-05",
+      "end": "2027-04-11",
+      "hours": 11.25,
+      "mds": [
+        "Block 6 (DSCI 532, 542, 554, 575)"
+      ],
+      "allocations": [
+        {
+          "id": "causal",
+          "title": "Causal inference",
+          "hours": 2.8,
+          "status": "finish"
+        },
+        {
+          "id": "llm-apps",
+          "title": "Building with LLMs",
+          "hours": 8.4,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 22,
+      "start": "2027-04-12",
+      "end": "2027-04-18",
+      "hours": 11.25,
+      "mds": [
+        "Block 6 (DSCI 532, 542, 554, 575)"
+      ],
+      "allocations": [
+        {
+          "id": "llm-apps",
+          "title": "Building with LLMs",
+          "hours": 11.2,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 23,
+      "start": "2027-04-19",
+      "end": "2027-04-25",
+      "hours": 17.5,
+      "mds": [
+        "Block 6 week 5"
+      ],
+      "allocations": [
+        {
+          "id": "llm-apps",
+          "title": "Building with LLMs",
+          "hours": 2.3,
+          "status": "finish"
+        },
+        {
+          "id": "ml-system-design",
+          "title": "ML system design",
+          "hours": 11.0,
+          "status": "start+finish"
+        },
+        {
+          "id": "mlops",
+          "title": "MLOps and cloud ML",
+          "hours": 4.2,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 24,
+      "start": "2027-04-26",
+      "end": "2027-05-02",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "mlops",
+          "title": "MLOps and cloud ML",
+          "hours": 10.0,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 25,
+      "start": "2027-05-03",
+      "end": "2027-05-09",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "mlops",
+          "title": "MLOps and cloud ML",
+          "hours": 5.6,
+          "status": "finish"
+        },
+        {
+          "id": "project-3",
+          "title": "Milestone project 3: Reliability platform",
+          "hours": 4.4,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 26,
+      "start": "2027-05-10",
+      "end": "2027-05-16",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "project-3",
+          "title": "Milestone project 3: Reliability platform",
+          "hours": 8.8,
+          "status": "finish"
+        },
+        {
+          "id": "cnn-rnn-attention",
+          "title": "CNNs, RNNs and attention",
+          "hours": 1.2,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 27,
+      "start": "2027-05-17",
+      "end": "2027-05-23",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "cnn-rnn-attention",
+          "title": "CNNs, RNNs and attention",
+          "hours": 10.0,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 28,
+      "start": "2027-05-24",
+      "end": "2027-05-30",
+      "hours": 11.5,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "cnn-rnn-attention",
+          "title": "CNNs, RNNs and attention",
+          "hours": 4.2,
+          "status": "finish"
+        },
+        {
+          "id": "transformers",
+          "title": "Transformers from scratch and a small language model",
+          "hours": 7.3,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 29,
+      "start": "2027-05-31",
+      "end": "2027-06-06",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "transformers",
+          "title": "Transformers from scratch and a small language model",
+          "hours": 10.0,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 30,
+      "start": "2027-06-07",
+      "end": "2027-06-13",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "transformers",
+          "title": "Transformers from scratch and a small language model",
+          "hours": 2.5,
+          "status": "finish"
+        },
+        {
+          "id": "llm-training",
+          "title": "Tokenization, pretraining, scaling, fine-tuning, alignment",
+          "hours": 7.5,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 31,
+      "start": "2027-06-14",
+      "end": "2027-06-20",
+      "hours": 10.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)"
+      ],
+      "allocations": [
+        {
+          "id": "llm-training",
+          "title": "Tokenization, pretraining, scaling, fine-tuning, alignment",
+          "hours": 7.9,
+          "status": "finish"
+        },
+        {
+          "id": "inference",
+          "title": "Inference and serving",
+          "hours": 2.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 32,
+      "start": "2027-06-21",
+      "end": "2027-06-27",
+      "hours": 11.0,
+      "mds": [
+        "Capstone DSCI 591 (Apr 26 - Jun 24)",
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "inference",
+          "title": "Inference and serving",
+          "hours": 8.9,
+          "status": "finish"
+        },
+        {
+          "id": "generative",
+          "title": "Generative models: VAEs and diffusion",
+          "hours": 2.1,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 33,
+      "start": "2027-06-28",
+      "end": "2027-07-04",
+      "hours": 15.5,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "generative",
+          "title": "Generative models: VAEs and diffusion",
+          "hours": 6.7,
+          "status": "finish"
+        },
+        {
+          "id": "rl",
+          "title": "Reinforcement learning",
+          "hours": 8.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 34,
+      "start": "2027-07-05",
+      "end": "2027-07-11",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "rl",
+          "title": "Reinforcement learning",
+          "hours": 13.2,
+          "status": "finish"
+        },
+        {
+          "id": "control-piml",
+          "title": "Control, physics-informed ML and digital twins",
+          "hours": 1.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 35,
+      "start": "2027-07-12",
+      "end": "2027-07-18",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "control-piml",
+          "title": "Control, physics-informed ML and digital twins",
+          "hours": 15.0,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 36,
+      "start": "2027-07-19",
+      "end": "2027-07-25",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "control-piml",
+          "title": "Control, physics-informed ML and digital twins",
+          "hours": 0.8,
+          "status": "finish"
+        },
+        {
+          "id": "scaling",
+          "title": "Scaling and performance",
+          "hours": 8.8,
+          "status": "start+finish"
+        },
+        {
+          "id": "responsible-ai",
+          "title": "Responsible AI",
+          "hours": 5.4,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 37,
+      "start": "2027-07-26",
+      "end": "2027-08-01",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "responsible-ai",
+          "title": "Responsible AI",
+          "hours": 1.2,
+          "status": "finish"
+        },
+        {
+          "id": "capstone-1",
+          "title": "Capstone 1: cooling and energy intelligence",
+          "hours": 13.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 38,
+      "start": "2027-08-02",
+      "end": "2027-08-08",
+      "hours": 15.5,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "capstone-1",
+          "title": "Capstone 1: cooling and energy intelligence",
+          "hours": 15.5,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 39,
+      "start": "2027-08-09",
+      "end": "2027-08-15",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "capstone-1",
+          "title": "Capstone 1: cooling and energy intelligence",
+          "hours": 15.0,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 40,
+      "start": "2027-08-16",
+      "end": "2027-08-22",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "capstone-1",
+          "title": "Capstone 1: cooling and energy intelligence",
+          "hours": 5.2,
+          "status": "finish"
+        },
+        {
+          "id": "capstone-2",
+          "title": "Capstone 2: AI-native fault diagnostician",
+          "hours": 9.8,
+          "status": "start"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 41,
+      "start": "2027-08-23",
+      "end": "2027-08-29",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "capstone-2",
+          "title": "Capstone 2: AI-native fault diagnostician",
+          "hours": 15.0,
+          "status": "continue"
+        }
+      ],
+      "spareHours": 0.0
+    },
+    {
+      "week": 42,
+      "start": "2027-08-30",
+      "end": "2027-09-05",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [
+        {
+          "id": "capstone-2",
+          "title": "Capstone 2: AI-native fault diagnostician",
+          "hours": 13.7,
+          "status": "finish"
+        }
+      ],
+      "spareHours": 1.3
+    },
+    {
+      "week": 43,
+      "start": "2027-09-06",
+      "end": "2027-09-12",
+      "hours": 15.5,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [],
+      "spareHours": 15.5
+    },
+    {
+      "week": 44,
+      "start": "2027-09-13",
+      "end": "2027-09-19",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [],
+      "spareHours": 15.0
+    },
+    {
+      "week": 45,
+      "start": "2027-09-20",
+      "end": "2027-09-26",
+      "hours": 15.0,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [],
+      "spareHours": 15.0
+    },
+    {
+      "week": 46,
+      "start": "2027-09-27",
+      "end": "2027-10-03",
+      "hours": 15.5,
+      "mds": [
+        "After MDS"
+      ],
+      "allocations": [],
+      "spareHours": 15.5
+    }
+  ],
+  "modules": {
+    "induction": {
+      "start": "2026-11-16",
+      "startWeek": 1,
+      "end": "2026-11-16",
+      "endWeek": 1
+    },
+    "python-mle": {
+      "start": "2026-11-16",
+      "startWeek": 1,
+      "end": "2026-11-25",
+      "endWeek": 2
+    },
+    "linear-algebra": {
+      "start": "2026-11-23",
+      "startWeek": 2,
+      "end": "2026-12-03",
+      "endWeek": 3
+    },
+    "calculus-optimization": {
+      "start": "2026-11-30",
+      "startWeek": 3,
+      "end": "2026-12-10",
+      "endWeek": 4
+    },
+    "probability-statistics": {
+      "start": "2026-12-07",
+      "startWeek": 4,
+      "end": "2026-12-15",
+      "endWeek": 5
+    },
+    "information-theory": {
+      "start": "2026-12-14",
+      "startWeek": 5,
+      "end": "2026-12-17",
+      "endWeek": 5
+    },
+    "linear-models": {
+      "start": "2026-12-14",
+      "startWeek": 5,
+      "end": "2026-12-24",
+      "endWeek": 6
+    },
+    "model-evaluation": {
+      "start": "2026-12-21",
+      "startWeek": 6,
+      "end": "2026-12-29",
+      "endWeek": 7
+    },
+    "trees-boosting": {
+      "start": "2026-12-28",
+      "startWeek": 7,
+      "end": "2027-01-05",
+      "endWeek": 8
+    },
+    "feature-pipelines": {
+      "start": "2027-01-04",
+      "startWeek": 8,
+      "end": "2027-01-11",
+      "endWeek": 9
+    },
+    "kernels-knn": {
+      "start": "2027-01-11",
+      "startWeek": 9,
+      "end": "2027-01-14",
+      "endWeek": 9
+    },
+    "unsupervised": {
+      "start": "2027-01-11",
+      "startWeek": 9,
+      "end": "2027-01-22",
+      "endWeek": 10
+    },
+    "project-1": {
+      "start": "2027-01-18",
+      "startWeek": 10,
+      "end": "2027-01-30",
+      "endWeek": 11
+    },
+    "autograd": {
+      "start": "2027-01-25",
+      "startWeek": 11,
+      "end": "2027-02-05",
+      "endWeek": 12
+    },
+    "training-deep-nets": {
+      "start": "2027-02-01",
+      "startWeek": 12,
+      "end": "2027-02-11",
+      "endWeek": 13
+    },
+    "pytorch": {
+      "start": "2027-02-08",
+      "startWeek": 13,
+      "end": "2027-02-15",
+      "endWeek": 14
+    },
+    "time-series": {
+      "start": "2027-02-15",
+      "startWeek": 14,
+      "end": "2027-03-01",
+      "endWeek": 16
+    },
+    "optimization-or": {
+      "start": "2027-03-01",
+      "startWeek": 16,
+      "end": "2027-03-11",
+      "endWeek": 17
+    },
+    "bayesian-uq": {
+      "start": "2027-03-08",
+      "startWeek": 17,
+      "end": "2027-03-16",
+      "endWeek": 18
+    },
+    "project-2": {
+      "start": "2027-03-15",
+      "startWeek": 18,
+      "end": "2027-03-22",
+      "endWeek": 19
+    },
+    "anomaly-fdd": {
+      "start": "2027-03-22",
+      "startWeek": 19,
+      "end": "2027-04-01",
+      "endWeek": 20
+    },
+    "causal": {
+      "start": "2027-03-29",
+      "startWeek": 20,
+      "end": "2027-04-06",
+      "endWeek": 21
+    },
+    "llm-apps": {
+      "start": "2027-04-05",
+      "startWeek": 21,
+      "end": "2027-04-19",
+      "endWeek": 23
+    },
+    "ml-system-design": {
+      "start": "2027-04-19",
+      "startWeek": 23,
+      "end": "2027-04-23",
+      "endWeek": 23
+    },
+    "mlops": {
+      "start": "2027-04-19",
+      "startWeek": 23,
+      "end": "2027-05-06",
+      "endWeek": 25
+    },
+    "project-3": {
+      "start": "2027-05-03",
+      "startWeek": 25,
+      "end": "2027-05-15",
+      "endWeek": 26
+    },
+    "cnn-rnn-attention": {
+      "start": "2027-05-10",
+      "startWeek": 26,
+      "end": "2027-05-26",
+      "endWeek": 28
+    },
+    "transformers": {
+      "start": "2027-05-24",
+      "startWeek": 28,
+      "end": "2027-06-08",
+      "endWeek": 30
+    },
+    "llm-training": {
+      "start": "2027-06-07",
+      "startWeek": 30,
+      "end": "2027-06-19",
+      "endWeek": 31
+    },
+    "inference": {
+      "start": "2027-06-14",
+      "startWeek": 31,
+      "end": "2027-06-26",
+      "endWeek": 32
+    },
+    "generative": {
+      "start": "2027-06-21",
+      "startWeek": 32,
+      "end": "2027-06-30",
+      "endWeek": 33
+    },
+    "rl": {
+      "start": "2027-06-28",
+      "startWeek": 33,
+      "end": "2027-07-10",
+      "endWeek": 34
+    },
+    "control-piml": {
+      "start": "2027-07-05",
+      "startWeek": 34,
+      "end": "2027-07-19",
+      "endWeek": 36
+    },
+    "scaling": {
+      "start": "2027-07-19",
+      "startWeek": 36,
+      "end": "2027-07-22",
+      "endWeek": 36
+    },
+    "responsible-ai": {
+      "start": "2027-07-19",
+      "startWeek": 36,
+      "end": "2027-07-26",
+      "endWeek": 37
+    },
+    "capstone-1": {
+      "start": "2027-07-26",
+      "startWeek": 37,
+      "end": "2027-08-17",
+      "endWeek": 40
+    },
+    "capstone-2": {
+      "start": "2027-08-16",
+      "startWeek": 40,
+      "end": "2027-09-04",
+      "endWeek": 42
+    }
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "after": "project-1",
+      "title": "Foundations and classical ML",
+      "date": "2027-01-30",
+      "week": 11
+    },
+    {
+      "id": "M2",
+      "after": "project-2",
+      "title": "Forecasting, optimization and deep-learning core",
+      "date": "2027-03-22",
+      "week": 19
+    },
+    {
+      "id": "M3",
+      "after": "project-3",
+      "title": "Production ML and LLM systems",
+      "date": "2027-05-15",
+      "week": 26
+    },
+    {
+      "id": "M4",
+      "after": "generative",
+      "title": "Deep learning and LLM internals",
+      "date": "2027-06-30",
+      "week": 33
+    },
+    {
+      "id": "M5",
+      "after": "capstone-1",
+      "title": "Control, RL and capstone 1",
+      "date": "2027-08-17",
+      "week": 40
+    },
+    {
+      "id": "M6",
+      "after": "capstone-2",
+      "title": "Capstone 2 and full mastery",
+      "date": "2027-09-04",
+      "week": 42
+    }
+  ],
+  "unfinished": []
+}

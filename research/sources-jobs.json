@@ -1,0 +1,965 @@
+[
+ {
+  "id": "job-amazon-10560313",
+  "type": "job-posting",
+  "title": "Research Scientist, WW Sustainability",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10560313",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   25
+  ],
+  "notes": "Tier A; sustainability; carbon removal and reduction credits"
+ },
+ {
+  "id": "job-amazon-10587034",
+  "type": "job-posting",
+  "title": "Principal Applied Scientist, AWS Data Center Services",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10587034",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   17,
+   19,
+   28,
+   29
+  ],
+  "notes": "Tier A; data center operations; computer vision on infrastructure"
+ },
+ {
+  "id": "job-amazon-10513233",
+  "type": "job-posting",
+  "title": "Senior Applied Scientist, Amazon Global Data Center Ops Central Insight and Analytics",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10513233",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   12,
+   13,
+   17,
+   19,
+   21,
+   22,
+   24,
+   25,
+   26,
+   27,
+   28
+  ],
+  "notes": "Tier A; data center operations; fleet-wide root cause analysis"
+ },
+ {
+  "id": "job-amazon-10477487",
+  "type": "job-posting",
+  "title": "Sr. Data Scientist, Capacity Planning",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10477487",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   21,
+   24,
+   28
+  ],
+  "notes": "Tier B; capacity planning; forecasting"
+ },
+ {
+  "id": "job-amazon-10415438",
+  "type": "job-posting",
+  "title": "Applied Scientist, AWS Insights & Optimization",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10415438",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   17,
+   19,
+   21,
+   22,
+   24,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; cloud cost and resource efficiency; anomaly detection"
+ },
+ {
+  "id": "job-amazon-10584232",
+  "type": "job-posting",
+  "title": "Data Scientist, CloudTune",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10584232",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   17,
+   19,
+   21,
+   24,
+   25,
+   28
+  ],
+  "notes": "Tier B; AWS capacity; stochastic optimization"
+ },
+ {
+  "id": "job-amazon-10585827",
+  "type": "job-posting",
+  "title": "Software Development Engineer III, WW Sustainability",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10585827",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   17,
+   19,
+   27,
+   28
+  ],
+  "notes": "Tier A; sustainability; carbon accounting systems"
+ },
+ {
+  "id": "job-amazon-10414903",
+  "type": "job-posting",
+  "title": "Data Scientist II, Long Term Planning and Forecasting",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10414903",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   17,
+   19,
+   21,
+   25,
+   26
+  ],
+  "notes": "Tier B; long-term forecasting; capacity and planning forecasts"
+ },
+ {
+  "id": "job-amazon-10579474",
+  "type": "job-posting",
+  "title": "Data Scientist I, PXT Central Science",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10579474",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   17,
+   19
+  ],
+  "notes": "Tier C; employee experience (off-domain)"
+ },
+ {
+  "id": "job-amazon-10601943",
+  "type": "job-posting",
+  "title": "Applied Scientist I, Tablet Product Software",
+  "authors": [
+   "Amazon"
+  ],
+  "year": 2026,
+  "venue": "amazon.jobs",
+  "doi": null,
+  "url": "https://www.amazon.jobs/en/jobs/10601943",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   17,
+   19,
+   27,
+   28
+  ],
+  "notes": "Tier C; recommendation models (off-domain)"
+ },
+ {
+  "id": "job-microsoft-200065939",
+  "type": "job-posting",
+  "title": "Principal Data Scientist Manager",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557055369",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   17,
+   19,
+   21,
+   22,
+   24,
+   28
+  ],
+  "notes": "Tier A; datacenter power utilization and reclamation; metrics and forecasting"
+ },
+ {
+  "id": "job-microsoft-200066763",
+  "type": "job-posting",
+  "title": "Senior Data Scientist",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557070629",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   6,
+   7,
+   8,
+   17,
+   19,
+   24,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; infrastructure analytics; AI-powered analytical methods"
+ },
+ {
+  "id": "job-microsoft-200063583",
+  "type": "job-posting",
+  "title": "Principal Software Engineer - HW/SW in Fleet Infrastructure",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557046033",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   27,
+   28
+  ],
+  "notes": "Tier B; fleet health; hardware repair and reliability"
+ },
+ {
+  "id": "job-microsoft-200046174",
+  "type": "job-posting",
+  "title": "Principal Software Engineer, ML & Distributed Systems",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393556952147",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   12,
+   13,
+   17,
+   19,
+   24,
+   28,
+   29
+  ],
+  "notes": "Tier B; ML serving at hyperscale; cost and latency optimization"
+ },
+ {
+  "id": "job-microsoft-200063877",
+  "type": "job-posting",
+  "title": "Senior Software Engineer - AI Infrastructure",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557047382",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   17,
+   19,
+   24,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; AI workload scheduling; capacity allocation"
+ },
+ {
+  "id": "job-microsoft-200065640",
+  "type": "job-posting",
+  "title": "Senior Applied Scientist - AI for Safe Changes Health Gating",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557053994",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   6,
+   7,
+   8,
+   17,
+   19,
+   21,
+   22,
+   24,
+   25,
+   26,
+   28,
+   29
+  ],
+  "notes": "Tier B; service health; change safety"
+ },
+ {
+  "id": "job-microsoft-200062684",
+  "type": "job-posting",
+  "title": "Senior Researcher - AI Systems and Infrastructure - Microsoft Research",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557043769",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   24,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; AI infrastructure efficiency; resource utilization"
+ },
+ {
+  "id": "job-microsoft-200065126",
+  "type": "job-posting",
+  "title": "Software Engineer 2 - GPU COGS/Efficiency",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557052841",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   17,
+   19,
+   24,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; GPU cost of goods and efficiency; fleet utilization"
+ },
+ {
+  "id": "job-microsoft-200061655",
+  "type": "job-posting",
+  "title": "Applied Scientist II",
+  "authors": [
+   "Microsoft"
+  ],
+  "year": 2026,
+  "venue": "apply.careers.microsoft.com",
+  "doi": null,
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557040164",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   12,
+   13,
+   17,
+   19,
+   28,
+   29
+  ],
+  "notes": "Tier C; Copilot ML (off-domain)"
+ },
+ {
+  "id": "job-google-138642076408390342",
+  "type": "job-posting",
+  "title": "Staff Software Engineer, Google Data Center Planning",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/138642076408390342",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   24,
+   27,
+   29
+  ],
+  "notes": "Tier A; data center capacity (gigawatts); planning optimization"
+ },
+ {
+  "id": "job-google-136915934152401606",
+  "type": "job-posting",
+  "title": "Senior Product Data Scientist, ML Resource Efficiency",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/136915934152401606",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   28
+  ],
+  "notes": "Tier B; ML resource efficiency; analytics"
+ },
+ {
+  "id": "job-google-141496697866855110",
+  "type": "job-posting",
+  "title": "Software Engineer, Fleet Analytics, PhD, Early Career, 2026",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/141496697866855110",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   6,
+   7,
+   8,
+   24,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; fleet optimization; mixed integer programming"
+ },
+ {
+  "id": "job-google-139663235753091782",
+  "type": "job-posting",
+  "title": "Senior Staff Software Engineer, AI/ML, Google Cloud Compute Infrastructure",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/139663235753091782",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   12,
+   13,
+   17,
+   19,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; hardware/software co-design; ML system performance modeling"
+ },
+ {
+  "id": "job-google-80847978566165190",
+  "type": "job-posting",
+  "title": "Staff Software Engineer, Core Systems and Capacity Assurance",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/80847978566165190",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   17,
+   19,
+   22,
+   27,
+   29
+  ],
+  "notes": "Tier B; data center hardware bring-up; test automation"
+ },
+ {
+  "id": "job-google-136909835298841286",
+  "type": "job-posting",
+  "title": "Staff Software Developer, Applied AI, Site Reliability Development",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/136909835298841286",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; SRE with applied AI; capacity planning"
+ },
+ {
+  "id": "job-google-133367856568902342",
+  "type": "job-posting",
+  "title": "Senior Staff Software Engineer, ML Performance, GPU",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/133367856568902342",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   12,
+   13,
+   17,
+   19,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier B; ML efficiency (GPU performance); LLM training and serving benchmarks"
+ },
+ {
+  "id": "job-google-127602843300307654",
+  "type": "job-posting",
+  "title": "Software Engineer, AI/ML, PhD, Early Career, 2026",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/127602843300307654",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   23,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier C; ML infrastructure (off-domain)"
+ },
+ {
+  "id": "job-google-123087196289671878",
+  "type": "job-posting",
+  "title": "Software Engineer, AI/Machine Learning, PhD, Early Career, 2027 Start",
+  "authors": [
+   "Google"
+  ],
+  "year": 2026,
+  "venue": "Google Careers",
+  "doi": null,
+  "url": "https://www.google.com/about/careers/applications/jobs/results/123087196289671878",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   12,
+   13,
+   27,
+   28,
+   29
+  ],
+  "notes": "Tier C; ML systems across the stack (off-domain)"
+ },
+ {
+  "id": "job-meta-2689975688126702",
+  "type": "job-posting",
+  "title": "Research Scientist, Infrastructure Modeling and Reliability",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/2689975688126702",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   21,
+   24,
+   25,
+   28
+  ],
+  "notes": "Tier A; data center power consumption and peak-risk modeling; reliability tradeoffs"
+ },
+ {
+  "id": "job-meta-1612727887131849",
+  "type": "job-posting",
+  "title": "Research Scientist, Infrastructure Modeling and Reliability (second listing)",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/1612727887131849",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   21,
+   24,
+   25
+  ],
+  "notes": "Tier A; data center power consumption and peak-risk modeling; reliability tradeoffs"
+ },
+ {
+  "id": "job-meta-1487028006662011",
+  "type": "job-posting",
+  "title": "Research Scientist, Server Demand Forecasting",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/1487028006662011",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   21,
+   24,
+   25,
+   28
+  ],
+  "notes": "Tier B; server and MW demand forecasting; demand-supply matching"
+ },
+ {
+  "id": "job-meta-1117047447904510",
+  "type": "job-posting",
+  "title": "Research Scientist, Demand Forecasting",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/1117047447904510",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   21,
+   24,
+   25
+  ],
+  "notes": "Tier B; server demand forecasting; capacity planning"
+ },
+ {
+  "id": "job-meta-1881878742790429",
+  "type": "job-posting",
+  "title": "Data Scientist, Infrastructure Finance",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/1881878742790429",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   6,
+   7,
+   8,
+   24
+  ],
+  "notes": "Tier B; capacity and efficiency investment analytics"
+ },
+ {
+  "id": "job-meta-2561197087738216",
+  "type": "job-posting",
+  "title": "Research Scientist, Systems ML - HW/SW Co-Design",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/2561197087738216",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   12,
+   13,
+   27,
+   29
+  ],
+  "notes": "Tier B; AI accelerator power efficiency; hardware/software co-design"
+ },
+ {
+  "id": "job-meta-2097712830820463",
+  "type": "job-posting",
+  "title": "Energy Analyst, Data Center Portfolio",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/2097712830820463",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   6,
+   7,
+   8,
+   21
+  ],
+  "notes": "Tier A; data center energy cost; tariffs and wholesale markets"
+ },
+ {
+  "id": "job-meta-1791619365408270",
+  "type": "job-posting",
+  "title": "Software Engineer, Systems Machine Learning",
+  "authors": [
+   "Meta"
+  ],
+  "year": 2026,
+  "venue": "Meta Careers (metacareers.com)",
+  "doi": null,
+  "url": "https://www.metacareers.com/profile/job_details/1791619365408270",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   27,
+   28
+  ],
+  "notes": "Tier C; ML systems tooling (off-domain)"
+ }
+]

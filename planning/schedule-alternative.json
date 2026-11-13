@@ -1,0 +1,273 @@
+{
+  "modules": {
+    "induction": {
+      "start": "2026-11-16",
+      "startWeek": 1,
+      "end": "2026-11-16",
+      "endWeek": 1
+    },
+    "python-mle": {
+      "start": "2026-11-16",
+      "startWeek": 1,
+      "end": "2026-11-25",
+      "endWeek": 2
+    },
+    "linear-algebra": {
+      "start": "2026-11-23",
+      "startWeek": 2,
+      "end": "2026-12-03",
+      "endWeek": 3
+    },
+    "calculus-optimization": {
+      "start": "2026-11-30",
+      "startWeek": 3,
+      "end": "2026-12-10",
+      "endWeek": 4
+    },
+    "probability-statistics": {
+      "start": "2026-12-07",
+      "startWeek": 4,
+      "end": "2026-12-15",
+      "endWeek": 5
+    },
+    "information-theory": {
+      "start": "2026-12-14",
+      "startWeek": 5,
+      "end": "2026-12-17",
+      "endWeek": 5
+    },
+    "linear-models": {
+      "start": "2026-12-14",
+      "startWeek": 5,
+      "end": "2026-12-24",
+      "endWeek": 6
+    },
+    "model-evaluation": {
+      "start": "2026-12-21",
+      "startWeek": 6,
+      "end": "2026-12-29",
+      "endWeek": 7
+    },
+    "trees-boosting": {
+      "start": "2026-12-28",
+      "startWeek": 7,
+      "end": "2027-01-05",
+      "endWeek": 8
+    },
+    "feature-pipelines": {
+      "start": "2027-01-04",
+      "startWeek": 8,
+      "end": "2027-01-11",
+      "endWeek": 9
+    },
+    "kernels-knn": {
+      "start": "2027-01-11",
+      "startWeek": 9,
+      "end": "2027-01-14",
+      "endWeek": 9
+    },
+    "unsupervised": {
+      "start": "2027-01-11",
+      "startWeek": 9,
+      "end": "2027-01-22",
+      "endWeek": 10
+    },
+    "project-1": {
+      "start": "2027-01-18",
+      "startWeek": 10,
+      "end": "2027-01-30",
+      "endWeek": 11
+    },
+    "autograd": {
+      "start": "2027-01-25",
+      "startWeek": 11,
+      "end": "2027-02-05",
+      "endWeek": 12
+    },
+    "training-deep-nets": {
+      "start": "2027-02-01",
+      "startWeek": 12,
+      "end": "2027-02-11",
+      "endWeek": 13
+    },
+    "pytorch": {
+      "start": "2027-02-08",
+      "startWeek": 13,
+      "end": "2027-02-15",
+      "endWeek": 14
+    },
+    "cnn-rnn-attention": {
+      "start": "2027-02-15",
+      "startWeek": 14,
+      "end": "2027-02-24",
+      "endWeek": 15
+    },
+    "transformers": {
+      "start": "2027-02-22",
+      "startWeek": 15,
+      "end": "2027-03-08",
+      "endWeek": 17
+    },
+    "project-2": {
+      "start": "2027-03-08",
+      "startWeek": 17,
+      "end": "2027-03-15",
+      "endWeek": 18
+    },
+    "llm-training": {
+      "start": "2027-03-15",
+      "startWeek": 18,
+      "end": "2027-03-22",
+      "endWeek": 19
+    },
+    "inference": {
+      "start": "2027-03-22",
+      "startWeek": 19,
+      "end": "2027-03-28",
+      "endWeek": 19
+    },
+    "llm-apps": {
+      "start": "2027-03-22",
+      "startWeek": 19,
+      "end": "2027-04-10",
+      "endWeek": 21
+    },
+    "generative": {
+      "start": "2027-04-05",
+      "startWeek": 21,
+      "end": "2027-04-15",
+      "endWeek": 22
+    },
+    "ml-system-design": {
+      "start": "2027-04-12",
+      "startWeek": 22,
+      "end": "2027-04-21",
+      "endWeek": 23
+    },
+    "mlops": {
+      "start": "2027-04-19",
+      "startWeek": 23,
+      "end": "2027-05-01",
+      "endWeek": 24
+    },
+    "project-3": {
+      "start": "2027-04-26",
+      "startWeek": 24,
+      "end": "2027-05-11",
+      "endWeek": 26
+    },
+    "time-series": {
+      "start": "2027-05-10",
+      "startWeek": 26,
+      "end": "2027-05-27",
+      "endWeek": 28
+    },
+    "anomaly-fdd": {
+      "start": "2027-05-24",
+      "startWeek": 28,
+      "end": "2027-06-08",
+      "endWeek": 30
+    },
+    "optimization-or": {
+      "start": "2027-06-07",
+      "startWeek": 30,
+      "end": "2027-06-19",
+      "endWeek": 31
+    },
+    "bayesian-uq": {
+      "start": "2027-06-14",
+      "startWeek": 31,
+      "end": "2027-06-26",
+      "endWeek": 32
+    },
+    "causal": {
+      "start": "2027-06-21",
+      "startWeek": 32,
+      "end": "2027-06-30",
+      "endWeek": 33
+    },
+    "rl": {
+      "start": "2027-06-28",
+      "startWeek": 33,
+      "end": "2027-07-10",
+      "endWeek": 34
+    },
+    "control-piml": {
+      "start": "2027-07-05",
+      "startWeek": 34,
+      "end": "2027-07-19",
+      "endWeek": 36
+    },
+    "scaling": {
+      "start": "2027-07-19",
+      "startWeek": 36,
+      "end": "2027-07-22",
+      "endWeek": 36
+    },
+    "responsible-ai": {
+      "start": "2027-07-19",
+      "startWeek": 36,
+      "end": "2027-07-26",
+      "endWeek": 37
+    },
+    "capstone-1": {
+      "start": "2027-07-26",
+      "startWeek": 37,
+      "end": "2027-08-17",
+      "endWeek": 40
+    },
+    "capstone-2": {
+      "start": "2027-08-16",
+      "startWeek": 40,
+      "end": "2027-09-04",
+      "endWeek": 42
+    }
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "after": "project-1",
+      "title": "Foundations and classical ML",
+      "date": "2027-01-30",
+      "week": 11
+    },
+    {
+      "id": "M2",
+      "after": "project-2",
+      "title": "Forecasting, optimization and deep-learning core",
+      "date": "2027-03-15",
+      "week": 18
+    },
+    {
+      "id": "M3",
+      "after": "project-3",
+      "title": "Production ML and LLM systems",
+      "date": "2027-05-11",
+      "week": 26
+    },
+    {
+      "id": "M4",
+      "after": "generative",
+      "title": "Deep learning and LLM internals",
+      "date": "2027-04-15",
+      "week": 22
+    },
+    {
+      "id": "M5",
+      "after": "capstone-1",
+      "title": "Control, RL and capstone 1",
+      "date": "2027-08-17",
+      "week": 40
+    },
+    {
+      "id": "M6",
+      "after": "capstone-2",
+      "title": "Capstone 2 and full mastery",
+      "date": "2027-09-04",
+      "week": 42
+    }
+  ],
+  "unfinished": [],
+  "capacityHours": 609.0,
+  "neededHours": 546.7
+}

@@ -1,0 +1,42 @@
+{
+  "_comment": "Learner calendar and default time budget. MDS block dates are partly inferred (see research/mds-curriculum.md); edit them here or in the app's settings. Minutes are per day.",
+  "courseStart": "2026-11-16",
+  "courseEnd": "2027-10-03",
+  "timeBudget": {
+    "teaching":   { "weekday": 75,  "weekend": 150, "label": "MDS teaching week" },
+    "blockWeek5": { "weekday": 150, "weekend": 150, "label": "MDS block week 5 (no lectures/labs)" },
+    "break":      { "weekday": 180, "weekend": 150, "label": "Break" },
+    "capstone":   { "weekday": 60,  "weekend": 150, "label": "MDS capstone (DSCI 591)" },
+    "summer":     { "weekday": 120, "weekend": 150, "label": "After MDS" }
+  },
+  "reviewOverhead": 0.10,
+  "periods": [
+    { "start": "2026-11-16", "end": "2026-12-13", "type": "teaching",   "mds": "Block 3 (DSCI 513, 522, 561, 573)", "status": "inferred" },
+    { "start": "2026-12-14", "end": "2026-12-21", "type": "blockWeek5", "mds": "Block 3 week 5 / end of Semester 1 (Dec 21)", "status": "published end date" },
+    { "start": "2026-12-22", "end": "2027-01-04", "type": "break",      "mds": "Winter break", "status": "inferred" },
+    { "start": "2027-01-05", "end": "2027-01-31", "type": "teaching",   "mds": "Block 4 (DSCI 524, 541, 562, 572)", "status": "inferred" },
+    { "start": "2027-02-01", "end": "2027-02-07", "type": "blockWeek5", "mds": "Block 4 week 5", "status": "inferred" },
+    { "start": "2027-02-08", "end": "2027-02-14", "type": "break",      "mds": "Semester 2 midterm break", "status": "published" },
+    { "start": "2027-02-15", "end": "2027-03-14", "type": "teaching",   "mds": "Block 5 (DSCI 525, 553, 563, 574)", "status": "inferred" },
+    { "start": "2027-03-15", "end": "2027-03-21", "type": "blockWeek5", "mds": "Block 5 week 5", "status": "inferred" },
+    { "start": "2027-03-22", "end": "2027-04-18", "type": "teaching",   "mds": "Block 6 (DSCI 532, 542, 554, 575)", "status": "inferred" },
+    { "start": "2027-04-19", "end": "2027-04-25", "type": "blockWeek5", "mds": "Block 6 week 5", "status": "inferred" },
+    { "start": "2027-04-26", "end": "2027-06-24", "type": "capstone",   "mds": "Capstone DSCI 591 (Apr 26 - Jun 24)", "status": "published" },
+    { "start": "2027-06-25", "end": "2027-10-03", "type": "summer",     "mds": "After MDS", "status": "n/a" }
+  ],
+  "holidays": [
+    { "date": "2026-12-24", "minutes": 60,  "name": "Christmas Eve" },
+    { "date": "2026-12-25", "minutes": 0,   "name": "Christmas Day" },
+    { "date": "2026-12-26", "minutes": 60,  "name": "Boxing Day" },
+    { "date": "2026-12-31", "minutes": 60,  "name": "New Year's Eve" },
+    { "date": "2027-01-01", "minutes": 60,  "name": "New Year's Day" },
+    { "date": "2027-02-15", "minutes": 150, "name": "Family Day (BC)" },
+    { "date": "2027-03-26", "minutes": 150, "name": "Good Friday" },
+    { "date": "2027-03-29", "minutes": 150, "name": "Easter Monday" },
+    { "date": "2027-05-24", "minutes": 150, "name": "Victoria Day" },
+    { "date": "2027-07-01", "minutes": 150, "name": "Canada Day" },
+    { "date": "2027-08-02", "minutes": 150, "name": "BC Day" },
+    { "date": "2027-09-06", "minutes": 150, "name": "Labour Day" },
+    { "date": "2027-09-30", "minutes": 150, "name": "National Day for Truth and Reconciliation" }
+  ]
+}

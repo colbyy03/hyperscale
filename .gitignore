@@ -1,0 +1,30 @@
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Node / app build
+node_modules/
+dist/
+.vite/
+coverage/
+playwright-report/
+test-results/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Data downloaded for local labs (licensed separately; never committed)
+data/raw/
+python/labs/**/data/
+*.parquet.tmp
+
+# Secrets
+.env
+.env.*

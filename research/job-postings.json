@@ -1,0 +1,1528 @@
+[
+ {
+  "id": "job-amazon-10560313",
+  "company": "Amazon",
+  "title": "Research Scientist, WW Sustainability",
+  "team_org": "Worldwide Sustainability (WWS)",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "Research Scientist",
+  "url": "https://www.amazon.jobs/en/jobs/10560313",
+  "job_id": "10560313",
+  "posted_date": "2026-09-25",
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "sustainability",
+   "carbon removal and reduction credits",
+   "climate science"
+  ],
+  "min_quals": [
+   "PhD, or Master's plus about 4 years of quantitative field research",
+   "Experience testing whether scientific principles apply to business problems",
+   "Experience analysing experimental and observational data"
+  ],
+  "pref_quals": [
+   "R, MATLAB or Python",
+   "Agile development",
+   "Building web dashboards"
+  ],
+  "skills": [
+   "python",
+   "r",
+   "statistics",
+   "physics-based-modeling",
+   "energy-markets",
+   "bayesian-uncertainty",
+   "dashboards-visualization",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Provides the science behind Amazon's purchasing of high-integrity greenhouse gas reduction and carbon removal credits outside its value chain. Evaluates the quality of climate projects and quantifies their impact using data from experiments and observation."
+ },
+ {
+  "id": "job-amazon-10587034",
+  "company": "Amazon",
+  "title": "Principal Applied Scientist, AWS Data Center Services",
+  "team_org": "AWS Data Center Services",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "Principal",
+  "url": "https://www.amazon.jobs/en/jobs/10587034",
+  "job_id": "10587034",
+  "posted_date": "2026-10-22",
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "data center operations",
+   "computer vision on infrastructure",
+   "GenAI for data center operations"
+  ],
+  "min_quals": [
+   "PhD in ML, computer vision, statistics or similar",
+   "Good Python skills",
+   "Strong communication and a record of delivery"
+  ],
+  "pref_quals": [
+   "7+ years industrial predictive modeling",
+   "Generative AI experience",
+   "Publications at top ML/CV venues",
+   "Mentoring junior scientists"
+  ],
+  "skills": [
+   "python",
+   "statistics",
+   "computer-vision",
+   "llm-genai",
+   "rag-agents",
+   "mlops-deployment",
+   "distributed-systems",
+   "cloud-aws",
+   "thermodynamics-hvac",
+   "power-systems-electrical",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Leads science for AI inside AWS data centers: training and evolving computer vision models for physical tasks, and building retrieval and LLM systems that reduce hallucination for operations. Partners with software teams to ship these solutions."
+ },
+ {
+  "id": "job-amazon-10513233",
+  "company": "Amazon",
+  "title": "Senior Applied Scientist, Amazon Global Data Center Ops Central Insight and Analytics",
+  "team_org": "Global Data Center Operations, Insight and Analytics",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "Senior",
+  "url": "https://www.amazon.jobs/en/jobs/10513233",
+  "job_id": "10513233",
+  "posted_date": "2026-08-25",
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "data center operations",
+   "fleet-wide root cause analysis",
+   "decision intelligence"
+  ],
+  "min_quals": [
+   "3+ years building ML models for business use",
+   "PhD (or Master's plus 4 years) in ML, stats, CS or OR",
+   "Strong in at least two of causal inference, time-series forecasting, anomaly detection, LLM reasoning"
+  ],
+  "pref_quals": [
+   "LLM integration (prompting, RAG, fine-tuning, evaluation)",
+   "Dose-response / treatment effect modeling",
+   "Operations research experience"
+  ],
+  "skills": [
+   "python",
+   "pytorch",
+   "tensorflow",
+   "scikit-learn",
+   "statistics",
+   "causal-inference",
+   "time-series-forecasting",
+   "anomaly-detection",
+   "optimization-lp-mip",
+   "operations-research",
+   "bayesian-uncertainty",
+   "llm-genai",
+   "rag-agents",
+   "nlp",
+   "ml-system-design",
+   "mlops-deployment",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Builds decision-intelligence models for data center operations: causal root-cause attribution of fleet metric movements, forecasting, anomaly detection, and LLM-based reasoning over operational data. Work is tied to measurable operational impact."
+ },
+ {
+  "id": "job-amazon-10477487",
+  "company": "Amazon",
+  "title": "Sr. Data Scientist, Capacity Planning",
+  "team_org": "Operations / workforce capacity planning (network-wide)",
+  "locations": [
+   "Dallas, TX, USA"
+  ],
+  "level": "Senior",
+  "url": "https://www.amazon.jobs/en/jobs/10477487",
+  "job_id": "10477487",
+  "posted_date": "2026-07-17",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "capacity planning",
+   "forecasting"
+  ],
+  "min_quals": [
+   "5+ years SQL/Python/R-type tooling",
+   "4+ years as a data scientist",
+   "Statistical modeling such as multinomial logistic regression"
+  ],
+  "pref_quals": [
+   "2+ years data visualization (QuickSight, Tableau, R Shiny)",
+   "Managing data pipelines",
+   "Mentoring on a data science team"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "r",
+   "statistics",
+   "time-series-forecasting",
+   "optimization-lp-mip",
+   "data-pipelines-etl",
+   "dashboards-visualization",
+   "cloud-aws",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Builds forecasting and optimization models that drive capacity decisions across a large operations network, working with data engineering, workforce management and finance. Owns modeling projects from design to production use. (Domain is fulfillment/workforce rather than data centers; included as a capacity-planning benchmark.)"
+ },
+ {
+  "id": "job-amazon-10415438",
+  "company": "Amazon",
+  "title": "Applied Scientist, AWS Insights & Optimization",
+  "team_org": "AWS Insights & Optimization",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "Applied Scientist",
+  "url": "https://www.amazon.jobs/en/jobs/10415438",
+  "job_id": "10415438",
+  "posted_date": "2026-05-09",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "cloud cost and resource efficiency",
+   "anomaly detection",
+   "forecasting"
+  ],
+  "min_quals": [
+   "3+ years building models for business applications",
+   "PhD, or Master's plus 4 years in CS/CE/ML",
+   "Programming in Java, C++ or Python"
+  ],
+  "pref_quals": [
+   "Unix/Linux",
+   "Professional software development",
+   "Publications or patents at top venues"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "time-series-forecasting",
+   "anomaly-detection",
+   "optimization-lp-mip",
+   "llm-genai",
+   "rag-agents",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "cloud-aws",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Owns end-to-end models for AWS customers' cost and utilisation: cost anomaly detection with root-cause attribution, time-series forecasting, and rightsizing engines for compute and storage. Takes models from formulation through experiments to production."
+ },
+ {
+  "id": "job-amazon-10584232",
+  "company": "Amazon",
+  "title": "Data Scientist, CloudTune",
+  "team_org": "CloudTune (AWS capacity and cost optimization)",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "Data Scientist",
+  "url": "https://www.amazon.jobs/en/jobs/10584232",
+  "job_id": "10584232",
+  "posted_date": "2026-10-20",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "AWS capacity",
+   "stochastic optimization",
+   "time series"
+  ],
+  "min_quals": [
+   "2+ years as a data scientist",
+   "3+ years SQL/Python/R-type tooling",
+   "3+ years ML / statistical modeling"
+  ],
+  "pref_quals": [
+   "PhD in a STEM field",
+   "ML or data science role at a large tech company",
+   "Benchmarks for GenAI model performance",
+   "Clear written communication"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "r",
+   "statistics",
+   "time-series-forecasting",
+   "optimization-lp-mip",
+   "operations-research",
+   "bayesian-uncertainty",
+   "llm-genai",
+   "big-data",
+   "cloud-aws",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Tackles stochastic optimization, time-series modeling and operations-research problems in a team that tunes AWS capacity and cost. Works with large datasets under high ambiguity alongside scientists, engineers and PMs."
+ },
+ {
+  "id": "job-amazon-10585827",
+  "company": "Amazon",
+  "title": "Software Development Engineer III, WW Sustainability",
+  "team_org": "Worldwide Sustainability (WWS)",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "SDE III (senior)",
+  "url": "https://www.amazon.jobs/en/jobs/10585827",
+  "job_id": "10585827",
+  "posted_date": "2026-10-21",
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "sustainability",
+   "carbon accounting systems",
+   "AI/ML in production"
+  ],
+  "min_quals": [
+   "5+ years professional software development",
+   "5+ years leading system design and architecture",
+   "Mentoring or tech-lead experience"
+  ],
+  "pref_quals": [
+   "Full software lifecycle experience",
+   "CS bachelor's degree"
+  ],
+  "skills": [
+   "rag-agents",
+   "ml-system-design",
+   "mlops-deployment",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Tech lead who productionises the ML-enabled methods that sustainability scientists develop, and drives AI-native engineering practice on the team. Focus is reliable ML systems rather than modeling research."
+ },
+ {
+  "id": "job-amazon-10414903",
+  "company": "Amazon",
+  "title": "Data Scientist II, Long Term Planning and Forecasting",
+  "team_org": "Long Term Planning and Forecasting (LTPF)",
+  "locations": [
+   "Bellevue, WA, USA"
+  ],
+  "level": "Data Scientist II",
+  "url": "https://www.amazon.jobs/en/jobs/10414903",
+  "job_id": "10414903",
+  "posted_date": "2026-05-08",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "long-term forecasting",
+   "capacity and planning forecasts"
+  ],
+  "min_quals": [
+   "2+ years as a data scientist",
+   "3+ years SQL/Python/R",
+   "3+ years ML / statistical modeling"
+  ],
+  "pref_quals": [
+   "PhD in STEM",
+   "ML for reasoning problems",
+   "Python/Perl scripting",
+   "GenAI benchmark creation"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "r",
+   "statistics",
+   "causal-inference",
+   "time-series-forecasting",
+   "bayesian-uncertainty",
+   "llm-genai",
+   "data-pipelines-etl",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Builds the multi-year roadmap and tooling that lets operations, stores and finance teams consume and act on company forecasts. Manages cross-functional science programs around forecasting outputs."
+ },
+ {
+  "id": "job-amazon-10579474",
+  "company": "Amazon",
+  "title": "Data Scientist I, PXT Central Science",
+  "team_org": "People Experience and Technology Central Science",
+  "locations": [
+   "Arlington, VA, USA"
+  ],
+  "level": "Data Scientist I (early career)",
+  "url": "https://www.amazon.jobs/en/jobs/10579474",
+  "job_id": "10579474",
+  "posted_date": "2026-10-15",
+  "accessed": "2026-11-12",
+  "tier": "C",
+  "domain_focus": [
+   "employee experience (off-domain)"
+  ],
+  "min_quals": [
+   "1+ year SQL/Python/R",
+   "2+ years as a data/research scientist or statistician on large data",
+   "Experience creating models and prototypes"
+  ],
+  "pref_quals": [
+   "PhD in STEM",
+   "Stats packages and BI tools",
+   "Basic ML concepts",
+   "Cluster/distributed data processing"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "r",
+   "scala",
+   "spark",
+   "statistics",
+   "llm-genai",
+   "big-data",
+   "dashboards-visualization",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-0-2"
+  ],
+  "responsibilities": "Designs and maintains statistical, ML or GenAI models and prototypes to fix employee-experience defects. Partners with scientists, engineers and product leaders. Calibration role for Amazon entry-level data science."
+ },
+ {
+  "id": "job-amazon-10601943",
+  "company": "Amazon",
+  "title": "Applied Scientist I, Tablet Product Software",
+  "team_org": "Devices - Tablet Product Software",
+  "locations": [
+   "Seattle, WA, USA"
+  ],
+  "level": "Applied Scientist I (early career)",
+  "url": "https://www.amazon.jobs/en/jobs/10601943",
+  "job_id": "10601943",
+  "posted_date": "2026-11-10",
+  "accessed": "2026-11-12",
+  "tier": "C",
+  "domain_focus": [
+   "recommendation models (off-domain)"
+  ],
+  "min_quals": [
+   "Master's in CS, math, stats, ML or similar",
+   "Programming in Java, C++ or Python",
+   "SQL and data warehouses"
+  ],
+  "pref_quals": [
+   "Implementing algorithms with toolkits and from scratch",
+   "Publications at top-tier venues"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "java",
+   "cpp",
+   "statistics",
+   "llm-genai",
+   "ml-system-design",
+   "mlops-deployment",
+   "masters-required"
+  ],
+  "responsibilities": "Designs and deploys recommendation models at scale, asks research questions about customer behaviour and ships models with engineers. Calibration role for Amazon entry-level applied science (Master's required)."
+ },
+ {
+  "id": "job-microsoft-200065939",
+  "company": "Microsoft",
+  "title": "Principal Data Scientist Manager",
+  "team_org": "Data Science (datacenter utilization / power reclamation)",
+  "locations": [
+   "Redmond, WA, USA"
+  ],
+  "level": "Principal manager",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557055369",
+  "job_id": "200065939",
+  "posted_date": "2026-11-11",
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "datacenter power utilization and reclamation",
+   "metrics and forecasting",
+   "operations research"
+  ],
+  "min_quals": [
+   "Doctorate in data science/stats/OR/CS plus 3+ years, or Master's plus more years",
+   "Statistical and analytical delivery experience"
+  ],
+  "pref_quals": [
+   "Longer data science tenure (10+ years via bachelor's route)",
+   "Master's or doctorate in a quantitative field"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "r",
+   "scala",
+   "statistics",
+   "time-series-forecasting",
+   "anomaly-detection",
+   "optimization-lp-mip",
+   "operations-research",
+   "experimentation-ab-testing",
+   "llm-genai",
+   "mlops-deployment",
+   "cloud-azure",
+   "azure-ml",
+   "dashboards-visualization",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Sets the analytics vision, measurement framework and roadmap for reclaiming stranded datacenter power and improving utilization. Owns metrics, forecasts, alerting, heatmaps and data governance, and presents to executives."
+ },
+ {
+  "id": "job-microsoft-200066763",
+  "company": "Microsoft",
+  "title": "Senior Data Scientist",
+  "team_org": "Data Science (infrastructure / capacity context)",
+  "locations": [
+   "Redmond, WA, USA"
+  ],
+  "level": "Senior",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557070629",
+  "job_id": "200066763",
+  "posted_date": "2026-11-12",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "infrastructure analytics",
+   "AI-powered analytical methods"
+  ],
+  "min_quals": [
+   "Doctorate in a quantitative field plus 1+ year, or Master's plus about 3 years data science"
+  ],
+  "pref_quals": [
+   "More years of data science experience (3+ with doctorate, more with Master's)"
+  ],
+  "skills": [
+   "scala",
+   "statistics",
+   "experimentation-ab-testing",
+   "operations-research",
+   "rag-agents",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "cloud-azure",
+   "azure-ml",
+   "dashboards-visualization",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Owns ambiguous high-impact analytical problems end to end: framing, data integration, statistical/ML/AI solutions, and recommendations to leaders. Builds reusable analytical methods. Domain tag is B because only partial infrastructure keywords matched."
+ },
+ {
+  "id": "job-microsoft-200063583",
+  "company": "Microsoft",
+  "title": "Principal Software Engineer - HW/SW in Fleet Infrastructure",
+  "team_org": "Microsoft 365 fleet infrastructure",
+  "locations": [
+   "Redmond, WA, USA",
+   "Mountain View, CA, USA",
+   "New York, NY, USA"
+  ],
+  "level": "Principal",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557046033",
+  "job_id": "200063583",
+  "posted_date": "2026-10-26",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "fleet health",
+   "hardware repair and reliability",
+   "telemetry"
+  ],
+  "min_quals": [
+   "Bachelor's in CS plus about 6 years engineering in C/C++/C#/Java/Python"
+  ],
+  "pref_quals": [
+   "Master's plus 8 years or bachelor's plus 12 years"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "scala",
+   "ml-system-design",
+   "mlops-deployment",
+   "model-monitoring",
+   "cloud-azure",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Sets technical strategy for fleet infrastructure software spanning firmware, fleet health, hardware repair, telemetry and monitoring, including reliability architecture for new hardware introduction. ML is a supporting theme, not the core."
+ },
+ {
+  "id": "job-microsoft-200046174",
+  "company": "Microsoft",
+  "title": "Principal Software Engineer, ML & Distributed Systems",
+  "team_org": "Cloud/AI platform",
+  "locations": [
+   "Redmond, WA, USA"
+  ],
+  "level": "Principal",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393556952147",
+  "job_id": "200046174",
+  "posted_date": "2026-09-01",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "ML serving at hyperscale",
+   "cost and latency optimization"
+  ],
+  "min_quals": [
+   "Bachelor's in CS plus about 6 years engineering"
+  ],
+  "pref_quals": [
+   "Master's plus 8 years"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "scala",
+   "optimization-lp-mip",
+   "deep-learning",
+   "llm-genai",
+   "rag-agents",
+   "mlops-deployment",
+   "model-monitoring",
+   "data-pipelines-etl",
+   "distributed-systems",
+   "kubernetes-docker",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Builds and operates containerised ML and deep learning services and model-serving at hyperscale, including LLM fine-tuning, evaluation pipelines and cost/latency tuning."
+ },
+ {
+  "id": "job-microsoft-200063877",
+  "company": "Microsoft",
+  "title": "Senior Software Engineer - AI Infrastructure",
+  "team_org": "Azure AI traffic management and scheduling",
+  "locations": [
+   "Redmond, WA, USA",
+   "Mountain View, CA, USA"
+  ],
+  "level": "Senior",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557047382",
+  "job_id": "200063877",
+  "posted_date": "2026-10-27",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "AI workload scheduling",
+   "capacity allocation",
+   "routing"
+  ],
+  "min_quals": [
+   "Bachelor's in CS plus about 4 years engineering"
+  ],
+  "pref_quals": [
+   "Master's plus 6 years"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "scala",
+   "optimization-lp-mip",
+   "llm-genai",
+   "ml-system-design",
+   "mlops-deployment",
+   "data-pipelines-etl",
+   "distributed-systems",
+   "cloud-azure",
+   "kubernetes-docker",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Designs distributed control-plane services and algorithms that route and allocate AI workloads across global infrastructure subject to latency, availability and cost targets."
+ },
+ {
+  "id": "job-microsoft-200065640",
+  "company": "Microsoft",
+  "title": "Senior Applied Scientist - AI for Safe Changes Health Gating",
+  "team_org": "Cloud reliability / safe deployment science",
+  "locations": [
+   "Redmond, WA, USA"
+  ],
+  "level": "Senior",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557053994",
+  "job_id": "200065640",
+  "posted_date": "2026-11-05",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "service health",
+   "change safety",
+   "failure attribution"
+  ],
+  "min_quals": [
+   "Bachelor's plus 4 years or Master's plus 3 years in stats/CS/EE-type field"
+  ],
+  "pref_quals": [
+   "Master's plus 6 years or doctorate in a related field"
+  ],
+  "skills": [
+   "statistics",
+   "causal-inference",
+   "time-series-forecasting",
+   "anomaly-detection",
+   "optimization-lp-mip",
+   "simulation-digital-twin",
+   "bayesian-uncertainty",
+   "rag-agents",
+   "mlops-deployment",
+   "model-monitoring",
+   "data-pipelines-etl",
+   "distributed-systems",
+   "ci-cd",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Frames change-safety and service-health problems as scientific questions and builds ML, causal, time-series or agent-based methods for regression detection, risk estimation, failure attribution and gating decisions."
+ },
+ {
+  "id": "job-microsoft-200062684",
+  "company": "Microsoft",
+  "title": "Senior Researcher - AI Systems and Infrastructure - Microsoft Research",
+  "team_org": "Microsoft Research (Vancouver)",
+  "locations": [
+   "Vancouver, BC, Canada"
+  ],
+  "level": "Senior researcher",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557043769",
+  "job_id": "200062684",
+  "posted_date": "2026-10-26",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "AI infrastructure efficiency",
+   "resource utilization"
+  ],
+  "min_quals": [
+   "Doctorate, or Master's plus 3 years research, or bachelor's plus 4 years"
+  ],
+  "pref_quals": [
+   "Doctorate plus 3 years research, or Master's plus 6 years"
+  ],
+  "skills": [
+   "optimization-lp-mip",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Researches AI-driven methods that improve performance, efficiency, scalability and reliability of AI systems and infrastructure, working with hardware and systems teams. Based in Vancouver."
+ },
+ {
+  "id": "job-microsoft-200065126",
+  "company": "Microsoft",
+  "title": "Software Engineer 2 - GPU COGS/Efficiency",
+  "team_org": "AI infrastructure cost efficiency",
+  "locations": [
+   "Shanghai, China",
+   "Suzhou, China"
+  ],
+  "level": "SWE 2",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557052841",
+  "job_id": "200065126",
+  "posted_date": "2026-11-05",
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "GPU cost of goods and efficiency",
+   "fleet utilization"
+  ],
+  "min_quals": [
+   "Not captured in detail (posting text did not render fully); standard SWE 2 profile of about 2+ years"
+  ],
+  "pref_quals": [
+   "Not captured"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "optimization-lp-mip",
+   "llm-genai",
+   "ml-system-design",
+   "mlops-deployment",
+   "model-monitoring",
+   "data-pipelines-etl",
+   "distributed-systems",
+   "dashboards-visualization",
+   "yoe-3-5"
+  ],
+  "responsibilities": "Works on GPU cost and efficiency measurement and improvement for AI infrastructure. Requirement detail not fully captured; tags come from keyword matching on the visible text."
+ },
+ {
+  "id": "job-microsoft-200061655",
+  "company": "Microsoft",
+  "title": "Applied Scientist II",
+  "team_org": "Applied Sciences (Copilot-related)",
+  "locations": [
+   "Redmond, WA, USA"
+  ],
+  "level": "Applied Scientist II (early career)",
+  "url": "https://apply.careers.microsoft.com/careers/job/1970393557040164",
+  "job_id": "200061655",
+  "posted_date": "2026-10-16",
+  "accessed": "2026-11-12",
+  "tier": "C",
+  "domain_focus": [
+   "Copilot ML (off-domain)"
+  ],
+  "min_quals": [
+   "Bachelor's plus 2 years, or Master's plus 1 year, in stats/CS/EE-type field"
+  ],
+  "pref_quals": [
+   "2+ years Python/C++ coding",
+   "2+ years applying deep learning to products",
+   "Experience with common ML/DL frameworks"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "scala",
+   "pytorch",
+   "tensorflow",
+   "statistics",
+   "deep-learning",
+   "nlp",
+   "llm-genai",
+   "rag-agents",
+   "mlops-deployment",
+   "distributed-systems",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-0-2"
+  ],
+  "responsibilities": "Builds ML and deep learning models over text, images and video for Copilot scenarios, from design through experimentation to shipping. Calibration for Microsoft entry-level applied science."
+ },
+ {
+  "id": "job-google-138642076408390342",
+  "company": "Google",
+  "title": "Staff Software Engineer, Google Data Center Planning",
+  "team_org": "Data Center Planning",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Staff",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/138642076408390342",
+  "job_id": "138642076408390342",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "data center capacity (gigawatts)",
+   "planning optimization",
+   "multi-year allocation"
+  ],
+  "min_quals": [
+   "Bachelor's or equivalent",
+   "8 years C++",
+   "5 years testing and launching software",
+   "5 years large-scale infrastructure or distributed systems",
+   "3 years software design and architecture"
+  ],
+  "pref_quals": [
+   "Master's or PhD",
+   "8 years data structures and algorithms",
+   "3 years technical leadership"
+  ],
+  "skills": [
+   "cpp",
+   "optimization-lp-mip",
+   "ml-system-design",
+   "distributed-systems",
+   "stakeholder-communication",
+   "phd-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Owns the optimal use of gigawatts of data center capacity across internal and external customers over a multi-year horizon, writing the planning software and setting policy. Mostly optimization and software engineering rather than ML."
+ },
+ {
+  "id": "job-google-136915934152401606",
+  "company": "Google",
+  "title": "Senior Product Data Scientist, ML Resource Efficiency",
+  "team_org": "ML infrastructure efficiency",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Senior",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/136915934152401606",
+  "job_id": "136915934152401606",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "ML resource efficiency",
+   "analytics"
+  ],
+  "min_quals": [
+   "Bachelor's in stats/math/engineering/physics/economics",
+   "8 years of analytics (or 5 with Master's) using Python/R/SQL"
+  ],
+  "pref_quals": [
+   "Master's degree",
+   "Experience working on ML products"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "r",
+   "statistics",
+   "physics-based-modeling",
+   "mlops-deployment",
+   "stakeholder-communication",
+   "masters-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Analyses ML fleet resource efficiency, reports KPIs and turns open-ended business problems into recommended actions. Analytics-heavy with ML as the subject domain."
+ },
+ {
+  "id": "job-google-141496697866855110",
+  "company": "Google",
+  "title": "Software Engineer, Fleet Analytics, PhD, Early Career, 2026",
+  "team_org": "Fleet Analytics (cloud infrastructure optimization)",
+  "locations": [
+   "not captured"
+  ],
+  "level": "PhD early career",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/141496697866855110",
+  "job_id": "141496697866855110",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "fleet optimization",
+   "mixed integer programming",
+   "cloud infrastructure"
+  ],
+  "min_quals": [
+   "PhD in CS, EE or related",
+   "Applying mathematical techniques to large intractable problems",
+   "Advanced research experience"
+  ],
+  "pref_quals": [
+   "PhD in stats, applied math or OR",
+   "Mathematical optimization (LP, IP, MIP, NLP)",
+   "Understanding of cloud virtualization and global infrastructure"
+  ],
+  "skills": [
+   "optimization-lp-mip",
+   "operations-research",
+   "statistics",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "cloud-gcp",
+   "stakeholder-communication",
+   "phd-preferred",
+   "yoe-0-2"
+  ],
+  "responsibilities": "Builds advanced optimization models (MIP) and platform capabilities for fleet analytics, rolling features out with safe-rollout practice and supporting partner teams. Early-career PhD entry route."
+ },
+ {
+  "id": "job-google-139663235753091782",
+  "company": "Google",
+  "title": "Senior Staff Software Engineer, AI/ML, Google Cloud Compute Infrastructure",
+  "team_org": "Cloud Compute Infrastructure (AI/ML)",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Senior Staff",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/139663235753091782",
+  "job_id": "139663235753091782",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "hardware/software co-design",
+   "ML system performance modeling",
+   "power and performance"
+  ],
+  "min_quals": [
+   "Bachelor's in CS/CE/EE",
+   "8 years software or systems engineering",
+   "5 years with ML systems, performance modeling or simulation",
+   "ML frameworks"
+  ],
+  "pref_quals": [
+   "Master's or PhD",
+   "5 years technical leadership",
+   "Hardware/software co-design experience"
+  ],
+  "skills": [
+   "python",
+   "cpp",
+   "pytorch",
+   "tensorflow",
+   "jax",
+   "deep-learning",
+   "llm-genai",
+   "simulation-digital-twin",
+   "ml-system-design",
+   "mlops-deployment",
+   "data-pipelines-etl",
+   "distributed-systems",
+   "cloud-gcp",
+   "phd-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Leads hardware/software co-design and performance modeling for large-scale ML training and inference, including simulation frameworks and system analysis tools."
+ },
+ {
+  "id": "job-google-80847978566165190",
+  "company": "Google",
+  "title": "Staff Software Engineer, Core Systems and Capacity Assurance",
+  "team_org": "Data center hardware new product introduction",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Staff",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/80847978566165190",
+  "job_id": "80847978566165190",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "data center hardware bring-up",
+   "test automation",
+   "failure analysis"
+  ],
+  "min_quals": [
+   "Bachelor's or equivalent",
+   "8 years software development",
+   "5 years testing/launching products",
+   "Experience integrating GenAI tools or LLMs into workflows",
+   "Data analysis and failure analysis"
+  ],
+  "pref_quals": [
+   "Master's or PhD",
+   "Data center systems, Linux, networking, ML hardware",
+   "Strong debugging"
+  ],
+  "skills": [
+   "python",
+   "llm-genai",
+   "anomaly-detection",
+   "ml-system-design",
+   "distributed-systems",
+   "stakeholder-communication",
+   "phd-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Manages automation, diagnostics and test processes that install, configure and validate new data center hardware from manufacturing to deployment. ML appears via LLM-in-workflow and failure analysis."
+ },
+ {
+  "id": "job-google-136909835298841286",
+  "company": "Google",
+  "title": "Staff Software Developer, Applied AI, Site Reliability Development",
+  "team_org": "Site Reliability Engineering, Google Cloud",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Staff",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/136909835298841286",
+  "job_id": "136909835298841286",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "SRE with applied AI",
+   "capacity planning",
+   "service monitoring"
+  ],
+  "min_quals": [
+   "Bachelor's in CS or equivalent",
+   "8 years software development",
+   "3 years leading projects",
+   "3 years designing and troubleshooting distributed systems"
+  ],
+  "pref_quals": [
+   "Master's in CS or engineering"
+  ],
+  "skills": [
+   "ml-system-design",
+   "mlops-deployment",
+   "model-monitoring",
+   "distributed-systems",
+   "cloud-gcp",
+   "stakeholder-communication",
+   "masters-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "SRE-style ownership of service lifecycle, including capacity planning, launch reviews and monitoring, applied with AI tooling. Reliability engineering focus."
+ },
+ {
+  "id": "job-google-133367856568902342",
+  "company": "Google",
+  "title": "Senior Staff Software Engineer, ML Performance, GPU",
+  "team_org": "ML compilers / GPU performance",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Senior Staff",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/133367856568902342",
+  "job_id": "133367856568902342",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "ML efficiency (GPU performance)",
+   "LLM training and serving benchmarks"
+  ],
+  "min_quals": [
+   "Bachelor's or equivalent",
+   "8 years software development",
+   "7 years leading ML design and optimising end-to-end ML",
+   "Modern GPU architecture knowledge"
+  ],
+  "pref_quals": [
+   "Master's or PhD",
+   "5 years technical leadership"
+  ],
+  "skills": [
+   "python",
+   "cpp",
+   "deep-learning",
+   "llm-genai",
+   "simulation-digital-twin",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "phd-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Maintains LLM training/serving benchmarks and drives XLA:GPU and Triton performance, working with DeepMind to train and serve models efficiently at scale."
+ },
+ {
+  "id": "job-google-127602843300307654",
+  "company": "Google",
+  "title": "Software Engineer, AI/ML, PhD, Early Career, 2026",
+  "team_org": "AI/ML software engineering",
+  "locations": [
+   "not captured"
+  ],
+  "level": "PhD early career",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/127602843300307654",
+  "job_id": "127602843300307654",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "C",
+  "domain_focus": [
+   "ML infrastructure (off-domain)"
+  ],
+  "min_quals": [
+   "PhD in CS, EE or related",
+   "1 year in speech/audio, RL, ML infrastructure or another ML specialty",
+   "1 year with ML infrastructure"
+  ],
+  "pref_quals": [
+   "2 years data structures and algorithms",
+   "Peer-reviewed publications"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "reinforcement-learning",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "phd-preferred",
+   "yoe-0-2"
+  ],
+  "responsibilities": "Writes product and system code, joins design and code reviews and triages issues in an AI/ML area. PhD-level early-career entry route."
+ },
+ {
+  "id": "job-google-123087196289671878",
+  "company": "Google",
+  "title": "Software Engineer, AI/Machine Learning, PhD, Early Career, 2027 Start",
+  "team_org": "AI/ML systems",
+  "locations": [
+   "not captured"
+  ],
+  "level": "PhD early career",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/123087196289671878",
+  "job_id": "123087196289671878",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "C",
+  "domain_focus": [
+   "ML systems across the stack (off-domain)"
+  ],
+  "min_quals": [
+   "PhD in CS, AI, ML or related",
+   "Coding in Python, C, C++, Java, JavaScript or Go",
+   "Experience in ML or AI"
+  ],
+  "pref_quals": [
+   "Research on large-scale distributed ML systems",
+   "Designing, training or refining complex models",
+   "Building AI application stacks incl. data pipelines"
+  ],
+  "skills": [
+   "python",
+   "java",
+   "cpp",
+   "pytorch",
+   "tensorflow",
+   "jax",
+   "deep-learning",
+   "data-pipelines-etl",
+   "ml-system-design",
+   "mlops-deployment",
+   "distributed-systems",
+   "phd-preferred",
+   "yoe-0-2"
+  ],
+  "responsibilities": "Builds end-to-end ML systems from hardware acceleration and compilers to model architecture and production APIs, turning research into robust systems."
+ },
+ {
+  "id": "job-meta-2689975688126702",
+  "company": "Meta",
+  "title": "Research Scientist, Infrastructure Modeling and Reliability",
+  "team_org": "Infrastructure / Data Center Strategy",
+  "locations": [
+   "Menlo Park, CA, USA",
+   "Remote, US"
+  ],
+  "level": "Senior/principal (10+ yrs)",
+  "url": "https://www.metacareers.com/profile/job_details/2689975688126702",
+  "job_id": "2689975688126702",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "data center power consumption and peak-risk modeling",
+   "reliability tradeoffs",
+   "uncertainty quantification"
+  ],
+  "min_quals": [
+   "10+ years building statistical, ML, simulation, forecasting or optimization systems",
+   "Leading ambiguous cross-functional programs from problem to deployment",
+   "Coding in Python, R, C++ or Java",
+   "Communicating assumptions and uncertainty"
+  ],
+  "pref_quals": [
+   "Not captured in detail"
+  ],
+  "skills": [
+   "python",
+   "r",
+   "cpp",
+   "java",
+   "statistics",
+   "time-series-forecasting",
+   "optimization-lp-mip",
+   "simulation-digital-twin",
+   "bayesian-uncertainty",
+   "mlops-deployment",
+   "power-systems-electrical",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Sets scientific direction for modeling power demand, peak risk and reliability across large-scale infrastructure: forecasting power, estimating peak distributions and quantifying uncertainty to support planning."
+ },
+ {
+  "id": "job-meta-1612727887131849",
+  "company": "Meta",
+  "title": "Research Scientist, Infrastructure Modeling and Reliability (second listing)",
+  "team_org": "Infrastructure / Data Center Strategy",
+  "locations": [
+   "Menlo Park, CA, USA"
+  ],
+  "level": "Senior/principal (10+ yrs)",
+  "url": "https://www.metacareers.com/profile/job_details/1612727887131849",
+  "job_id": "1612727887131849",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "data center power consumption and peak-risk modeling",
+   "reliability tradeoffs"
+  ],
+  "min_quals": [
+   "10+ years quantitative modeling (statistical, ML, simulation, forecasting, optimization)",
+   "Leading cross-functional technical programs to deployment"
+  ],
+  "pref_quals": [
+   "Not captured in detail"
+  ],
+  "skills": [
+   "python",
+   "statistics",
+   "time-series-forecasting",
+   "optimization-lp-mip",
+   "simulation-digital-twin",
+   "bayesian-uncertainty",
+   "power-systems-electrical",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Same scope as its sibling listing: models power consumption, peak risk and reliability tradeoffs with statistical, ML and optimization methods that forecast demand and quantify uncertainty."
+ },
+ {
+  "id": "job-meta-1487028006662011",
+  "company": "Meta",
+  "title": "Research Scientist, Server Demand Forecasting",
+  "team_org": "Data Center Operations / Infrastructure planning",
+  "locations": [
+   "Menlo Park, CA, USA"
+  ],
+  "level": "Principal technical leader",
+  "url": "https://www.metacareers.com/profile/job_details/1487028006662011",
+  "job_id": "1487028006662011",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "server and MW demand forecasting",
+   "demand-supply matching",
+   "power and cooling constraints"
+  ],
+  "min_quals": [
+   "8+ years applying operations research to planning problems",
+   "MS in OR, IE, applied math, stats or CS",
+   "LP, MILP, stochastic/robust optimization, simulation, queuing, probabilistic forecasting",
+   "Gurobi/CPLEX/OR-Tools, SQL and Python"
+  ],
+  "pref_quals": [
+   "Hyperscale data center capacity planning",
+   "Time-series and hierarchical probabilistic forecasting",
+   "PhD in OR or similar"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "time-series-forecasting",
+   "optimization-lp-mip",
+   "operations-research",
+   "simulation-digital-twin",
+   "bayesian-uncertainty",
+   "mlops-deployment",
+   "data-pipelines-etl",
+   "stakeholder-communication",
+   "masters-required",
+   "phd-preferred",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Owns 2-5 year server and megawatt demand forecasts and the operations-research models that match demand to hardware, cooling, lead time and power supply constraints. Mixes production optimization systems with quick prototypes."
+ },
+ {
+  "id": "job-meta-1117047447904510",
+  "company": "Meta",
+  "title": "Research Scientist, Demand Forecasting",
+  "team_org": "Server Demand Planning, Infrastructure",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Senior (6+ yrs)",
+  "url": "https://www.metacareers.com/profile/job_details/1117047447904510",
+  "job_id": "1117047447904510",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "server demand forecasting",
+   "capacity planning"
+  ],
+  "min_quals": [
+   "6+ years applying operations research to demand and capacity planning",
+   "MS in a quantitative field",
+   "LP/MILP, stochastic optimization, simulation, queuing, probabilistic forecasting"
+  ],
+  "pref_quals": [
+   "Hyperscale capacity planning",
+   "Statistical/ML forecasting depth"
+  ],
+  "skills": [
+   "python",
+   "sql",
+   "time-series-forecasting",
+   "optimization-lp-mip",
+   "operations-research",
+   "simulation-digital-twin",
+   "bayesian-uncertainty",
+   "stakeholder-communication",
+   "masters-required",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Technical owner within server demand planning: forecasts compute demand by hardware type and region and builds models that reconcile it with supply."
+ },
+ {
+  "id": "job-meta-1881878742790429",
+  "company": "Meta",
+  "title": "Data Scientist, Infrastructure Finance",
+  "team_org": "Infrastructure finance and capacity strategy",
+  "locations": [
+   "Menlo Park, CA, USA"
+  ],
+  "level": "Senior (10+ yrs)",
+  "url": "https://www.metacareers.com/profile/job_details/1881878742790429",
+  "job_id": "1881878742790429",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "capacity and efficiency investment analytics"
+  ],
+  "min_quals": [
+   "10+ years analysis, data science, statistics, economics or OR on business/investment decisions",
+   "Quantitative degree",
+   "Data science for operational planning and resource allocation"
+  ],
+  "pref_quals": [
+   "Integrating AI tools to redesign workflows"
+  ],
+  "skills": [
+   "statistics",
+   "operations-research",
+   "optimization-lp-mip",
+   "dashboards-visualization",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Builds analytical models and decision frameworks that turn utilisation, demand, cost and capacity constraints into metrics and scenarios for multi-year capacity plans and efficiency goals."
+ },
+ {
+  "id": "job-meta-2561197087738216",
+  "company": "Meta",
+  "title": "Research Scientist, Systems ML - HW/SW Co-Design",
+  "team_org": "MTIA AI accelerator architecture",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Senior (7+ yrs)",
+  "url": "https://www.metacareers.com/profile/job_details/2561197087738216",
+  "job_id": "2561197087738216",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "B",
+  "domain_focus": [
+   "AI accelerator power efficiency",
+   "hardware/software co-design"
+  ],
+  "min_quals": [
+   "Bachelor's in CS/CE/EE",
+   "7+ years industry",
+   "HW/SW co-design, accelerator architecture, systems for ML, HPC or performance modeling"
+  ],
+  "pref_quals": [
+   "Ongoing AI skill development (prompting, agent orchestration)"
+  ],
+  "skills": [
+   "python",
+   "cpp",
+   "deep-learning",
+   "simulation-digital-twin",
+   "ml-system-design",
+   "distributed-systems",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Turns production ML workload insights into hardware design decisions that improve performance, power efficiency and cost of Meta's AI accelerators, with data-driven pre-silicon analysis."
+ },
+ {
+  "id": "job-meta-2097712830820463",
+  "company": "Meta",
+  "title": "Energy Analyst, Data Center Portfolio",
+  "team_org": "Data Center Strategy / Engineering",
+  "locations": [
+   "Bellevue, WA, USA"
+  ],
+  "level": "Senior (6+ yrs)",
+  "url": "https://www.metacareers.com/profile/job_details/2097712830820463",
+  "job_id": "2097712830820463",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "A",
+  "domain_focus": [
+   "data center energy cost",
+   "tariffs and wholesale markets",
+   "load forecasting"
+  ],
+  "min_quals": [
+   "6+ years in energy industry on rate analysis, load forecasting or market analytics",
+   "Utility tariff and wholesale market analysis",
+   "Quantitative and financial modeling"
+  ],
+  "pref_quals": [
+   "Not captured in detail"
+  ],
+  "skills": [
+   "sql",
+   "statistics",
+   "time-series-forecasting",
+   "energy-markets",
+   "power-systems-electrical",
+   "dashboards-visualization",
+   "stakeholder-communication",
+   "yoe-5plus"
+  ],
+  "responsibilities": "Evaluates energy cost implications of data center sites using tariffs and wholesale prices, and forecasts consumption, demand charges and rate impacts across Meta's portfolio. Analytics and finance oriented rather than ML-heavy; included as the closest Meta energy-markets role."
+ },
+ {
+  "id": "job-meta-1791619365408270",
+  "company": "Meta",
+  "title": "Software Engineer, Systems Machine Learning",
+  "team_org": "MTIA tooling (AI accelerators)",
+  "locations": [
+   "not captured"
+  ],
+  "level": "Entry (degree in progress or completed)",
+  "url": "https://www.metacareers.com/profile/job_details/1791619365408270",
+  "job_id": "1791619365408270",
+  "posted_date": null,
+  "accessed": "2026-11-12",
+  "tier": "C",
+  "domain_focus": [
+   "ML systems tooling (off-domain)"
+  ],
+  "min_quals": [
+   "Currently has or is completing a bachelor's in CS or similar",
+   "Degree complete before joining"
+  ],
+  "pref_quals": [
+   "Exposure to accelerators (GPU/CUDA, TPU, ASIC)",
+   "Ongoing AI skill development"
+  ],
+  "skills": [
+   "python",
+   "cpp",
+   "ml-system-design",
+   "model-monitoring",
+   "mlops-deployment",
+   "yoe-0-2"
+  ],
+  "responsibilities": "Builds debugging, profiling, performance and monitoring tools for Meta's ML accelerator stack, owning features end to end. Entry-level calibration role."
+ }
+]

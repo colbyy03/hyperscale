@@ -1,0 +1,517 @@
+[
+ {
+  "id": "mds-course-descriptions",
+  "type": "course",
+  "title": "MDS Courses (descriptions)",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://ubc-mds.github.io/descriptions/",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   4,
+   6,
+   7,
+   8,
+   10
+  ],
+  "notes": "Official course codes, blocks, descriptions."
+ },
+ {
+  "id": "mds-vancouver-program",
+  "type": "web",
+  "title": "MDS Vancouver program page",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://masterdatascience.ubc.ca/programs/vancouver",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Block structure; Block 5 has a 1-week break."
+ },
+ {
+  "id": "mds-event-calendar",
+  "type": "web",
+  "title": "MDS Event Calendar",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://ubc-mds.github.io/event-calendar/",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Orientation, midterm breaks, Dec 21, Jan 5 dates."
+ },
+ {
+  "id": "mds-capstone-timeline",
+  "type": "web",
+  "title": "MDS Capstone Timeline",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://ubc-mds.github.io/capstone/timeline/",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Capstone Apr 26-Jun 24 2027."
+ },
+ {
+  "id": "ubc-van-dates",
+  "type": "web",
+  "title": "UBC Vancouver dates and deadlines 2026/27",
+  "authors": [
+   "UBC"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://vancouver.calendar.ubc.ca/dates-and-deadlines",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Term 1/2 dates, midterm breaks."
+ },
+ {
+  "id": "mds-policies",
+  "type": "web",
+  "title": "MDS Policies",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://ubc-mds.github.io/policies/",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Blocks numbered 1-6; no dates."
+ },
+ {
+  "id": "mds-calendar-page",
+  "type": "web",
+  "title": "MDS Calendar page",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "UBC MDS",
+  "doi": null,
+  "url": "https://ubc-mds.github.io/calendar/",
+  "open_url": null,
+  "access": "partial",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Detailed calendar is login-gated; notes MDS runs ~1 week shifted from UBC."
+ },
+ {
+  "id": "ubc-mds-dsci-571",
+  "type": "software",
+  "title": "UBC-MDS DSCI 571 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_571_sup-learn-1",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   6,
+   7,
+   8,
+   9,
+   11
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-572",
+  "type": "software",
+  "title": "UBC-MDS DSCI 572 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_572_sup-learn-2",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   3,
+   12,
+   13,
+   14,
+   15
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-573",
+  "type": "software",
+  "title": "UBC-MDS DSCI 573 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_573_feat-model-select",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   6,
+   7,
+   8,
+   11
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-563",
+  "type": "software",
+  "title": "UBC-MDS DSCI 563 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_563_unsup-learn",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   10
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-575",
+  "type": "software",
+  "title": "UBC-MDS DSCI 575 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_575_adv-mach-learn",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   15,
+   16,
+   17
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-574",
+  "type": "software",
+  "title": "UBC-MDS DSCI 574 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_574_spat-temp-mod",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   21,
+   22
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-553",
+  "type": "software",
+  "title": "UBC-MDS DSCI 553 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_553_stat-inf-2",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   4,
+   25
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-561",
+  "type": "software",
+  "title": "UBC-MDS DSCI 561 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_561_regr-1",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   4,
+   6
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-562",
+  "type": "software",
+  "title": "UBC-MDS DSCI 562 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_562_regr-2",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   4,
+   6
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-552",
+  "type": "software",
+  "title": "UBC-MDS DSCI 552 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_552_stat-inf-1",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   4
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-554",
+  "type": "software",
+  "title": "UBC-MDS DSCI 554 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_554_exper-causal-inf",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   26
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-525",
+  "type": "software",
+  "title": "UBC-MDS DSCI 525 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_525_web-cloud-comp",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   28,
+   29
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-512",
+  "type": "software",
+  "title": "UBC-MDS DSCI 512 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_512_alg-data-struct",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   24
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-511",
+  "type": "software",
+  "title": "UBC-MDS DSCI 511 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_511_prog-dsci",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-524",
+  "type": "software",
+  "title": "UBC-MDS DSCI 524 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_524_collab-sw-dev",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   1,
+   28
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-dsci-522",
+  "type": "software",
+  "title": "UBC-MDS DSCI 522 repository README",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/DSCI_522_dsci-workflows",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [
+   28
+  ],
+  "notes": "Public course README; used for lecture topics, language and assessments (offering year may be older)."
+ },
+ {
+  "id": "ubc-mds-public",
+  "type": "software",
+  "title": "UBC-MDS public course index",
+  "authors": [
+   "UBC MDS"
+  ],
+  "year": 2026,
+  "venue": "GitHub",
+  "doi": null,
+  "url": "https://github.com/UBC-MDS/public",
+  "open_url": null,
+  "access": "open",
+  "license": null,
+  "accessed": "2026-11-12",
+  "verified": true,
+  "modules": [],
+  "notes": "Index linking 25 course repos."
+ }
+]

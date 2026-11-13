@@ -1,0 +1,931 @@
+{
+ "calendar": [
+  {
+   "label": "Orientation",
+   "start": "2026-08-26",
+   "end": "2026-08-28",
+   "status": "published",
+   "notes": "MDS dinner Aug 28. Source: MDS event calendar."
+  },
+  {
+   "label": "Block 1 (DSCI 511,521,523,551)",
+   "start": "2026-09-08",
+   "end": "2026-10-02",
+   "status": "inferred",
+   "notes": "4 teaching weeks; UBC Term 1 starts Tue Sep 8 (Sep 7 Labour Day). MDS says it usually runs about a week off UBC dates; exact start unpublished."
+  },
+  {
+   "label": "Block 1 week 5 (no lectures/labs)",
+   "start": "2026-10-05",
+   "end": "2026-10-09",
+   "status": "inferred",
+   "notes": "Derived from 5-week cadence."
+  },
+  {
+   "label": "Block 2 (DSCI 512,531,552,571)",
+   "start": "2026-10-12",
+   "end": "2026-11-06",
+   "status": "inferred",
+   "notes": "CURRENT BLOCK on 2026-11-12 just ended; matches learner's recent 531/552/571 labs. Oct 12 is Thanksgiving, so real start may be Oct 13."
+  },
+  {
+   "label": "Block 2 week 5 / Semester 1 midterm break",
+   "start": "2026-11-09",
+   "end": "2026-11-13",
+   "status": "published",
+   "notes": "Published as Semester 1 midterm break Nov 9-13 (UBC midterm break Nov 9-11 incl. Remembrance Day). This is the week the learner is in on 2026-11-12."
+  },
+  {
+   "label": "Block 3 (DSCI 513,522,561,573)",
+   "start": "2026-11-16",
+   "end": "2026-12-11",
+   "status": "inferred",
+   "notes": "Teaching weeks; deadlines and quizzes may spill into week 5."
+  },
+  {
+   "label": "Block 3 week 5 / end of Semester 1",
+   "start": "2026-12-14",
+   "end": "2026-12-21",
+   "status": "published",
+   "notes": "Last day of Semester 1 is Dec 21 (published); week 5 Dec 14-18 inferred."
+  },
+  {
+   "label": "Winter break",
+   "start": "2026-12-22",
+   "end": "2027-01-04",
+   "status": "inferred",
+   "notes": "Between published Dec 21 and Jan 5 dates; ~2 weeks free for Hyperscale."
+  },
+  {
+   "label": "Block 4 (DSCI 524,541,562,572)",
+   "start": "2027-01-05",
+   "end": "2027-02-05",
+   "status": "inferred",
+   "notes": "Semester 2 starts Jan 5 (published); 4 teaching weeks plus week 5 (Feb 1-5) inferred."
+  },
+  {
+   "label": "Semester 2 midterm break",
+   "start": "2027-02-08",
+   "end": "2027-02-12",
+   "status": "published",
+   "notes": "Published Feb 8-12 for Blocks 4-6. UBC's own break is Feb 15-19; MDS differs."
+  },
+  {
+   "label": "Block 5 (DSCI 525,553,563,574)",
+   "start": "2027-02-15",
+   "end": "2027-03-12",
+   "status": "inferred",
+   "notes": "Program page says Block 5 is 4 weeks plus a 1-week break; exact placement unconfirmed (could instead start Feb 1 with break inside). Week 5 ~Mar 15-19."
+  },
+  {
+   "label": "Block 6 (DSCI 532,542,554,575)",
+   "start": "2027-03-22",
+   "end": "2027-04-16",
+   "status": "inferred",
+   "notes": "Good Friday Mar 26 and Easter Monday Mar 29, 2027 (calendar fact) fall inside; week 5 ~Apr 19-23."
+  },
+  {
+   "label": "Capstone (DSCI 591)",
+   "start": "2027-04-26",
+   "end": "2027-06-24",
+   "status": "published",
+   "notes": "Kickoff hackathon Apr 26-28 at Point Grey. Source: capstone timeline page."
+  },
+  {
+   "label": "End-of-program celebration",
+   "start": "2027-06-24",
+   "end": "2027-06-30",
+   "status": "published",
+   "notes": "'End of June 2027' per MDS event calendar."
+  },
+  {
+   "label": "Convocation",
+   "start": "2027-11-01",
+   "end": "2027-11-30",
+   "status": "published",
+   "notes": "Late November 2027, date TBC."
+  }
+ ],
+ "current_block_on_2026_11_12": "Between blocks: Block 2 (DSCI 512/531/552/571, Oct 12-Nov 6, inferred) has ended and Nov 9-13 is its week 5 / published Semester 1 midterm break. Block 3 begins ~Nov 16.",
+ "courses": [
+  {
+   "code": "DSCI 511",
+   "title": "Programming for Data Science",
+   "block": 1,
+   "language": "Python",
+   "topics": [
+    "control flow, functions, classes",
+    "unit tests, style, scripts",
+    "NumPy intro",
+    "pandas wrangling"
+   ],
+   "depth": "applied, intro",
+   "tools": [
+    "Python",
+    "NumPy",
+    "pandas",
+    "Jupyter"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_511_prog-dsci"
+  },
+  {
+   "code": "DSCI 521",
+   "title": "Computing Platforms for Data Science",
+   "block": 1,
+   "language": "Python/R",
+   "topics": [
+    "Unix shell",
+    "git/GitHub",
+    "environments, IDEs",
+    "literate programming"
+   ],
+   "depth": "applied, intro",
+   "tools": [
+    "bash",
+    "git",
+    "conda",
+    "Jupyter"
+   ],
+   "url": "https://ubc-mds.github.io/descriptions/"
+  },
+  {
+   "code": "DSCI 523",
+   "title": "Programming for Data Manipulation",
+   "block": 1,
+   "language": "R",
+   "topics": [
+    "tidyverse wrangling: filter, group, reshape, clean"
+   ],
+   "depth": "applied",
+   "tools": [
+    "R",
+    "tidyverse"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_523_r-prog"
+  },
+  {
+   "code": "DSCI 551",
+   "title": "Descriptive Statistics and Probability for Data Science",
+   "block": 1,
+   "language": "R",
+   "topics": [
+    "descriptive stats",
+    "random variables, distributions",
+    "joint/conditional/marginal probability",
+    "missing data"
+   ],
+   "depth": "intro-moderate, some math",
+   "tools": [
+    "R"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci"
+  },
+  {
+   "code": "DSCI 512",
+   "title": "Algorithms and Data Structures",
+   "block": 2,
+   "language": "Python",
+   "topics": [
+    "Big-O",
+    "search/sort/hash tables",
+    "recursion",
+    "graphs",
+    "discrete optimization",
+    "dynamic programming, speeding up Python"
+   ],
+   "depth": "applied analysis with CLRS-style references",
+   "tools": [
+    "Python",
+    "Jupyter"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_512_alg-data-struct"
+  },
+  {
+   "code": "DSCI 531",
+   "title": "Data Visualization I",
+   "block": 2,
+   "language": "R and Python",
+   "topics": [
+    "principles of visualization",
+    "static plots",
+    "EDA",
+    "ggplot2 and Altair"
+   ],
+   "depth": "applied",
+   "tools": [
+    "ggplot2",
+    "Altair"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_531_viz-1"
+  },
+  {
+   "code": "DSCI 552",
+   "title": "Statistical Inference and Computation I",
+   "block": 2,
+   "language": "R",
+   "topics": [
+    "sampling, bootstrap",
+    "CIs via bootstrap and CLT",
+    "simulation-based hypothesis tests",
+    "t-tests, ANOVA",
+    "error types and power"
+   ],
+   "depth": "introductory, simulation-first",
+   "tools": [
+    "R",
+    "ModernDive"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_552_stat-inf-1"
+  },
+  {
+   "code": "DSCI 571",
+   "title": "Supervised Learning I",
+   "block": 2,
+   "language": "Python",
+   "topics": [
+    "baselines, decision trees",
+    "ML fundamentals, overfitting, golden rule",
+    "kNN, SVM RBF",
+    "preprocessing, pipelines, ColumnTransformer, text features",
+    "hyperparameter search, optimization bias",
+    "naive Bayes",
+    "logistic regression, multiclass"
+   ],
+   "depth": "applied library use, intuition-first; no from-scratch",
+   "tools": [
+    "scikit-learn",
+    "Jupyter",
+    "Gradescope"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_571_sup-learn-1"
+  },
+  {
+   "code": "DSCI 513",
+   "title": "Databases and Data Retrieval",
+   "block": 3,
+   "language": "SQL (Python/R clients)",
+   "topics": [
+    "relational schemas",
+    "SQL queries",
+    "embedded SQL",
+    "XML/XQuery"
+   ],
+   "depth": "applied",
+   "tools": [
+    "SQL"
+   ],
+   "url": "https://ubc-mds.github.io/descriptions/"
+  },
+  {
+   "code": "DSCI 522",
+   "title": "Data Science Workflows",
+   "block": 3,
+   "language": "Python and R",
+   "topics": [
+    "scripts vs notebooks",
+    "Make pipelines",
+    "Docker environments",
+    "git PR workflow",
+    "reproducibility"
+   ],
+   "depth": "practical, project-based (team of 3-4)",
+   "tools": [
+    "git",
+    "Make",
+    "Docker",
+    "Jupyter",
+    "docopt"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_522_dsci-workflows"
+  },
+  {
+   "code": "DSCI 561",
+   "title": "Regression I",
+   "block": 3,
+   "language": "R",
+   "topics": [
+    "linear models in matrix form",
+    "categorical/continuous predictors, interactions",
+    "least squares, CIs, prediction intervals",
+    "diagnostics, multicollinearity, influence",
+    "bootstrap"
+   ],
+   "depth": "applied statistical inference with some matrix math",
+   "tools": [
+    "R",
+    "broom"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_561_regr-1"
+  },
+  {
+   "code": "DSCI 573",
+   "title": "Feature and Model Selection",
+   "block": 3,
+   "language": "Python",
+   "topics": [
+    "classification metrics, class imbalance",
+    "regression metrics",
+    "feature engineering",
+    "feature importance and selection",
+    "loss functions, L1/L2 regularization",
+    "ensembles",
+    "SHAP interpretability"
+   ],
+   "depth": "applied; explains regularization but mostly library use",
+   "tools": [
+    "scikit-learn",
+    "SHAP",
+    "spaCy"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_573_feat-model-select"
+  },
+  {
+   "code": "DSCI 524",
+   "title": "Collaborative Software Development",
+   "block": 4,
+   "language": "Python (likely; repo not explicit)",
+   "topics": [
+    "software life cycle",
+    "unit testing, CI",
+    "packaging and distribution",
+    "licenses",
+    "abstraction"
+   ],
+   "depth": "practical (course page lacks lecture list)",
+   "tools": [
+    "git",
+    "pytest (inferred)",
+    "GitHub Actions (inferred)"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_524_collab-sw-dev"
+  },
+  {
+   "code": "DSCI 541",
+   "title": "Privacy, Ethics, and Security",
+   "block": 4,
+   "language": "n/a (non-coding)",
+   "topics": [
+    "privacy law, ethics boards",
+    "data security, social engineering",
+    "anonymization, encryption",
+    "case studies"
+   ],
+   "depth": "conceptual",
+   "tools": [],
+   "url": "https://ubc-mds.github.io/descriptions/"
+  },
+  {
+   "code": "DSCI 562",
+   "title": "Regression II",
+   "block": 4,
+   "language": "R",
+   "topics": [
+    "GLMs, count regression",
+    "multinomial/ordinal logistic",
+    "linear mixed-effects",
+    "survival analysis",
+    "local, quantile regression",
+    "missing data"
+   ],
+   "depth": "applied, assumes solid stats background",
+   "tools": [
+    "R"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_562_regr-2"
+  },
+  {
+   "code": "DSCI 572",
+   "title": "Supervised Learning II",
+   "block": 4,
+   "language": "Python",
+   "topics": [
+    "floating point errors",
+    "gradient descent, SGD",
+    "intro neural nets in PyTorch",
+    "training neural nets",
+    "CNNs, transfer learning",
+    "GANs high level"
+   ],
+   "depth": "applied; implement small nets in PyTorch, backprop conceptual",
+   "tools": [
+    "PyTorch",
+    "Jupyter"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_572_sup-learn-2"
+  },
+  {
+   "code": "DSCI 525",
+   "title": "Web and Cloud Computing",
+   "block": 5,
+   "language": "Python and R",
+   "topics": [
+    "scraping, APIs",
+    "how the internet works",
+    "cloud computing (EC2)",
+    "MapReduce, NoSQL",
+    "parallel computing"
+   ],
+   "depth": "introductory (repo seen is 2019; current offering may differ)",
+   "tools": [
+    "scrapy",
+    "BeautifulSoup",
+    "EC2",
+    "Docker",
+    "Spark"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_525_web-cloud-comp"
+  },
+  {
+   "code": "DSCI 553",
+   "title": "Statistical Inference and Computation II",
+   "block": 5,
+   "language": "R",
+   "topics": [
+    "multiple testing, FDR",
+    "Bayesian prior-to-posterior",
+    "beta-binomial",
+    "MCMC",
+    "Bayesian regression and logistic",
+    "hierarchical models, diagnostics"
+   ],
+   "depth": "applied Bayesian, Bayes Rules! textbook",
+   "tools": [
+    "R",
+    "Stan/rstan"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_553_stat-inf-2"
+  },
+  {
+   "code": "DSCI 563",
+   "title": "Unsupervised Learning",
+   "block": 5,
+   "language": "Python",
+   "topics": [
+    "k-means, GMM/EM",
+    "DBSCAN, hierarchical",
+    "PCA, LSA, NMF, autoencoders",
+    "word2vec embeddings",
+    "topic models",
+    "recommender systems"
+   ],
+   "depth": "applied with intuition; no from-scratch stated",
+   "tools": [
+    "scikit-learn",
+    "Jupyter"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_563_unsup-learn"
+  },
+  {
+   "code": "DSCI 574",
+   "title": "Spatial and Temporal Models",
+   "block": 5,
+   "language": "R (2019 repo) or Python; unconfirmed",
+   "topics": [
+    "time series, ARIMA",
+    "state space, change-point detection",
+    "hidden Markov models",
+    "Gaussian processes, kriging"
+   ],
+   "depth": "2019 repo had formal derivations (MA/AR moments, stationarity); current depth unconfirmed",
+   "tools": [
+    "R/gstat (2019)"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_574_spat-temp-mod"
+  },
+  {
+   "code": "DSCI 532",
+   "title": "Data Visualization II",
+   "block": 6,
+   "language": "Python",
+   "topics": [
+    "interactive dashboards",
+    "multiple views",
+    "design choices"
+   ],
+   "depth": "applied",
+   "tools": [
+    "Dash/Shiny (unconfirmed)",
+    "Altair"
+   ],
+   "url": "https://ubc-mds.github.io/descriptions/"
+  },
+  {
+   "code": "DSCI 542",
+   "title": "Communication and Argumentation",
+   "block": 6,
+   "language": "n/a",
+   "topics": [
+    "claims, evidence",
+    "written/oral presentation"
+   ],
+   "depth": "soft skills",
+   "tools": [],
+   "url": "https://ubc-mds.github.io/descriptions/"
+  },
+  {
+   "code": "DSCI 554",
+   "title": "Experimentation and Causal Inference",
+   "block": 6,
+   "language": "R",
+   "topics": [
+    "multiple comparisons",
+    "randomization, blocking, power",
+    "A/B testing, early stopping",
+    "observational data, confounding",
+    "matched case-control"
+   ],
+   "depth": "applied frequentist, regression-based",
+   "tools": [
+    "R",
+    "Stan"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_554_exper-causal-inf"
+  },
+  {
+   "code": "DSCI 575",
+   "title": "Advanced Machine Learning",
+   "block": 6,
+   "language": "Python",
+   "topics": [
+    "Markov models, language models, PageRank",
+    "HMMs, Viterbi, Baum-Welch",
+    "RNNs",
+    "transformers, self-attention",
+    "applications, LLMs (overview)"
+   ],
+   "depth": "conceptual-to-applied; one lecture each on transformers/LLMs",
+   "tools": [
+    "PyTorch/HF (inferred)",
+    "Jupyter"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_575_adv-mach-learn"
+  },
+  {
+   "code": "DSCI 591",
+   "title": "Capstone Project",
+   "block": 7,
+   "language": "Python/R",
+   "topics": [
+    "partner project, reproducible pipeline, report, presentation"
+   ],
+   "depth": "team project, Apr 26 - Jun 24 2027",
+   "tools": [
+    "git",
+    "Docker",
+    "partner stack"
+   ],
+   "url": "https://github.com/UBC-MDS/DSCI_591_capstone-proj"
+  }
+ ],
+ "coverage_map": [
+  {
+   "module": 1,
+   "title": "Python for ML engineering",
+   "mds_courses": [
+    "DSCI 511",
+    "512",
+    "524",
+    "522"
+   ],
+   "coverage": "light",
+   "mds_timing": "B1 Sep-Oct; B2 Oct-Nov; B3 Nov-Dec; B4 Jan",
+   "recommendation": "deepen",
+   "notes": "MDS teaches basic Python, pandas (not Polars/DuckDB), unit tests, Make/Docker. Hyperscale: NumPy vectorization/broadcasting/perf, typing, pytest, uv, Polars, DuckDB."
+  },
+  {
+   "module": 2,
+   "title": "Linear algebra",
+   "mds_courses": [
+    "DSCI 561",
+    "563"
+   ],
+   "coverage": "light",
+   "mds_timing": "B3 (matrix form of OLS); B5 (PCA)",
+   "recommendation": "teach-fully",
+   "notes": "Only matrix notation for regression and PCA use; no SVD/eigen theory."
+  },
+  {
+   "module": 3,
+   "title": "Calculus & optimization",
+   "mds_courses": [
+    "DSCI 572",
+    "512"
+   ],
+   "coverage": "light",
+   "mds_timing": "B4 Jan; B2",
+   "recommendation": "deepen",
+   "notes": "572 covers GD/SGD and float error applied; add convexity, second-order methods, constrained optimization. Learner's calculus is strong."
+  },
+  {
+   "module": 4,
+   "title": "Probability & statistics",
+   "mds_courses": [
+    "DSCI 551",
+    "552",
+    "553",
+    "561",
+    "562"
+   ],
+   "coverage": "strong",
+   "mds_timing": "B1-B5 (R)",
+   "recommendation": "accelerate",
+   "notes": "Heavy frequentist and Bayesian coverage in R. Diagnostic plus Python equivalents (scipy, statsmodels, bootstrap in NumPy); add MLE/asymptotics if missing."
+  },
+  {
+   "module": 5,
+   "title": "Information theory",
+   "mds_courses": [
+    "DSCI 571"
+   ],
+   "coverage": "none",
+   "mds_timing": "-",
+   "recommendation": "teach-fully",
+   "notes": "Entropy appears only implicitly in trees."
+  },
+  {
+   "module": 6,
+   "title": "Linear/logistic regression, regularization, bias-variance",
+   "mds_courses": [
+    "DSCI 561",
+    "562",
+    "571",
+    "573"
+   ],
+   "coverage": "strong",
+   "mds_timing": "B2 logistic; B3 OLS/regularization",
+   "recommendation": "deepen",
+   "notes": "Covered as inference (R) and applied sklearn. Add from-scratch GD, closed form, probabilistic derivations. Python equivalent of R GLM material."
+  },
+  {
+   "module": 7,
+   "title": "Model evaluation",
+   "mds_courses": [
+    "DSCI 571",
+    "573"
+   ],
+   "coverage": "strong",
+   "mds_timing": "B2-B3",
+   "recommendation": "accelerate",
+   "notes": "Metrics, CV, imbalance, SHAP covered. Add calibration, leakage case studies, grouped/time-series CV."
+  },
+  {
+   "module": 8,
+   "title": "Trees, forests, boosting",
+   "mds_courses": [
+    "DSCI 571",
+    "572",
+    "573"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B2, B3, B4",
+   "recommendation": "deepen",
+   "notes": "Trees and RF applied; boosting internals (XGBoost/LightGBM) mostly absent."
+  },
+  {
+   "module": 9,
+   "title": "SVMs, kernels, kNN",
+   "mds_courses": [
+    "DSCI 571",
+    "572"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B2, B4",
+   "recommendation": "accelerate",
+   "notes": "Applied usage; add kernel math and dual form briefly."
+  },
+  {
+   "module": 10,
+   "title": "Unsupervised learning",
+   "mds_courses": [
+    "DSCI 563"
+   ],
+   "coverage": "strong",
+   "mds_timing": "B5 Feb-Mar",
+   "recommendation": "accelerate",
+   "notes": "k-means, GMM/EM, PCA, NMF, hierarchical, topic models, recsys. Targeted extensions: t-SNE/UMAP, EM from scratch."
+  },
+  {
+   "module": 11,
+   "title": "Feature engineering & data pipelines",
+   "mds_courses": [
+    "DSCI 571",
+    "573",
+    "522"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B2-B3",
+   "recommendation": "deepen",
+   "notes": "sklearn pipelines and feature work; add production pipelines, Polars/DuckDB, leakage-safe design."
+  },
+  {
+   "module": 12,
+   "title": "Autograd from scratch",
+   "mds_courses": [
+    "DSCI 572"
+   ],
+   "coverage": "light",
+   "mds_timing": "B4 Jan",
+   "recommendation": "teach-fully",
+   "notes": "Backprop is conceptual; no engine built."
+  },
+  {
+   "module": 13,
+   "title": "Training deep nets",
+   "mds_courses": [
+    "DSCI 572"
+   ],
+   "coverage": "light",
+   "mds_timing": "B4",
+   "recommendation": "deepen",
+   "notes": "Basic training recipes only; add init, normalization, schedules, debugging."
+  },
+  {
+   "module": 14,
+   "title": "PyTorch fluency",
+   "mds_courses": [
+    "DSCI 572"
+   ],
+   "coverage": "light",
+   "mds_timing": "B4",
+   "recommendation": "deepen",
+   "notes": "Basic PyTorch; add GPU, AMP, custom modules/data loaders."
+  },
+  {
+   "module": 15,
+   "title": "CNNs, RNNs/LSTMs, attention",
+   "mds_courses": [
+    "DSCI 572",
+    "575"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B4 CNN; B6 RNN/attention",
+   "recommendation": "deepen",
+   "notes": "Conceptual/applied; add from-scratch implementations."
+  },
+  {
+   "module": 16,
+   "title": "Transformers from scratch",
+   "mds_courses": [
+    "DSCI 575"
+   ],
+   "coverage": "light",
+   "mds_timing": "B6 Mar-Apr",
+   "recommendation": "teach-fully",
+   "notes": "One-two lectures, applied."
+  },
+  {
+   "module": 17,
+   "title": "Pretraining, scaling laws, fine-tuning, RLHF",
+   "mds_courses": [
+    "DSCI 575"
+   ],
+   "coverage": "light",
+   "mds_timing": "B6",
+   "recommendation": "teach-fully",
+   "notes": "LLM overview only."
+  },
+  {
+   "module": 18,
+   "title": "Inference & serving optimization",
+   "mds_courses": [],
+   "coverage": "none",
+   "mds_timing": "-",
+   "recommendation": "teach-fully",
+   "notes": ""
+  },
+  {
+   "module": 19,
+   "title": "Building with LLMs",
+   "mds_courses": [
+    "DSCI 575"
+   ],
+   "coverage": "light",
+   "mds_timing": "B6",
+   "recommendation": "teach-fully",
+   "notes": "No RAG/agents/MCP expected; confirm with 2026-27 syllabus."
+  },
+  {
+   "module": 20,
+   "title": "Generative models",
+   "mds_courses": [
+    "DSCI 572",
+    "563"
+   ],
+   "coverage": "light",
+   "mds_timing": "B4 (GANs high level); B5 autoencoders",
+   "recommendation": "teach-fully",
+   "notes": "No VAEs/diffusion."
+  },
+  {
+   "module": 21,
+   "title": "Time series",
+   "mds_courses": [
+    "DSCI 574"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B5 Feb-Mar",
+   "recommendation": "deepen",
+   "notes": "ARIMA, state space, HMMs, GPs. Add GBM and DL forecasters, probabilistic forecasting, backtesting. Check whether 574 is R or Python."
+  },
+  {
+   "module": 22,
+   "title": "Anomaly detection & fault diagnosis",
+   "mds_courses": [
+    "DSCI 574"
+   ],
+   "coverage": "light",
+   "mds_timing": "B5",
+   "recommendation": "teach-fully",
+   "notes": "Change-point detection only."
+  },
+  {
+   "module": 23,
+   "title": "Reinforcement learning",
+   "mds_courses": [],
+   "coverage": "none",
+   "mds_timing": "-",
+   "recommendation": "teach-fully",
+   "notes": ""
+  },
+  {
+   "module": 24,
+   "title": "Optimization & control",
+   "mds_courses": [
+    "DSCI 512"
+   ],
+   "coverage": "light",
+   "mds_timing": "B2",
+   "recommendation": "teach-fully",
+   "notes": "Only discrete optimization/DP."
+  },
+  {
+   "module": 25,
+   "title": "Bayesian methods & UQ",
+   "mds_courses": [
+    "DSCI 553",
+    "574"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B5",
+   "recommendation": "accelerate",
+   "notes": "Stan in R; give PyMC/NumPyro equivalents; add conformal prediction, ensembles, calibration."
+  },
+  {
+   "module": 26,
+   "title": "Causal inference",
+   "mds_courses": [
+    "DSCI 554"
+   ],
+   "coverage": "moderate",
+   "mds_timing": "B6",
+   "recommendation": "deepen",
+   "notes": "Frequentist/regression in R; add DAGs, potential outcomes, DoWhy/EconML in Python."
+  },
+  {
+   "module": 27,
+   "title": "ML system design",
+   "mds_courses": [
+    "DSCI 591"
+   ],
+   "coverage": "light",
+   "mds_timing": "Capstone Apr-Jun",
+   "recommendation": "teach-fully",
+   "notes": "Interview-style design not covered."
+  },
+  {
+   "module": 28,
+   "title": "MLOps",
+   "mds_courses": [
+    "DSCI 522",
+    "524",
+    "525"
+   ],
+   "coverage": "light",
+   "mds_timing": "B3, B4, B5",
+   "recommendation": "deepen",
+   "notes": "Docker, Make, CI, intro cloud (EC2); add tracking, serving, monitoring, AWS/Azure ML."
+  },
+  {
+   "module": 29,
+   "title": "Scaling & distributed training",
+   "mds_courses": [
+    "DSCI 525"
+   ],
+   "coverage": "light",
+   "mds_timing": "B5",
+   "recommendation": "teach-fully",
+   "notes": "Intro parallel computing only."
+  },
+  {
+   "module": 30,
+   "title": "Responsible AI",
+   "mds_courses": [
+    "DSCI 541"
+   ],
+   "coverage": "light",
+   "mds_timing": "B4",
+   "recommendation": "deepen",
+   "notes": "Privacy/ethics/security; add fairness, model risk."
+  }
+ ]
+}
