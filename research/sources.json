@@ -1964,25 +1964,24 @@
   {
     "id": "house2001-apar",
     "type": "paper",
-    "title": "An expert rule set for fault detection in air-handling units (APAR)",
+    "title": "An Expert Rule Set for Fault Detection in Air-Handling Units",
     "authors": [
       "House, John M.",
-      "Vaezi-Nejad, Hossein",
-      "Whitcomb, John M."
+      "Vaezi-Nejad, Hossein"
     ],
     "year": 2001,
-    "venue": "ASHRAE Transactions 107(1)",
+    "venue": "ASHRAE Transactions",
     "doi": null,
-    "url": "https://www.ashrae.org/",
+    "url": "https://www.nist.gov/publications/expert-rule-set-fault-detection-air-handling-units",
     "open_url": null,
     "access": "paywalled",
     "license": null,
     "accessed": "2026-11-12",
-    "verified": false,
+    "verified": true,
     "modules": [
       22
     ],
-    "notes": "AHU rule set (APAR) from IEA Annex 25; a template for hand-written physics rules that an LLM agent can call as tools. Title and venue from memory; verify via the library.",
+    "notes": "AHU rule set (APAR) from IEA Annex 25; a template for hand-written physics rules that an LLM agent can call as tools. Title and venue from memory; verify via the library. Citation record verified on the NIST publications page; full text is in ASHRAE Transactions (library access).",
     "aliases": [],
     "origins": [
       "domain-ml"
@@ -2116,12 +2115,12 @@
     "year": 2018,
     "venue": "Advances in Neural Information Processing Systems 31 (NeurIPS 2018)",
     "doi": null,
-    "url": "https://proceedings.neurips.cc/paper_files/paper/2018",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2018/hash/059fdcd96baeb75112f09fa1dcc740cc-Abstract.html",
     "open_url": null,
     "access": "open",
     "license": null,
     "accessed": "2026-11-12",
-    "verified": false,
+    "verified": true,
     "modules": [
       23,
       24
@@ -2457,14 +2456,14 @@
       "Ranganathan, Parthasarathy"
     ],
     "year": 2020,
-    "venue": "ASPLOS 2020 (Google)",
+    "venue": "Proceedings of the 25th International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2020)",
     "doi": "10.1145/3373376.3378533",
     "url": "https://research.google/pubs/data-center-power-oversubscription-with-a-medium-voltage-power-plane-and-priority-aware-capping/",
     "open_url": null,
     "access": "open",
     "license": null,
     "accessed": "2026-11-12",
-    "verified": false,
+    "verified": true,
     "modules": [
       21,
       24,
@@ -2736,14 +2735,14 @@
       "Gao, Jim"
     ],
     "year": 2014,
-    "venue": "Google whitepaper",
+    "venue": "Google (white paper)",
     "doi": null,
     "url": "https://research.google/pubs/machine-learning-applications-for-data-center-optimization/",
     "open_url": null,
     "access": "open",
     "license": null,
     "accessed": "2026-11-12",
-    "verified": false,
+    "verified": true,
     "modules": [
       0,
       8,

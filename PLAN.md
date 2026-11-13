@@ -78,7 +78,7 @@ Full notes in `research/`. All citations are in `research/sources.json`, merged 
   - **Communication** is in 69%, so every project ends with a stakeholder memo.
 - **MDS** (`mds-curriculum.md`): ML courses are applied, with no from-scratch work and no autograd; transformers get about one lecture; statistics is in R. Mode per module:
   - accelerate: 4, 7, 10, 17;
-  - deepen: 1, 3, 6, 8, 9, 11, 13–15, 19, 22, 31;
+  - deepen: 1, 3, 6, 8, 9, 11, 13–15, 19, 22, 23, 31;
   - teach fully: everything else.
 - **Domain ML** (`domain-ml-literature.md`, `datasets.md`):
   - **Data:** no public data-center cooling telemetry exists, so the simulator is necessary. Usable public data:
@@ -299,7 +299,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 ---
 
-### Phase 1: Foundations (Nov 16 – Dec 20)
+### Phase 1: Foundations (Nov 16 – Dec 17)
 
 **0 · Induction (2 h)**
 1. Welcome to Kestrel Ridge: how the course works (daily sessions, mastery gates, reviews) and the story.
@@ -373,7 +373,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 - *Build:* rank fault-predictive features by mutual information; compute the perplexity of a character n-gram model of maintenance logs.
 
-### Phase 2: Classical ML (Dec 14 – Jan 31)
+### Phase 2: Classical ML (Dec 14 – Jan 30)
 
 **6 · Linear and logistic regression from scratch (14 h · deepen)**
 1. Linear regression three ways: QR closed form, gradient descent, maximum likelihood; statsmodels as the Python twin of DSCI 561's R output.
@@ -440,7 +440,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 **P1 · Energy Desk forecaster → Milestone M1** (details in section 5)
 
-### Phase 3: Forecasting, optimization and the deep-learning core (Feb 1 – Mar 21)
+### Phase 3: Forecasting, optimization and the deep-learning core (Jan 25 – Mar 22)
 
 **12 · Autograd engine from scratch (14 h · teach fully)**
 1. Reverse-mode automatic differentiation on paper: computational graphs, local derivatives, topological order.
@@ -512,7 +512,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 **P2 · Capacity and power planner → Milestone M2**
 
-### Phase 4: Reliability, LLM systems and production (Mar 22 – May 16)
+### Phase 4: Reliability, LLM systems and production (Mar 22 – May 15)
 
 **18 · Anomaly detection and fault diagnosis (16 h · teach fully)**
 1. The problem: anomaly types, base rates, label scarcity; why many benchmarks and point-adjusted scores mislead.
@@ -572,7 +572,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 **P3 · Reliability platform → Milestone M3**
 
-### Phase 5: Deep-learning depth and LLM internals (May 17 – Jul 4)
+### Phase 5: Deep-learning depth and LLM internals (May 10 – Jun 30)
 
 **23 · CNNs, RNNs and attention (14 h · deepen)**
 1. Convolution from scratch: 1-D and 2-D, padding/stride/dilation, receptive fields, backward pass; 1-D convs on sensor signals.
@@ -624,7 +624,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 **→ Milestone M4**
 
-### Phase 6: Control, RL and the capstones (Jul 5 – Sep 26)
+### Phase 6: Control, RL and the capstones (Jun 28 – Sep 4, buffer to Oct 3)
 
 **28 · Reinforcement learning (20 h · teach fully)**
 1. Bandits: ε-greedy, UCB, Thompson sampling; bandits vs A/B tests for setpoint trials.
@@ -928,6 +928,27 @@ Everything is cached after first use. The lesson player pre-warms the worker as 
   Learner code runs as a module, never via `exec` on the UI thread. Tracebacks are re-mapped to the learner's line numbers.
 - **Timeouts.** Default 10 s, configurable per exercise. On timeout the worker is terminated and respawned (about 2 s warm restart from cache). This catches infinite loops without needing cross-origin isolation, which GitHub Pages cannot provide.
 - **Graders run real pytest.** Each exercise ships a `tests.py`. A small pytest plugin (`hsgrade.plugin`) collects every test's outcome, assertion message, duration and the hint tag it maps to, and returns them as JSON. The *same* `tests.py` runs locally with `uv run pytest`, so the browser and your laptop agree.
+  - **Verified on Nov 12 in Chrome on this Mac**, with Pyodide 314.0.7 loaded from the CDN:
+    - cold boot 3.3 s;
+    - NumPy + pytest load 1.0 s;
+    - first pytest run 3.2 s (imports plus assertion rewriting);
+    - **warm re-grade 0.5 s**.
+  - pytest's assertion rewriting produced readable failure messages through the plugin.
+  - The worker pre-warms Python and imports pytest as soon as a lesson with code opens, so you normally see the warm number.
+  - Between attempts the grader clears the learner and test modules from `sys.modules`, so each run sees fresh code.
+- **Package loading is part of grading.** Also verified in Chrome on Nov 12 (100 boosting rounds on 5,000×8 data, after 4–5 s cold package downloads):
+  - scikit-learn HistGradientBoosting: 0.6 s;
+  - LightGBM: 0.6 s;
+  - XGBoost native API: 0.6 s;
+  - XGBoost's scikit-learn wrapper: 0.8 s, and **only if scikit-learn is loaded before XGBoost is imported**;
+  - LightGBM and XGBoost coexist in one interpreter;
+  - SciPy's bundled HiGHS (`linprog`, `milp`) solved LPs correctly.
+
+  The standalone `highspy` package works on its own, but crashed WebAssembly ("memory access out of bounds") when loaded into an interpreter already holding the ML stack. So:
+  - LP/MILP lessons use SciPy's HiGHS interface;
+  - each exercise declares its packages;
+  - the worker loads them in dependency order and recycles itself when a lesson needs an incompatible set;
+  - CI loads every package combination any exercise uses.
 - **Feedback that teaches.** `hsgrade` assertion helpers turn raw failures into diagnoses:
   - `assert_close` reports where and by how much values differ;
   - `assert_shape` says, for example, "expected (n,), got (n, 1). Did you forget `.ravel()`?";

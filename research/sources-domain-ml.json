@@ -1,63 +1,1509 @@
 [
-{"id":"gao2014-ml-dc-optimization","type":"report","title":"Machine Learning Applications for Data Center Optimization","authors":["Gao, Jim"],"year":2014,"venue":"Google whitepaper","doi":null,"url":"https://research.google/pubs/machine-learning-applications-for-data-center-optimization/","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":false,"modules":[0,8,24,27],"notes":"Neural-network model of PUE from plant telemetry (about 19 inputs) used to simulate what-if setpoint changes; the origin story of ML for DC cooling. URL and bibliographic details are from memory and not page-verified."},
-{"id":"evans-gao2016-deepmind-cooling-40","type":"web","title":"DeepMind AI Reduces Google Data Centre Cooling Bill by 40%","authors":["Evans, Richard","Gao, Jim"],"year":2016,"venue":"Google DeepMind blog (20 July 2016)","doi":null,"url":"https://deepmind.google/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-by-40/","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[0,24],"notes":"Announces a recommendation system (humans apply the suggested setpoints) that cut cooling energy by up to 40 percent; vendor blog, so treat the headline as a best-case figure from one facility."},
-{"id":"gamble-gao2018-safety-first-cooling","type":"web","title":"Safety-first AI for autonomous data centre cooling and industrial control","authors":["Gamble, Chris","Gao, Jim"],"year":2018,"venue":"Google DeepMind blog (17 Aug 2018)","doi":null,"url":"https://deepmind.google/blog/safety-first-ai-for-autonomous-data-centre-cooling-and-industrial-control/","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"Moves from recommendations to direct autonomous control with layered safety (uncertainty estimates, hard operating constraints, operator override); good template for the safety section of the cooling capstone."},
-{"id":"lazic2018-dc-cooling-mpc","type":"paper","title":"Data center cooling using model-predictive control","authors":["Lazic, Nevena","Boutilier, Craig","Lu, Tyler","Wong, Eehern","Roy, Binz","Ryu, MK","Imwalle, Greg"],"year":2018,"venue":"Advances in Neural Information Processing Systems 31 (NeurIPS 2018)","doi":null,"url":"https://proceedings.neurips.cc/paper_files/paper/2018","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":false,"modules":[24,23],"notes":"Learns a linear time-varying dynamics model from about two years of sensor data and runs MPC with safety constraints, comparing favourably with a deep-RL baseline for data efficiency. Exact paper URL still to be pinned; the proceedings are open."},
-{"id":"luo2022-rl-commercial-cooling","type":"paper","title":"Controlling Commercial Cooling Systems Using Reinforcement Learning","authors":["Luo, Jerry","Paduraru, Cosmin","Voicu, Octavian","Chervonyi, Yuri","Munns, Scott","Mankowitz, Daniel J."],"year":2022,"venue":"arXiv:2211.07357 (DeepMind/Google with Trane)","doi":null,"url":"https://arxiv.org/abs/2211.07357","open_url":"https://arxiv.org/pdf/2211.07357","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24,7],"notes":"Live RL control of two real commercial chiller plants with roughly 9 and 13 percent energy savings; the most useful part for the course is the discussion of evaluation, offline learning and constraint handling in real deployments."},
-{"id":"meta2024-sim-rl-dc-cooling","type":"web","title":"Simulator-based reinforcement learning for data center cooling optimization","authors":["Meta Engineering"],"year":2024,"venue":"Engineering at Meta blog (10 Sept 2024)","doi":null,"url":"https://engineering.fb.com/2024/09/10/data-center-engineering/simulator-based-reinforcement-learning-for-data-center-cooling-optimization/","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"Describes training RL on a physics simulator of Meta's outside-air/evaporative penthouse cooling and reporting about 20 percent lower supply-fan energy and 4 percent less water in a pilot region; direct precedent for capstone 1's simulate-then-deploy design."},
-{"id":"radovanovic2023-carbon-aware-computing","type":"paper","title":"Carbon-Aware Computing for Datacenters","authors":["Radovanovic, Ana","Koningstein, Ross","Schneider, Ian","Chen, Bokan","Duarte, Alexandre","Cirne, Walfredo"],"year":2023,"venue":"IEEE Transactions on Power Systems 38(2)","doi":"10.1109/TPWRS.2022.3173250","url":"https://doi.org/10.1109/TPWRS.2022.3173250","open_url":"https://arxiv.org/abs/2106.11750","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21,24,27],"notes":"Google's carbon-intelligent compute management: day-ahead load and carbon-intensity forecasts feed a risk-aware optimizer producing hourly Virtual Capacity Curves that defer flexible jobs. Good example of forecast-then-optimize."},
-{"id":"wu2016-dynamo-fb-power","type":"paper","title":"Dynamo: Facebook's Data Center-Wide Power Management System","authors":["Wu, Qiang","Deng, Qingyuan","Ganesh, Lakshmi"],"year":2016,"venue":"ISCA 2016","doi":"10.1109/ISCA.2016.48","url":"https://doi.org/10.1109/ISCA.2016.48","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24,27],"notes":"Hierarchical power-capping and oversubscription at Facebook; non-ML but defines the control problem (priority-aware capping against breaker limits). Crossref confirmed; I did not locate a verified open PDF."},
-{"id":"sakalkar2020-dc-power-oversubscription","type":"paper","title":"Data Center Power Oversubscription with a Medium Voltage Power Plane and Priority-Aware Capping","authors":["Sakalkar, Varun","Kontorinis, Vasileios","Landhuis, David","Li, Shaohong","De Ronde, Darren","Blooming, Thomas","Ramesh, Anand","Kennedy, James","Malone, Christopher","Clidaras, Jimmy","Ranganathan, Parthasarathy"],"year":2020,"venue":"ASPLOS 2020 (Google)","doi":"10.1145/3373376.3378533","url":"https://research.google/pubs/data-center-power-oversubscription-with-a-medium-voltage-power-plane-and-priority-aware-capping/","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":false,"modules":[21,24,27],"notes":"Companion paper to Google's public 2019 power-trace dataset (57 power domains). Author list and DOI are from memory; the URL is the one cited by the dataset's own README (page-verified via that README)."},
-{"id":"cortez2017-resource-central","type":"paper","title":"Resource Central: Understanding and Predicting Workloads for Improved Resource Management in Large Cloud Platforms","authors":["Cortez, Eli","Bonde, Anand","Muzio, Alexandre","Russinovich, Mark","Fontoura, Marcus","Bianchini, Ricardo"],"year":2017,"venue":"SOSP 2017","doi":"10.1145/3132747.3132772","url":"https://doi.org/10.1145/3132747.3132772","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[8,21,27],"notes":"Azure's ML service predicting VM lifetime, size and utilization with gradient-boosted trees to drive placement and oversubscription; companion to the Azure public traces. Open copy (Microsoft Research) likely exists; confirm via library."},
-{"id":"botezatu2016-disk-replacement","type":"paper","title":"Predicting Disk Replacement towards Reliable Data Centers","authors":["Botezatu, Mirela M.","Giurgiu, Ioana","Bogojeska, Jasmina","Wiesmann, Dorothea"],"year":2016,"venue":"KDD 2016","doi":"10.1145/2939672.2939699","url":"https://doi.org/10.1145/2939672.2939699","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[7,8,22],"notes":"Disk replacement prediction with class imbalance and time-aware evaluation; use with the Backblaze data to teach leakage-safe survival-style splits."},
-{"id":"backblaze-drive-stats","type":"dataset","title":"Backblaze Drive Stats","authors":["Backblaze"],"year":2026,"venue":"Backblaze","doi":null,"url":"https://www.backblaze.com/cloud-storage/resources/hard-drive-test-data","open_url":null,"access":"open","license":"Backblaze terms: cite Backblaze; user responsible for use; derivative works may be sold but the data itself may not be resold","accessed":"2026-11-12","verified":true,"modules":[7,8,22,25],"notes":"Daily SMART snapshots for every drive since 2013, updated quarterly (Q2 2026 snapshot lists 354,415 drives). Best public hardware-failure dataset."},
-{"id":"miller2020-gepiii","type":"paper","title":"The ASHRAE Great Energy Predictor III competition: Overview and results","authors":["Miller, Clayton","Arjunan, Pandarasamy","Kathirgamanathan, Anjukan","Fu, Chun","Roth, Jonathan","Park, June Young","Balbach, Chris","Gowri, Krishnan","Nagy, Zoltan","Fontanini, Anthony D.","Haberl, Jeff"],"year":2020,"venue":"Science and Technology for the Built Environment","doi":"10.1080/23744731.2020.1795514","url":"https://doi.org/10.1080/23744731.2020.1795514","open_url":"https://arxiv.org/abs/2007.06933","access":"partial","license":null,"accessed":"2026-11-12","verified":true,"modules":[7,8,11,21],"notes":"Overview of the Kaggle competition on predicting meter readings for 2,380 meters; winners relied on gradient boosting ensembles and heavy handling of data quality and leakage. The arXiv id is from memory (the BDG2 README says a preprint is on arXiv)."},
-{"id":"miller2020-bdg2","type":"paper","title":"The Building Data Genome Project 2, energy meter data from the ASHRAE Great Energy Predictor III competition","authors":["Miller, Clayton","Kathirgamanathan, Anjukan","Picchetti, Bianca","Arjunan, Pandarasamy","Park, June Young","Nagy, Zoltan","Raftery, Paul","Hobson, Brodie W.","Shi, Zixiao","Meggers, Forrest"],"year":2020,"venue":"Scientific Data 7, 368","doi":"10.1038/s41597-020-00712-x","url":"https://doi.org/10.1038/s41597-020-00712-x","open_url":null,"access":"open","license":"CC BY 4.0","accessed":"2026-11-12","verified":true,"modules":[7,11,21,22],"notes":"Data descriptor for BDG2: 3,053 meters in 1,636 non-residential buildings, hourly, 2016 to 2017. Primary dataset for the building-load forecasting modules."},
-{"id":"bdg2-zenodo","type":"dataset","title":"Building Data Genome Project 2 v1.0 (Zenodo)","authors":["Miller, Clayton"],"year":2020,"venue":"Zenodo","doi":"10.5281/zenodo.3887306","url":"https://zenodo.org/records/3887306","open_url":"https://github.com/buds-lab/building-data-genome-project-2","access":"open","license":"CC BY 4.0","accessed":"2026-11-12","verified":true,"modules":[7,21],"notes":"595 MB zip; Zenodo API record confirms CC BY 4.0 licence."},
-{"id":"hong2016-gefcom2014","type":"paper","title":"Probabilistic energy forecasting: Global Energy Forecasting Competition 2014 and beyond","authors":["Hong, Tao","Pinson, Pierre","Fan, Shu","Zareipour, Hamidreza","Troccoli, Alberto","Hyndman, Rob J."],"year":2016,"venue":"International Journal of Forecasting 32(3)","doi":"10.1016/j.ijforecast.2016.02.001","url":"https://doi.org/10.1016/j.ijforecast.2016.02.001","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[21,25],"notes":"Competition report for quantile forecasting of load, price, wind and solar using pinball loss; the reference for probabilistic energy forecast evaluation."},
-{"id":"makridakis2020-m4","type":"paper","title":"The M4 Competition: 100,000 time series and 61 forecasting methods","authors":["Makridakis, Spyros","Spiliotis, Evangelos","Assimakopoulos, Vassilios"],"year":2020,"venue":"International Journal of Forecasting 36(1)","doi":"10.1016/j.ijforecast.2019.04.014","url":"https://doi.org/10.1016/j.ijforecast.2019.04.014","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[21],"notes":"Key finding for the course: statistical/ML hybrids and ensembles beat pure ML, and simple combinations are strong baselines."},
-{"id":"makridakis2022-m5","type":"paper","title":"M5 accuracy competition: Results, findings, and conclusions","authors":["Makridakis, Spyros","Spiliotis, Evangelos","Assimakopoulos, Vassilios"],"year":2022,"venue":"International Journal of Forecasting 38(4)","doi":"10.1016/j.ijforecast.2021.11.013","url":"https://doi.org/10.1016/j.ijforecast.2021.11.013","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[8,21],"notes":"Retail demand competition won by LightGBM-style gradient boosting with strong feature engineering; supports teaching GBMs for tabular forecasting."},
-{"id":"ansari2024-chronos","type":"paper","title":"Chronos: Learning the Language of Time Series","authors":["Ansari, Abdul Fatir","Stella, Lorenzo","Turkmen, Caner"],"year":2024,"venue":"arXiv:2403.07815 (TMLR)","doi":null,"url":"https://arxiv.org/abs/2403.07815","open_url":"https://arxiv.org/pdf/2403.07815","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21,16],"notes":"Tokenizes scaled values and trains T5 models; reports zero-shot accuracy comparable to, and sometimes better than, models trained per dataset across 42 datasets. Code is Apache-2.0."},
-{"id":"das2024-timesfm","type":"paper","title":"A decoder-only foundation model for time-series forecasting","authors":["Das, Abhimanyu","Kong, Weihao","Sen, Rajat","Zhou, Yichen"],"year":2024,"venue":"arXiv:2310.10688 (ICML 2024)","doi":null,"url":"https://arxiv.org/abs/2310.10688","open_url":"https://arxiv.org/pdf/2310.10688","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21],"notes":"TimesFM: patched decoder pretrained on a large corpus with zero-shot accuracy near supervised models on public benchmarks."},
-{"id":"woo2024-moirai","type":"paper","title":"Unified Training of Universal Time Series Forecasting Transformers","authors":["Woo, Gerald","Liu, Chenghao","Kumar, Akshat","Xiong, Caiming","Savarese, Silvio","Sahoo, Doyen"],"year":2024,"venue":"arXiv:2402.02592 (ICML 2024)","doi":null,"url":"https://arxiv.org/abs/2402.02592","open_url":"https://arxiv.org/pdf/2402.02592","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21],"notes":"Moirai plus the LOTSA pretraining archive (27B observations); any-variate attention."},
-{"id":"garza2023-timegpt1","type":"paper","title":"TimeGPT-1","authors":["Garza, Azul","Challu, Cristian","Mergenthaler-Canseco, Max"],"year":2023,"venue":"arXiv:2310.03589","doi":null,"url":"https://arxiv.org/abs/2310.03589","open_url":"https://arxiv.org/pdf/2310.03589","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21],"notes":"Commercial API foundation forecaster; closed weights so results cannot be independently reproduced offline. Use as a cautionary example."},
-{"id":"aksu2024-gifteval","type":"paper","title":"GIFT-Eval: A Benchmark For General Time Series Forecasting Model Evaluation","authors":["Aksu, Taha","Woo, Gerald","Liu, Juncheng","Sahoo, Doyen"],"year":2024,"venue":"arXiv:2410.10393","doi":null,"url":"https://arxiv.org/abs/2410.10393","open_url":"https://arxiv.org/pdf/2410.10393","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21,7],"notes":"23 datasets, 144k series, with a non-leaking pretraining set; compares 17 baselines and discusses where foundation models do and do not win. Use for the leakage lesson (train/test overlap in foundation-model evals)."},
-{"id":"tan2024-llm-ts-useful","type":"paper","title":"Are Language Models Actually Useful for Time Series Forecasting?","authors":["Tan, Mingtian","Merrill, Mike A.","Gupta, Vinayak","Althoff, Tim","Hartvigsen, Thomas"],"year":2024,"venue":"NeurIPS 2024 (arXiv:2406.16964)","doi":null,"url":"https://arxiv.org/abs/2406.16964","open_url":"https://arxiv.org/pdf/2406.16964","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[21,7],"notes":"Ablations show that removing the pretrained LLM from LLM-adapted forecasters does not hurt and often helps; strong evidence for keeping tuned baselines in every comparison."},
-{"id":"chandola2009-anomaly-detection","type":"paper","title":"Anomaly detection: A survey","authors":["Chandola, Varun","Banerjee, Arindam","Kumar, Vipin"],"year":2009,"venue":"ACM Computing Surveys 41(3)","doi":"10.1145/1541880.1541882","url":"https://doi.org/10.1145/1541880.1541882","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[22],"notes":"Canonical taxonomy (point, contextual, collective anomalies; supervised, semi-supervised, unsupervised); use as the vocabulary for module 22."},
-{"id":"liu2008-isolation-forest","type":"paper","title":"Isolation Forest","authors":["Liu, Fei Tony","Ting, Kai Ming","Zhou, Zhi-Hua"],"year":2008,"venue":"IEEE ICDM 2008","doi":"10.1109/ICDM.2008.17","url":"https://doi.org/10.1109/ICDM.2008.17","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[22],"notes":"Random-partition isolation as an anomaly score; fast, no distance computation. Baseline detector for sensor data."},
-{"id":"katipamula2005-fdd-review-i","type":"paper","title":"Methods for Fault Detection, Diagnostics, and Prognostics for Building Systems: A Review, Part I","authors":["Katipamula, Srinivas","Brambley, Michael R."],"year":2005,"venue":"HVAC&R Research 11(1)","doi":"10.1080/10789669.2005.10391133","url":"https://doi.org/10.1080/10789669.2005.10391133","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[22,0],"notes":"Standard HVAC FDD taxonomy (model-based, rule-based, data-driven). Part II is DOI 10.1080/10789669.2005.10391134 (not independently verified). A PNNL/OSTI copy probably exists; the open_url is a placeholder to resolve."},
-{"id":"granderson2020-lbnl-fdd-data","type":"paper","title":"Building fault detection data to aid diagnostic algorithm creation and performance testing","authors":["Granderson, Jessica","Lin, Guanjing","Chen, Yimin","Casillas, Armando","Im, Piljae","Jung, Sungkyun","Sharma, Mahendra","Vrabie, Draguna","Zhang, Jian"],"year":2020,"venue":"Scientific Data 7, 65","doi":"10.1038/s41597-020-0398-6","url":"https://doi.org/10.1038/s41597-020-0398-6","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[22],"notes":"Data descriptor for the labeled LBNL/PNNL/NREL/ORNL HVAC FDD datasets. Author list is partly from memory; title, first author, year confirmed via Crossref."},
-{"id":"lbnl-fdd-oedi","type":"dataset","title":"LBNL Fault Detection and Diagnostics Datasets","authors":["LBNL","PNNL","NREL","ORNL"],"year":2020,"venue":"Open Energy Data Initiative (OEDI)","doi":"10.25984/1881324","url":"https://data.openei.org/submissions/5763","open_url":null,"access":"open","license":"Publicly accessible via OEDI; check the page's license field before redistribution","accessed":"2026-11-12","verified":true,"modules":[22],"notes":"Time-series data with faults at several severities plus fault-free cases for seven equipment types (RTU, single- and dual-duct AHU, VAV, FCU, chiller plant, boiler plant), with PDFs and Brick TTL files."},
-{"id":"house2001-apar","type":"paper","title":"An expert rule set for fault detection in air-handling units (APAR)","authors":["House, John M.","Vaezi-Nejad, Hossein","Whitcomb, John M."],"year":2001,"venue":"ASHRAE Transactions 107(1)","doi":null,"url":"https://www.ashrae.org/","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":false,"modules":[22],"notes":"AHU rule set (APAR) from IEA Annex 25; a template for hand-written physics rules that an LLM agent can call as tools. Title and venue from memory; verify via the library."},
-{"id":"lavin2015-nab","type":"paper","title":"Evaluating Real-time Anomaly Detection Algorithms - the Numenta Anomaly Benchmark","authors":["Lavin, Alexander","Ahmad, Subutai"],"year":2015,"venue":"IEEE ICMLA 2015","doi":"10.1109/ICMLA.2015.141","url":"https://arxiv.org/abs/1510.03336","open_url":"https://arxiv.org/pdf/1510.03336","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[22],"notes":"Streaming benchmark with a scoring function that rewards early detection and penalizes false alarms; data and code are MIT on GitHub."},
-{"id":"wu2021-keogh-flawed-benchmarks","type":"paper","title":"Current Time Series Anomaly Detection Benchmarks are Flawed and are Creating the Illusion of Progress","authors":["Wu, Renjie","Keogh, Eamonn J."],"year":2021,"venue":"IEEE Transactions on Knowledge and Data Engineering","doi":"10.1109/TKDE.2021.3112126","url":"https://arxiv.org/abs/2009.13807","open_url":"https://arxiv.org/pdf/2009.13807","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[22,7],"notes":"Argues that Yahoo, Numenta, NASA and similar benchmarks have triviality, unrealistic anomaly density, mislabeling and run-to-failure bias; introduces the UCR Anomaly Archive."},
-{"id":"schmidl2022-tsad-eval","type":"paper","title":"Anomaly detection in time series: a comprehensive evaluation","authors":["Schmidl, Sebastian","Wenig, Phillip","Papenbrock, Thorsten"],"year":2022,"venue":"Proceedings of the VLDB Endowment 15(9)","doi":"10.14778/3538598.3538602","url":"https://doi.org/10.14778/3538598.3538602","open_url":null,"access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[22,7],"notes":"Compares 71 detectors on many datasets; shows no method dominates, simple methods are often competitive, and metric choice changes rankings. Use to justify a multi-metric harness."},
-{"id":"raissi2019-pinn","type":"paper","title":"Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations","authors":["Raissi, Maziar","Perdikaris, Paris","Karniadakis, George E."],"year":2019,"venue":"Journal of Computational Physics 378","doi":"10.1016/j.jcp.2018.10.045","url":"https://doi.org/10.1016/j.jcp.2018.10.045","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24,12],"notes":"Original PINN paper: embed PDE residuals in the loss. Good for heat-transfer examples; course should also teach its known training pathologies."},
-{"id":"karniadakis2021-piml","type":"paper","title":"Physics-informed machine learning","authors":["Karniadakis, George Em","Kevrekidis, Ioannis G.","Lu, Lu","Perdikaris, Paris","Wang, Sifan","Yang, Liu"],"year":2021,"venue":"Nature Reviews Physics 3","doi":"10.1038/s42254-021-00314-5","url":"https://doi.org/10.1038/s42254-021-00314-5","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24],"notes":"Review organizing physics-informed ML into observational, inductive and learning biases; use as the map for module 24's physics-informed section."},
-{"id":"brunton2016-sindy","type":"paper","title":"Discovering governing equations from data by sparse identification of nonlinear dynamical systems","authors":["Brunton, Steven L.","Proctor, Joshua L.","Kutz, J. Nathan"],"year":2016,"venue":"PNAS 113(15)","doi":"10.1073/pnas.1517384113","url":"https://doi.org/10.1073/pnas.1517384113","open_url":"https://arxiv.org/abs/1509.03580","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[24],"notes":"SINDy: sparse regression on a library of candidate terms to recover ODEs; arXiv id from memory. Useful for identifying simple thermal dynamics from data."},
-{"id":"chen2018-neural-ode","type":"paper","title":"Neural Ordinary Differential Equations","authors":["Chen, Ricky T. Q.","Rubanova, Yulia","Bettencourt, Jesse","Duvenaud, David"],"year":2018,"venue":"NeurIPS 2018 (arXiv:1806.07366)","doi":null,"url":"https://arxiv.org/abs/1806.07366","open_url":"https://arxiv.org/pdf/1806.07366","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[12,24],"notes":"Parameterizes the derivative of a hidden state with a network and integrates with an ODE solver; the basis for continuous-time learned plant models."},
-{"id":"bacher2011-greybox","type":"paper","title":"Identifying suitable models for the heat dynamics of buildings","authors":["Bacher, Peder","Madsen, Henrik"],"year":2011,"venue":"Energy and Buildings 43(7)","doi":"10.1016/j.enbuild.2011.02.005","url":"https://doi.org/10.1016/j.enbuild.2011.02.005","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24,21],"notes":"Forward model selection among lumped RC (grey-box) stochastic models using likelihood tests; the practical recipe for RC thermal models. DOI confirmed through a Crossref search result, not a direct lookup."},
-{"id":"drgona2021-physics-constrained","type":"paper","title":"Physics-constrained deep learning of multi-zone building thermal dynamics","authors":["Drgona, Jan","Tuor, Aaron R.","Chandan, Vikas","Vrabie, Draguna L."],"year":2021,"venue":"Energy and Buildings 243","doi":"10.1016/j.enbuild.2021.110992","url":"https://doi.org/10.1016/j.enbuild.2021.110992","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[12,24],"notes":"Structured neural state-space model with physics-inspired constraints for building thermal dynamics (a PNNL work, so an OSTI copy is likely). Author list from memory."},
-{"id":"nasem2024-digital-twins","type":"report","title":"Foundational Research Gaps and Future Directions for Digital Twins","authors":["National Academies of Sciences, Engineering, and Medicine"],"year":2024,"venue":"National Academies Press","doi":"10.17226/26894","url":"https://doi.org/10.17226/26894","open_url":"https://nap.nationalacademies.org/catalog/26894","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[24,25,27],"notes":"Consensus report defining a digital twin as a bidirectional coupling of virtual and physical systems and emphasizing verification, validation and uncertainty quantification; use to scope the capstone's 'digital twin' claim honestly."},
-{"id":"drgona2020-mpc-buildings","type":"paper","title":"All you need to know about model predictive control for buildings","authors":["Drgona, Jan","Arroyo, Javier","Cupeiro Figueroa, Iago","Blum, David","Arendt, Krzysztof","Kim, Donghun","Ollé, Enric Perarnau","Oravec, Juraj","Wetter, Michael","Vrabie, Draguna L.","Helsen, Lieve"],"year":2020,"venue":"Annual Reviews in Control 50","doi":"10.1016/j.arcontrol.2020.09.001","url":"https://doi.org/10.1016/j.arcontrol.2020.09.001","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24],"notes":"The standard review of MPC for buildings: modelling, estimation, formulation, deployment cost and open problems. Author list partly from memory."},
-{"id":"afram2014-hvac-mpc-review","type":"paper","title":"Theory and applications of HVAC control systems - A review of model predictive control (MPC)","authors":["Afram, Abdul","Janabi-Sharifi, Farrokh"],"year":2014,"venue":"Building and Environment 72","doi":"10.1016/j.buildenv.2013.11.016","url":"https://doi.org/10.1016/j.buildenv.2013.11.016","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24],"notes":"Earlier review of MPC for HVAC, including simulated versus real savings; useful for the comparison with newer RL reviews."},
-{"id":"wang2020-rl-building-controls","type":"paper","title":"Reinforcement learning for building controls: The opportunities and challenges","authors":["Wang, Zhe","Hong, Tianzhen"],"year":2020,"venue":"Applied Energy 269","doi":"10.1016/j.apenergy.2020.115036","url":"https://doi.org/10.1016/j.apenergy.2020.115036","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"LBNL review covering how RL was applied to buildings and the practical barriers (sample efficiency, safety, simulators); a LBNL/eScholarship open copy is likely."},
-{"id":"wei2017-drl-hvac","type":"paper","title":"Deep Reinforcement Learning for Building HVAC Control","authors":["Wei, Tianshu","Wang, Yanzhi","Zhu, Qi"],"year":2017,"venue":"DAC 2017","doi":"10.1145/3061639.3062224","url":"https://doi.org/10.1145/3061639.3062224","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[23],"notes":"Early deep Q-learning for HVAC in EnergyPlus; useful as a historical example whose evaluation conditions are easy to critique."},
-{"id":"chen2019-gnurl","type":"paper","title":"Gnu-RL: A Precocial Reinforcement Learning Solution for Building HVAC Control Using a Differentiable MPC Policy","authors":["Chen, Bingqing","Cai, Zicheng","Berges, Mario"],"year":2019,"venue":"BuildSys 2019","doi":"10.1145/3360322.3360849","url":"https://doi.org/10.1145/3360322.3360849","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"Policy is a differentiable MPC initialized by imitation of an existing controller, bridging MPC and RL. Title from memory; Crossref confirmed first author, year and short title."},
-{"id":"blum2021-boptest","type":"paper","title":"Building optimization testing framework (BOPTEST) for simulation-based benchmarking of control strategies in buildings","authors":["Blum, David","Arroyo, Javier","Huang, Sen","Drgona, Jan","Jorissen, Filip","Walnum, Harald Taxt","Chen, Yan","Benne, Kyle","Vrabie, Draguna","Wetter, Michael","Helsen, Lieve"],"year":2021,"venue":"Journal of Building Performance Simulation 14(5)","doi":"10.1080/19401493.2021.1986574","url":"https://doi.org/10.1080/19401493.2021.1986574","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[24,23],"notes":"Containerized Modelica emulators with standard KPIs for comparing controllers; the most credible benchmark for MPC versus RL on buildings. Author list partly from memory."},
-{"id":"jimenez2021-sinergym","type":"paper","title":"Sinergym: A Building Simulation and Control Framework for Training Reinforcement Learning Agents","authors":["Jimenez-Raboso, Javier","Campoy-Nieves, Alejandro","Manjavacas-Lucas, Antonio","Gomez-Romero, Juan","Molina-Solana, Miguel"],"year":2021,"venue":"BuildSys 2021","doi":"10.1145/3486611.3488729","url":"https://doi.org/10.1145/3486611.3488729","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[23],"notes":"Gymnasium wrapper around EnergyPlus (code MIT per GitHub API). Includes data-center-like environments in later versions (not verified)."},
-{"id":"vazquez2019-citylearn","type":"paper","title":"CityLearn v1.0: An OpenAI Gym Environment for Demand Response with Deep Reinforcement Learning","authors":["Vazquez-Canteli, Jose R.","Kaempf, Jerome","Henze, Gregor","Nagy, Zoltan"],"year":2019,"venue":"BuildSys 2019","doi":"10.1145/3360322.3360998","url":"https://doi.org/10.1145/3360322.3360998","open_url":null,"access":"paywalled","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"Multi-building demand-response RL environment (MIT licence per GitHub API)."},
-{"id":"nweye2024-citylearn-v2","type":"paper","title":"CityLearn v2: Energy-flexible, resilient, occupant-centric, and carbon-aware management of grid-interactive communities","authors":["Nweye, Kingsley","Kaspar, Kathryn","Nagy, Zoltan"],"year":2024,"venue":"Journal of Building Performance Simulation (arXiv:2405.03848)","doi":"10.1080/19401493.2024.2418813","url":"https://arxiv.org/abs/2405.03848","open_url":"https://arxiv.org/pdf/2405.03848","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"CityLearn built on the NREL End-Use Load Profiles dataset, with RL, MPC and rule-based baselines for batteries, V2G and heat pumps."},
-{"id":"brunke2022-safe-learning-robotics","type":"paper","title":"Safe Learning in Robotics: From Learning-Based Control to Safe Reinforcement Learning","authors":["Brunke, Lukas","Greeff, Melissa","Hall, Adam W.","Yuan, Zhaocong","Zhou, Siqi","Panerati, Jacopo","Schoellig, Angela P."],"year":2022,"venue":"Annual Review of Control, Robotics, and Autonomous Systems 5","doi":"10.1146/annurev-control-042920-020211","url":"https://doi.org/10.1146/annurev-control-042920-020211","open_url":"https://arxiv.org/abs/2108.06266","access":"partial","license":null,"accessed":"2026-11-12","verified":true,"modules":[23,24],"notes":"Survey of safe learning for physical systems (constraint satisfaction, safety filters, certification); transferable to HVAC and cooling control. arXiv id from memory."},
-{"id":"patel2025-assetopsbench","type":"paper","title":"AssetOpsBench: Benchmarking AI Agents for Task Automation in Industrial Asset Operations and Maintenance","authors":["Patel, Dhaval","Lin, Shuxin","Rayfield, James","Zhou, Nianjun","Kalagnanam, Jayant"],"year":2025,"venue":"arXiv:2506.03828 (v4 Aug 2026; ACM DOI 10.1145/3770855.3817562)","doi":"10.1145/3770855.3817562","url":"https://arxiv.org/abs/2506.03828","open_url":"https://arxiv.org/pdf/2506.03828","access":"open","license":"Code Apache-2.0 (GitHub IBM/AssetOpsBench)","accessed":"2026-11-12","verified":true,"modules":[19,22],"notes":"IBM benchmark: four domain agents, 140+ human-written queries and a simulated CouchDB IoT environment, scored with an automated evaluation of Tool-As-Agent versus Plan-Executor designs. Closest public template for capstone 2's harness; vendor-authored, so check for overfitting to its own tools."},
-{"id":"zhang2024-cloud-incident-rca","type":"paper","title":"Automated Root Causing of Cloud Incidents using In-Context Learning with GPT-4","authors":["Zhang, Xuchao"],"year":2024,"venue":"arXiv:2401.13810 (Microsoft)","doi":null,"url":"https://arxiv.org/abs/2401.13810","open_url":"https://arxiv.org/pdf/2401.13810","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[19,27],"notes":"Microsoft study of retrieval of similar historical incidents plus in-context learning for root-causing cloud incidents; closest analogue to retrieval-based fault diagnosis. Only the first author was recorded from the arXiv feed."},
-{"id":"cui2024-logeval","type":"paper","title":"LogEval: A Comprehensive Benchmark Suite for Large Language Models In Log Analysis","authors":["Cui, Tianyu"],"year":2024,"venue":"arXiv:2407.01896","doi":null,"url":"https://arxiv.org/abs/2407.01896","open_url":"https://arxiv.org/pdf/2407.01896","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[19,22],"notes":"Benchmark of LLMs on log parsing, anomaly detection and fault diagnosis for IT logs; pattern for building an eval set from logs. Only the first author was recorded."},
-{"id":"boonmee2024-industrial-fault-llm","type":"paper","title":"Consultation on Industrial Machine Faults with Large language Models","authors":["Boonmee, Apiradee"],"year":2024,"venue":"arXiv:2410.03223","doi":null,"url":"https://arxiv.org/abs/2410.03223","open_url":"https://arxiv.org/pdf/2410.03223","access":"open","license":null,"accessed":"2026-11-12","verified":true,"modules":[19],"notes":"Small preprint on using LLMs to advise on machine faults; low-credibility, include only as a weak data point. Title and first author verified via the arXiv feed; I did not read the paper."},
-{"id":"google-cluster-data","type":"dataset","title":"Google cluster-data (ClusterData2011, ClusterData2019, PowerData2019)","authors":["Google"],"year":2019,"venue":"GitHub google/cluster-data","doi":null,"url":"https://github.com/google/cluster-data","open_url":null,"access":"open","license":"CC-BY 4.0 (stated in the 2019 cluster and power trace docs)","accessed":"2026-11-12","verified":true,"modules":[21,22,24,27],"notes":"Borg traces for 8 cells in May 2019 plus 2019 power traces for 57 power domains in Google data centers, with a Colab to reproduce the paper's figures."},
-{"id":"azure-public-dataset","type":"dataset","title":"Azure Public Dataset (VM, LLM inference, Copilot agent traces)","authors":["Microsoft Azure"],"year":2024,"venue":"GitHub Azure/AzurePublicDataset","doi":null,"url":"https://github.com/Azure/AzurePublicDataset","open_url":null,"access":"open","license":"CC-BY 4.0 (GitHub API licence field)","accessed":"2026-11-12","verified":true,"modules":[21,19,27],"notes":"Includes VM traces plus LLM inference traces (Nov 2023, May 2024), multimodal inference traces (Oct 2024) and a GitHub Copilot coding-agent trace, per its README."},
-{"id":"alibaba-clusterdata","type":"dataset","title":"Alibaba cluster-trace (v2017, v2018 and later)","authors":["Alibaba Group"],"year":2018,"venue":"GitHub alibaba/clusterdata","doi":null,"url":"https://github.com/alibaba/clusterdata","open_url":null,"access":"open","license":"No licence file in repository; read each trace's terms","accessed":"2026-11-12","verified":true,"modules":[21,27],"notes":"v2017 covers about 1,300 machines over 12 hours with co-located online and batch work; later versions add GPU and other traces."},
-{"id":"nab-repo","type":"dataset","title":"Numenta Anomaly Benchmark (NAB)","authors":["Numenta"],"year":2015,"venue":"GitHub numenta/NAB","doi":null,"url":"https://github.com/numenta/NAB","open_url":null,"access":"open","license":"MIT (GitHub API)","accessed":"2026-11-12","verified":true,"modules":[22],"notes":"58 labeled streaming series; use as a demonstration of why the Wu and Keogh critique matters."},
-{"id":"skab-repo","type":"dataset","title":"SKAB: Skoltech Anomaly Benchmark","authors":["Katser, Iurii D.","Kozitsin, Vyacheslav O."],"year":2020,"venue":"GitHub waico/SKAB","doi":null,"url":"https://github.com/waico/SKAB","open_url":null,"access":"open","license":"GPL-3.0 (GitHub API)","accessed":"2026-11-12","verified":true,"modules":[22],"notes":"Water-circulation testbed with labeled anomalies; GPL-3.0 licence means check compatibility before bundling. Author names from memory."},
-{"id":"eia-opendata","type":"dataset","title":"EIA Open Data API (including Hourly Electric Grid Monitor, EIA-930)","authors":["U.S. Energy Information Administration"],"year":2026,"venue":"EIA","doi":null,"url":"https://www.eia.gov/opendata/","open_url":null,"access":"open","license":"Free; API key registration and Terms of Service; follow EIA Copyrights and Reuse Policy","accessed":"2026-11-12","verified":true,"modules":[21,24],"notes":"Page confirms free access via a registered API key; hourly balancing-authority demand, generation by fuel and interchange (EIA-930) are inside the electricity section."},
-{"id":"watttime-signals","type":"web","title":"WattTime Data Signals overview","authors":["WattTime"],"year":2026,"venue":"WattTime","doi":null,"url":"https://watttime.org/data-science/data-signals/","open_url":null,"access":"partial","license":"API terms; registration required; free access scope not verified","accessed":"2026-11-12","verified":true,"modules":[24],"notes":"Marginal operating emissions rate (co2_moer) signal in lbs/MWh with forecasts for load shifting; check free-tier coverage and terms before relying on it."}
+  {
+    "id": "gao2014-ml-dc-optimization",
+    "type": "report",
+    "title": "Machine Learning Applications for Data Center Optimization",
+    "authors": [
+      "Gao, Jim"
+    ],
+    "year": 2014,
+    "venue": "Google (white paper)",
+    "doi": null,
+    "url": "https://research.google/pubs/machine-learning-applications-for-data-center-optimization/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      8,
+      24,
+      27
+    ],
+    "notes": "Neural-network model of PUE from plant telemetry (about 19 inputs) used to simulate what-if setpoint changes; the origin story of ML for DC cooling. URL and bibliographic details are from memory and not page-verified."
+  },
+  {
+    "id": "evans-gao2016-deepmind-cooling-40",
+    "type": "web",
+    "title": "DeepMind AI Reduces Google Data Centre Cooling Bill by 40%",
+    "authors": [
+      "Evans, Richard",
+      "Gao, Jim"
+    ],
+    "year": 2016,
+    "venue": "Google DeepMind blog (20 July 2016)",
+    "doi": null,
+    "url": "https://deepmind.google/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-by-40/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "Announces a recommendation system (humans apply the suggested setpoints) that cut cooling energy by up to 40 percent; vendor blog, so treat the headline as a best-case figure from one facility."
+  },
+  {
+    "id": "gamble-gao2018-safety-first-cooling",
+    "type": "web",
+    "title": "Safety-first AI for autonomous data centre cooling and industrial control",
+    "authors": [
+      "Gamble, Chris",
+      "Gao, Jim"
+    ],
+    "year": 2018,
+    "venue": "Google DeepMind blog (17 Aug 2018)",
+    "doi": null,
+    "url": "https://deepmind.google/blog/safety-first-ai-for-autonomous-data-centre-cooling-and-industrial-control/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Moves from recommendations to direct autonomous control with layered safety (uncertainty estimates, hard operating constraints, operator override); good template for the safety section of the cooling capstone."
+  },
+  {
+    "id": "lazic2018-dc-cooling-mpc",
+    "type": "paper",
+    "title": "Data center cooling using model-predictive control",
+    "authors": [
+      "Lazic, Nevena",
+      "Boutilier, Craig",
+      "Lu, Tyler",
+      "Wong, Eehern",
+      "Roy, Binz",
+      "Ryu, MK",
+      "Imwalle, Greg"
+    ],
+    "year": 2018,
+    "venue": "Advances in Neural Information Processing Systems 31 (NeurIPS 2018)",
+    "doi": null,
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2018/hash/059fdcd96baeb75112f09fa1dcc740cc-Abstract.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24,
+      23
+    ],
+    "notes": "Learns a linear time-varying dynamics model from about two years of sensor data and runs MPC with safety constraints, comparing favourably with a deep-RL baseline for data efficiency. Exact paper URL still to be pinned; the proceedings are open."
+  },
+  {
+    "id": "luo2022-rl-commercial-cooling",
+    "type": "paper",
+    "title": "Controlling Commercial Cooling Systems Using Reinforcement Learning",
+    "authors": [
+      "Luo, Jerry",
+      "Paduraru, Cosmin",
+      "Voicu, Octavian",
+      "Chervonyi, Yuri",
+      "Munns, Scott",
+      "Mankowitz, Daniel J."
+    ],
+    "year": 2022,
+    "venue": "arXiv:2211.07357 (DeepMind/Google with Trane)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2211.07357",
+    "open_url": "https://arxiv.org/pdf/2211.07357",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24,
+      7
+    ],
+    "notes": "Live RL control of two real commercial chiller plants with roughly 9 and 13 percent energy savings; the most useful part for the course is the discussion of evaluation, offline learning and constraint handling in real deployments."
+  },
+  {
+    "id": "meta2024-sim-rl-dc-cooling",
+    "type": "web",
+    "title": "Simulator-based reinforcement learning for data center cooling optimization",
+    "authors": [
+      "Meta Engineering"
+    ],
+    "year": 2024,
+    "venue": "Engineering at Meta blog (10 Sept 2024)",
+    "doi": null,
+    "url": "https://engineering.fb.com/2024/09/10/data-center-engineering/simulator-based-reinforcement-learning-for-data-center-cooling-optimization/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Describes training RL on a physics simulator of Meta's outside-air/evaporative penthouse cooling and reporting about 20 percent lower supply-fan energy and 4 percent less water in a pilot region; direct precedent for capstone 1's simulate-then-deploy design."
+  },
+  {
+    "id": "radovanovic2023-carbon-aware-computing",
+    "type": "paper",
+    "title": "Carbon-Aware Computing for Datacenters",
+    "authors": [
+      "Radovanovic, Ana",
+      "Koningstein, Ross",
+      "Schneider, Ian",
+      "Chen, Bokan",
+      "Duarte, Alexandre",
+      "Cirne, Walfredo"
+    ],
+    "year": 2023,
+    "venue": "IEEE Transactions on Power Systems 38(2)",
+    "doi": "10.1109/TPWRS.2022.3173250",
+    "url": "https://doi.org/10.1109/TPWRS.2022.3173250",
+    "open_url": "https://arxiv.org/abs/2106.11750",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      24,
+      27
+    ],
+    "notes": "Google's carbon-intelligent compute management: day-ahead load and carbon-intensity forecasts feed a risk-aware optimizer producing hourly Virtual Capacity Curves that defer flexible jobs. Good example of forecast-then-optimize."
+  },
+  {
+    "id": "wu2016-dynamo-fb-power",
+    "type": "paper",
+    "title": "Dynamo: Facebook's Data Center-Wide Power Management System",
+    "authors": [
+      "Wu, Qiang",
+      "Deng, Qingyuan",
+      "Ganesh, Lakshmi"
+    ],
+    "year": 2016,
+    "venue": "ISCA 2016",
+    "doi": "10.1109/ISCA.2016.48",
+    "url": "https://doi.org/10.1109/ISCA.2016.48",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24,
+      27
+    ],
+    "notes": "Hierarchical power-capping and oversubscription at Facebook; non-ML but defines the control problem (priority-aware capping against breaker limits). Crossref confirmed; I did not locate a verified open PDF."
+  },
+  {
+    "id": "sakalkar2020-dc-power-oversubscription",
+    "type": "paper",
+    "title": "Data Center Power Oversubscription with a Medium Voltage Power Plane and Priority-Aware Capping",
+    "authors": [
+      "Sakalkar, Varun",
+      "Kontorinis, Vasileios",
+      "Landhuis, David",
+      "Li, Shaohong",
+      "De Ronde, Darren",
+      "Blooming, Thomas",
+      "Ramesh, Anand",
+      "Kennedy, James",
+      "Malone, Christopher",
+      "Clidaras, Jimmy",
+      "Ranganathan, Parthasarathy"
+    ],
+    "year": 2020,
+    "venue": "Proceedings of the 25th International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2020)",
+    "doi": "10.1145/3373376.3378533",
+    "url": "https://research.google/pubs/data-center-power-oversubscription-with-a-medium-voltage-power-plane-and-priority-aware-capping/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      24,
+      27
+    ],
+    "notes": "Companion paper to Google's public 2019 power-trace dataset (57 power domains). Author list and DOI are from memory; the URL is the one cited by the dataset's own README (page-verified via that README)."
+  },
+  {
+    "id": "cortez2017-resource-central",
+    "type": "paper",
+    "title": "Resource Central: Understanding and Predicting Workloads for Improved Resource Management in Large Cloud Platforms",
+    "authors": [
+      "Cortez, Eli",
+      "Bonde, Anand",
+      "Muzio, Alexandre",
+      "Russinovich, Mark",
+      "Fontoura, Marcus",
+      "Bianchini, Ricardo"
+    ],
+    "year": 2017,
+    "venue": "SOSP 2017",
+    "doi": "10.1145/3132747.3132772",
+    "url": "https://doi.org/10.1145/3132747.3132772",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      8,
+      21,
+      27
+    ],
+    "notes": "Azure's ML service predicting VM lifetime, size and utilization with gradient-boosted trees to drive placement and oversubscription; companion to the Azure public traces. Open copy (Microsoft Research) likely exists; confirm via library."
+  },
+  {
+    "id": "botezatu2016-disk-replacement",
+    "type": "paper",
+    "title": "Predicting Disk Replacement towards Reliable Data Centers",
+    "authors": [
+      "Botezatu, Mirela M.",
+      "Giurgiu, Ioana",
+      "Bogojeska, Jasmina",
+      "Wiesmann, Dorothea"
+    ],
+    "year": 2016,
+    "venue": "KDD 2016",
+    "doi": "10.1145/2939672.2939699",
+    "url": "https://doi.org/10.1145/2939672.2939699",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      7,
+      8,
+      22
+    ],
+    "notes": "Disk replacement prediction with class imbalance and time-aware evaluation; use with the Backblaze data to teach leakage-safe survival-style splits."
+  },
+  {
+    "id": "backblaze-drive-stats",
+    "type": "dataset",
+    "title": "Backblaze Drive Stats",
+    "authors": [
+      "Backblaze"
+    ],
+    "year": 2026,
+    "venue": "Backblaze",
+    "doi": null,
+    "url": "https://www.backblaze.com/cloud-storage/resources/hard-drive-test-data",
+    "open_url": null,
+    "access": "open",
+    "license": "Backblaze terms: cite Backblaze; user responsible for use; derivative works may be sold but the data itself may not be resold",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      7,
+      8,
+      22,
+      25
+    ],
+    "notes": "Daily SMART snapshots for every drive since 2013, updated quarterly (Q2 2026 snapshot lists 354,415 drives). Best public hardware-failure dataset."
+  },
+  {
+    "id": "miller2020-gepiii",
+    "type": "paper",
+    "title": "The ASHRAE Great Energy Predictor III competition: Overview and results",
+    "authors": [
+      "Miller, Clayton",
+      "Arjunan, Pandarasamy",
+      "Kathirgamanathan, Anjukan",
+      "Fu, Chun",
+      "Roth, Jonathan",
+      "Park, June Young",
+      "Balbach, Chris",
+      "Gowri, Krishnan",
+      "Nagy, Zoltan",
+      "Fontanini, Anthony D.",
+      "Haberl, Jeff"
+    ],
+    "year": 2020,
+    "venue": "Science and Technology for the Built Environment",
+    "doi": "10.1080/23744731.2020.1795514",
+    "url": "https://doi.org/10.1080/23744731.2020.1795514",
+    "open_url": "https://arxiv.org/abs/2007.06933",
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      7,
+      8,
+      11,
+      21
+    ],
+    "notes": "Overview of the Kaggle competition on predicting meter readings for 2,380 meters; winners relied on gradient boosting ensembles and heavy handling of data quality and leakage. The arXiv id is from memory (the BDG2 README says a preprint is on arXiv)."
+  },
+  {
+    "id": "miller2020-bdg2",
+    "type": "paper",
+    "title": "The Building Data Genome Project 2, energy meter data from the ASHRAE Great Energy Predictor III competition",
+    "authors": [
+      "Miller, Clayton",
+      "Kathirgamanathan, Anjukan",
+      "Picchetti, Bianca",
+      "Arjunan, Pandarasamy",
+      "Park, June Young",
+      "Nagy, Zoltan",
+      "Raftery, Paul",
+      "Hobson, Brodie W.",
+      "Shi, Zixiao",
+      "Meggers, Forrest"
+    ],
+    "year": 2020,
+    "venue": "Scientific Data 7, 368",
+    "doi": "10.1038/s41597-020-00712-x",
+    "url": "https://doi.org/10.1038/s41597-020-00712-x",
+    "open_url": null,
+    "access": "open",
+    "license": "CC BY 4.0",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      7,
+      11,
+      21,
+      22
+    ],
+    "notes": "Data descriptor for BDG2: 3,053 meters in 1,636 non-residential buildings, hourly, 2016 to 2017. Primary dataset for the building-load forecasting modules."
+  },
+  {
+    "id": "bdg2-zenodo",
+    "type": "dataset",
+    "title": "Building Data Genome Project 2 v1.0 (Zenodo)",
+    "authors": [
+      "Miller, Clayton"
+    ],
+    "year": 2020,
+    "venue": "Zenodo",
+    "doi": "10.5281/zenodo.3887306",
+    "url": "https://zenodo.org/records/3887306",
+    "open_url": "https://github.com/buds-lab/building-data-genome-project-2",
+    "access": "open",
+    "license": "CC BY 4.0",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      7,
+      21
+    ],
+    "notes": "595 MB zip; Zenodo API record confirms CC BY 4.0 licence."
+  },
+  {
+    "id": "hong2016-gefcom2014",
+    "type": "paper",
+    "title": "Probabilistic energy forecasting: Global Energy Forecasting Competition 2014 and beyond",
+    "authors": [
+      "Hong, Tao",
+      "Pinson, Pierre",
+      "Fan, Shu",
+      "Zareipour, Hamidreza",
+      "Troccoli, Alberto",
+      "Hyndman, Rob J."
+    ],
+    "year": 2016,
+    "venue": "International Journal of Forecasting 32(3)",
+    "doi": "10.1016/j.ijforecast.2016.02.001",
+    "url": "https://doi.org/10.1016/j.ijforecast.2016.02.001",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      25
+    ],
+    "notes": "Competition report for quantile forecasting of load, price, wind and solar using pinball loss; the reference for probabilistic energy forecast evaluation."
+  },
+  {
+    "id": "makridakis2020-m4",
+    "type": "paper",
+    "title": "The M4 Competition: 100,000 time series and 61 forecasting methods",
+    "authors": [
+      "Makridakis, Spyros",
+      "Spiliotis, Evangelos",
+      "Assimakopoulos, Vassilios"
+    ],
+    "year": 2020,
+    "venue": "International Journal of Forecasting 36(1)",
+    "doi": "10.1016/j.ijforecast.2019.04.014",
+    "url": "https://doi.org/10.1016/j.ijforecast.2019.04.014",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Key finding for the course: statistical/ML hybrids and ensembles beat pure ML, and simple combinations are strong baselines."
+  },
+  {
+    "id": "makridakis2022-m5",
+    "type": "paper",
+    "title": "M5 accuracy competition: Results, findings, and conclusions",
+    "authors": [
+      "Makridakis, Spyros",
+      "Spiliotis, Evangelos",
+      "Assimakopoulos, Vassilios"
+    ],
+    "year": 2022,
+    "venue": "International Journal of Forecasting 38(4)",
+    "doi": "10.1016/j.ijforecast.2021.11.013",
+    "url": "https://doi.org/10.1016/j.ijforecast.2021.11.013",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      8,
+      21
+    ],
+    "notes": "Retail demand competition won by LightGBM-style gradient boosting with strong feature engineering; supports teaching GBMs for tabular forecasting."
+  },
+  {
+    "id": "ansari2024-chronos",
+    "type": "paper",
+    "title": "Chronos: Learning the Language of Time Series",
+    "authors": [
+      "Ansari, Abdul Fatir",
+      "Stella, Lorenzo",
+      "Turkmen, Caner"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2403.07815 (TMLR)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2403.07815",
+    "open_url": "https://arxiv.org/pdf/2403.07815",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      16
+    ],
+    "notes": "Tokenizes scaled values and trains T5 models; reports zero-shot accuracy comparable to, and sometimes better than, models trained per dataset across 42 datasets. Code is Apache-2.0."
+  },
+  {
+    "id": "das2024-timesfm",
+    "type": "paper",
+    "title": "A decoder-only foundation model for time-series forecasting",
+    "authors": [
+      "Das, Abhimanyu",
+      "Kong, Weihao",
+      "Sen, Rajat",
+      "Zhou, Yichen"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2310.10688 (ICML 2024)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2310.10688",
+    "open_url": "https://arxiv.org/pdf/2310.10688",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "TimesFM: patched decoder pretrained on a large corpus with zero-shot accuracy near supervised models on public benchmarks."
+  },
+  {
+    "id": "woo2024-moirai",
+    "type": "paper",
+    "title": "Unified Training of Universal Time Series Forecasting Transformers",
+    "authors": [
+      "Woo, Gerald",
+      "Liu, Chenghao",
+      "Kumar, Akshat",
+      "Xiong, Caiming",
+      "Savarese, Silvio",
+      "Sahoo, Doyen"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2402.02592 (ICML 2024)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2402.02592",
+    "open_url": "https://arxiv.org/pdf/2402.02592",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Moirai plus the LOTSA pretraining archive (27B observations); any-variate attention."
+  },
+  {
+    "id": "garza2023-timegpt1",
+    "type": "paper",
+    "title": "TimeGPT-1",
+    "authors": [
+      "Garza, Azul",
+      "Challu, Cristian",
+      "Mergenthaler-Canseco, Max"
+    ],
+    "year": 2023,
+    "venue": "arXiv:2310.03589",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2310.03589",
+    "open_url": "https://arxiv.org/pdf/2310.03589",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Commercial API foundation forecaster; closed weights so results cannot be independently reproduced offline. Use as a cautionary example."
+  },
+  {
+    "id": "aksu2024-gifteval",
+    "type": "paper",
+    "title": "GIFT-Eval: A Benchmark For General Time Series Forecasting Model Evaluation",
+    "authors": [
+      "Aksu, Taha",
+      "Woo, Gerald",
+      "Liu, Juncheng",
+      "Sahoo, Doyen"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2410.10393",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2410.10393",
+    "open_url": "https://arxiv.org/pdf/2410.10393",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      7
+    ],
+    "notes": "23 datasets, 144k series, with a non-leaking pretraining set; compares 17 baselines and discusses where foundation models do and do not win. Use for the leakage lesson (train/test overlap in foundation-model evals)."
+  },
+  {
+    "id": "tan2024-llm-ts-useful",
+    "type": "paper",
+    "title": "Are Language Models Actually Useful for Time Series Forecasting?",
+    "authors": [
+      "Tan, Mingtian",
+      "Merrill, Mike A.",
+      "Gupta, Vinayak",
+      "Althoff, Tim",
+      "Hartvigsen, Thomas"
+    ],
+    "year": 2024,
+    "venue": "NeurIPS 2024 (arXiv:2406.16964)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2406.16964",
+    "open_url": "https://arxiv.org/pdf/2406.16964",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      7
+    ],
+    "notes": "Ablations show that removing the pretrained LLM from LLM-adapted forecasters does not hurt and often helps; strong evidence for keeping tuned baselines in every comparison."
+  },
+  {
+    "id": "chandola2009-anomaly-detection",
+    "type": "paper",
+    "title": "Anomaly detection: A survey",
+    "authors": [
+      "Chandola, Varun",
+      "Banerjee, Arindam",
+      "Kumar, Vipin"
+    ],
+    "year": 2009,
+    "venue": "ACM Computing Surveys 41(3)",
+    "doi": "10.1145/1541880.1541882",
+    "url": "https://doi.org/10.1145/1541880.1541882",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Canonical taxonomy (point, contextual, collective anomalies; supervised, semi-supervised, unsupervised); use as the vocabulary for module 22."
+  },
+  {
+    "id": "liu2008-isolation-forest",
+    "type": "paper",
+    "title": "Isolation Forest",
+    "authors": [
+      "Liu, Fei Tony",
+      "Ting, Kai Ming",
+      "Zhou, Zhi-Hua"
+    ],
+    "year": 2008,
+    "venue": "IEEE ICDM 2008",
+    "doi": "10.1109/ICDM.2008.17",
+    "url": "https://doi.org/10.1109/ICDM.2008.17",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Random-partition isolation as an anomaly score; fast, no distance computation. Baseline detector for sensor data."
+  },
+  {
+    "id": "katipamula2005-fdd-review-i",
+    "type": "paper",
+    "title": "Methods for Fault Detection, Diagnostics, and Prognostics for Building Systems: A Review, Part I",
+    "authors": [
+      "Katipamula, Srinivas",
+      "Brambley, Michael R."
+    ],
+    "year": 2005,
+    "venue": "HVAC&R Research 11(1)",
+    "doi": "10.1080/10789669.2005.10391133",
+    "url": "https://doi.org/10.1080/10789669.2005.10391133",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      0
+    ],
+    "notes": "Standard HVAC FDD taxonomy (model-based, rule-based, data-driven). Part II is DOI 10.1080/10789669.2005.10391134 (not independently verified). A PNNL/OSTI copy probably exists; the open_url is a placeholder to resolve."
+  },
+  {
+    "id": "granderson2020-lbnl-fdd-data",
+    "type": "paper",
+    "title": "Building fault detection data to aid diagnostic algorithm creation and performance testing",
+    "authors": [
+      "Granderson, Jessica",
+      "Lin, Guanjing",
+      "Chen, Yimin",
+      "Casillas, Armando",
+      "Im, Piljae",
+      "Jung, Sungkyun",
+      "Sharma, Mahendra",
+      "Vrabie, Draguna",
+      "Zhang, Jian"
+    ],
+    "year": 2020,
+    "venue": "Scientific Data 7, 65",
+    "doi": "10.1038/s41597-020-0398-6",
+    "url": "https://doi.org/10.1038/s41597-020-0398-6",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Data descriptor for the labeled LBNL/PNNL/NREL/ORNL HVAC FDD datasets. Author list is partly from memory; title, first author, year confirmed via Crossref."
+  },
+  {
+    "id": "lbnl-fdd-oedi",
+    "type": "dataset",
+    "title": "LBNL Fault Detection and Diagnostics Datasets",
+    "authors": [
+      "LBNL",
+      "PNNL",
+      "NREL",
+      "ORNL"
+    ],
+    "year": 2020,
+    "venue": "Open Energy Data Initiative (OEDI)",
+    "doi": "10.25984/1881324",
+    "url": "https://data.openei.org/submissions/5763",
+    "open_url": null,
+    "access": "open",
+    "license": "Publicly accessible via OEDI; check the page's license field before redistribution",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Time-series data with faults at several severities plus fault-free cases for seven equipment types (RTU, single- and dual-duct AHU, VAV, FCU, chiller plant, boiler plant), with PDFs and Brick TTL files."
+  },
+  {
+    "id": "house2001-apar",
+    "type": "paper",
+    "title": "An Expert Rule Set for Fault Detection in Air-Handling Units",
+    "authors": [
+      "House, John M.",
+      "Vaezi-Nejad, Hossein"
+    ],
+    "year": 2001,
+    "venue": "ASHRAE Transactions",
+    "doi": null,
+    "url": "https://www.nist.gov/publications/expert-rule-set-fault-detection-air-handling-units",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "AHU rule set (APAR) from IEA Annex 25; a template for hand-written physics rules that an LLM agent can call as tools. Title and venue from memory; verify via the library. Citation record verified on the NIST publications page; full text is in ASHRAE Transactions (library access)."
+  },
+  {
+    "id": "lavin2015-nab",
+    "type": "paper",
+    "title": "Evaluating Real-time Anomaly Detection Algorithms - the Numenta Anomaly Benchmark",
+    "authors": [
+      "Lavin, Alexander",
+      "Ahmad, Subutai"
+    ],
+    "year": 2015,
+    "venue": "IEEE ICMLA 2015",
+    "doi": "10.1109/ICMLA.2015.141",
+    "url": "https://arxiv.org/abs/1510.03336",
+    "open_url": "https://arxiv.org/pdf/1510.03336",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Streaming benchmark with a scoring function that rewards early detection and penalizes false alarms; data and code are MIT on GitHub."
+  },
+  {
+    "id": "wu2021-keogh-flawed-benchmarks",
+    "type": "paper",
+    "title": "Current Time Series Anomaly Detection Benchmarks are Flawed and are Creating the Illusion of Progress",
+    "authors": [
+      "Wu, Renjie",
+      "Keogh, Eamonn J."
+    ],
+    "year": 2021,
+    "venue": "IEEE Transactions on Knowledge and Data Engineering",
+    "doi": "10.1109/TKDE.2021.3112126",
+    "url": "https://arxiv.org/abs/2009.13807",
+    "open_url": "https://arxiv.org/pdf/2009.13807",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      7
+    ],
+    "notes": "Argues that Yahoo, Numenta, NASA and similar benchmarks have triviality, unrealistic anomaly density, mislabeling and run-to-failure bias; introduces the UCR Anomaly Archive."
+  },
+  {
+    "id": "schmidl2022-tsad-eval",
+    "type": "paper",
+    "title": "Anomaly detection in time series: a comprehensive evaluation",
+    "authors": [
+      "Schmidl, Sebastian",
+      "Wenig, Phillip",
+      "Papenbrock, Thorsten"
+    ],
+    "year": 2022,
+    "venue": "Proceedings of the VLDB Endowment 15(9)",
+    "doi": "10.14778/3538598.3538602",
+    "url": "https://doi.org/10.14778/3538598.3538602",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      7
+    ],
+    "notes": "Compares 71 detectors on many datasets; shows no method dominates, simple methods are often competitive, and metric choice changes rankings. Use to justify a multi-metric harness."
+  },
+  {
+    "id": "raissi2019-pinn",
+    "type": "paper",
+    "title": "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations",
+    "authors": [
+      "Raissi, Maziar",
+      "Perdikaris, Paris",
+      "Karniadakis, George E."
+    ],
+    "year": 2019,
+    "venue": "Journal of Computational Physics 378",
+    "doi": "10.1016/j.jcp.2018.10.045",
+    "url": "https://doi.org/10.1016/j.jcp.2018.10.045",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24,
+      12
+    ],
+    "notes": "Original PINN paper: embed PDE residuals in the loss. Good for heat-transfer examples; course should also teach its known training pathologies."
+  },
+  {
+    "id": "karniadakis2021-piml",
+    "type": "paper",
+    "title": "Physics-informed machine learning",
+    "authors": [
+      "Karniadakis, George Em",
+      "Kevrekidis, Ioannis G.",
+      "Lu, Lu",
+      "Perdikaris, Paris",
+      "Wang, Sifan",
+      "Yang, Liu"
+    ],
+    "year": 2021,
+    "venue": "Nature Reviews Physics 3",
+    "doi": "10.1038/s42254-021-00314-5",
+    "url": "https://doi.org/10.1038/s42254-021-00314-5",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Review organizing physics-informed ML into observational, inductive and learning biases; use as the map for module 24's physics-informed section."
+  },
+  {
+    "id": "brunton2016-sindy",
+    "type": "paper",
+    "title": "Discovering governing equations from data by sparse identification of nonlinear dynamical systems",
+    "authors": [
+      "Brunton, Steven L.",
+      "Proctor, Joshua L.",
+      "Kutz, J. Nathan"
+    ],
+    "year": 2016,
+    "venue": "PNAS 113(15)",
+    "doi": "10.1073/pnas.1517384113",
+    "url": "https://doi.org/10.1073/pnas.1517384113",
+    "open_url": "https://arxiv.org/abs/1509.03580",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "SINDy: sparse regression on a library of candidate terms to recover ODEs; arXiv id from memory. Useful for identifying simple thermal dynamics from data."
+  },
+  {
+    "id": "chen2018-neural-ode",
+    "type": "paper",
+    "title": "Neural Ordinary Differential Equations",
+    "authors": [
+      "Chen, Ricky T. Q.",
+      "Rubanova, Yulia",
+      "Bettencourt, Jesse",
+      "Duvenaud, David"
+    ],
+    "year": 2018,
+    "venue": "NeurIPS 2018 (arXiv:1806.07366)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1806.07366",
+    "open_url": "https://arxiv.org/pdf/1806.07366",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      24
+    ],
+    "notes": "Parameterizes the derivative of a hidden state with a network and integrates with an ODE solver; the basis for continuous-time learned plant models."
+  },
+  {
+    "id": "bacher2011-greybox",
+    "type": "paper",
+    "title": "Identifying suitable models for the heat dynamics of buildings",
+    "authors": [
+      "Bacher, Peder",
+      "Madsen, Henrik"
+    ],
+    "year": 2011,
+    "venue": "Energy and Buildings 43(7)",
+    "doi": "10.1016/j.enbuild.2011.02.005",
+    "url": "https://doi.org/10.1016/j.enbuild.2011.02.005",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24,
+      21
+    ],
+    "notes": "Forward model selection among lumped RC (grey-box) stochastic models using likelihood tests; the practical recipe for RC thermal models. DOI confirmed through a Crossref search result, not a direct lookup."
+  },
+  {
+    "id": "drgona2021-physics-constrained",
+    "type": "paper",
+    "title": "Physics-constrained deep learning of multi-zone building thermal dynamics",
+    "authors": [
+      "Drgona, Jan",
+      "Tuor, Aaron R.",
+      "Chandan, Vikas",
+      "Vrabie, Draguna L."
+    ],
+    "year": 2021,
+    "venue": "Energy and Buildings 243",
+    "doi": "10.1016/j.enbuild.2021.110992",
+    "url": "https://doi.org/10.1016/j.enbuild.2021.110992",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      24
+    ],
+    "notes": "Structured neural state-space model with physics-inspired constraints for building thermal dynamics (a PNNL work, so an OSTI copy is likely). Author list from memory."
+  },
+  {
+    "id": "nasem2024-digital-twins",
+    "type": "report",
+    "title": "Foundational Research Gaps and Future Directions for Digital Twins",
+    "authors": [
+      "National Academies of Sciences, Engineering, and Medicine"
+    ],
+    "year": 2024,
+    "venue": "National Academies Press",
+    "doi": "10.17226/26894",
+    "url": "https://doi.org/10.17226/26894",
+    "open_url": "https://nap.nationalacademies.org/catalog/26894",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24,
+      25,
+      27
+    ],
+    "notes": "Consensus report defining a digital twin as a bidirectional coupling of virtual and physical systems and emphasizing verification, validation and uncertainty quantification; use to scope the capstone's 'digital twin' claim honestly."
+  },
+  {
+    "id": "drgona2020-mpc-buildings",
+    "type": "paper",
+    "title": "All you need to know about model predictive control for buildings",
+    "authors": [
+      "Drgona, Jan",
+      "Arroyo, Javier",
+      "Cupeiro Figueroa, Iago",
+      "Blum, David",
+      "Arendt, Krzysztof",
+      "Kim, Donghun",
+      "Ollé, Enric Perarnau",
+      "Oravec, Juraj",
+      "Wetter, Michael",
+      "Vrabie, Draguna L.",
+      "Helsen, Lieve"
+    ],
+    "year": 2020,
+    "venue": "Annual Reviews in Control 50",
+    "doi": "10.1016/j.arcontrol.2020.09.001",
+    "url": "https://doi.org/10.1016/j.arcontrol.2020.09.001",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "The standard review of MPC for buildings: modelling, estimation, formulation, deployment cost and open problems. Author list partly from memory."
+  },
+  {
+    "id": "afram2014-hvac-mpc-review",
+    "type": "paper",
+    "title": "Theory and applications of HVAC control systems - A review of model predictive control (MPC)",
+    "authors": [
+      "Afram, Abdul",
+      "Janabi-Sharifi, Farrokh"
+    ],
+    "year": 2014,
+    "venue": "Building and Environment 72",
+    "doi": "10.1016/j.buildenv.2013.11.016",
+    "url": "https://doi.org/10.1016/j.buildenv.2013.11.016",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Earlier review of MPC for HVAC, including simulated versus real savings; useful for the comparison with newer RL reviews."
+  },
+  {
+    "id": "wang2020-rl-building-controls",
+    "type": "paper",
+    "title": "Reinforcement learning for building controls: The opportunities and challenges",
+    "authors": [
+      "Wang, Zhe",
+      "Hong, Tianzhen"
+    ],
+    "year": 2020,
+    "venue": "Applied Energy 269",
+    "doi": "10.1016/j.apenergy.2020.115036",
+    "url": "https://doi.org/10.1016/j.apenergy.2020.115036",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "LBNL review covering how RL was applied to buildings and the practical barriers (sample efficiency, safety, simulators); a LBNL/eScholarship open copy is likely."
+  },
+  {
+    "id": "wei2017-drl-hvac",
+    "type": "paper",
+    "title": "Deep Reinforcement Learning for Building HVAC Control",
+    "authors": [
+      "Wei, Tianshu",
+      "Wang, Yanzhi",
+      "Zhu, Qi"
+    ],
+    "year": 2017,
+    "venue": "DAC 2017",
+    "doi": "10.1145/3061639.3062224",
+    "url": "https://doi.org/10.1145/3061639.3062224",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Early deep Q-learning for HVAC in EnergyPlus; useful as a historical example whose evaluation conditions are easy to critique."
+  },
+  {
+    "id": "chen2019-gnurl",
+    "type": "paper",
+    "title": "Gnu-RL: A Precocial Reinforcement Learning Solution for Building HVAC Control Using a Differentiable MPC Policy",
+    "authors": [
+      "Chen, Bingqing",
+      "Cai, Zicheng",
+      "Berges, Mario"
+    ],
+    "year": 2019,
+    "venue": "BuildSys 2019",
+    "doi": "10.1145/3360322.3360849",
+    "url": "https://doi.org/10.1145/3360322.3360849",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Policy is a differentiable MPC initialized by imitation of an existing controller, bridging MPC and RL. Title from memory; Crossref confirmed first author, year and short title."
+  },
+  {
+    "id": "blum2021-boptest",
+    "type": "paper",
+    "title": "Building optimization testing framework (BOPTEST) for simulation-based benchmarking of control strategies in buildings",
+    "authors": [
+      "Blum, David",
+      "Arroyo, Javier",
+      "Huang, Sen",
+      "Drgona, Jan",
+      "Jorissen, Filip",
+      "Walnum, Harald Taxt",
+      "Chen, Yan",
+      "Benne, Kyle",
+      "Vrabie, Draguna",
+      "Wetter, Michael",
+      "Helsen, Lieve"
+    ],
+    "year": 2021,
+    "venue": "Journal of Building Performance Simulation 14(5)",
+    "doi": "10.1080/19401493.2021.1986574",
+    "url": "https://doi.org/10.1080/19401493.2021.1986574",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24,
+      23
+    ],
+    "notes": "Containerized Modelica emulators with standard KPIs for comparing controllers; the most credible benchmark for MPC versus RL on buildings. Author list partly from memory."
+  },
+  {
+    "id": "jimenez2021-sinergym",
+    "type": "paper",
+    "title": "Sinergym: A Building Simulation and Control Framework for Training Reinforcement Learning Agents",
+    "authors": [
+      "Jimenez-Raboso, Javier",
+      "Campoy-Nieves, Alejandro",
+      "Manjavacas-Lucas, Antonio",
+      "Gomez-Romero, Juan",
+      "Molina-Solana, Miguel"
+    ],
+    "year": 2021,
+    "venue": "BuildSys 2021",
+    "doi": "10.1145/3486611.3488729",
+    "url": "https://doi.org/10.1145/3486611.3488729",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Gymnasium wrapper around EnergyPlus (code MIT per GitHub API). Includes data-center-like environments in later versions (not verified)."
+  },
+  {
+    "id": "vazquez2019-citylearn",
+    "type": "paper",
+    "title": "CityLearn v1.0: An OpenAI Gym Environment for Demand Response with Deep Reinforcement Learning",
+    "authors": [
+      "Vazquez-Canteli, Jose R.",
+      "Kaempf, Jerome",
+      "Henze, Gregor",
+      "Nagy, Zoltan"
+    ],
+    "year": 2019,
+    "venue": "BuildSys 2019",
+    "doi": "10.1145/3360322.3360998",
+    "url": "https://doi.org/10.1145/3360322.3360998",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Multi-building demand-response RL environment (MIT licence per GitHub API)."
+  },
+  {
+    "id": "nweye2024-citylearn-v2",
+    "type": "paper",
+    "title": "CityLearn v2: Energy-flexible, resilient, occupant-centric, and carbon-aware management of grid-interactive communities",
+    "authors": [
+      "Nweye, Kingsley",
+      "Kaspar, Kathryn",
+      "Nagy, Zoltan"
+    ],
+    "year": 2024,
+    "venue": "Journal of Building Performance Simulation (arXiv:2405.03848)",
+    "doi": "10.1080/19401493.2024.2418813",
+    "url": "https://arxiv.org/abs/2405.03848",
+    "open_url": "https://arxiv.org/pdf/2405.03848",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "CityLearn built on the NREL End-Use Load Profiles dataset, with RL, MPC and rule-based baselines for batteries, V2G and heat pumps."
+  },
+  {
+    "id": "brunke2022-safe-learning-robotics",
+    "type": "paper",
+    "title": "Safe Learning in Robotics: From Learning-Based Control to Safe Reinforcement Learning",
+    "authors": [
+      "Brunke, Lukas",
+      "Greeff, Melissa",
+      "Hall, Adam W.",
+      "Yuan, Zhaocong",
+      "Zhou, Siqi",
+      "Panerati, Jacopo",
+      "Schoellig, Angela P."
+    ],
+    "year": 2022,
+    "venue": "Annual Review of Control, Robotics, and Autonomous Systems 5",
+    "doi": "10.1146/annurev-control-042920-020211",
+    "url": "https://doi.org/10.1146/annurev-control-042920-020211",
+    "open_url": "https://arxiv.org/abs/2108.06266",
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Survey of safe learning for physical systems (constraint satisfaction, safety filters, certification); transferable to HVAC and cooling control. arXiv id from memory."
+  },
+  {
+    "id": "patel2025-assetopsbench",
+    "type": "paper",
+    "title": "AssetOpsBench: Benchmarking AI Agents for Task Automation in Industrial Asset Operations and Maintenance",
+    "authors": [
+      "Patel, Dhaval",
+      "Lin, Shuxin",
+      "Rayfield, James",
+      "Zhou, Nianjun",
+      "Kalagnanam, Jayant"
+    ],
+    "year": 2025,
+    "venue": "arXiv:2506.03828 (v4 Aug 2026; ACM DOI 10.1145/3770855.3817562)",
+    "doi": "10.1145/3770855.3817562",
+    "url": "https://arxiv.org/abs/2506.03828",
+    "open_url": "https://arxiv.org/pdf/2506.03828",
+    "access": "open",
+    "license": "Code Apache-2.0 (GitHub IBM/AssetOpsBench)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      22
+    ],
+    "notes": "IBM benchmark: four domain agents, 140+ human-written queries and a simulated CouchDB IoT environment, scored with an automated evaluation of Tool-As-Agent versus Plan-Executor designs. Closest public template for capstone 2's harness; vendor-authored, so check for overfitting to its own tools."
+  },
+  {
+    "id": "zhang2024-cloud-incident-rca",
+    "type": "paper",
+    "title": "Automated Root Causing of Cloud Incidents using In-Context Learning with GPT-4",
+    "authors": [
+      "Zhang, Xuchao"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2401.13810 (Microsoft)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2401.13810",
+    "open_url": "https://arxiv.org/pdf/2401.13810",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      27
+    ],
+    "notes": "Microsoft study of retrieval of similar historical incidents plus in-context learning for root-causing cloud incidents; closest analogue to retrieval-based fault diagnosis. Only the first author was recorded from the arXiv feed."
+  },
+  {
+    "id": "cui2024-logeval",
+    "type": "paper",
+    "title": "LogEval: A Comprehensive Benchmark Suite for Large Language Models In Log Analysis",
+    "authors": [
+      "Cui, Tianyu"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2407.01896",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2407.01896",
+    "open_url": "https://arxiv.org/pdf/2407.01896",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      22
+    ],
+    "notes": "Benchmark of LLMs on log parsing, anomaly detection and fault diagnosis for IT logs; pattern for building an eval set from logs. Only the first author was recorded."
+  },
+  {
+    "id": "boonmee2024-industrial-fault-llm",
+    "type": "paper",
+    "title": "Consultation on Industrial Machine Faults with Large language Models",
+    "authors": [
+      "Boonmee, Apiradee"
+    ],
+    "year": 2024,
+    "venue": "arXiv:2410.03223",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2410.03223",
+    "open_url": "https://arxiv.org/pdf/2410.03223",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Small preprint on using LLMs to advise on machine faults; low-credibility, include only as a weak data point. Title and first author verified via the arXiv feed; I did not read the paper."
+  },
+  {
+    "id": "google-cluster-data",
+    "type": "dataset",
+    "title": "Google cluster-data (ClusterData2011, ClusterData2019, PowerData2019)",
+    "authors": [
+      "Google"
+    ],
+    "year": 2019,
+    "venue": "GitHub google/cluster-data",
+    "doi": null,
+    "url": "https://github.com/google/cluster-data",
+    "open_url": null,
+    "access": "open",
+    "license": "CC-BY 4.0 (stated in the 2019 cluster and power trace docs)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      22,
+      24,
+      27
+    ],
+    "notes": "Borg traces for 8 cells in May 2019 plus 2019 power traces for 57 power domains in Google data centers, with a Colab to reproduce the paper's figures."
+  },
+  {
+    "id": "azure-public-dataset",
+    "type": "dataset",
+    "title": "Azure Public Dataset (VM, LLM inference, Copilot agent traces)",
+    "authors": [
+      "Microsoft Azure"
+    ],
+    "year": 2024,
+    "venue": "GitHub Azure/AzurePublicDataset",
+    "doi": null,
+    "url": "https://github.com/Azure/AzurePublicDataset",
+    "open_url": null,
+    "access": "open",
+    "license": "CC-BY 4.0 (GitHub API licence field)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      19,
+      27
+    ],
+    "notes": "Includes VM traces plus LLM inference traces (Nov 2023, May 2024), multimodal inference traces (Oct 2024) and a GitHub Copilot coding-agent trace, per its README."
+  },
+  {
+    "id": "alibaba-clusterdata",
+    "type": "dataset",
+    "title": "Alibaba cluster-trace (v2017, v2018 and later)",
+    "authors": [
+      "Alibaba Group"
+    ],
+    "year": 2018,
+    "venue": "GitHub alibaba/clusterdata",
+    "doi": null,
+    "url": "https://github.com/alibaba/clusterdata",
+    "open_url": null,
+    "access": "open",
+    "license": "No licence file in repository; read each trace's terms",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      27
+    ],
+    "notes": "v2017 covers about 1,300 machines over 12 hours with co-located online and batch work; later versions add GPU and other traces."
+  },
+  {
+    "id": "nab-repo",
+    "type": "dataset",
+    "title": "Numenta Anomaly Benchmark (NAB)",
+    "authors": [
+      "Numenta"
+    ],
+    "year": 2015,
+    "venue": "GitHub numenta/NAB",
+    "doi": null,
+    "url": "https://github.com/numenta/NAB",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT (GitHub API)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "58 labeled streaming series; use as a demonstration of why the Wu and Keogh critique matters."
+  },
+  {
+    "id": "skab-repo",
+    "type": "dataset",
+    "title": "SKAB: Skoltech Anomaly Benchmark",
+    "authors": [
+      "Katser, Iurii D.",
+      "Kozitsin, Vyacheslav O."
+    ],
+    "year": 2020,
+    "venue": "GitHub waico/SKAB",
+    "doi": null,
+    "url": "https://github.com/waico/SKAB",
+    "open_url": null,
+    "access": "open",
+    "license": "GPL-3.0 (GitHub API)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Water-circulation testbed with labeled anomalies; GPL-3.0 licence means check compatibility before bundling. Author names from memory."
+  },
+  {
+    "id": "eia-opendata",
+    "type": "dataset",
+    "title": "EIA Open Data API (including Hourly Electric Grid Monitor, EIA-930)",
+    "authors": [
+      "U.S. Energy Information Administration"
+    ],
+    "year": 2026,
+    "venue": "EIA",
+    "doi": null,
+    "url": "https://www.eia.gov/opendata/",
+    "open_url": null,
+    "access": "open",
+    "license": "Free; API key registration and Terms of Service; follow EIA Copyrights and Reuse Policy",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "Page confirms free access via a registered API key; hourly balancing-authority demand, generation by fuel and interchange (EIA-930) are inside the electricity section."
+  },
+  {
+    "id": "watttime-signals",
+    "type": "web",
+    "title": "WattTime Data Signals overview",
+    "authors": [
+      "WattTime"
+    ],
+    "year": 2026,
+    "venue": "WattTime",
+    "doi": null,
+    "url": "https://watttime.org/data-science/data-signals/",
+    "open_url": null,
+    "access": "partial",
+    "license": "API terms; registration required; free access scope not verified",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Marginal operating emissions rate (co2_moer) signal in lbs/MWh with forecasts for load shifting; check free-tier coverage and terms before relying on it."
+  }
 ]
