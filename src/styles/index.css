@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/* ---------- Design tokens (dark first; light via [data-theme="light"]) ---------- */
+:root {
+  color-scheme: dark;
+  --bg: #0b1016;
+  --surface: #111922;
+  --surface-2: #17212c;
+  --surface-3: #1e2a37;
+  --border: #223040;
+  --border-strong: #31435a;
+  --text: #e6edf3;
+  --muted: #94a5b6;
+  --faint: #5f7183;
+  --accent: #2dd4bf; /* cool: chilled water, success of cooling */
+  --accent-strong: #14b8a6;
+  --accent-soft: rgb(45 212 191 / 0.12);
+  --heat: #f5a524; /* warm: heat, load, warnings */
+  --heat-soft: rgb(245 165 36 / 0.12);
+  --danger: #f87171;
+  --danger-soft: rgb(248 113 113 / 0.12);
+  --success: #4ade80;
+  --info: #60a5fa;
+  --info-soft: rgb(96 165 250 / 0.12);
+  --violet: #a78bfa;
+  --violet-soft: rgb(167 139 250 / 0.12);
+  --focus: #5eead4;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.25);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f8fa;
+  --surface: #ffffff;
+  --surface-2: #f0f3f6;
+  --surface-3: #e7ecf1;
+  --border: #dbe2e9;
+  --border-strong: #c3ced9;
+  --text: #0f1822;
+  --muted: #4a5a6a;
+  --faint: #7f8e9d;
+  --accent: #0d9488;
+  --accent-strong: #0f766e;
+  --accent-soft: rgb(13 148 136 / 0.1);
+  --heat: #c26a06;
+  --heat-soft: rgb(217 119 6 / 0.12);
+  --danger: #dc2626;
+  --danger-soft: rgb(220 38 38 / 0.08);
+  --success: #16a34a;
+  --info: #2563eb;
+  --info-soft: rgb(37 99 235 / 0.08);
+  --violet: #7c3aed;
+  --violet-soft: rgb(124 58 237 / 0.08);
+  --focus: #0d9488;
+  --shadow: 0 1px 2px rgb(15 24 34 / 0.06), 0 8px 24px rgb(15 24 34 / 0.06);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-heat: var(--heat);
+  --color-heat-soft: var(--heat-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+  --shadow-card: var(--shadow);
+}
+
+/* ---------- Base ---------- */
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Lesson prose ---------- */
+.lesson-prose {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+.lesson-prose > * + * {
+  margin-top: 1.1em;
+}
+.lesson-prose h2 {
+  font-size: 1.4rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-top: 2.2em;
+  line-height: 1.3;
+}
+.lesson-prose h3 {
+  font-size: 1.15rem;
+  font-weight: 620;
+  margin-top: 1.8em;
+}
+.lesson-prose p {
+  color: var(--text);
+}
+.lesson-prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lesson-prose strong {
+  font-weight: 650;
+}
+.lesson-prose ul,
+.lesson-prose ol {
+  padding-left: 1.4em;
+}
+.lesson-prose ul {
+  list-style: disc;
+}
+.lesson-prose ol {
+  list-style: decimal;
+}
+.lesson-prose li + li {
+  margin-top: 0.35em;
+}
+.lesson-prose li::marker {
+  color: var(--faint);
+}
+.lesson-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+}
+.lesson-prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+}
+.lesson-prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+.lesson-prose blockquote {
+  border-left: 3px solid var(--border-strong);
+  padding-left: 1em;
+  color: var(--muted);
+}
+.lesson-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+.lesson-prose th,
+.lesson-prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+  vertical-align: top;
+}
+.lesson-prose th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.lesson-prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25em 0;
+}
+
+/* Thin, quiet scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}

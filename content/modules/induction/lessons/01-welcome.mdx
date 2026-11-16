@@ -1,0 +1,100 @@
+---
+id: induction/welcome
+title: Welcome to Kestrel Ridge
+minutes: 12
+concepts: [learning-loop, heat-balance]
+sources: [shehabi2024-us-dc-energy, iea2025-energy-and-ai, evans-gao2016-deepmind-cooling-40, gamble-gao2018-safety-first-cooling, meta2024-sim-rl-dc-cooling, roediger2006-test-enhanced-learning, cepeda2008-spacing-ridgeline, freeman2014-active-learning]
+cards: []
+---
+
+<Situation from="Mara, site lead">
+Welcome aboard. You're joining Basalt Cloud's ML group at Kestrel Ridge, our campus on the plateau. Hall A runs 4.8 MW of servers today, and an AI pod comes online later this year. Your desk faces the controls team on purpose: the people who keep this building cool want to know what your models can do, and they will tell you when a model is wrong. Spend this week learning the building. Next week you start shipping.
+</Situation>
+
+Kestrel Ridge and Basalt Cloud are fictional. The physics, the numbers and the problems are real, and every figure in these lessons is cited at the bottom of the page.
+
+## What this course is for
+
+Over the next ten months you will go from basic Python and basic ML to the depth of an ML engineer who can work on data-center, energy and infrastructure problems: forecasting load, detecting faults, optimizing a cooling plant, and building the LLM tools that operators actually use.
+
+Every major idea goes through the same loop:
+
+1. **Predict, then explore.** You commit to a guess before you touch an interactive explainer.
+2. **Derive.** You complete the key steps of the math yourself.
+3. **Build from scratch** in NumPy.
+4. **Compare with the production library** (scikit-learn, LightGBM, PyTorch and others) and explain any differences.
+5. **Retrieve.** Short recall questions, then review cards that come back on a schedule.
+
+<Predict
+  id="why-predict"
+  question="Which study method produces better recall of material one week later?"
+  options={["Re-reading the material several times", "Taking practice tests on it, with no extra study time", "Both work about equally well"]}
+  answer={1}
+  explain="In a classic experiment, students who took practice tests remembered much more a week later than students who restudied, even though restudying felt more effective at the time. That's why this course asks you to predict and recall constantly. It will sometimes feel slower; that feeling is part of how durable learning works."
+/>
+
+## How a day works
+
+Open the app and tap **Start session**. A session is sized to the time you have that day:
+
+- a two-minute warm-up of predictions about the coming lesson;
+- spaced reviews of cards from earlier lessons, capped at 15 minutes;
+- new material;
+- a mixed practice set that deliberately interleaves today's topic with older ones;
+- one harder challenge;
+- a short closed-book recall at the end.
+
+Modules end with a **checkpoint**. To pass, you need at least 85% overall and every item flagged as critical, plus a transfer problem and a short explanation. A parallel re-check a few days later confirms that the skill stuck. If you fail twice, you can still move on, but the gaps follow you into your daily reviews.
+
+<KeyIdea>
+The course is designed around what the evidence says works: retrieval practice, spacing, interleaving, faded worked examples, and committing to predictions. You will spend most of your time doing, not reading.
+</KeyIdea>
+
+## Why data centers, and why now
+
+Data centers used about 176 TWh in the United States in 2023, roughly 4.4% of the country's electricity, and the US national laboratory estimate for 2028 is 325–580 TWh. Worldwide they used about 415 TWh in 2024, with the International Energy Agency's base case reaching roughly 945 TWh by 2030. AI is a large part of that growth.
+
+<Predict
+  id="share-of-us-power"
+  question="By 2028, what share of US electricity does the national-laboratory estimate expect data centers to use?"
+  options={["About 2%", "About 4%", "Between about 7% and 12%", "About 25%"]}
+  answer={2}
+  explain="The report's 2028 scenarios span 325–580 TWh, about 6.7% to 12% of US electricity, up from 4.4% in 2023. The wide range reflects real uncertainty about how fast AI hardware is deployed and how efficiently it runs."
+/>
+
+That growth is why efficiency matters so much: every percentage point of cooling or power overhead is now measured in hundreds of megawatts across a fleet. And it is why the large operators already run ML inside their buildings:
+
+- In 2016, a DeepMind system that recommended cooling settings cut cooling energy at Google data centers by up to 40%.
+- By 2018, a successor system controlled cooling directly. It ran inside safety layers: low-confidence actions were discarded, and the local control system re-checked every command.
+- Meta reported in 2024 that a reinforcement-learning policy trained in a physics simulator cut supply-fan energy by about 20% and water use by about 4% in a pilot region.
+
+<Craft title="Read results like an engineer">
+These are company reports from pilots or single sites. They are best-case numbers and they are not peer-reviewed. Part of your job this year is learning to ask the questions that separate a real gain from a lucky test: compared with what baseline, over which season, measured how, and with what constraints switched on?
+</Craft>
+
+## The one physical law you need today
+
+<Bridge>
+You already know the most important fact about a data center from thermodynamics: at steady state, essentially every watt of electrical power the servers draw leaves the building as heat. A 4.8 MW hall is a 4.8 MW heater, running all year. Cooling is the work of moving that heat outdoors, and Lesson 2 traces exactly how it travels.
+</Bridge>
+
+<Check
+  questions={[
+    {
+      id: "it-heat",
+      prompt: "Hall A's servers draw 4.8 MW of electricity. Roughly how much heat do they release into the hall?",
+      options: ["Much less than 4.8 MW, because computation stores energy", "About 4.8 MW", "About 9.6 MW, because of fan friction"],
+      answer: 1,
+      explain: "Computation stores a negligible amount of energy, so the electrical power becomes heat at about the same rate."
+    },
+    {
+      id: "session-order",
+      prompt: "Why does every explainer in this course ask for a prediction before you can use the sliders?",
+      options: ["To grade you", "Because committing to a prediction makes the result stick and exposes misconceptions", "To slow you down"],
+      answer: 1,
+      explain: "Predicting first improves understanding compared with only watching, and a wrong prediction tells the app which misconception to drill."
+    }
+  ]}
+/>
+
+Next: a walk through Hall A, following the power in and the heat out.

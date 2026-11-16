@@ -1,0 +1,11 @@
+[
+  { "id": "dc-power-chain", "title": "Data center power chain and redundancy", "module": "induction", "prereqs": [] },
+  { "id": "dc-cooling-chain", "title": "The heat path from chip to atmosphere", "module": "induction", "prereqs": [] },
+  { "id": "heat-balance", "title": "Every IT watt becomes heat (first law)", "module": "induction", "prereqs": [] },
+  { "id": "pue", "title": "Power usage effectiveness", "module": "induction", "prereqs": ["dc-power-chain", "dc-cooling-chain"] },
+  { "id": "wue-cue", "title": "Water and carbon usage effectiveness", "module": "induction", "prereqs": ["pue"] },
+  { "id": "ashrae-envelope", "title": "ASHRAE thermal envelope for server inlets", "module": "induction", "prereqs": [] },
+  { "id": "economizer", "title": "Economizers and free cooling", "module": "induction", "prereqs": ["dc-cooling-chain"] },
+  { "id": "chiller-lift-cop", "title": "Chiller lift and coefficient of performance", "module": "induction", "prereqs": ["heat-balance"] },
+  { "id": "learning-loop", "title": "How Hyperscale teaches: predict, derive, build, compare, retrieve", "module": "induction", "prereqs": [] }
+]

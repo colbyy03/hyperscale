@@ -41,6 +41,20 @@ def norm_url(url: str | None) -> str | None:
     return u
 
 
+def title_similarity(a: str, b: str) -> float:
+    import difflib
+    na = " ".join(re.sub(r"[^a-z0-9 ]+", " ", (a or "").lower()).split())
+    nb = " ".join(re.sub(r"[^a-z0-9 ]+", " ", (b or "").lower()).split())
+    return difflib.SequenceMatcher(None, na, nb).ratio()
+
+
+def same_work(a: str, b: str) -> bool:
+    """Titles name the same work: identical, one extends the other (subtitle), or nearly identical."""
+    na = " ".join(re.sub(r"[^a-z0-9 ]+", " ", (a or "").lower()).split())
+    nb = " ".join(re.sub(r"[^a-z0-9 ]+", " ", (b or "").lower()).split())
+    return na == nb or na.startswith(nb) or nb.startswith(na) or title_similarity(a, b) >= 0.97
+
+
 def clean(rec: dict, origin: str, problems: list[str]) -> dict:
     r = dict(rec)
     r.setdefault("doi", None)
@@ -104,6 +118,11 @@ def main() -> int:
                             ("url:" + norm_url(r["url"])) if norm_url(r["url"]) else None,
                             "id:" + r["id"]) if k]
         hit = next((k for k in keys if k in by_key), None)
+        # A shared URL alone is weak evidence (publisher landing pages are reused across titles):
+        # only merge on a URL match when the titles are also similar.
+        if hit and hit.startswith("url:") and not same_work(r["title"], by_key[hit]["title"]):
+            keys = [k for k in keys if not k.startswith("url:")]
+            hit = next((k for k in keys if k in by_key), None)
         if hit is None and r["id"] in key_of_id:
             hit = key_of_id[r["id"]]
         if hit:

@@ -1,0 +1,52 @@
+import { lazy, Suspense, type ReactNode } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import { Layout } from "@/components/Layout";
+import { Facility } from "@/routes/Facility";
+import { Learn } from "@/routes/Learn";
+import { ModulePage } from "@/routes/ModulePage";
+import { NotFound } from "@/routes/NotFound";
+import { Practice } from "@/routes/Practice";
+import { Progress } from "@/routes/Progress";
+import { Projects } from "@/routes/Projects";
+import { Review } from "@/routes/Review";
+import { Today } from "@/routes/Today";
+
+// Heavier screens are code-split: the lesson player (MDX + KaTeX) and the bibliography (large JSON).
+const LessonPage = lazy(() => import("@/routes/LessonPage").then((m) => ({ default: m.LessonPage })));
+const Sources = lazy(() => import("@/routes/Sources").then((m) => ({ default: m.Sources })));
+const Settings = lazy(() => import("@/routes/Settings").then((m) => ({ default: m.Settings })));
+
+function Loading() {
+  return <div className="py-16 text-center text-sm text-faint">Loading…</div>;
+}
+
+const suspended = (node: ReactNode) => <Suspense fallback={<Loading />}>{node}</Suspense>;
+
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
+const router = createBrowserRouter(
+  [
+    {
+      element: <Layout />,
+      children: [
+        { index: true, element: <Today /> },
+        { path: "learn", element: <Learn /> },
+        { path: "learn/:moduleId", element: <ModulePage /> },
+        { path: "learn/:moduleId/:lessonSlug", element: suspended(<LessonPage />) },
+        { path: "practice", element: <Practice /> },
+        { path: "review", element: <Review /> },
+        { path: "facility", element: <Facility /> },
+        { path: "projects", element: <Projects /> },
+        { path: "progress", element: <Progress /> },
+        { path: "sources", element: suspended(<Sources />) },
+        { path: "settings", element: suspended(<Settings />) },
+        { path: "*", element: <NotFound /> },
+      ],
+    },
+  ],
+  { basename },
+);
+
+export function App() {
+  return <RouterProvider router={router} />;
+}

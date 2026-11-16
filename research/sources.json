@@ -1,5 +1,34 @@
 [
   {
+    "id": "ashrae-liquid-cooling-guidelines-book",
+    "type": "book",
+    "title": "Liquid Cooling Guidelines for Datacom Equipment Centers",
+    "authors": [
+      "ASHRAE Technical Committee 9.9"
+    ],
+    "year": 2014,
+    "venue": "ASHRAE Datacom Series",
+    "doi": null,
+    "url": "https://www.ashrae.org/technical-resources/bookstore/datacom-series",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      24
+    ],
+    "notes": "Design reference for facility-water and technology-cooling loops; FEMP (2024) says a third edition is upcoming. Edition year from memory; ISBN not captured.",
+    "aliases": [],
+    "origins": [
+      "domain-dc"
+    ],
+    "moduleIds": [
+      "control-piml",
+      "optimization-or"
+    ]
+  },
+  {
     "id": "ashrae2021-thermal-guidelines-5e",
     "type": "book",
     "title": "Thermal Guidelines for Data Processing Environments, 5th edition",
@@ -20,10 +49,8 @@
       22,
       24
     ],
-    "notes": "The authoritative envelope definitions (A1-A4, H1, humidity, rate-of-change, liquid W classes) and server power/airflow vs inlet temperature data. ISBN 9781947192645 (catalog also lists 9781947192652); ISBNs from a library-catalog search result, not checked. Fetch via library. | Design reference for facility-water and technology-cooling loops; FEMP (2024) says a third edition is upcoming. Edition year from memory; ISBN not captured.",
-    "aliases": [
-      "ashrae-liquid-cooling-guidelines-book"
-    ],
+    "notes": "The authoritative envelope definitions (A1-A4, H1, humidity, rate-of-change, liquid W classes) and server power/airflow vs inlet temperature data. ISBN 9781947192645 (catalog also lists 9781947192652); ISBNs from a library-catalog search result, not checked. Fetch via library.",
+    "aliases": [],
     "origins": [
       "domain-dc"
     ],
@@ -763,10 +790,8 @@
       27,
       28
     ],
-    "notes": "The CS329S lecture notes expanded into a book: framing, data, features, training, deployment, distribution shift and monitoring, continual learning, infrastructure, human side. Spine for module 27. | Last offering 2022; project-heavy (65% final ML application). Syllabus mirrors the DMLS chapters.",
-    "aliases": [
-      "stanford-cs329s-2022"
-    ],
+    "notes": "The CS329S lecture notes expanded into a book: framing, data, features, training, deployment, distribution shift and monitoring, continual learning, infrastructure, human side. Spine for module 27.",
+    "aliases": [],
     "origins": [
       "pedagogy-advanced"
     ],
@@ -2243,6 +2268,34 @@
       "generative",
       "scaling",
       "training-deep-nets"
+    ]
+  },
+  {
+    "id": "stanford-cs329s-2022",
+    "type": "course",
+    "title": "CS 329S: Machine Learning Systems Design (Winter 2022)",
+    "authors": [
+      "Huyen, Chip"
+    ],
+    "year": 2022,
+    "venue": "Stanford University",
+    "doi": null,
+    "url": "https://stanford-cs329s.github.io/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27
+    ],
+    "notes": "Last offering 2022; project-heavy (65% final ML application). Syllabus mirrors the DMLS chapters.",
+    "aliases": [],
+    "origins": [
+      "pedagogy-advanced"
+    ],
+    "moduleIds": [
+      "ml-system-design"
     ]
   },
   {
@@ -14498,6 +14551,34 @@
     ]
   },
   {
+    "id": "tgg2010-wp32-cue",
+    "type": "report",
+    "title": "Carbon Usage Effectiveness (CUE): A Green Grid Data Center Sustainability Metric (White Paper #32)",
+    "authors": [
+      "The Green Grid"
+    ],
+    "year": 2010,
+    "venue": "The Green Grid",
+    "doi": null,
+    "url": "https://www.thegreengrid.org/en/resources/library-and-tools",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Defines CUE; linked from the FEMP guide. Free registration required; not opened.",
+    "aliases": [],
+    "origins": [
+      "domain-dc"
+    ],
+    "moduleIds": [
+      "induction"
+    ]
+  },
+  {
     "id": "tgg2011-wp35-wue",
     "type": "report",
     "title": "Water Usage Effectiveness (WUE): A Green Grid Data Center Sustainability Metric (White Paper #35)",
@@ -14516,10 +14597,8 @@
     "modules": [
       0
     ],
-    "notes": "Defines site and source WUE; linked from the FEMP guide. Free registration required; not opened. | Defines CUE; linked from the FEMP guide. Free registration required; not opened.",
-    "aliases": [
-      "tgg2010-wp32-cue"
-    ],
+    "notes": "Defines site and source WUE; linked from the FEMP guide. Free registration required; not opened.",
+    "aliases": [],
     "origins": [
       "domain-dc"
     ],

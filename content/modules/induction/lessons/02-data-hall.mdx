@@ -1,0 +1,126 @@
+---
+id: induction/data-hall
+title: The data hall in one picture
+minutes: 25
+concepts: [dc-power-chain, dc-cooling-chain, pue, wue-cue, ashrae-envelope, economizer, chiller-lift-cop]
+sources: [femp2024-dc-best-practices, schneider-wp179-cooling-outage-temp-rise, uptime2026-global-survey, google-dc-pue-page, microsoft2026-esr, amazon2025-sustainability-report, meta2025-environmental-data-index, nvidia-dgx-gb200-user-guide, shehabi2024-us-dc-energy, iso-iec-30134-2-pue, tgg2011-wp35-wue, tgg2010-wp32-cue]
+cards: []
+---
+
+<Situation from="Dev, controls engineer">
+Grab a vest, we'll walk Hall A. Two things to watch the whole time: where the electricity goes, and where the heat goes. Everything I'll ask your models to do later is about one of those two flows.
+</Situation>
+
+## Following the power in
+
+Electricity reaches the chips through a chain of conversions, and every stage wastes a little of it as heat:
+
+1. **Utility and campus substation**, then **medium-voltage switchgear**.
+2. **Transformers** step the voltage down. They are usually most efficient at 20–50% load.
+3. The **UPS** (uninterruptible power supply) conditions the power and carries the load on batteries during a utility outage. A modern double-conversion UPS runs at about 95–97% efficiency, and eco modes reach about 99%.
+4. **PDUs, power panels or overhead busway** distribute power to the rows.
+5. **Rack PDUs** feed the servers, whose **power supplies** convert to the low DC voltages the chips use.
+
+Redundancy is described as **N** (exactly enough), **N+1** (one spare unit), or **2N** (two complete, independent paths). Redundancy costs efficiency: two UPS units sharing a load in N+1 each run at 50% or less, where their losses are proportionally higher.
+
+<Craft title="The outage you'll meet later">
+When the utility drops out, the UPS carries the servers instantly, but diesel generators take roughly a minute to start and pick up load. Fans, pumps and chillers are often *not* on UPS. So for that minute the servers keep making heat with no cooling, and chillers then need several more minutes to restart. You'll simulate this event, and the temperature spike it causes, in a later module.
+</Craft>
+
+## Following the heat out
+
+<Viz name="HeatPath" />
+
+The servers pull air from a contained **cold aisle** and blow it out about 10–15 K hotter into the **hot aisle**. Air handlers (CRAHs: a fan wall plus a chilled-water coil) cool it and push it back. The **chilled water** carries the heat to the **chillers**, which pump it "uphill" into the **condenser water**, which the **cooling towers** cool by evaporating a little of it into the outdoor air.
+
+ASHRAE's recommended range for air entering the servers is **18–27 °C**. Warmer is allowed for short periods, but this envelope is the standard target. You will meet it again as a constraint in every controller you write.
+
+Two trends change this picture:
+
+- **Economizers.** When it is cool and dry outside, a plate heat exchanger lets tower water cool the chilled-water loop directly, and the chillers can switch off. Inland campuses get many such hours a year.
+- **Liquid cooling.** An AI rack built around NVIDIA's GB200 NVL72 draws about 120 kW, roughly ten times the 11 kW of a typical rack in the 2026 industry survey. Air can't carry that much heat out of a rack, so cold plates on the chips carry coolant instead. Kestrel Ridge's AI pod will work this way.
+
+<Bridge title="Engineering bridge: chillers are heat pumps">
+A chiller's coefficient of performance (COP) is heat removed per unit of work. Its ideal (Carnot) limit depends only on the two temperatures it works between:
+
+$$
+\mathrm{COP}_{\text{Carnot}} = \frac{T_{\text{cold}}}{T_{\text{hot}} - T_{\text{cold}}}
+$$
+
+The denominator is the **lift**. Raising the chilled-water temperature or lowering the condenser temperature shrinks the lift, and the work drops sharply. That is why modern halls run warmer water (around 16 °C supply instead of 7 °C), and why the wet-bulb temperature outside matters so much.
+</Bridge>
+
+## Measuring efficiency: PUE, WUE, CUE
+
+**Power usage effectiveness** compares everything the facility draws with what reaches the IT equipment:
+
+$$
+\mathrm{PUE} = \frac{E_{\text{facility}}}{E_{\text{IT}}} = 1 + \frac{E_{\text{cooling}} + E_{\text{power losses}} + E_{\text{other}}}{E_{\text{IT}}}
+$$
+
+A PUE of 1.0 would mean zero overhead. The 2026 industry survey average is **1.52**, essentially unchanged for about seven years. The hyperscalers report much lower values:
+
+| Operator | Fleet PUE (latest report) |
+|---|---|
+| Google | 1.09 (2025, trailing twelve months) |
+| Meta | 1.08 |
+| AWS | 1.14 (2025) |
+| Microsoft | 1.17 (FY2025) |
+
+<Predict
+  id="hall-a-pue"
+  question="Hall A at design load: IT 4.8 MW, chiller plant 0.85 MW, air-handler fans 0.24 MW, power-chain losses equal to 6% of IT load, lighting and offices 0.04 MW. What is its PUE?"
+  options={["≈ 1.10", "≈ 1.20", "≈ 1.30", "≈ 1.50"]}
+  answer={2}
+  explain="Total = 4.8 + 0.85 + 0.24 + 0.288 + 0.04 = 6.22 MW, and 6.22 / 4.8 ≈ 1.30. That's a respectable design-day figure for mechanical cooling. Over a year, free-cooling hours pull it down, and your controllers will push it further."
+/>
+
+<Viz name="PueCalculator" />
+
+Try halving the chiller power, as a full economizer hour would. Then try a heavier power chain (more redundancy, lower UPS load) and see how much smaller that lever is.
+
+Two more metrics complete the picture:
+
+- **WUE** (water usage effectiveness) = annual site water ÷ IT energy, in L/kWh. Cooling towers dominate it. Companies report it differently, for example water *withdrawn* versus water *consumed*, so be careful comparing numbers across operators.
+- **CUE** (carbon usage effectiveness) = facility CO₂e ÷ IT energy. With all-grid power it equals the grid's emission factor times PUE.
+
+<Craft title="What PUE hides">
+- **Boundaries.** Server power-supply losses and server fans count as "IT". A more efficient power supply lowers total energy but can leave PUE flat or even make it slightly *worse*.
+- **Averaging.** An instantaneous PUE on a cold night says little; report energy-weighted annual or trailing-twelve-month values.
+- **What isn't counted.** PUE says nothing about how much useful computing each kWh buys, or about water and carbon. An ML system that improves PUE by pushing inlet temperatures up may make the servers' own fans work harder. The facility metric improves while the IT side gets worse.
+</Craft>
+
+<Check
+  questions={[
+    {
+      id: "pue-calc",
+      prompt: "A site draws 12.6 GWh in a year, of which 10.5 GWh reaches IT equipment. What is its PUE?",
+      answer: 1.2,
+      tolerance: 0.01,
+      explain: "12.6 / 10.5 = 1.20. The 2.1 GWh of overhead is the target for cooling and power-chain improvements."
+    },
+    {
+      id: "psu-upgrade",
+      prompt: "The site upgrades all server power supplies to a more efficient model. Total facility energy falls. What happens to PUE?",
+      options: ["It improves substantially", "It stays roughly flat or gets slightly worse", "It can't be computed any more"],
+      answer: 1,
+      explain: "Power-supply losses sit inside the IT boundary. IT energy falls, and the cooling load falls a little with it, so the ratio barely moves and can even rise. A good reminder to track total energy, not only PUE."
+    },
+    {
+      id: "carnot",
+      prompt: "Ideal (Carnot) cooling COP for chilled water at 16 °C and condenser water at 30 °C? (Use kelvin.)",
+      answer: 20.7,
+      tolerance: 0.03,
+      explain: "T_cold = 289.15 K and the lift is 14 K, so 289.15 / 14 ≈ 20.7. Real chillers reach a fraction of this, and the fraction is a useful efficiency diagnostic you'll fit from plant data later."
+    },
+    {
+      id: "envelope",
+      prompt: "What is ASHRAE's recommended server inlet temperature range?",
+      options: ["10–20 °C", "18–27 °C", "25–35 °C"],
+      answer: 1,
+      explain: "18–27 °C is the recommended envelope. Allowable classes go wider, but controllers in this course treat 27 °C as the line not to cross."
+    }
+  ]}
+/>
+
+Next comes the Control Room, where you'll tune Hall A's setpoints by hand and set the baseline score your later controllers must beat. It opens with the simulator build.
