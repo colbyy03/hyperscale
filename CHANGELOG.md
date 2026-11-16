@@ -1,5 +1,22 @@
 # Changelog
 
+## Phase 2: Code runner and grading (2026-11-16)
+
+- **`hsgrade`** (`python/hsgrade`), a grading library that runs unchanged in Pyodide and CPython:
+  - assertion helpers that diagnose common mistakes: shape mismatches with `.ravel()`/`keepdims` hints, NaN/inf sources, wrong sign, wrong order, constant-factor errors such as ddof, loops in vectorization exercises, forbidden imports in from-scratch exercises, runtime limits;
+  - a pytest plugin returning structured JSON results, with `hidden` and `misconception` markers;
+  - 13 tests, run on CPython 3.14 with Pyodide's NumPy 2.4.6 and pytest 9.0.2.
+- **Python worker**: Pyodide 314.0.7 in a module Web Worker.
+  - Package loading in dependency order, kept outside the run timeout.
+  - stdout/stderr capture and cleaned tracebacks.
+  - Timeouts terminate and respawn the worker, so an infinite loop can't hang the app.
+- **CodeMirror 6 editor** themed to the app, touch-friendly: Ctrl/Cmd+Enter runs, Shift+Ctrl/Cmd+Enter checks.
+- **CodeExercise**: Run, Check (real pytest), attempt-first tiered hints, a guarded solution reveal, saved drafts, attempts recorded with skills and hint tier.
+- **`npm run verify:exercises`**: Pyodide on Node checks that each exercise's solution passes, its starter fails, and every known-wrong variant fails with its expected message.
+- **First Module 1 content**: lesson "Vectorization and broadcasting" and the exercise "Standardize sensor columns, vectorized", with five known-wrong variants.
+- **Fix**: lesson text styles no longer leak into exercises and interactive blocks (`not-prose` scoping).
+- **Tests**: end-to-end test that loads real Pyodide in Chrome and grades the starter (1/7) and a correct solution (7/7). CI now runs the grader tests and exercise verification.
+
 ## Phase 1: App shell and content system (2026-11-16)
 
 - Vite 8 + React 19 + TypeScript 7 (strict) single-page app; Tailwind 4 design system (dark-first, light theme, thermal colour tokens); Inter and JetBrains Mono bundled for offline use.

@@ -1,0 +1,22 @@
+{
+  "id": "python-mle/standardize-columns",
+  "type": "code",
+  "language": "python",
+  "title": "Standardize sensor columns, vectorized",
+  "prompt": "Write `standardize(X)` for a 2-D array of sensor readings (rows are timestamps, columns are sensors). Return a new array where every column has mean 0 and standard deviation 1, using the population standard deviation (`ddof=0`).\n\nA stuck sensor reports the same value forever, so its column has standard deviation 0. Those columns must come out as all zeros, not NaN. Don't modify the input, and don't use Python loops.",
+  "concepts": ["numpy-vectorization", "numpy-broadcasting", "standardization"],
+  "difficulty": 0.35,
+  "minutes": 10,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": [], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "You need one mean and one standard deviation per column. Which axis do you reduce over to collapse the rows?",
+    "`X.mean(axis=0)` has shape `(n_features,)`. Broadcasting stretches it across every row when you compute `X - mu`. For constant columns, divide by something that can't be zero: `np.where(sd == 0, 1.0, sd)` works, because `X - mu` is already zero there.",
+    "mu = X.mean(axis=0); sd = X.std(axis=0); return (X - mu) / np.where(sd == 0, 1.0, sd)"
+  ],
+  "misconceptions": {
+    "standardize-constant-column": "Dividing by a zero standard deviation turns a stuck sensor into NaN, and NaN silently poisons every model downstream."
+  },
+  "sources": ["harris2020-numpy", "numpy-docs-2-5"]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "python-mle",
+  "title": "Python for ML engineering",
+  "summary": "The Python an ML engineer actually needs: NumPy's memory model, vectorization and broadcasting, numerical hygiene, SQL and DataFrames for telemetry, ML code written as software, and the testing and tooling that keep it correct.",
+  "objectives": [
+    "Predict NumPy's behaviour (views vs copies, dtypes, broadcasting) before running code",
+    "Replace Python loops with vectorized, broadcasting array code and measure the speedup",
+    "Write numerically stable code (log-sum-exp, stable softmax) and explain floating-point traps",
+    "Query and resample sensor telemetry with SQL (DuckDB) and DataFrames (Polars, pandas), choosing the right tool",
+    "Structure ML code with types, dataclasses and the fit/predict contract, with seeded randomness",
+    "Test ML code with pytest, numerical tolerances and property-based tests, in a uv project"
+  ],
+  "concepts": [
+    "numpy-memory-model",
+    "numpy-vectorization",
+    "numpy-broadcasting",
+    "standardization",
+    "floating-point",
+    "log-sum-exp",
+    "profiling",
+    "sql-telemetry",
+    "dataframe-choice",
+    "typed-ml-code",
+    "estimator-api",
+    "seeded-rng",
+    "pytest-tolerances",
+    "property-based-testing",
+    "uv-projects"
+  ],
+  "facilityUnlock": "ops-console",
+  "incidents": ["pue-dashboard-wrong"],
+  "sources": ["harris2020-numpy", "numpy-docs-2-5", "gorelick2025-hpp3", "mckinney2022-pda3", "wilson2014-sci-computing"],
+  "build": {
+    "title": "Telemetry toolkit",
+    "summary": "A typed, tested Python package that loads simulator telemetry from Parquet, cleans gaps, stuck sensors and unit mix-ups, computes interval PUE, and exposes a small CLI."
+  }
+}

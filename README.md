@@ -24,7 +24,9 @@ The app opens at http://localhost:5173.
 | `npm run dev` | Dev server with hot reload (content edits reload too) |
 | `npm run build` | Validates content, builds `dist/` (PWA, service worker, `404.html` fallback) |
 | `npm run preview` | Serves the production build at http://localhost:4173 |
-| `npm run check` | Type-check + unit tests + content validation |
+| `npm run check` | Type-check + unit tests + content validation + exercise verification |
+| `npm run verify:exercises` | Runs every exercise in Pyodide on Node: solution passes, starter fails, each known-wrong variant fails with its expected message |
+| `npm run test:python` | Tests for the `hsgrade` grading library (CPython 3.14 with the same NumPy/pytest versions as Pyodide) |
 | `npm run e2e` | Playwright smoke tests on desktop/tablet/phone viewports (uses installed Chrome; build first) |
 
 ## Deploy
@@ -49,6 +51,15 @@ A lesson is MDX with frontmatter (`id: <module-id>/<slug>`, `title`, `minutes`, 
 - `<Bridge>`, `<Craft>`, `<KeyIdea>`, `<Figure>`, `<CodeExercise id="...">`
 
 Math is written in KaTeX (`$...$`, `$$...$$`). Sources are cited by id from `research/sources.json`.
+
+An exercise folder holds:
+- `exercise.json`: prompt, concepts, exactly three hints, packages, constraints, misconceptions;
+- `starter.py`;
+- `solution.py`;
+- `tests.py`: pytest, importing the learner's code with `from solution import ...` and the helpers in `hsgrade`. Mark edge cases with `@pytest.mark.hidden` and link failures to misconceptions with `@pytest.mark.misconception("id")`;
+- optional `variants/*.py`: known-wrong implementations whose first line is `# expect: <text a failure message must contain>`.
+
+Embed an exercise in a lesson with `<CodeExercise id="module-id/slug" />`. In the app it runs real pytest inside Pyodide, with hint tiers, a guarded solution reveal and an 8–10 s infinite-loop guard.
 
 `npm run validate` checks every file against the schemas in `src/content/schema.ts`. It covers ids, concepts, source ids and the required exercise files. The build refuses to ship invalid content.
 

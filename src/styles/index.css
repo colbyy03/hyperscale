@@ -123,49 +123,49 @@ body {
   line-height: 1.75;
   color: var(--text);
 }
-.lesson-prose > * + * {
+.lesson-prose > * + *:not(.not-prose, .not-prose *) {
   margin-top: 1.1em;
 }
-.lesson-prose h2 {
+.lesson-prose h2:not(.not-prose, .not-prose *) {
   font-size: 1.4rem;
   font-weight: 650;
   letter-spacing: -0.01em;
   margin-top: 2.2em;
   line-height: 1.3;
 }
-.lesson-prose h3 {
+.lesson-prose h3:not(.not-prose, .not-prose *) {
   font-size: 1.15rem;
   font-weight: 620;
   margin-top: 1.8em;
 }
-.lesson-prose p {
+.lesson-prose p:not(.not-prose, .not-prose *) {
   color: var(--text);
 }
-.lesson-prose a {
+.lesson-prose a:not(.not-prose, .not-prose *) {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.lesson-prose strong {
+.lesson-prose strong:not(.not-prose, .not-prose *) {
   font-weight: 650;
 }
-.lesson-prose ul,
-.lesson-prose ol {
+.lesson-prose ul:not(.not-prose, .not-prose *),
+.lesson-prose ol:not(.not-prose, .not-prose *) {
   padding-left: 1.4em;
 }
-.lesson-prose ul {
+.lesson-prose ul:not(.not-prose, .not-prose *) {
   list-style: disc;
 }
-.lesson-prose ol {
+.lesson-prose ol:not(.not-prose, .not-prose *) {
   list-style: decimal;
 }
-.lesson-prose li + li {
+.lesson-prose li + li:not(.not-prose, .not-prose *) {
   margin-top: 0.35em;
 }
-.lesson-prose li::marker {
+.lesson-prose li::marker:not(.not-prose, .not-prose *) {
   color: var(--faint);
 }
-.lesson-prose code {
+.lesson-prose code:not(.not-prose, .not-prose *) {
   font-family: var(--font-mono);
   font-size: 0.88em;
   background: var(--surface-2);
@@ -173,7 +173,7 @@ body {
   border-radius: 6px;
   padding: 0.1em 0.35em;
 }
-.lesson-prose pre {
+.lesson-prose pre:not(.not-prose, .not-prose *) {
   font-family: var(--font-mono);
   font-size: 0.88rem;
   line-height: 1.6;
@@ -183,38 +183,38 @@ body {
   padding: 1rem 1.1rem;
   overflow-x: auto;
 }
-.lesson-prose pre code {
+.lesson-prose pre code:not(.not-prose, .not-prose *) {
   background: none;
   border: 0;
   padding: 0;
 }
-.lesson-prose blockquote {
+.lesson-prose blockquote:not(.not-prose, .not-prose *) {
   border-left: 3px solid var(--border-strong);
   padding-left: 1em;
   color: var(--muted);
 }
-.lesson-prose table {
+.lesson-prose table:not(.not-prose, .not-prose *) {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
   display: block;
   overflow-x: auto;
 }
-.lesson-prose th,
-.lesson-prose td {
+.lesson-prose th:not(.not-prose, .not-prose *),
+.lesson-prose td:not(.not-prose, .not-prose *) {
   border-bottom: 1px solid var(--border);
   padding: 0.5em 0.75em;
   text-align: left;
   vertical-align: top;
 }
-.lesson-prose th {
+.lesson-prose th:not(.not-prose, .not-prose *) {
   color: var(--muted);
   font-weight: 600;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-.lesson-prose .katex-display {
+.lesson-prose .katex-display:not(.not-prose, .not-prose *) {
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0.25em 0;

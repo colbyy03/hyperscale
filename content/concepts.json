@@ -1,11 +1,171 @@
 [
-  { "id": "dc-power-chain", "title": "Data center power chain and redundancy", "module": "induction", "prereqs": [] },
-  { "id": "dc-cooling-chain", "title": "The heat path from chip to atmosphere", "module": "induction", "prereqs": [] },
-  { "id": "heat-balance", "title": "Every IT watt becomes heat (first law)", "module": "induction", "prereqs": [] },
-  { "id": "pue", "title": "Power usage effectiveness", "module": "induction", "prereqs": ["dc-power-chain", "dc-cooling-chain"] },
-  { "id": "wue-cue", "title": "Water and carbon usage effectiveness", "module": "induction", "prereqs": ["pue"] },
-  { "id": "ashrae-envelope", "title": "ASHRAE thermal envelope for server inlets", "module": "induction", "prereqs": [] },
-  { "id": "economizer", "title": "Economizers and free cooling", "module": "induction", "prereqs": ["dc-cooling-chain"] },
-  { "id": "chiller-lift-cop", "title": "Chiller lift and coefficient of performance", "module": "induction", "prereqs": ["heat-balance"] },
-  { "id": "learning-loop", "title": "How Hyperscale teaches: predict, derive, build, compare, retrieve", "module": "induction", "prereqs": [] }
+  {
+    "id": "dc-power-chain",
+    "title": "Data center power chain and redundancy",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "dc-cooling-chain",
+    "title": "The heat path from chip to atmosphere",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "heat-balance",
+    "title": "Every IT watt becomes heat (first law)",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "pue",
+    "title": "Power usage effectiveness",
+    "module": "induction",
+    "prereqs": [
+      "dc-power-chain",
+      "dc-cooling-chain"
+    ]
+  },
+  {
+    "id": "wue-cue",
+    "title": "Water and carbon usage effectiveness",
+    "module": "induction",
+    "prereqs": [
+      "pue"
+    ]
+  },
+  {
+    "id": "ashrae-envelope",
+    "title": "ASHRAE thermal envelope for server inlets",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "economizer",
+    "title": "Economizers and free cooling",
+    "module": "induction",
+    "prereqs": [
+      "dc-cooling-chain"
+    ]
+  },
+  {
+    "id": "chiller-lift-cop",
+    "title": "Chiller lift and coefficient of performance",
+    "module": "induction",
+    "prereqs": [
+      "heat-balance"
+    ]
+  },
+  {
+    "id": "learning-loop",
+    "title": "How Hyperscale teaches: predict, derive, build, compare, retrieve",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "numpy-memory-model",
+    "title": "NumPy arrays: dtypes, strides, views vs copies",
+    "module": "python-mle",
+    "prereqs": []
+  },
+  {
+    "id": "numpy-vectorization",
+    "title": "Vectorization: whole-array operations instead of Python loops",
+    "module": "python-mle",
+    "prereqs": [
+      "numpy-memory-model"
+    ]
+  },
+  {
+    "id": "numpy-broadcasting",
+    "title": "Broadcasting rules and shape algebra",
+    "module": "python-mle",
+    "prereqs": [
+      "numpy-vectorization"
+    ]
+  },
+  {
+    "id": "standardization",
+    "title": "Standardizing features (z-scores) and zero-variance columns",
+    "module": "python-mle",
+    "prereqs": [
+      "numpy-broadcasting"
+    ]
+  },
+  {
+    "id": "floating-point",
+    "title": "Floating-point representation, rounding and cancellation",
+    "module": "python-mle",
+    "prereqs": []
+  },
+  {
+    "id": "log-sum-exp",
+    "title": "Log-sum-exp and the numerically stable softmax",
+    "module": "python-mle",
+    "prereqs": [
+      "floating-point"
+    ]
+  },
+  {
+    "id": "profiling",
+    "title": "Measuring performance: timing, profiling, memory",
+    "module": "python-mle",
+    "prereqs": []
+  },
+  {
+    "id": "sql-telemetry",
+    "title": "SQL for telemetry: joins, window functions, as-of joins (DuckDB)",
+    "module": "python-mle",
+    "prereqs": []
+  },
+  {
+    "id": "dataframe-choice",
+    "title": "Polars vs pandas vs DuckDB: choosing the right tool",
+    "module": "python-mle",
+    "prereqs": [
+      "sql-telemetry"
+    ]
+  },
+  {
+    "id": "typed-ml-code",
+    "title": "ML code as software: functions, dataclasses, protocols, type hints",
+    "module": "python-mle",
+    "prereqs": []
+  },
+  {
+    "id": "estimator-api",
+    "title": "The fit/predict/transform contract",
+    "module": "python-mle",
+    "prereqs": [
+      "typed-ml-code"
+    ]
+  },
+  {
+    "id": "seeded-rng",
+    "title": "Reproducible randomness with seeded generators",
+    "module": "python-mle",
+    "prereqs": []
+  },
+  {
+    "id": "pytest-tolerances",
+    "title": "Testing numerical code with pytest and tolerances",
+    "module": "python-mle",
+    "prereqs": [
+      "floating-point"
+    ]
+  },
+  {
+    "id": "property-based-testing",
+    "title": "Property-based testing with Hypothesis",
+    "module": "python-mle",
+    "prereqs": [
+      "pytest-tolerances"
+    ]
+  },
+  {
+    "id": "uv-projects",
+    "title": "uv projects, lockfiles and reproducible environments",
+    "module": "python-mle",
+    "prereqs": []
+  }
 ]

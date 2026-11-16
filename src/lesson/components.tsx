@@ -2,8 +2,8 @@
  * Components available inside lesson MDX. See PLAN.md §9.2 for the authoring format.
  */
 import clsx from "clsx";
-import { Building2, Check as CheckIcon, Code2, Lightbulb, Radio, Wrench, X } from "lucide-react";
-import { Suspense, useRef, useState, type ReactNode } from "react";
+import { Building2, Check as CheckIcon, Lightbulb, Radio, Wrench, X } from "lucide-react";
+import { lazy, Suspense, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui";
 import { vizRegistry } from "@/viz/registry";
 import { recordAttempt, useLesson } from "./context";
@@ -92,7 +92,7 @@ export function Predict({ id, question, options, answer, explain }: { id: string
     });
   };
   return (
-    <div className="my-6 rounded-2xl border border-line bg-surface p-4 sm:p-5" data-testid={`predict-${id}`}>
+    <div className="not-prose my-6 rounded-2xl border border-line bg-surface p-4 sm:p-5" data-testid={`predict-${id}`}>
       <div className="mb-1 text-xs font-semibold tracking-wider text-info uppercase">Predict first</div>
       <div className="mb-3 font-medium">{question}</div>
       <div className="flex flex-col gap-2" role="radiogroup" aria-label={question}>
@@ -215,7 +215,7 @@ function QuestionItem({ q }: { q: Question }) {
 
 export function Check({ title = "Check yourself", questions }: { title?: string; questions: Question[] }) {
   return (
-    <section className="my-8 rounded-2xl border border-line bg-surface p-4 sm:p-5">
+    <section className="not-prose my-8 rounded-2xl border border-line bg-surface p-4 sm:p-5">
       <div className="mb-3 text-xs font-semibold tracking-wider text-accent uppercase">{title}</div>
       <ol className="flex flex-col gap-3">
         {questions.map((q) => (
@@ -246,14 +246,14 @@ export function Viz({ name, ...props }: { name: string } & Record<string, unknow
   );
 }
 
+// The editor and Python runtime are code-split so prose-only lessons stay light.
+const LazyCodeExercise = lazy(() => import("@/exercise/CodeExercise").then((m) => ({ default: m.CodeExercise })));
+
 export function CodeExercise({ id }: { id: string }) {
   return (
-    <div className="my-6 flex items-start gap-3 rounded-2xl border border-dashed border-line-strong p-5 text-sm text-muted">
-      <Code2 size={18} className="mt-0.5 shrink-0" />
-      <div>
-        Code exercise <code>{id}</code> runs in the in-browser Python runner, which ships in the next build.
-      </div>
-    </div>
+    <Suspense fallback={<div className="my-8 rounded-2xl border border-line p-6 text-center text-sm text-faint">Loading exercise…</div>}>
+      <LazyCodeExercise id={id} />
+    </Suspense>
   );
 }
 

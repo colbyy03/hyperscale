@@ -24,6 +24,11 @@ jobs:
         run: npm test
       - name: Validate content
         run: npm run validate -- --quiet
+      - uses: astral-sh/setup-uv@v6
+      - name: Grader library tests (CPython 3.14, Pyodide-matched versions)
+        run: npm run test:python
+      - name: Verify every exercise in Pyodide (solution passes, starter and known mistakes fail)
+        run: npm run verify:exercises
       - name: Build
         run: npm run build
       - name: End-to-end smoke tests (installed Chrome)

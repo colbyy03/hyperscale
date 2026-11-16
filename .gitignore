@@ -28,3 +28,6 @@ python/labs/**/data/
 # Secrets
 .env
 .env.*
+
+# Pyodide on Node package cache (should live in node_modules/.cache; ignore stray copies)
+/https:/

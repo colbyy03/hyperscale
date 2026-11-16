@@ -1,0 +1,119 @@
+---
+id: python-mle/vectorization
+title: Vectorization and broadcasting
+minutes: 30
+concepts: [numpy-vectorization, numpy-broadcasting, standardization]
+sources: [harris2020-numpy, numpy-docs-2-5, gorelick2025-hpp3, mckinney2022-pda3]
+cards: []
+---
+
+<Situation from="Ines, reliability lead">
+I exported three months of one-minute readings from the 360 rack-inlet sensors in Hall A: about 47 million numbers. The script we inherited z-scores each sensor with nested Python loops and takes minutes. Before you build anything on this data, make that step instant. And watch out for sensor T-114: it's been stuck at 21.5 °C since August.
+</Situation>
+
+## Why Python loops are slow
+
+A Python `for` loop over a NumPy array does real work on every element: it creates a Python float object, looks up the `+` operator, checks types, and stores the result. That overhead is around tens of nanoseconds per element, and it dwarfs the actual arithmetic.
+
+A **vectorized** expression such as `X - X.mean(axis=0)` hands the whole loop to compiled code. That code walks contiguous memory with no per-element type checks, often using SIMD instructions that process several numbers at once.
+
+<Predict
+  id="loop-speedup"
+  question="Summing one million float64 values: roughly how much faster is np.sum(x) than a Python for-loop that adds them one by one?"
+  options={["About 2× faster", "About 10× faster", "About 100× faster", "Over 10,000× faster"]}
+  answer={2}
+  explain="On a typical laptop, the Python loop takes tens of milliseconds and np.sum well under a millisecond, so expect something in the region of 50–200×. The exact factor depends on the machine; the order of magnitude is the lesson."
+/>
+
+The rule of thumb: **if you are writing `for i in range(len(x))` over array elements, there is almost always a whole-array expression instead.**
+
+## Broadcasting: arithmetic between different shapes
+
+Vectorized code constantly combines arrays of different shapes: subtract a per-column mean from a matrix, scale each sensor by its own gain. **Broadcasting** is NumPy's rule for when that's allowed and what it means. Compare the two shapes **from the right**, one axis at a time. Two axes are compatible when:
+
+1. they are equal, or
+2. one of them is 1. That axis is stretched, virtually and without copying, to match the other.
+
+If an array has fewer axes, NumPy pads its shape with 1s on the left. So for `X` of shape `(129600, 360)` and `mu` of shape `(360,)`:
+
+```text
+X      : 129600 × 360
+mu     :          360   →  padded to 1 × 360  →  stretched to 129600 × 360
+X - mu : 129600 × 360
+```
+
+Every row of `X` gets the same 360 means subtracted, with no loop and no copy of `mu`.
+
+<Predict
+  id="broadcast-shape"
+  question="a = np.ones((3, 1)) and b = np.arange(4), which has shape (4,). What is the shape of a + b?"
+  options={["It raises an error", "(3, 4)", "(4, 3)", "(3, 1)"]}
+  answer={1}
+  explain="Right-align the shapes: (3, 1) and (4,) → (1, 4). Axis by axis: 3 vs 1 → 3; 1 vs 4 → 4. The result is (3, 4): an 'outer sum' of the column and the row."
+/>
+
+## The broadcasting bug that ships
+
+Broadcasting is also how silent bugs get into ML code. A model returns predictions shaped `(n, 1)` and your targets are shaped `(n,)`:
+
+```python
+y_true = np.array([20.1, 22.4, 21.0])        # shape (3,)
+y_pred = model.predict(X)                    # shape (3, 1)
+mse = np.mean((y_true - y_pred) ** 2)        # no error!
+```
+
+<Predict
+  id="silent-mse"
+  question="What is the shape of (y_true - y_pred) above, before np.mean?"
+  options={["(3,)", "(3, 1)", "(3, 3)", "It raises an error"]}
+  answer={2}
+  explain="(3,) becomes (1, 3), and (3, 1) against (1, 3) broadcasts to (3, 3): every prediction minus every target. The 'MSE' is the average of nine numbers, six of them meaningless, and nothing crashes. This exact bug has shipped in production models."
+/>
+
+<Craft>
+Defend against shape bugs at the boundaries of your functions:
+- assert the shape you expect (`assert y_pred.shape == y_true.shape`);
+- flatten predictions deliberately (`y_pred.ravel()`);
+- pass `keepdims=True` when you want a reduced axis kept for broadcasting.
+
+The grader in this course does the same: its messages tell you *which* shape it expected and what usually causes the mismatch.
+</Craft>
+
+## Your turn: standardize the sensors
+
+Standardizing (z-scoring) puts every sensor on the same scale: subtract the column's mean and divide by its standard deviation. Many models, including every gradient-based one you will build, train badly without it. Two details matter:
+
+- use the **population** standard deviation (`ddof=0`, NumPy's default), so the result has standard deviation exactly 1;
+- a **stuck sensor** has standard deviation 0. Dividing by it gives NaN, and NaN silently spreads through every downstream computation.
+
+<CodeExercise id="python-mle/standardize-columns" />
+
+<Bridge>
+This is the same move as going from index notation to matrix form in a finite-element or CFD code. Instead of looping over nodes and writing `T[i] = ...`, you write one operation over the whole field and let an optimized kernel (BLAS, or NumPy's C loops) do the iteration. MATLAB users learn this as "vectorize your code" for exactly the same reason.
+</Bridge>
+
+<Check
+  questions={[
+    {
+      id: "bcast-1",
+      prompt: "X has shape (500, 8). Which expression subtracts each row's own mean from that row?",
+      options: ["X - X.mean(axis=0)", "X - X.mean(axis=1)", "X - X.mean(axis=1, keepdims=True)"],
+      answer: 2,
+      explain: "X.mean(axis=1) has shape (500,), which right-aligns against the 8 columns and fails to broadcast. keepdims=True keeps the shape (500, 1), which stretches across the columns."
+    },
+    {
+      id: "bcast-2",
+      prompt: "Shapes (7, 1, 5) and (3, 1). Do they broadcast, and to what?",
+      options: ["No, they're incompatible", "Yes, to (7, 3, 5)", "Yes, to (7, 1, 5)"],
+      answer: 1,
+      explain: "Right-align: (7, 1, 5) and (1, 3, 1). Axis by axis: 7 vs 1 → 7; 1 vs 3 → 3; 5 vs 1 → 5."
+    },
+    {
+      id: "stuck-sensor",
+      prompt: "Why does a stuck sensor need special handling when you standardize?",
+      options: ["Its mean is undefined", "Its standard deviation is 0, so dividing produces NaN", "It makes the other columns' standard deviations wrong"],
+      answer: 1,
+      explain: "A constant column has zero spread. (x − μ)/σ becomes 0/0 = NaN, which spreads into any model that touches it. Mapping it to zeros, or dropping it and flagging the sensor, is the safe choice."
+    }
+  ]}
+/>
