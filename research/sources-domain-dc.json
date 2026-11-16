@@ -1,0 +1,1305 @@
+[
+  {
+    "id": "femp2024-dc-best-practices",
+    "type": "report",
+    "title": "Best Practices Guide for Energy-Efficient Data Center Design (Revised July 2024)",
+    "authors": [
+      "Van Geet, Otto",
+      "Sickinger, David"
+    ],
+    "year": 2024,
+    "venue": "NREL / U.S. DOE Federal Energy Management Program, NREL/TP-5R00-89843",
+    "doi": null,
+    "url": "https://www.energy.gov/sites/default/files/2024-07/best-practice-guide-data-center-design.pdf",
+    "open_url": "https://www.osti.gov/biblio/2417618",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      22,
+      24,
+      27
+    ],
+    "notes": "Open 48-page federal guide; the backbone of the primer: ASHRAE 2021 envelope table, W classes, UPS/transformer/PSU load-efficiency facts, kW/ton and W/cfm benchmarks, tower and HX approaches, pumping and reset practices, PUE/ERE/WUE/CUE definitions. Text extracted from the PDF on the access date."
+  },
+  {
+    "id": "shehabi2024-us-dc-energy",
+    "type": "report",
+    "title": "2024 United States Data Center Energy Usage Report",
+    "authors": [
+      "Shehabi, Arman",
+      "Smith, Sarah Josephine",
+      "Hubbard, Alex",
+      "Newkirk, Alexander",
+      "Lei, Nuoa",
+      "Siddik, Md AbuBakar",
+      "Holecek, Billie",
+      "Koomey, Jonathan G.",
+      "Masanet, Eric R.",
+      "Sartor, Dale A."
+    ],
+    "year": 2024,
+    "venue": "Lawrence Berkeley National Laboratory, LBNL-2001637",
+    "doi": "10.71468/P1WC7Q",
+    "url": "https://eta-publications.lbl.gov/publications/2024-lbnl-data-center-energy-usage-report",
+    "open_url": "https://eta-publications.lbl.gov/sites/default/files/2024-12/us_data_center_energy_usage_report_lbnl-2001637.pdf",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      21,
+      27
+    ],
+    "notes": "Congressionally requested estimate of US data-center electricity 2014-2028 (176 TWh in 2023; 325-580 TWh in 2028), average PUE and site WUE trends, server utilization and AI duty assumptions. Use for macro context and for load-model assumptions. The LBNL-hosted PDF carries an embargo watermark but is the official publication."
+  },
+  {
+    "id": "iea2025-energy-and-ai",
+    "type": "report",
+    "title": "Energy and AI",
+    "authors": [
+      "International Energy Agency"
+    ],
+    "year": 2025,
+    "venue": "IEA special report",
+    "doi": null,
+    "url": "https://www.iea.org/reports/energy-and-ai/executive-summary",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      21
+    ],
+    "notes": "Global data-centre electricity (415 TWh in 2024, about 945 TWh in 2030 base case, 700-1,700 TWh range in 2035), regional shares, grid-connection and equipment bottlenecks, and the case for data-centre flexibility. Executive summary page read."
+  },
+  {
+    "id": "uptime2026-global-survey",
+    "type": "report",
+    "title": "Uptime Institute Global Data Center Survey 2026",
+    "authors": [
+      "Donnellan, Douglas",
+      "Lawrence, Andy",
+      "Bizo, Daniel",
+      "Rogers, Owen",
+      "Judge, Peter",
+      "O'Brien, John",
+      "Davis, Jacqueline",
+      "Smolaks, Max",
+      "Weinschenk, Rose"
+    ],
+    "year": 2026,
+    "venue": "Uptime Institute Intelligence, Keynote Report 209",
+    "doi": null,
+    "url": "https://datacenter.uptimeinstitute.com/rs/711-RIA-145/images/UptimeInstitute.GlobalDataCenterSurvey.2026.pdf?version=0",
+    "open_url": "https://intelligence.uptimeinstitute.com/resource/uptime-institute-global-data-center-survey-2026",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      27
+    ],
+    "notes": "Industry benchmark survey: average PUE 1.52 (n=644), modal rack density above 11 kW (7.8 kW excluding a few dense sites), 24% of operators with 30 kW+ racks, power as the cause of 56% of impactful outages, operator trust in AI by use case. Use for 'industry average' comparisons."
+  },
+  {
+    "id": "uptime2025-global-survey",
+    "type": "report",
+    "title": "Uptime Institute Global Data Center Survey 2025",
+    "authors": [
+      "Uptime Institute"
+    ],
+    "year": 2025,
+    "venue": "Uptime Institute Intelligence, Keynote Report 180",
+    "doi": null,
+    "url": "https://intelligence.uptimeinstitute.com/resource/uptime-institute-global-data-center-survey-2025",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Previous edition; its 1.54 average PUE is quoted (and was verified) on Google's PUE page, but the report itself was not opened."
+  },
+  {
+    "id": "google-dc-pue-page",
+    "type": "web",
+    "title": "Power usage effectiveness - Google Data Centers",
+    "authors": [
+      "Google"
+    ],
+    "year": 2026,
+    "venue": "datacenters.google",
+    "doi": null,
+    "url": "https://www.datacenters.google/efficiency/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      21
+    ],
+    "notes": "Google's fleet and per-campus quarterly and trailing-twelve-month PUE from 2008 to 2026 (fleet 1.09 TTM in 2025; The Dalles, Oregon 1.06-1.10; Mesa, Arizona 1.22) plus its unusually inclusive measurement boundary. Doubles as a tiny real seasonal time series for Module 21."
+  },
+  {
+    "id": "google2026-environmental-report",
+    "type": "report",
+    "title": "Google 2026 Environmental Report",
+    "authors": [
+      "Google"
+    ],
+    "year": 2026,
+    "venue": "Google sustainability reporting",
+    "doi": null,
+    "url": "https://sustainability.google/reports/google-2026-environmental-report/",
+    "open_url": "https://www.datacenters.google/operating-sustainably/",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0
+    ],
+    "notes": "Covers 2025: fleet PUE 1.09, 83% less overhead than the Uptime 2025 average, 87% of freshwater from low/medium-risk sources, about 35 GW of clean-energy contracts since 2010, demand response and flexibility. Figures and title confirmed on Google's data-center pages; the report PDF itself was not opened."
+  },
+  {
+    "id": "microsoft2026-esr",
+    "type": "report",
+    "title": "2026 Environmental Sustainability Report",
+    "authors": [
+      "Microsoft"
+    ],
+    "year": 2026,
+    "venue": "Microsoft corporate sustainability reporting",
+    "doi": null,
+    "url": "https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/msc/documents/presentations/CSR/2026-Microsoft-Environmental-Sustainability-Report-PDF.pdf",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0
+    ],
+    "notes": "Covers FY2025: global average datacenter PUE 1.17, 'power harvesting' of stranded capacity, closed-loop direct-to-chip design avoiding more than 125 million litres of water per year per datacenter, WUE intensity down 25% vs 2022, waste-heat reuse. PDF text checked."
+  },
+  {
+    "id": "microsoft2026-water-blog",
+    "type": "web",
+    "title": "Inside Microsoft's two-decade push to cut water intensity while scaling for growth",
+    "authors": [
+      "Priest, Judy",
+      "Solomon, Steve"
+    ],
+    "year": 2026,
+    "venue": "The Official Microsoft Blog",
+    "doi": null,
+    "url": "https://blogs.microsoft.com/blog/2026/06/24/inside-microsofts-two-decade-push-to-cut-water-intensity-while-scaling-for-growth/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "WUE 2.3 to 0.27 L/kWh (2025); direct air cooling with evaporative assist only above 29.4 C; share of hours needing water by climate; plain-language taxonomy of cooling options (towers, hybrid fluid coolers, direct air, air-cooled chillers, closed-loop liquid); Quincy, Washington uses 74% recycled or non-potable water."
+  },
+  {
+    "id": "amazon2025-sustainability-report",
+    "type": "report",
+    "title": "Amazon's 2025 Sustainability Report: key takeaways",
+    "authors": [
+      "Amazon"
+    ],
+    "year": 2026,
+    "venue": "About Amazon news",
+    "doi": null,
+    "url": "https://www.aboutamazon.com/news/sustainability/amazon-sustainability-report-2025",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0
+    ],
+    "notes": "Report covering 2025: AWS global PUE 1.14 (9% better than a public-cloud average, 30% better than on-premises), water efficiency 7x the industry average and improved 33% in 2025, 75% of the way to water-positive by 2030."
+  },
+  {
+    "id": "aws-cloud-sustainability-page",
+    "type": "web",
+    "title": "AWS Cloud - Amazon Sustainability",
+    "authors": [
+      "Amazon Web Services"
+    ],
+    "year": 2026,
+    "venue": "sustainability.aboutamazon.com",
+    "doi": null,
+    "url": "https://sustainability.aboutamazon.com/products-services/aws-cloud",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      22
+    ],
+    "notes": "Defines AWS WUE as litres withdrawn per kWh of IT load (0.12 in 2025) and derives an industry withdrawal WUE of 0.84 from a consumption WUE of 0.56 and 3 cycles of concentration (DOE BMP #10); mentions sensor-based anomaly detection for water and ISO-based PUE methodology."
+  },
+  {
+    "id": "meta2025-environmental-data-index",
+    "type": "dataset",
+    "title": "2025 Environmental Data Index",
+    "authors": [
+      "Meta"
+    ],
+    "year": 2025,
+    "venue": "Meta sustainability reporting",
+    "doi": null,
+    "url": "https://sustainability.atmeta.com/wp-content/uploads/2025/10/Meta_2025-Environmental-Data-Index.pdf",
+    "open_url": "https://sustainability.atmeta.com/asset/2025-environmental-data-index/",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      21
+    ],
+    "notes": "Tables of Meta's data-center PUE (1.10, 1.09, 1.08, 1.08, 1.08 for 2020-2024), annual WUE (0.30 to 0.19 L/kWh) and site water withdrawal. Latest Meta edition found on the access date."
+  },
+  {
+    "id": "meta2025-sustainability-report",
+    "type": "report",
+    "title": "2025 Sustainability Report",
+    "authors": [
+      "Meta"
+    ],
+    "year": 2025,
+    "venue": "Meta sustainability reporting",
+    "doi": null,
+    "url": "https://sustainability.atmeta.com/wp-content/uploads/2025/08/Meta_2025-Sustainability-Report_.pdf",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "Describes digital-twin models of data-center cooling systems used to forecast water use, a real-time server-fleet utilization metric, and site heat-safety tooling. Good example of digital twins in operations."
+  },
+  {
+    "id": "meta2026-closed-loop-cooling",
+    "type": "web",
+    "title": "Closed-Loop Cooling Explained: The Plumbing Behind Meta's AI",
+    "authors": [
+      "Shaw, Tom"
+    ],
+    "year": 2026,
+    "venue": "Meta Newsroom",
+    "doi": null,
+    "url": "https://about.fb.com/news/2026/08/closed-loop-cooling-explained-the-plumbing-behind-metas-ai/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      23,
+      24
+    ],
+    "notes": "Plain-language explainer: closed-loop water-glycol direct-to-chip cooling with dry coolers, air-assisted liquid cooling for retrofits, coolant lifetime up to a decade, and RL cooling optimization now scaled across Meta's air-cooled fleet."
+  },
+  {
+    "id": "meta2024-sim-rl-dc-cooling",
+    "type": "web",
+    "title": "Simulator-based reinforcement learning for data center cooling optimization",
+    "authors": [
+      "Zhou, Chi",
+      "Gao, Doris",
+      "Rivalin, Lisa",
+      "Grier, Andrew"
+    ],
+    "year": 2024,
+    "venue": "Engineering at Meta",
+    "doi": null,
+    "url": "https://engineering.fb.com/2024/09/10/data-center-engineering/simulator-based-reinforcement-learning-for-data-center-cooling-optimization/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24,
+      27
+    ],
+    "notes": "Meta's penthouse outside-air/evaporative design, its three supply-air control loops, and offline RL trained in a physics-based simulator to set the airflow setpoint (about 20% less supply-fan energy, 4% less water). Template for the course's RL module."
+  },
+  {
+    "id": "evans-gao2016-deepmind-cooling-40",
+    "type": "web",
+    "title": "DeepMind AI Reduces Google Data Centre Cooling Bill by 40%",
+    "authors": [
+      "Evans, Richard",
+      "Gao, Jim"
+    ],
+    "year": 2016,
+    "venue": "Google DeepMind blog",
+    "doi": null,
+    "url": "https://deepmind.google/blog/deepmind-ai-reduces-google-data-centre-cooling-bill-by-40/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      23,
+      24
+    ],
+    "notes": "The original public result: an ML recommendation system cut cooling energy by about 40%. Motivating story for Modules 23-24."
+  },
+  {
+    "id": "gamble-gao2018-safety-first-cooling",
+    "type": "web",
+    "title": "Safety-first AI for autonomous data centre cooling and industrial control",
+    "authors": [
+      "Gamble, Chris",
+      "Gao, Jim"
+    ],
+    "year": 2018,
+    "venue": "Google DeepMind blog",
+    "doi": null,
+    "url": "https://deepmind.google/blog/safety-first-ai-for-autonomous-data-centre-cooling-and-industrial-control/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24,
+      27
+    ],
+    "notes": "Autonomous cooling control: 5-minute snapshots from thousands of sensors, neural-network energy prediction, uncertainty filtering, two-layer verification against operator limits, operator override; savings grew from 12% to about 30% in kW/ton. Use as the safety-architecture reference in Module 27."
+  },
+  {
+    "id": "lazic2018-dc-cooling-mpc",
+    "type": "paper",
+    "title": "Data center cooling using model-predictive control",
+    "authors": [
+      "Lazic, Nevena",
+      "Boutilier, Craig",
+      "Lu, Tyler",
+      "Wong, Eehern",
+      "Roy, Binz",
+      "Ryu, MK",
+      "Imwalle, Greg"
+    ],
+    "year": 2018,
+    "venue": "Advances in Neural Information Processing Systems 31 (NeurIPS 2018)",
+    "doi": null,
+    "url": "https://papers.nips.cc/paper_files/paper/2018/hash/059fdcd96baeb75112f09fa1dcc740cc-Abstract.html",
+    "open_url": "https://papers.nips.cc/paper_files/paper/2018/file/059fdcd96baeb75112f09fa1dcc740cc-Paper.pdf",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Floor-level MPC at Google: AHU fan speed and valve as controls; cold-aisle temperature and differential pressure as states; server power and entering water temperature as disturbances; linear model from about 3 h of safe exploration beat per-AHU PID loops. Directly shapes the simulator's air-side states and the MPC baseline."
+  },
+  {
+    "id": "google2025-1mw-racks-liquid-cooling",
+    "type": "web",
+    "title": "Enabling 1 MW IT racks and liquid cooling at OCP EMEA Summit",
+    "authors": [
+      "Iyengar, Madhusudan",
+      "Huffman, Amber"
+    ],
+    "year": 2025,
+    "venue": "Google Cloud Blog",
+    "doi": null,
+    "url": "https://cloud.google.com/blog/topics/systems/enabling-1-mw-it-racks-and-liquid-cooling-at-ocp-emea-summit",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "48 V DC racks (10 to 100 kW), +/-400 V DC sidecar power for up to 1 MW racks, more than 500 kW per rack expected before 2030, liquid cooling across 2,000+ TPU pods at about 99.999% availability, redundant in-row CDUs (Project Deschutes)."
+  },
+  {
+    "id": "nvidia-dgx-gb200-user-guide",
+    "type": "web",
+    "title": "Hardware - NVIDIA DGX GB Rack Scale Systems User Guide",
+    "authors": [
+      "NVIDIA"
+    ],
+    "year": 2025,
+    "venue": "NVIDIA documentation",
+    "doi": null,
+    "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "Vendor documentation for the GB200 NVL72 rack: about 120 kW, 18 liquid-cooled compute trays, eight 33 kW power shelves (6 x 5.5 kW PSUs, N+N) on a 50-51 V DC busbar, air-cooled networking and storage. Page is undated; year is approximate. Use for the AI-pod parameters."
+  },
+  {
+    "id": "ocp2023-oai-liquid-cooling-guidelines",
+    "type": "report",
+    "title": "OAI System Liquid Cooling Guidelines (OCP template, March 3, 2023 update)",
+    "authors": [
+      "Open Compute Project, Open Accelerator Infrastructure sub-project"
+    ],
+    "year": 2023,
+    "venue": "Open Compute Project",
+    "doi": null,
+    "url": "https://www.opencompute.org/documents/oai-system-liquid-cooling-guidelines-in-ocp-template-mar-3-2023-update-pdf",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Cold-plate loop design guidance for 1 kW-class accelerators: 1.25-2.0 L/min/kW (design 1.5 for a 10 K rise with PG25), case-to-inlet resistance below 0.02 K/W, coolant-supply temperature groups (40-45 C and 30-37 C). Primary source for the DLC loop parameters."
+  },
+  {
+    "id": "energyplus96-eng-ref-ite",
+    "type": "web",
+    "title": "EnergyPlus 9.6 Engineering Reference: Zone Internal Gains (ElectricEquipment:ITE:AirCooled)",
+    "authors": [
+      "U.S. Department of Energy, EnergyPlus development team"
+    ],
+    "year": 2021,
+    "venue": "EnergyPlus documentation (Big Ladder Software mirror)",
+    "doi": null,
+    "url": "https://bigladdersoftware.com/epx/docs/9-6/engineering-reference/zone-internal-gains.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Equations for air-cooled IT equipment: CPU and fan power vs load and inlet temperature, airflow vs load and inlet temperature, recirculation-adjusted inlet temperature, supply/return approach temperatures, supply heat index, power-supply losses vs part load. The simulator's IT model follows this structure."
+  },
+  {
+    "id": "energyplus96-io-ref-ite",
+    "type": "web",
+    "title": "EnergyPlus 9.6 Input Output Reference: Group Internal Gains (ITE objects)",
+    "authors": [
+      "U.S. Department of Energy, EnergyPlus development team"
+    ],
+    "year": 2021,
+    "venue": "EnergyPlus documentation (Big Ladder Software mirror)",
+    "doi": null,
+    "url": "https://bigladdersoftware.com/epx/docs/9-6/input-output-reference/group-internal-gains-people-lights-other.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Input fields for the ITE object (design fan power fraction, airflow per watt, approach temperatures, power-supply efficiency curve, ASHRAE class used to count hours outside the allowable envelope)."
+  },
+  {
+    "id": "energyplus96-eng-ref-chillers",
+    "type": "web",
+    "title": "EnergyPlus 9.6 Engineering Reference: Chillers (Electric EIR model)",
+    "authors": [
+      "U.S. Department of Energy, EnergyPlus development team"
+    ],
+    "year": 2021,
+    "venue": "EnergyPlus documentation (Big Ladder Software mirror)",
+    "doi": null,
+    "url": "https://bigladdersoftware.com/epx/docs/9-6/engineering-reference/chillers.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      24
+    ],
+    "notes": "DOE-2-style chiller model with three curves (capacity and EIR vs leaving chilled-water and entering condenser temperature, EIR vs part-load ratio). Level 2a chiller option in the simulator."
+  },
+  {
+    "id": "energyplus96-eng-ref-cooling-towers",
+    "type": "web",
+    "title": "EnergyPlus 9.6 Engineering Reference: Cooling Towers and Evaporative Fluid Coolers",
+    "authors": [
+      "U.S. Department of Energy, EnergyPlus development team"
+    ],
+    "year": 2021,
+    "venue": "EnergyPlus documentation (Big Ladder Software mirror)",
+    "doi": null,
+    "url": "https://bigladdersoftware.com/epx/docs/9-6/engineering-reference/cooling-towers-and-evaporative-fluid-coolers.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Merkel/effectiveness-NTU tower models, CoolTools and YorkCalc approach correlations for variable-speed towers, free convection, and makeup water as evaporation plus drift plus blowdown."
+  },
+  {
+    "id": "schneider-wp108-large-ups-efficiency",
+    "type": "report",
+    "title": "Making Large UPS Systems More Efficient (White Paper 108, Revision 3)",
+    "authors": [
+      "Sawyer, Richard L."
+    ],
+    "year": 2012,
+    "venue": "Schneider Electric Data Center Science Center",
+    "doi": null,
+    "url": "https://download.schneider-electric.com/doc/SPD_VAVR-6LJV7V_EN/VAVR-6LJV7V_R3_EN.pdf",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "UPS efficiency curves and the no-load / proportional / square-law loss decomposition; eco-mode 98-99% vs 94-97% double conversion. Basis of the simulator's UPS loss polynomial. Year is approximate (revision cites sources accessed January 2012)."
+  },
+  {
+    "id": "schneider-wp179-cooling-outage-temp-rise",
+    "type": "report",
+    "title": "Data Center Temperature Rise During a Cooling System Outage (White Paper 179, Revision 0)",
+    "authors": [
+      "Lin, Paul",
+      "Zhang, Simon",
+      "VanGilder, Jim"
+    ],
+    "year": 2013,
+    "venue": "Schneider Electric Data Center Science Center",
+    "doi": null,
+    "url": "https://www.sustainabilitymatters.net.au/content/sustainability/white-paper/data-centre-temperature-rise-during-a-cooling-system-outage-303657868/download",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      22,
+      24
+    ],
+    "notes": "Well-mixed room model and CFD for power-outage transients: up to about 5 K/min heating, generator start, 10-15 min chiller restart, thermal storage sizing by rack density, effect of containment. Gives a quantitative validation scenario for the simulator. The link is a third-party host that serves the PDF as a direct download; year approximate."
+  },
+  {
+    "id": "schneider-wp75-ups-configurations",
+    "type": "report",
+    "title": "Comparing UPS System Design Configurations (White Paper 75, Revision 4)",
+    "authors": [
+      "McCarthy, Kevin",
+      "Avelar, Victor"
+    ],
+    "year": 2016,
+    "venue": "Schneider Electric Data Center Science Center",
+    "doi": null,
+    "url": "https://www.se.com/us/en/download/document/SPD_SADE-5TPL8X_EN/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Compares capacity (N), isolated redundant, parallel redundant (N+1), distributed redundant and system-plus-system (2N, 2N+1) UPS designs. Metadata from a search listing; not opened."
+  },
+  {
+    "id": "zhang-vangilder2011-transient-analysis",
+    "type": "paper",
+    "title": "Real-Time Data Center Transient Analysis",
+    "authors": [
+      "Zhang, X.",
+      "VanGilder, J."
+    ],
+    "year": 2011,
+    "venue": "ASME 2011 Pacific Rim Technical Conference and Exhibition on Packaging and Integration of Electronic and Photonic Systems (InterPACK2011)",
+    "doi": "10.1115/ipack2011-52088",
+    "url": "https://doi.org/10.1115/ipack2011-52088",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Peer-reviewed source of the well-mixed transient room model used in Schneider WP 179. Metadata confirmed via Crossref; full text needs library access."
+  },
+  {
+    "id": "gordon-ng-chua1995-centrifugal-chillers",
+    "type": "paper",
+    "title": "Centrifugal chillers: Thermodynamic modelling and a diagnostic case study",
+    "authors": [
+      "Gordon, J. M.",
+      "Ng, K. C.",
+      "Chua, H. T."
+    ],
+    "year": 1995,
+    "venue": "International Journal of Refrigeration",
+    "doi": "10.1016/0140-7007(95)96863-2",
+    "url": "https://doi.org/10.1016/0140-7007(95)96863-2",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      24
+    ],
+    "notes": "Gordon-Ng thermodynamic chiller model applied to diagnosing a real centrifugal chiller; parameters map to internal losses, heat leaks and heat-exchanger resistance. Level 2b chiller model and a natural FDD exercise. Crossref-verified; author initials from memory."
+  },
+  {
+    "id": "gordon-ng1995-universal-chiller-model",
+    "type": "paper",
+    "title": "Predictive and diagnostic aspects of a universal thermodynamic model for chillers",
+    "authors": [
+      "Gordon, J. M.",
+      "Ng, K. C."
+    ],
+    "year": 1995,
+    "venue": "International Journal of Heat and Mass Transfer",
+    "doi": "10.1016/0017-9310(94)00208-d",
+    "url": "https://doi.org/10.1016/0017-9310(94)00208-d",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      24
+    ],
+    "notes": "Companion paper presenting the general Gordon-Ng model and its predictive/diagnostic use. Crossref-verified."
+  },
+  {
+    "id": "sharma2002-dimensionless-thermal-metrics",
+    "type": "paper",
+    "title": "Dimensionless Parameters for Evaluation of Thermal Design and Performance of Large-scale Data Centers",
+    "authors": [
+      "Sharma, Ratnesh K.",
+      "Bash, Cullen E.",
+      "Patel, Chandrakant D."
+    ],
+    "year": 2002,
+    "venue": "8th AIAA/ASME Joint Thermophysics and Heat Transfer Conference",
+    "doi": "10.2514/6.2002-3091",
+    "url": "https://doi.org/10.2514/6.2002-3091",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22,
+      24
+    ],
+    "notes": "Origin of the Supply Heat Index and Return Heat Index for quantifying recirculation. Crossref-verified."
+  },
+  {
+    "id": "herrlin2005-rack-cooling-index",
+    "type": "paper",
+    "title": "Rack Cooling Effectiveness in Data Centers and Telecom Central Offices: The Rack Cooling Index (RCI)",
+    "authors": [
+      "Herrlin, Magnus K."
+    ],
+    "year": 2005,
+    "venue": "ASHRAE Transactions 111(2)",
+    "doi": null,
+    "url": "https://www.ashrae.org/technical-resources/ashrae-transactions",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      22,
+      24
+    ],
+    "notes": "Defines RCI_HI and RCI_LO; FEMP's guide recommends RCI for monitoring inlet temperatures. Citation from memory; URL is the generic ASHRAE Transactions page."
+  },
+  {
+    "id": "wu2016-dynamo-fb-power",
+    "type": "paper",
+    "title": "Dynamo: Facebook's Data Center-Wide Power Management System",
+    "authors": [
+      "Wu, Qiang",
+      "Deng, Qingyuan",
+      "Ganesh, Lakshmi",
+      "Hsu, Chang-Hong"
+    ],
+    "year": 2016,
+    "venue": "2016 ACM/IEEE 43rd Annual International Symposium on Computer Architecture (ISCA)",
+    "doi": "10.1109/ISCA.2016.48",
+    "url": "https://doi.org/10.1109/ISCA.2016.48",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      27
+    ],
+    "notes": "Fleet-wide power monitoring and capping that enables oversubscription; reference for the supervisory power-capping loop. Crossref-verified (first four authors listed)."
+  },
+  {
+    "id": "zhang2021-flex-zero-reserved-power",
+    "type": "paper",
+    "title": "Flex: High-Availability Datacenters With Zero Reserved Power",
+    "authors": [
+      "Zhang, Chaojie",
+      "Kumbhare, Alok Gautam",
+      "Manousakis, Ioannis",
+      "Zhang, Deli"
+    ],
+    "year": 2021,
+    "venue": "2021 ACM/IEEE 48th Annual International Symposium on Computer Architecture (ISCA)",
+    "doi": "10.1109/ISCA52012.2021.00033",
+    "url": "https://doi.org/10.1109/ISCA52012.2021.00033",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      27
+    ],
+    "notes": "Microsoft design that uses the redundant power budget for workloads and sheds or caps flexible load during failures. Crossref-verified (first four authors listed; first names from memory)."
+  },
+  {
+    "id": "zheng2020-load-migration-curtailment",
+    "type": "paper",
+    "title": "Mitigating Curtailment and Carbon Emissions through Load Migration between Data Centers",
+    "authors": [
+      "Zheng, Jiajia",
+      "Chien, Andrew A.",
+      "Suh, Sangwon"
+    ],
+    "year": 2020,
+    "venue": "Joule",
+    "doi": "10.1016/j.joule.2020.08.001",
+    "url": "https://doi.org/10.1016/j.joule.2020.08.001",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      0,
+      23,
+      27
+    ],
+    "notes": "Quantifies how moving flexible compute between sites can absorb curtailed renewables and cut emissions; supports carbon-aware scheduling exercises. Crossref-verified."
+  },
+  {
+    "id": "radovanovic2023-carbon-aware-computing",
+    "type": "paper",
+    "title": "Carbon-Aware Computing for Datacenters",
+    "authors": [
+      "Radovanovic, Ana"
+    ],
+    "year": 2023,
+    "venue": "IEEE Transactions on Power Systems",
+    "doi": "10.1109/TPWRS.2022.3173250",
+    "url": "https://doi.org/10.1109/TPWRS.2022.3173250",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0,
+      23,
+      27
+    ],
+    "notes": "Google's system for shifting flexible compute to lower-carbon hours. Not opened by this agent; DOI taken from the sibling record in sources-domain-ml.json (which is verified there). First author only."
+  },
+  {
+    "id": "norris2025-rethinking-load-growth",
+    "type": "report",
+    "title": "Rethinking Load Growth: Assessing the Potential for Integration of Large Flexible Loads in US Power Systems",
+    "authors": [
+      "Norris, Tyler H.",
+      "Profeta, Tim",
+      "Patino-Echeverri, Dalia",
+      "Cowie-Haskell, Adam"
+    ],
+    "year": 2025,
+    "venue": "Nicholas Institute for Energy, Environment & Sustainability, Duke University",
+    "doi": null,
+    "url": "https://nicholasinstitute.duke.edu/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0,
+      23,
+      27
+    ],
+    "notes": "Estimates 76/98/126 GW of new flexible load could be integrated with 0.25/0.5/1% annual curtailment. Figures and authors from memory; exact URL not checked."
+  },
+  {
+    "id": "epri2024-powering-intelligence",
+    "type": "report",
+    "title": "Powering Intelligence: Analyzing Artificial Intelligence and Data Center Energy Consumption",
+    "authors": [
+      "EPRI"
+    ],
+    "year": 2024,
+    "venue": "Electric Power Research Institute",
+    "doi": null,
+    "url": "https://www.epri.com/",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "2024 scenarios: data centers at 4.6-9.1% of US generation by 2030. Figures from news coverage of the report; exact product URL not checked."
+  },
+  {
+    "id": "epri2026-powering-intelligence",
+    "type": "report",
+    "title": "Powering Intelligence 2026: Updated Scenarios of U.S. Data Center Electricity Use and Power Strategies",
+    "authors": [
+      "EPRI"
+    ],
+    "year": 2026,
+    "venue": "Electric Power Research Institute",
+    "doi": null,
+    "url": "https://esca.epri.com/products/3002034696/",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "2026 update: 9-17% of US electricity by 2030 and much higher state shares (e.g., Virginia). Product URL from search results; figures from secondary coverage; not opened."
+  },
+  {
+    "id": "granderson2023-hvac-fault-dataset",
+    "type": "paper",
+    "title": "A labeled dataset for building HVAC systems operating in faulted and fault-free states",
+    "authors": [
+      "Granderson, Jessica",
+      "Lin, Guanjing",
+      "Chen, Yimin",
+      "Casillas, Armando"
+    ],
+    "year": 2023,
+    "venue": "Scientific Data",
+    "doi": "10.1038/s41597-023-02197-w",
+    "url": "https://doi.org/10.1038/s41597-023-02197-w",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "LBNL labeled fault/fault-free HVAC data (simulated and experimental) to benchmark FDD methods alongside the simulator's injected faults. Crossref-verified; the ML sibling file holds the related 2020 dataset records."
+  },
+  {
+    "id": "eccc-historical-climate-data",
+    "type": "dataset",
+    "title": "Historical Climate Data",
+    "authors": [
+      "Environment and Climate Change Canada"
+    ],
+    "year": 2026,
+    "venue": "Government of Canada",
+    "doi": null,
+    "url": "https://climate.weather.gc.ca/historical_data/search_historic_data_e.html",
+    "open_url": null,
+    "access": "open",
+    "license": "Open Government Licence - Canada (not checked on the page)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "Station-level hourly observations (temperature, dew point, RH, pressure, wind) with bulk CSV download; use for a BC Interior site (e.g., Kamloops) and for the 2021 heat-dome incident."
+  },
+  {
+    "id": "noaa-isd-global-hourly",
+    "type": "dataset",
+    "title": "Global Hourly - Integrated Surface Database (ISD)",
+    "authors": [
+      "NOAA National Centers for Environmental Information"
+    ],
+    "year": 2026,
+    "venue": "NOAA NCEI",
+    "doi": null,
+    "url": "https://www.ncei.noaa.gov/products/land-based-station/integrated-surface-database",
+    "open_url": null,
+    "access": "open",
+    "license": "US Government data, generally public domain for US-origin records (not checked; some non-US data carry WMO Resolution 40 restrictions)",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "Global hourly surface observations from 100+ sources (temperature, dew point, pressure, wind, etc.); use for Columbia Plateau stations such as Moses Lake, Wenatchee, The Dalles or Yakima."
+  },
+  {
+    "id": "nsrdb",
+    "type": "dataset",
+    "title": "National Solar Radiation Database (NSRDB)",
+    "authors": [
+      "National Renewable Energy Laboratory (now National Laboratory of the Rockies)"
+    ],
+    "year": 2026,
+    "venue": "U.S. DOE (data.gov catalog)",
+    "doi": null,
+    "url": "https://catalog.data.gov/dataset/national-solar-radiation-database-nsrdb",
+    "open_url": "https://nsrdb.nrel.gov/",
+    "access": "open",
+    "license": "CC BY 4.0",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "Gridded satellite-derived solar and meteorological time series and TMY products for the Americas; license and 2026 update confirmed on data.gov. The nsrdb.nrel.gov domain did not resolve on the access date (lab renamed); look for the current host before use."
+  },
+  {
+    "id": "onebuilding-tmyx",
+    "type": "dataset",
+    "title": "Repository of free climate data for building performance simulation (TMYx EPW files)",
+    "authors": [
+      "Lawrie, Linda K.",
+      "Crawley, Drury B."
+    ],
+    "year": 2026,
+    "venue": "climate.onebuilding.org",
+    "doi": null,
+    "url": "https://climate.onebuilding.org/",
+    "open_url": null,
+    "access": "open",
+    "license": "Free download; terms not checked",
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "Typical-year EnergyPlus weather files derived from ISD hourly data through 2023 (2026 release, 17,315 locations, ERA5 solar). Page content confirmed; author names from memory, so marked unverified. Best quick input for annual simulator runs."
+  },
+  {
+    "id": "ashrae2021-thermal-guidelines-5e",
+    "type": "book",
+    "title": "Thermal Guidelines for Data Processing Environments, 5th edition",
+    "authors": [
+      "ASHRAE Technical Committee 9.9"
+    ],
+    "year": 2021,
+    "venue": "ASHRAE Datacom Series, Book 1",
+    "doi": null,
+    "url": "https://www.ashrae.org/technical-resources/bookstore/datacom-series",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0,
+      22,
+      24
+    ],
+    "notes": "The authoritative envelope definitions (A1-A4, H1, humidity, rate-of-change, liquid W classes) and server power/airflow vs inlet temperature data. ISBN 9781947192645 (catalog also lists 9781947192652); ISBNs from a library-catalog search result, not checked. Fetch via library."
+  },
+  {
+    "id": "ashrae2021-liquid-cooling-wp",
+    "type": "report",
+    "title": "Emergence and Expansion of Liquid Cooling in Mainstream Data Centers",
+    "authors": [
+      "ASHRAE Technical Committee 9.9"
+    ],
+    "year": 2021,
+    "venue": "ASHRAE white paper",
+    "doi": null,
+    "url": "https://www.ashrae.org/File%20Library/Technical%20Resources/Bookstore/Emergence-and-Expansion-of-Liquid-Cooling-in-Mainstream-Data-Centers_WP.pdf",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "Free TC 9.9 white paper arguing that new facilities should be ready for liquid cooling. URL from search results; not opened."
+  },
+  {
+    "id": "ashrae-liquid-cooling-guidelines-book",
+    "type": "book",
+    "title": "Liquid Cooling Guidelines for Datacom Equipment Centers",
+    "authors": [
+      "ASHRAE Technical Committee 9.9"
+    ],
+    "year": 2014,
+    "venue": "ASHRAE Datacom Series",
+    "doi": null,
+    "url": "https://www.ashrae.org/technical-resources/bookstore/datacom-series",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      24
+    ],
+    "notes": "Design reference for facility-water and technology-cooling loops; FEMP (2024) says a third edition is upcoming. Edition year from memory; ISBN not captured."
+  },
+  {
+    "id": "ashrae2023-handbook-applications-ch20",
+    "type": "book",
+    "title": "ASHRAE Handbook - HVAC Applications (2023), Chapter 20: Data Centers and Telecommunication Facilities",
+    "authors": [
+      "ASHRAE"
+    ],
+    "year": 2023,
+    "venue": "ASHRAE Handbook",
+    "doi": null,
+    "url": "https://www.ashrae.org/technical-resources/ashrae-handbook",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "Cited by the FEMP guide as the design reference for air management and cooling systems; pair with Handbook Fundamentals (psychrometrics) and HVAC Systems and Equipment (coils, towers, pumps). Library item."
+  },
+  {
+    "id": "ashrae-90-4-2022",
+    "type": "standard",
+    "title": "ANSI/ASHRAE Standard 90.4-2022, Energy Standard for Data Centers",
+    "authors": [
+      "ASHRAE"
+    ],
+    "year": 2022,
+    "venue": "ASHRAE",
+    "doi": null,
+    "url": "https://www.ashrae.org/technical-resources/standards-and-guidelines",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0,
+      24
+    ],
+    "notes": "Energy code for data centers using mechanical and electrical loss components instead of PUE. Edition year from memory; not checked."
+  },
+  {
+    "id": "iso-iec-30134-2-pue",
+    "type": "standard",
+    "title": "ISO/IEC 30134-2: Data centres - Key performance indicators - Part 2: Power usage effectiveness (PUE)",
+    "authors": [
+      "ISO/IEC JTC 1/SC 39"
+    ],
+    "year": 2016,
+    "venue": "ISO/IEC",
+    "doi": null,
+    "url": "https://www.iso.org/",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "International standard for measuring and reporting PUE (companion parts cover other KPIs such as WUE and CUE). FEMP 2024 points to the ISO/IEC 30134 series; edition and URL not checked."
+  },
+  {
+    "id": "tgg2012-wp49-pue",
+    "type": "report",
+    "title": "PUE: A Comprehensive Examination of the Metric (White Paper #49)",
+    "authors": [
+      "The Green Grid"
+    ],
+    "year": 2012,
+    "venue": "The Green Grid",
+    "doi": null,
+    "url": "https://www.thegreengrid.org/",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Canonical explanation of PUE measurement categories, partial PUE and reporting practice. Free registration required; not opened."
+  },
+  {
+    "id": "tgg2011-wp35-wue",
+    "type": "report",
+    "title": "Water Usage Effectiveness (WUE): A Green Grid Data Center Sustainability Metric (White Paper #35)",
+    "authors": [
+      "The Green Grid"
+    ],
+    "year": 2011,
+    "venue": "The Green Grid",
+    "doi": null,
+    "url": "https://www.thegreengrid.org/en/resources/library-and-tools",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Defines site and source WUE; linked from the FEMP guide. Free registration required; not opened."
+  },
+  {
+    "id": "tgg2010-wp32-cue",
+    "type": "report",
+    "title": "Carbon Usage Effectiveness (CUE): A Green Grid Data Center Sustainability Metric (White Paper #32)",
+    "authors": [
+      "The Green Grid"
+    ],
+    "year": 2010,
+    "venue": "The Green Grid",
+    "doi": null,
+    "url": "https://www.thegreengrid.org/en/resources/library-and-tools",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Defines CUE; linked from the FEMP guide. Free registration required; not opened."
+  },
+  {
+    "id": "uptime-tier-standard-topology",
+    "type": "standard",
+    "title": "Tier Standard: Topology",
+    "authors": [
+      "Uptime Institute"
+    ],
+    "year": null,
+    "venue": "Uptime Institute",
+    "doi": null,
+    "url": "https://uptimeinstitute.com/tiers",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      0
+    ],
+    "notes": "Defines Tier I-IV (basic capacity, redundant components, concurrently maintainable, fault tolerant). Page did not load on the access date; definitions in the primer are from general knowledge."
+  },
+  {
+    "id": "psychrolib",
+    "type": "software",
+    "title": "PsychroLib: psychrometric functions library",
+    "authors": [
+      "Meyer, D.",
+      "Thevenard, D."
+    ],
+    "year": 2019,
+    "venue": "GitHub / Journal of Open Source Software",
+    "doi": null,
+    "url": "https://github.com/psychrometrics/psychrolib",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT (not checked)",
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "Open psychrometric routines (including JavaScript) for wet-bulb, dew point and humidity ratio in the browser simulator. Not opened; details from memory."
+  },
+  {
+    "id": "stull2011-wet-bulb",
+    "type": "paper",
+    "title": "Wet-Bulb Temperature from Relative Humidity and Air Temperature",
+    "authors": [
+      "Stull, Roland"
+    ],
+    "year": 2011,
+    "venue": "Journal of Applied Meteorology and Climatology",
+    "doi": "10.1175/JAMC-D-11-0143.1",
+    "url": "https://doi.org/10.1175/JAMC-D-11-0143.1",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      21,
+      24
+    ],
+    "notes": "One-line empirical wet-bulb formula from temperature and RH at sea-level pressure, by a UBC atmospheric scientist; handy when a weather file lacks wet-bulb. DOI from memory; not checked."
+  }
+]

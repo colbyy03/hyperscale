@@ -1,7 +1,6 @@
 # Hyperscale: plan (draft for approval)
 
 Status: **Phase 0 (research + plan) — awaiting your approval.**
-Two pedagogy surveys and the data-center physics survey were still running when this draft was assembled. Their files will land in `research/` and refine sections 3–4 and the simulator spec. Nothing below depends on them structurally.
 
 Contents:
 1. Summary and decisions
@@ -37,7 +36,7 @@ RL appears in 1 of 36 postings, so Option A moves time series, optimization/OR, 
 
 | Milestone | Target date (Option A) | You can build | Roles it supports |
 |---|---|---|---|
-| M1 Foundations and classical ML | **Jan 30, 2027** | Leak-free forecasting/classification pipelines with calibrated GBMs; tested, typed Python packages; core algorithms from scratch | Data scientist (forecasting/analytics) on infrastructure and energy teams; ML-fundamentals screens |
+| M1 Foundations and classical ML | **Jan 26, 2027** | Leak-free forecasting/classification pipelines with calibrated GBMs; tested, typed Python packages; core algorithms from scratch | Data scientist (forecasting/analytics) on infrastructure and energy teams; ML-fundamentals screens |
 | M2 Forecasting, optimization, DL core | **Mar 22** | Probabilistic forecasters with backtests; LP/MILP and stochastic optimization; your own autograd engine; PyTorch training | Applied scientist / data scientist in capacity, demand and energy planning (Meta demand forecasting, Amazon CloudTune-type roles) |
 | M3 Production ML and LLM systems | **May 15** | FDD/anomaly systems; causal impact estimates; RAG/agent apps with evals; deployed, monitored ML services | ML engineer (production), AI engineer, applied scientist for infrastructure reliability (e.g. Amazon DC Ops analytics, Microsoft safe-changes) |
 | M4 DL and LLM internals | **Jun 30** | CNN/RNN/attention and transformers from scratch; a small LM; LoRA; inference optimization | ML engineer on model/serving teams; GenAI applied scientist |
@@ -69,7 +68,7 @@ That is after much of the application window. `planning/schedule-alternative.jso
 
 ## 2. What the research says
 
-Full notes in `research/`. All citations are in `research/sources.json`, merged from the per-stream files by `research/merge_sources.py`.
+Full notes in `research/`. All citations are in `research/sources.json`: **563 sources, 532 verified** against Crossref, arXiv or the live page. 155 are paywalled. Each record also maps to stable module ids, so renumbering never breaks a citation. The file is merged from the per-stream files by `research/merge_sources.py`.
 
 - **Jobs** (`job-postings.md`, 36 postings: Amazon 10, Microsoft 9, Google 9, Meta 8):
   - **Most-named skills:** Python 75%, MLOps/deployment 67%, ML system design 53%, statistics 50%, distributed systems 50%, optimization/MIP 47%, LLM/GenAI 42%, time-series forecasting 33% (56% of tier A), Bayesian/UQ 25% (44% of tier A).
@@ -77,8 +76,8 @@ Full notes in `research/`. All citations are in `research/sources.json`, merged 
   - **Seniority:** true ML-for-data-center roles are scarce and mostly senior; entry routes are Amazon Applied Scientist I/Data Scientist I and Microsoft Applied Scientist II.
   - **Communication** is in 69%, so every project ends with a stakeholder memo.
 - **MDS** (`mds-curriculum.md`): ML courses are applied, with no from-scratch work and no autograd; transformers get about one lecture; statistics is in R. Mode per module:
-  - accelerate: 4, 7, 10, 17;
-  - deepen: 1, 3, 6, 8, 9, 11, 13–15, 19, 22, 23, 31;
+  - accelerate: 4, 7, 16, 17;
+  - deepen: 1, 3, 6, 8–10, 12–14, 19, 22, 23, 31;
   - teach fully: everything else.
 - **Domain ML** (`domain-ml-literature.md`, `datasets.md`):
   - **Data:** no public data-center cooling telemetry exists, so the simulator is necessary. Usable public data:
@@ -88,69 +87,141 @@ Full notes in `research/`. All citations are in `research/sources.json`, merged 
     - LBNL labeled HVAC faults;
     - EIA-930 grid data.
   - **Gotchas to teach:** flawed anomaly benchmarks; forecast leakage; sim-to-real.
-- **Pedagogy and data-center physics:** in progress at the time of writing; they will feed lesson details and the simulator spec.
+- **Data-center domain** (`domain-datacenter.md`):
+  - **Scale:** US data centers used 176 TWh in 2023 (4.4% of US electricity), with 325–580 TWh projected for 2028 (LBNL). Global use is heading from 415 TWh (2024) to about 945 TWh (2030) (IEA).
+  - **Efficiency:** industry-average PUE is about 1.5 (Uptime) against hyperscalers at 1.08–1.17. Typical racks draw about 11 kW; liquid-cooled AI racks about 120 kW. ASHRAE's recommended inlet range is 18–27 °C.
+  - **Simulator:** the notes contain the full spec described in section 8.7: states, equations, parameters, 10 baseline control loops, 15 failure modes with sensor signatures, and a sensor list.
+  - **Library items:** ASHRAE's thermal and liquid-cooling guidelines and the chiller-model papers are the paywalled items to fetch through UBC later.
+- **Pedagogy** (`pedagogy-foundations.md`, `pedagogy-advanced.md`; current syllabi checked for CS229, CS231n, CS224n, CS336, CMU DL Systems, fast.ai, Karpathy's Zero to Hero/nanochat, FPP, and others):
+  - **Learning science:** the evidence-based rules (retrieval, spacing, interleaving, faded worked examples, predict-observe-explain, mastery gates with a release valve, attempt-first hints, FSRS-7) define section 3.
+  - **Order changes adopted:** feature pipelines before boosting; kernels directly before Bayesian/GPs; a policy-gradient primer inside LLM training; evals before RAG and agents; resource accounting from the PyTorch module on.
+  - **Browser vs local, measured:** NumPy runs at about 0.5 GFLOP/s in Pyodide, so in-browser training stays at ≤ 10⁵ parameters and under 60 s; PyTorch, JAX, numba-based libraries and Gymnasium run locally. Optimization and control tooling (CVXPY+Clarabel, CasADi, python-control, PySINDy) works in the browser.
 
 ## 3. Teaching design
 
+The design follows the learning-science review in `research/pedagogy-foundations.md` (rules R1–R18 there, with citations). Thresholds are evidence-anchored defaults, not experimentally optimized constants. The app logs enough data to tune them for you after a few months (R18).
+
 ### 3.1 The loop every major idea goes through
 
-1. **Intuition.** An interactive explainer, opened with a *prediction*: "what will happen to the boundary if C grows?". You commit to an answer before you touch the sliders. Predicting first makes the surprise stick.
-2. **Math.** A guided derivation. You complete the key steps yourself as typed expressions, checked automatically. Each step has hints; the full derivation is revealed only after you try.
-3. **From scratch.** A NumPy implementation inside graded scaffolding:
-   - fill-in first, then a blank page as the module progresses (faded worked examples);
-   - library imports blocked where they would short-circuit the point.
-4. **Production.** The same task with scikit-learn, statsmodels, XGBoost/LightGBM, PyTorch or the relevant tool. A `<Compare>` block checks that your result matches, and explains any differences (defaults, numerics, regularization conventions).
-5. **Craft.** What goes wrong in practice: debugging exercises with broken code, misleading loss curves, leakage hunts, numerical traps.
-6. **Retrieval.** Two to four quick questions at the end of the lesson. The lesson's review cards then enter your spaced-repetition deck.
-7. **Interleaving.** Later practice sessions mix this concept with older ones, so you learn to pick the right tool, not just to use the tool the chapter is about.
-8. **Gate.** The module checkpoint certifies mastery before the next module unlocks.
+1. **Predict, then explore.** Every interactive explainer starts locked until you commit a prediction: a number, a choice, or a sketch on axes. After you explore, you write one or two sentences reconciling prediction and outcome. A wrong prediction automatically drafts a review card for that misconception. Watching demonstrations without predicting produces little understanding (`crouch2004-predict-demos`); how you engage matters more than what the visualization shows (`hundhausen2002-av-meta`).
+2. **Math, as a faded worked example.**
+   - A full derivation comes first, with a "which principle justifies this step?" prompt on each line.
+   - Then backward fading: the last step is blank, then the last two, and so on.
+   - Then a matched problem you derive yourself, as typed expressions checked numerically or symbolically.
+   - Fading is faster where you are already strong (calculus) and slower where the material is new (probabilistic modeling). This follows the expertise-reversal effect (`atkinson2003-fading-self-explanation`, `kalyuga2003-expertise-reversal`).
+3. **Code, also faded.**
+   1. An annotated reference implementation.
+   2. A Parsons problem (shuffled lines, later with distractors).
+   3. Fill in the key lines.
+   4. Write it from scratch in NumPy.
 
-### 3.2 Lesson anatomy (15–30 minutes)
+   If you solve the first faded item quickly, correctly and without hints, the app jumps you to the from-scratch task.
+4. **Production comparison.** The same task with scikit-learn, statsmodels, LightGBM/XGBoost, PyTorch or the relevant tool. A `<Compare>` block checks agreement within a stated tolerance and explains differences (defaults, numerics, regularization conventions).
+5. **Craft and debugging, after competence.** "Find the bug" and "why is this model lying?" items unlock only once the correct procedure is secure. Erroneous examples help learners with solid prior knowledge but hurt novices (`grosse2007-erroneous-examples`).
+6. **Retrieval and spacing.** Closed-book recall at the end of the lesson, then review cards (FSRS), then spiral re-checks:
+   - a delayed mastery confirmation 3–7 days after the gate;
+   - a mixed module set about 3–4 weeks later;
+   - re-derive / re-implement drills at about 1 week, 1 month and 3 months.
 
-| Part | Typical length | Block |
+   Whole derivations and implementations are drills, not flashcards (`cepeda2008-spacing-ridgeline`).
+7. **Interleaving.** After 3–5 blocked items on a new procedure, practice is mixed: about 40% today's lesson, 30% this module, 30% earlier modules. Each set includes at least one "which method applies?" item, and confusable pairs are interleaved deliberately:
+   - ridge/lasso;
+   - ROC/PR;
+   - bagging/boosting;
+   - GroupKFold vs time-series splits;
+   - MLE/MAP;
+   - confidence vs prediction vs credible intervals;
+   - confounder/mediator/collider.
+
+   Terminology drills stay blocked, because interleaving hurts word learning (`brunmair2019-interleaving-meta`, `rohrer2020-interleaving-rct`).
+8. **Productive failure, sparingly.** At most one 10–15 minute invention task per module, before instruction, on a concept worth reinventing. Examples: invent a split-quality score before impurity; invent an interval that covers 90% of future errors before conformal prediction. It is never used for tooling or syntax (`sinha2021-pf-meta`, `loibl2017-ps-i`).
+
+### 3.2 A daily session
+
+| Part | Default (weekday, 45–75 min) | Why |
 |---|---|---|
-| Situation from the facility | 1 min | `<Situation>` |
-| Predict → explore → explain | 4–6 min | `<Predict>`, `<Viz>`, `<Experiment>` |
-| Derivation you complete | 4–8 min | `<Derivation>` |
-| Implement from scratch | 6–12 min | `<CodeExercise type="fill-in"/"code">` |
-| Compare with the library | 2–4 min | `<Compare>` |
-| Bridge + craft notes | 1–2 min | `<Bridge>`, `<Craft>` |
-| Retrieval check | 2–3 min | `<Check>` |
+| Warm-up | 2–3 min: two or three pre-questions or predictions about today's lesson, recorded but not graded | Pre-questions prime later learning (IES guide, `pashler2007-ies-guide`) |
+| Reviews | ≤ 15 min (hard cap): FSRS cards mixed across all modules | Spacing and interleaving at no extra cost |
+| New material | 25–35 min: one or two cycles of the loop in 3.1, with a learner action at least every 3–5 minutes | Active learning beats passive exposure (`freeman2014-active-learning`) |
+| Mixed practice | 8–10 min: 5–8 items in the 40/30/30 mix, with a confidence rating before each reveal | Interleaving plus calibration |
+| Challenge | One harder, unscaffolded item (≈10–15 min; shorter on short days) | Your brief's "one hard challenge" |
+| Exit | 3–5 min: two closed-book recall items, approve or edit today's draft review cards, calibration readout | Retrieval beats restudy on delayed tests (`roediger2006-test-enhanced-learning`) |
 
-Lessons are short on purpose: you can finish one in a weekday slot, and the daily planner can split a lesson across days at block boundaries.
+Variants:
+- **lite day** (15 min: reviews plus three mixed items) for heavy MDS weeks, switched on automatically during assessment crunches;
+- **weekend lab** (90–150 min: a from-scratch build or project work, a weakness drill, and delayed confirmations).
+
+The planner sizes every session to the minutes available that day (section 8.6). Once, briefly, the app explains why spaced and mixed practice *feels* slower while producing more durable learning (`deslauriers2019-feeling-of-learning`, `bjork2013-self-regulated`).
 
 ### 3.3 Exercise types
 
-- **Predict-the-output**: code or a plot is shown and you predict before running. Used heavily for NumPy semantics, broadcasting, PyTorch autograd behaviour, and "what will this loss curve do".
-- **Fill-in-the-code**: a scaffold with holes; graded by tests.
-- **From-scratch implementation**: a blank function plus a specification; graded by visible and hidden tests plus a comparison with the library.
-- **Debugging**: broken code or a broken training run that fails a test; you fix it without deleting functionality. Hidden tests make sure the fix is real.
-- **"What happens if" experiments**: sliders on an explainer with a question you answer after exploring.
-- **Derivations**: step lists with typed expressions, checked numerically or symbolically.
-- **Parsons problems**: reorder shuffled lines, a fast way to practise algorithm structure on a phone.
-- **Concept questions**: multiple choice, numeric with tolerance and units, ordering, matching.
-- **SQL**: DuckDB-WASM queries against telemetry tables.
-- **Local labs**: PyTorch/GPU work with pytest suites and completion codes.
-- **Challenges**: harder, less scaffolded problems, one per daily session.
+- **Predict-the-output**: code or a plot is shown and you predict before running. Heavy use for NumPy semantics, broadcasting, PyTorch autograd behaviour and loss-curve reading.
+- **Parsons problems**: the code-level fading step. Fast, and phone-friendly.
+- **Fill-in-the-code** and **from-scratch implementation**, graded by visible and hidden pytest suites, plus a comparison with the library. Gradients must pass finite-difference checks (relative error below 1e-6 in float64).
+- **Debugging**: seeded broken code or a recorded broken training run (loss curve, activation statistics, config). You name the cause, then prove it with a minimal fix that hidden tests verify.
+- **Derivations**: step lists with typed expressions, graded step by step rather than only on the final answer (step-level feedback is what makes tutoring systems work; `vanlehn2011-tutoring`).
+- **"What happens if" experiments** on explainers, answered after exploring.
+- **Concept questions**: mostly *generative* (numbers, steps, short code, explanations). Multiple choice is reserved for discrimination items with diagnostic distractors, because recall beats recognition (`rowland2014-testing-meta`).
+- **Explain items**: a Feynman-style explanation scored against a rubric, plus one "interviewer follow-up" question. These are self-assessed, or tutor-assessed if you enable the tutor.
+- **SQL** against telemetry tables (DuckDB-WASM).
+- **Local labs**: PyTorch/GPU work with pytest suites. Tests fail with `NotImplementedError` until your code is wired in through an adapters module, the pattern Stanford CS336 uses.
+- **Experiments with seeds**: any comparison of training methods runs 3–5 seeds and reports intervals.
 
-### 3.4 Mastery and practice
+### 3.4 Mastery gates, hints and feedback
 
-- **Checkpoint per module.** Graded code tasks plus concept questions. To pass you need at least 80% overall and at least 70% on every core concept, with code tasks passing hidden tests. Failing gives you a concept-level diagnosis and targeted practice. You can retake after 24 hours with fresh item variants.
-- **Test-outs.** Modules MDS already covers well (4, 7, 10, 17) open with an optional checkpoint attempt. Passing skips the introductory lessons and assigns only the extension lessons.
-- **Weak areas get more practice automatically.** Low-mastery concepts are injected into daily practice and weekly review. Each failed exercise adds the matching misconception card.
-- **Spaced repetition (FSRS).** Card types:
-  - concept;
-  - equation cloze;
-  - gotcha;
-  - predict-the-output;
-  - spot-the-bug;
-  - derivation step.
+- **Module gate.** A fresh, unhinted, interleaved checkpoint of 10–14 items covering every module objective. To pass you need:
+  - **at least 85% overall**;
+  - **100% on items flagged critical** (for example a leak-free split, a correct gradient, the right estimand);
+  - at least one **transfer item** in a new engineering context;
+  - one **explain item** scoring at least 3/4.
 
-  Desired retention defaults to 90%. Reviews are capped at about 15% of a session so they support learning rather than replace it.
+  Code is graded per function by tests; derivations per step.
+- **Delayed confirmation.** A parallel form 3–7 days later; pass at 80% or more. Failing re-opens only the failed objectives.
+- **Failing a gate.** Targeted remediation (a new worked example plus 3–5 items per failed objective), then a retake on new items after at least 24 hours. **After two failed attempts you may advance provisionally**, with the remediation items pinned into daily reviews. Self-paced mastery programs without that release valve lower completion rates (`kulik1990-mastery-meta`).
+- **Test-outs.** Modules MDS already covers well (**4, 7, 16, 17**) open with an optional gate attempt. Passing skips the introductory lessons and assigns only the extension lessons.
+- **Hint ladder.**
+  - **T0:** a first attempt (or about 60 seconds of work) is required before any hint.
+  - **T1 orient:** restates the goal and the known quantities.
+  - **T2 principle:** names the concept and links to the lesson.
+  - **T3 next step:** solves the next step, or gives a Parsons skeleton.
+  - **T4 bottom-out:** the full worked solution. The item is graded as a failure, and an isomorphic variant comes back within 1–3 days.
 
-### 3.5 Engineering bridges (examples)
+  Hints fade as your skill estimate rises (`aleven2016-help-seeking`, `koedinger2007-assistance-dilemma`).
+- **Feedback** is always about the task and the process: the correct answer plus a short process-level explanation. It is never praise or blame of the person, which can lower performance (`hattie2007-feedback`, `kluger1996-feedback`).
+- **Weak spots get more practice automatically.** Each week a 20-minute weakness drill is assembled from:
+  - lowest-retrievability cards;
+  - skills with the most hint use;
+  - repeated misconceptions from predictions.
 
-You already understand most of ML's machinery under different names. Lessons say so explicitly with `<Bridge>` notes, and some bridges become exercises.
+  These also feed daily mixed practice.
+- **What the dashboard leads with.** Delayed-retention evidence comes first: gate confirmations, FSRS retention, calibration curves comparing your confidence with your accuracy. Streaks and time spent are shown, but kept secondary.
+
+### 3.5 Spaced repetition
+
+- **Scheduler.** FSRS-7 through `ts-fsrs` v6, not SM-2. FSRS models each card's difficulty, stability and retrievability, and schedules reviews to hit a target retention. On the open benchmark, per-user optimized FSRS-7 beats its defaults and older schedulers (`fsrs-srs-benchmark`).
+- **Retention.** 0.90 by default; 0.92–0.93 for gate-critical cards (prerequisite identities, leakage rules, core derivation steps); 0.85 for peripheral facts (API names, history).
+- **Steps and limits.**
+  - learning steps 1m and 10m, relearning 10m;
+  - maximum interval 365 days during MDS and the job search;
+  - 10–15 new cards a day, and new cards pause when the review backlog exceeds two days;
+  - leeches (about 8 lapses) are suspended and flagged for a rewrite or re-teach.
+- **Weights.** Personalized monthly from your own review log.
+- **Grade mapping.**
+  - wrong, or a T3/T4 hint used → Again;
+  - correct with T2, or slow → Hard;
+  - correct → Good;
+  - fast, correct and confident → Easy.
+- **Cards per lesson.** 8–15, drafted from tagged lesson elements and approved or edited by you in the exit step. Types:
+  - concept why/when;
+  - one derivation step;
+  - predict-the-output or shape;
+  - code cloze;
+  - discrimination ("which metric here?");
+  - engineering bridge;
+  - bug spotting.
+- **Card writing.** One retrieval target per card; no yes/no prompts; parameterized variants where possible, so you recall the concept rather than the surface form (`matuschak2020-prompts`).
+
+### 3.6 Engineering bridges (examples)
 
 | ML idea | What you already know |
 |---|---|
@@ -158,36 +229,40 @@ You already understand most of ML's machinery under different names. Lessons say
 | Momentum | Heavy ball / damped mass–spring dynamics |
 | Ridge / weight decay | Tikhonov regularization of ill-posed inverse problems; damping |
 | PCA / SVD | Modal analysis; proper orthogonal decomposition of flow and temperature fields |
-| Kalman filter, state-space models, RNNs | State estimation and discrete-time state-space systems from controls |
-| Normalization layers | Nondimensionalization, scaling of governing equations |
-| LR warmup and annealing | Under-relaxation factors in CFD solvers |
-| MLE | Least-squares curve fitting of experimental data with known noise |
-| Bellman equation, MPC | Dynamic programming, optimal control, receding-horizon control |
+| Covariance ellipse | Mohr's circle (principal axes of a symmetric tensor) |
+| Kalman filter, state-space models, RNNs | State estimation and discrete-time state-space systems |
+| Normalization layers | Nondimensionalization of governing equations |
+| LR warmup and annealing | Under-relaxation in CFD solvers |
+| MLE | Least-squares fits of experimental data with known noise |
+| Bellman equation, MPC | Dynamic programming, optimal and receding-horizon control |
 | PINNs, grey-box models | PDE residuals, lumped-capacitance and RC thermal networks |
 | Conformal / Bayesian intervals | Measurement uncertainty and error propagation |
-| Anomaly detection with control charts | Statistical process control |
+| Control charts for anomalies | Statistical process control |
 
-### 3.6 The craft thread
+Each bridge appears in its lesson and as a review card. Each visualization is paired with its equation and a concrete facility example.
 
-Production skills are not a single module. They recur:
+### 3.7 The craft thread
 
 | Skill | Introduced | Practised again in |
 |---|---|---|
-| Debugging training runs and reading loss curves | 13 | 14, 23–25, 28 |
-| Data leakage (target, temporal, group, preprocessing, pretraining overlap) | 7 | 9, 15, 18, P1–P3 |
-| Reproducibility (seeds, lockfiles, determinism, data versions) | 1 | 14, 22, every project |
-| Experiment tracking | 14 | 15, 22, 24–25, capstones |
-| Tested ML code (unit, property, shape, golden, "overfit one batch") | 1 | 12, 13, 22, every project |
-| Numerical stability | 1 | 2, 6, 12, 26 |
-| Evaluation design and uncertainty on every number | 7 | 15, 17, 18, 20, capstones |
+| Debugging training runs and reading loss curves | 12 | 13, 23–25, 28 |
+| Data leakage (target, temporal, group, preprocessing, pretraining overlap) | 6–7 | 8, 14, 18, P1–P3 |
+| Reproducibility (seeds, lockfiles, determinism, data versions) | 1 | 13, 22, every project |
+| Experiment tracking | 13 | 14, 22, 24–25, capstones |
+| Tested ML code (unit, property, shape, golden, "overfit one batch") | 1 | 11, 12, 22, every project |
+| Numerical stability | 1 | 2, 6, 11, 26 |
+| Resource accounting (memory, FLOPs ≈ 6·N·D) | 13 | 24–26, 30 |
+| Evaluation design and uncertainty on every number | 6–7 | 14, 17, 18, 20, capstones |
 
-### 3.7 AI-native thread
+### 3.8 AI-native thread
 
-Every module ends with **"How I'd do this with AI tools"**: a short, concrete walkthrough of using coding agents and LLMs on that module's work. Each one includes at least one exercise where you review agent-written code or a derivation and find what is wrong.
+The policy matches where the field landed in 2026: course policies that forbid AI completing assignments, open-source projects that require disclosing LLM-written code, and agents running whole experiment loops (`research/pedagogy-advanced.md` §0.5).
 
-The recurring rules:
+- **From-scratch stages are AI-off.** The optional tutor switches to Socratic-only mode, with no code generation.
+- **Production stages are AI-on, with eval-driven review.**
+- **Every module ends with "How I'd do this with AI tools":** a walkthrough of a real coding-agent session on that module's work, *plus the checks that caught its mistakes*, plus at least one exercise where you review agent-written code or a derivation and find what is wrong.
 - **Delegate** scaffolding, boilerplate, plotting, refactors, test skeletons, docstrings and search.
-- **Own** the math, evaluation design, leakage reasoning, numerical stability and the decision of what to build.
+- **Own** the math, evaluation design, leakage reasoning, numerical stability, and what to build.
 - **Always verify:**
   - run the tests;
   - gradient-check derivatives;
@@ -195,39 +270,37 @@ The recurring rules:
   - read every diff;
   - check shapes and units;
   - re-derive claims that matter.
-- **Know the failure modes:**
-  - hallucinated APIs and arguments;
-  - silent broadcasting/shape bugs;
+- **Known failure modes:**
+  - hallucinated APIs;
+  - silent broadcasting bugs;
   - pipelines that leak because an agent fit a scaler on all the data;
   - confident but wrong derivations;
   - tests that test the implementation instead of the spec.
-- **Eval-driven development** for LLM systems (Module 20 onward): write the eval before the prompt.
+- **Eval-first** for LLM systems: error analysis and a small golden set come before any RAG or agent work (Module 20).
 
-### 3.8 Domain thread (data centers)
-
-The data-center primer is woven through the modules rather than taught in one block:
+### 3.9 Domain thread (data centers)
 
 | Domain topic | Where it appears |
 |---|---|
-| Power chain, cooling chain, PUE/WUE | Induction |
-| Telemetry and BMS/DCIM data, units and time | Module 1 |
+| Power chain, cooling chain, PUE/WUE/CUE | Induction |
+| Telemetry, BMS/DCIM points, units and time | Module 1 |
 | Thermal fields and sensors | Modules 2 and 4 |
 | CRAH control loops | Module 3 |
-| Chiller physics (lift, part-load) | Modules 6 and 8 |
-| Psychrometrics and economizers | Module 9 |
-| Operating modes and fouling | Module 11 |
-| Load and grid carbon | Module 15 |
-| Plant scheduling, thermal storage and power capacity | Module 16 / P2 |
-| FDD of chillers, CRAHs, towers and sensors | Module 18 |
+| Chiller physics (lift, part-load) | Modules 6 and 9 |
+| Psychrometrics and economizers | Module 8 |
+| Operating modes and coil fouling | Module 10 |
+| IT load, PUE seasonality, grid carbon | Module 14 |
+| Plant scheduling, thermal storage, power capacity | Module 15 / P2 |
+| FDD for chillers, CRAHs, towers, sensors | Module 18 |
 | Retrofit M&V | Module 19 |
 | SOPs and maintenance logs | Module 20 |
-| Liquid-cooled AI pods, rack density and inference energy | Modules 26 and 30 |
+| Liquid-cooled AI pods, rack density, inference energy | Modules 26 and 30 |
 | MPC/RL for cooling | Modules 28–29 |
-| Community, water and grid impacts | Module 31 |
+| Water, grid and community impacts | Module 31 |
 
-Facts come from `research/domain-datacenter.md` with citations.
+Facts and numbers come from `research/domain-datacenter.md`, cited by source id.
 
-### 3.9 Narrative
+### 3.10 Narrative
 
 You are a new ML engineer at **Kestrel Ridge**, a fictional hyperscale campus run by the fictional **Basalt Cloud**:
 - modules unlock rooms of the campus map;
@@ -259,39 +332,39 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 | # | Module | Brief # | Hours | MDS mode | Phase |
 |---|---|---|---|---|---|
-| 0 | Induction | n/a | 2 | n/a | 1 Foundations |
+| 0 | Induction: first week at the facility | n/a | 2 | teach fully | 1 Foundations |
 | 1 | Python for ML engineering | 1 | 12 | deepen | 1 |
 | 2 | Linear algebra for ML | 2 | 12 | teach fully | 1 |
 | 3 | Calculus and continuous optimization | 3 | 10 | deepen | 1 |
 | 4 | Probability and statistics | 4 | 10 | accelerate | 1 |
 | 5 | Information theory | 5 | 4 | teach fully | 1 |
-| 6 | Linear and logistic regression | 6 | 14 | deepen | 2 Classical ML |
+| 6 | Linear and logistic regression from scratch | 6 | 14 | deepen | 2 Classical ML |
 | 7 | Model evaluation | 7 | 8 | accelerate | 2 |
-| 8 | Trees, forests, gradient boosting | 8 | 14 | deepen | 2 |
-| 9 | Feature engineering and data pipelines | 11 | 10 | deepen | 2 |
-| 10 | SVMs, kernels, k-NN | 9 | 5 | accelerate | 2 |
-| 11 | Unsupervised learning | 10 | 11 | deepen | 2 |
+| 8 | Feature engineering and data pipelines | 11 | 10 | deepen | 2 |
+| 9 | Trees, random forests and gradient boosting | 8 | 14 | deepen | 2 |
+| 10 | Unsupervised learning | 10 | 11 | deepen | 2 |
 | P1 | Milestone project: Energy Desk forecaster | n/a | 12 | n/a | 2 |
-| 12 | Autograd engine from scratch | 12 | 14 | teach fully | 3 Forecasting, optimization, DL core |
-| 13 | Training deep networks | 13 | 13 | deepen | 3 |
-| 14 | PyTorch fluency | 14 | 10 | deepen | 3 |
-| 15 | Time series and probabilistic forecasting | 21 | 22 | deepen | 3 |
-| 16 | Optimization and operations research | 24a | 14 | teach fully | 3 |
-| 17 | Bayesian methods and UQ | 25 | 10 | accelerate | 3 |
+| 11 | Autograd engine from scratch | 12 | 14 | teach fully | 3 Forecasting, optimization and the deep-learning core |
+| 12 | Training deep networks | 13 | 13 | deepen | 3 |
+| 13 | PyTorch fluency | 14 | 10 | deepen | 3 |
+| 14 | Time series and probabilistic forecasting | 21 | 22 | deepen | 3 |
+| 15 | Optimization and operations research | 24a | 14 | teach fully | 3 |
+| 16 | SVMs, kernels and k-NN | 9 | 5 | accelerate | 3 |
+| 17 | Bayesian methods and uncertainty quantification | 25 | 10 | accelerate | 3 |
 | P2 | Milestone project: Capacity and power planner | n/a | 12 | n/a | 3 |
-| 18 | Anomaly detection and fault diagnosis | 22 | 16 | teach fully | 4 Reliability, LLM systems, production |
+| 18 | Anomaly detection and fault diagnosis | 22 | 16 | teach fully | 4 Reliability, LLM systems and production |
 | 19 | Causal inference | 26 | 8 | deepen | 4 |
 | 20 | Building with LLMs | 19 | 20 | teach fully | 4 |
 | 21 | ML system design | 27 | 10 | teach fully | 4 |
 | 22 | MLOps and cloud ML | 28 | 18 | deepen | 4 |
 | P3 | Milestone project: Reliability platform | n/a | 12 | n/a | 4 |
-| 23 | CNNs, RNNs and attention | 15 | 14 | deepen | 5 DL depth and LLM internals |
-| 24 | Transformers from scratch and a small LM | 16 | 18 | teach fully | 5 |
+| 23 | CNNs, RNNs and attention | 15 | 14 | deepen | 5 Deep-learning depth and LLM internals |
+| 24 | Transformers from scratch and a small language model | 16 | 18 | teach fully | 5 |
 | 25 | Tokenization, pretraining, scaling, fine-tuning, alignment | 17 | 14 | teach fully | 5 |
 | 26 | Inference and serving | 18 | 10 | teach fully | 5 |
 | 27 | Generative models: VAEs and diffusion | 20 | 8 | teach fully | 5 |
-| 28 | Reinforcement learning | 23 | 20 | teach fully | 6 Control, RL, capstones |
-| 29 | Control, physics-informed ML, digital twins | 24b | 16 | teach fully | 6 |
+| 28 | Reinforcement learning | 23 | 20 | teach fully | 6 Control, RL and the capstones |
+| 29 | Control, physics-informed ML and digital twins | 24b | 16 | teach fully | 6 |
 | 30 | Scaling and performance | 29 | 8 | teach fully | 6 |
 | 31 | Responsible AI | 30 | 6 | deepen | 6 |
 | C1 | Capstone 1: cooling and energy intelligence | n/a | 45 | n/a | 6 |
@@ -365,6 +438,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 - *Build:* **Sensor truth**, a Kalman filter that fuses two sensors with a thermal model and flags a drifting sensor from its innovation statistics.
 - *Bridges:* lab error propagation; Weibull reliability; Kalman filtering from controls.
 - *Incident:* "two sensors disagree".
+- *Causal hook:* Simpson's paradox in fleet failure rates (prediction vs explanation).
 
 **5 · Information theory (4 h · teach fully)**
 1. Entropy as surprise and compression.
@@ -373,20 +447,22 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 - *Build:* rank fault-predictive features by mutual information; compute the perplexity of a character n-gram model of maintenance logs.
 
-### Phase 2: Classical ML (Dec 14 – Jan 30)
+### Phase 2: Classical ML (Dec 14 – Jan 26)
 
 **6 · Linear and logistic regression from scratch (14 h · deepen)**
 1. Linear regression three ways: QR closed form, gradient descent, maximum likelihood; statsmodels as the Python twin of DSCI 561's R output.
-2. Features and basis expansions: polynomials, splines, interactions, physically motivated features (dimensionless groups).
-3. Regularization: ridge as Tikhonov damping, lasso by coordinate descent, elastic net, regularization paths, the MAP view.
-4. Bias–variance: the decomposition derived and simulated; a double-descent teaser.
-5. Logistic regression: Bernoulli likelihood, gradient and Newton/IRLS, softmax regression.
-6. GLMs in Python: Poisson regression for fault counts, link functions.
-7. Diagnostics and numerics: conditioning, standardization, collinearity, residuals, influence.
+2. Minimum viable evaluation: an honest split, one leakage check and one metric, so every model from here on is judged fairly. Module 7 goes deep.
+3. Features and basis expansions: polynomials, splines, interactions, physically motivated features (dimensionless groups).
+4. Regularization: ridge as Tikhonov damping, lasso by coordinate descent, elastic net, regularization paths, the MAP view.
+5. Bias–variance: the decomposition derived and simulated; a double-descent teaser.
+6. Logistic regression: Bernoulli likelihood, gradient and Newton/IRLS, softmax regression.
+7. GLMs in Python: Poisson regression for fault counts, link functions.
+8. Diagnostics and numerics: conditioning, standardization, collinearity, residuals, influence.
 
 - *From scratch → library:* OLS (QR), ridge, lasso (coordinate descent), logistic (GD and Newton), softmax vs scikit-learn and statsmodels.
 - *Build:* **Chiller power model**, a regression of chiller kW on lift, part-load ratio and wet-bulb, plus a logistic model of inlet-temperature excursions.
 - *Incident:* "the model says chillers use less power at higher load" (collinearity and confounding).
+- *Causal hook:* coefficients are not effects. This plants confounding and bad controls ahead of Module 19.
 
 **7 · Model evaluation (8 h · accelerate)**: test-out first
 1. Splitting for the question you are asking: k-fold, grouped, rolling-origin time-series CV, nested CV, optimization bias.
@@ -398,8 +474,20 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 - *Build:* **Evaluation harness**, a reusable, tested module used by every later project.
 - *Incident:* "the 99%-accurate fault detector".
+- *Causal hook:* temporal leakage as a violation of time order.
 
-**8 · Trees, random forests and gradient boosting (14 h · deepen)**
+**8 · Feature engineering and data pipelines (10 h · deepen)**
+1. Features for sensor and time data: lags, rolling windows, calendar and Fourier terms, physics-derived features (ΔT, approach, lift, part-load ratio).
+2. Missing and bad data: gaps, stuck-at values and spikes, imputation without leakage, data validation checks.
+3. scikit-learn Pipelines and ColumnTransformer in depth; custom transformers.
+4. Point-in-time correctness: as-of joins of weather *forecasts* vs actuals (DuckDB `ASOF JOIN`), training/serving consistency.
+5. Production pipelines: idempotent batch ETL over partitioned Parquet with DuckDB/Polars, incremental updates, schema evolution, feature-store concepts.
+
+- *Build:* **Energy Desk feature pipeline**: raw telemetry → validated, point-in-time-correct features → model-ready Parquet, with tests. It feeds the boosting forecaster in Module 9 and P1.
+- *Why before boosting:* leakage-proof pipelines become a habit before the most powerful tabular models arrive.
+- *Causal hook:* features that are consequences of the target leak.
+
+**9 · Trees, random forests and gradient boosting (14 h · deepen)**
 1. Decision trees from scratch: impurity (entropy from Module 5), vectorized split search, regression trees, pruning.
 2. Bagging and random forests: variance reduction, OOB error, impurity vs permutation importance and their biases.
 3. Gradient boosting as functional gradient descent: squared and log loss, shrinkage, subsampling.
@@ -408,26 +496,10 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 6. Practice: tuning, early stopping, monotonic constraints for physical consistency, quantile objectives, TreeSHAP.
 
 - *From scratch → library:* CART, random forest, and a mini second-order histogram GBM, compared with scikit-learn's HistGradientBoosting, XGBoost and LightGBM, all in the browser.
-- *Build:* **Cooling load forecaster v1**, a day-ahead GBM with monotonic constraints and quantile intervals (simulator arc, step 3).
+- *Build:* **Cooling load forecaster v1**, a day-ahead GBM on your Module 8 feature pipeline, with monotonic constraints and quantile intervals (simulator arc, step 3).
 - *Incident:* "feature importance says hour-of-day causes failures".
 
-**9 · Feature engineering and data pipelines (10 h · deepen)**
-1. Features for sensor and time data: lags, rolling windows, calendar and Fourier terms, physics-derived features (ΔT, approach, lift, part-load ratio).
-2. Missing and bad data: gaps, stuck-at values and spikes, imputation without leakage, data validation checks.
-3. scikit-learn Pipelines and ColumnTransformer in depth; custom transformers.
-4. Point-in-time correctness: as-of joins of weather *forecasts* vs actuals (DuckDB `ASOF JOIN`), training/serving consistency.
-5. Production pipelines: idempotent batch ETL over partitioned Parquet with DuckDB/Polars, incremental updates, schema evolution, feature-store concepts.
-
-- *Build:* **Energy Desk feature pipeline**: raw telemetry → validated, point-in-time-correct features → model-ready Parquet, with tests. It feeds P1.
-
-**10 · SVMs, kernels and k-NN (5 h · accelerate)**: test-out first
-1. k-NN and the curse of dimensionality; KD-trees and approximate nearest neighbours (vector search preview).
-2. Max-margin classification: hinge loss, the dual via KKT, support vectors.
-3. Kernels: the kernel trick, RBF intuition, kernel ridge regression from scratch, and the bridge to Gaussian processes.
-
-- *Build:* kernel ridge vs GBM on chiller curves; k-NN distance as an anomaly score.
-
-**11 · Unsupervised learning (11 h · deepen)**
+**10 · Unsupervised learning (11 h · deepen)**
 1. k-means from scratch: Lloyd's algorithm, k-means++, failure modes.
 2. Density and hierarchy: DBSCAN/HDBSCAN and hierarchical clustering for discovering plant operating modes.
 3. PCA in depth: variance maximization equals the SVD, choosing components, whitening, process monitoring with T² and SPE statistics.
@@ -442,7 +514,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 ### Phase 3: Forecasting, optimization and the deep-learning core (Jan 25 – Mar 22)
 
-**12 · Autograd engine from scratch (14 h · teach fully)**
+**11 · Autograd engine from scratch (14 h · teach fully)**
 1. Reverse-mode automatic differentiation on paper: computational graphs, local derivatives, topological order.
 2. A scalar autograd engine: a value type, operators and `backward`, checked against finite differences.
 3. Tensor autograd on NumPy: broadcasting-aware gradients (sum-to-shape), matmul backward.
@@ -452,7 +524,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 - *Build:* **your own tensor library**, plus a neural surrogate that emulates the simulator one step ahead (a digital-twin preview). Runs entirely in the browser.
 
-**13 · Training deep networks (13 h · deepen)**
+**12 · Training deep networks (13 h · deepen)**
 1. Initialization: variance propagation (Xavier/He) and what breaks without it.
 2. Optimizers in depth: SGD with momentum, Adam/AdamW and decoupled weight decay, the LR range test.
 3. Normalization: BatchNorm and its train/eval trap, LayerNorm, RMSNorm.
@@ -464,33 +536,33 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 - *Build:* **Training doctor**: diagnose and fix eight broken training runs and write the incident report. Everything is built inside your own engine.
 - *Bridges:* normalization as nondimensionalization; warmup and annealing as solver relaxation factors.
 
-**14 · PyTorch fluency (10 h · deepen · local)**
+**13 · PyTorch fluency (10 h · deepen · local)**
 1. From your engine to `torch`: tensors, autograd, `no_grad`/`detach`, in-place pitfalls, devices (CPU, Apple MPS, CUDA).
 2. `nn.Module`, `state_dict`, hooks, custom layers and initialization.
 3. Data: `Dataset`/`DataLoader`, collate functions, workers, windowed sequence datasets from Parquet telemetry.
 4. The training loop done right: train/eval modes, clipping, checkpoint and resume, determinism and seeding.
-5. Performance: asynchronous execution and correct timing, mixed precision (bf16/fp16, GradScaler), `torch.compile`, the profiler.
+5. Performance and resource accounting: memory for parameters, gradients, optimizer state and activations; FLOPs ≈ 6·N·D; asynchronous execution and correct timing; mixed precision (bf16/fp16, GradScaler); `torch.compile`; the profiler.
 6. Experiment tracking: MLflow locally, configs, reproducible runs.
 
 - *Build:* **Thermal surrogate in PyTorch**:
-  1. Port your Module 12 surrogate.
+  1. Port your Module 11 surrogate.
   2. Prove numerical agreement with your engine from identical weights.
   3. Train it fast with AMP and tracking.
 
-**15 · Time series and probabilistic forecasting (22 h · deepen · in step with DSCI 574)**
+**14 · Time series and probabilistic forecasting (22 h · deepen · in step with DSCI 574)**
 1. Anatomy: trend, seasonality, autocorrelation, stationarity, STL; data-center load patterns.
 2. Baselines and exponential smoothing: naive, seasonal-naive, ETS from scratch.
 3. ARIMA and state space: AR by least squares, SARIMA in statsmodels, the Kalman filter for local-level models.
 4. Backtesting done right: rolling origin, horizon-wise metrics, MASE, leakage traps, hierarchical reconciliation (campus → hall → rack).
 5. ML forecasters: GBM with lags, direct vs recursive multi-step, global models, exogenous *forecasts* not actuals.
-6. Deep forecasters: MLP/N-BEATS-style, DeepAR-style RNNs, temporal convolutions, patching; when deep learning wins and when it doesn't (M4/M5 evidence).
+6. Deep forecasters: MLP/N-BEATS-style models, then a first sequence model: an RNN as a nonlinear state-space model (a learnable cousin of your Kalman filter) and dilated causal convolutions; when deep learning wins and when it doesn't (M4/M5 evidence). Module 23 revisits sequence models in depth.
 7. Probabilistic forecasting: quantile regression, pinball loss, CRPS, conformal intervals, interval calibration.
 8. Foundation models and forecasting for decisions: Chronos/TimesFM zero-shot vs tuned baselines (with a pretraining-leakage check); grid carbon-intensity and price forecasts for load shifting.
 
 - *From scratch → library:* ETS, AR, Kalman local-level, a quantile-GBM objective and split conformal, compared with statsforecast, statsmodels, LightGBM and neuralforecast (local).
 - *Build:* **Grid Desk**: probabilistic day-ahead forecasts of IT load, cooling load and grid carbon intensity (public EIA-930 data), with a backtest and calibration report.
 
-**16 · Optimization and operations research (14 h · teach fully)**
+**15 · Optimization and operations research (14 h · teach fully)**
 1. Modeling with LP: variables, constraints and objectives for energy and capacity problems; geometry and the simplex idea.
 2. Duality and shadow prices: what a binding constraint is worth.
 3. Integer programming: MILP modeling tricks (on/off, big-M, minimum run times), branch-and-bound intuition, chiller staging.
@@ -500,6 +572,14 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 - *From scratch → library:* a dense simplex for small LPs vs HiGHS, `scipy.optimize.linprog` and OR-Tools.
 - *Build:* **Plant scheduler**: day-ahead chiller staging plus thermal-storage/battery dispatch as a MILP under time-varying prices and carbon, driven by your forecasts (simulator arc, step 5).
+
+**16 · SVMs, kernels and k-NN (5 h · accelerate)**: test-out first
+1. k-NN and the curse of dimensionality; KD-trees and approximate nearest neighbours (vector search preview).
+2. Max-margin classification: hinge loss, the dual via KKT, support vectors.
+3. Kernels: the kernel trick, RBF intuition, kernel ridge regression from scratch, and the bridge to Gaussian processes.
+
+- *Build:* kernel ridge vs GBM on chiller curves; k-NN distance as an anomaly score.
+- *Placement:* this sits directly before Module 17 so kernels flow straight into Gaussian processes.
 
 **17 · Bayesian methods and uncertainty quantification (10 h · accelerate · in step with DSCI 553)**: test-out first
 1. The Bayesian workflow in Python (PyMC/NumPyro): priors, posterior predictive checks, diagnostics (Python twin of 553).
@@ -536,11 +616,11 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 
 **20 · Building with LLMs (20 h · teach fully)**
 1. LLMs as components: tokens, context, sampling, cost, latency; the Messages API, streaming and prompt caching (Python and TypeScript).
-2. Structured outputs and tool use: schemas, validation, retries; extracting structured fault records from maintenance logs.
-3. Embeddings and vector search: chunking, ANN indexes (HNSW intuition), hybrid BM25 + vector search, reranking; a vector index from scratch, then a library.
-4. RAG: retrieval metrics (recall@k, MRR), grounding and citations, failure analysis; RAG over equipment manuals and SOPs.
-5. Agents and MCP: the agent loop, tools, planning, memory, error recovery; when a workflow beats an agent; an MCP server over facility telemetry.
-6. Evaluating LLM systems: eval-driven development, golden sets, LLM-as-judge calibrated to your own labels, error analysis, regression tests, tracing, cost tracking.
+2. Evals first: error analysis on traces, a 20–50-task golden set, binary judgments, LLM-as-judge validated against your own labels, regression tests, tracing, cost tracking. Everything after this lesson is built eval-first.
+3. Structured outputs and tool use: schemas, validation, retries; extracting structured fault records from maintenance logs.
+4. Embeddings and vector search: chunking, ANN indexes (HNSW intuition), hybrid BM25 + vector search, reranking; a vector index from scratch, then a library.
+5. RAG: retrieval metrics (recall@k, MRR), grounding and citations, failure analysis; RAG over equipment manuals and SOPs.
+6. Agents and MCP: the agent loop, tools, planning, memory, error recovery; when a workflow beats an agent; an MCP server over facility telemetry, built to the current (2026-07-28) stateless MCP spec.
 7. Safety for operations: prompt injection through retrieved documents and logs, guardrails, human approval for actions on physical plant.
 
 - *Build:* **Ops Copilot v0**, a RAG + tools assistant over manuals and live simulator telemetry, with a 50-question eval harness.
@@ -556,7 +636,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 - *Build:* the design doc for Capstone 1.
 
 **22 · MLOps and cloud ML (18 h · deepen)**
-1. Experiment tracking, model registry and lineage (MLflow).
+1. MLOps maturity as the scaffold (level 0 manual → level 1 continuous training → level 2 CI/CD); experiment tracking, model registry and lineage (MLflow).
 2. Data versioning and orchestration concepts (DVC-style versioning; Prefect/Airflow/Dagster patterns); data validation in pipelines.
 3. Containers for ML: Docker multi-stage builds, slim images, reproducibility.
 4. CI/CD for ML: GitHub Actions, the ML testing pyramid, model-quality gates, shadow and canary releases.
@@ -600,8 +680,9 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 2. Pretraining: objectives, data mixtures, deduplication and filtering, compute accounting (≈6ND FLOPs).
 3. Scaling laws: Kaplan vs Chinchilla; fit a scaling law to your own small runs.
 4. Fine-tuning: full vs parameter-efficient; LoRA derived and implemented on your model; QLoRA concepts.
-5. Alignment: reward models, RLHF with PPO and a KL penalty, DPO derived from Bradley–Terry, AI-feedback methods, evaluating tuned models.
-6. Practical fine-tuning with Hugging Face (local/Colab).
+5. Policy-gradient primer: the bandit framing, REINFORCE with a baseline, and a KL penalty to a reference policy. RLHF and DPO need this before Module 28 covers RL properly.
+6. Alignment: reward models, RLHF with PPO and a KL penalty, DPO derived from Bradley–Terry, AI-feedback methods, evaluating tuned models.
+7. Practical fine-tuning with Hugging Face (local/Colab).
 
 - *Build:* LoRA fine-tune of a small open model for structured fault-report extraction, compared with prompting a frontier model on quality and cost.
 
@@ -632,7 +713,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 3. Model-free learning: Monte Carlo, TD, SARSA, Q-learning from scratch, learning live in the browser.
 4. Function approximation and DQN: replay, target networks, the deadly triad.
 5. Policy gradients: REINFORCE, baselines, actor–critic, GAE.
-6. PPO: the clipped objective and the implementation details that matter; training on the simulator (local, Gymnasium).
+6. PPO: the clipped objective and the implementation details that matter; training on the simulator (local, Gymnasium; in the browser a lightweight environment class stands in, since Gymnasium does not run in Pyodide). Revisit RL post-training of LLMs as an application.
 7. RL in the physical world: reward design, constraints and safety layers, sim-to-real, offline RL, fair evaluation; lessons from the DeepMind, Trane and Meta cooling work.
 
 - *Build:* a PPO agent on the simulator, compared fairly with your PI controller.
@@ -645,6 +726,7 @@ Sections 3 and 9 describe the lesson anatomy and file format.
 5. Digital twins: definitions and calibration, surrogates inside MPC; RL for control vs MPC with safety layers.
 
 - *Build:* **Plant Control Room**: economic MPC for the simulator, compared with PI and PPO (simulator arc, steps 6–7).
+- *Runs mostly in the browser:* CVXPY (with Clarabel), CasADi, python-control and PySINDy all loaded in Pyodide during research. PINNs and IPOPT-based nonlinear MPC run locally.
 
 **30 · Scaling and performance (8 h · teach fully)**
 1. Profiling and bottlenecks: data loading vs compute, GPU utilization, file formats and throughput math.
@@ -755,7 +837,7 @@ In the app the same logic runs live, so the plan re-flows whenever you:
 
 Milestone countdowns show the target date and your projected date side by side.
 
-**Week 0 (Nov 12–15)** is for approving this plan while I build the app shell, runners and the first modules. Day-to-day study starts Monday Nov 16 with Induction and Module 1.
+**Start date.** The schedule starts Monday Nov 16. Study begins as soon as the first app release ships (shell, code runners, Induction and Module 1); the schedule then re-flows from your actual start date. The buffer absorbs a one-week slip, at a cost of about 11 hours.
 
 Default time budget (configurable):
 
@@ -777,17 +859,17 @@ Totals: **609 h available**, **547 h planned** (496 h of modules and projects pl
 | 4 | Dec 7-Dec 13 | B 3 (513, 522, 561, 573) | 11.2 | Calculus and continuous optimization (5.9, finish); Probability and statistics (5.4, start) |
 | 5 | Dec 14-Dec 20 | B 3 week 5 / end of Semester 1 (Dec 21) | 17.5 | Probability and statistics (5.6, finish); Information theory (4.4); Linear and logistic regression from scratch (7.5, start) |
 | 6 | Dec 21-Dec 27 | B 3 week 5 / end of Semester 1 (Dec 21); Winter break | 13.0 | Linear and logistic regression from scratch (7.9, finish); Model evaluation (5.1, start) |
-| 7 | Dec 28-Jan 3 | Winter break | 16.0 | Model evaluation (3.7, finish); Trees, random forests and gradient boosting (12.3, start) |
-| 8 | Jan 4-Jan 10 | Winter break; B 4 (524, 541, 562, 572) | 13.0 | Trees, random forests and gradient boosting (3.1, finish); Feature engineering and data pipelines (9.9, start) |
-| 9 | Jan 11-Jan 17 | B 4 (524, 541, 562, 572) | 11.2 | Feature engineering and data pipelines (1.1, finish); SVMs, kernels and k-NN (5.5); Unsupervised learning (4.6, start) |
-| 10 | Jan 18-Jan 24 | B 4 (524, 541, 562, 572) | 11.2 | Unsupervised learning (7.5, finish); Milestone project 1: Energy Desk forecaster (3.8, start) |
-| 11 | Jan 25-Jan 31 | B 4 (524, 541, 562, 572) | 11.2 | Milestone project 1: Energy Desk forecaster (9.4, finish); Autograd engine from scratch (1.8, start) - **M1 Foundations and classical ML** |
-| 12 | Feb 1-Feb 7 | B 4 week 5 | 17.5 | Autograd engine from scratch (13.6, finish); Training deep networks (3.9, start) |
-| 13 | Feb 8-Feb 14 | Semester 2 midterm break | 20.0 | Training deep networks (10.4, finish); PyTorch fluency (9.6, start) |
-| 14 | Feb 15-Feb 21 | B 5 (525, 553, 563, 574) | 12.5 | PyTorch fluency (1.4, finish); Time series and probabilistic forecasting (11.1, start) |
-| 15 | Feb 22-Feb 28 | B 5 (525, 553, 563, 574) | 11.2 | Time series and probabilistic forecasting (11.2, cont.) |
-| 16 | Mar 1-Mar 7 | B 5 (525, 553, 563, 574) | 11.2 | Time series and probabilistic forecasting (1.8, finish); Optimization and operations research (9.4, start) |
-| 17 | Mar 8-Mar 14 | B 5 (525, 553, 563, 574) | 11.2 | Optimization and operations research (6, finish); Bayesian methods and uncertainty quantification (5.3, start) |
+| 7 | Dec 28-Jan 3 | Winter break | 16.0 | Model evaluation (3.7, finish); Feature engineering and data pipelines (11); Trees, random forests and gradient boosting (1.3, start) |
+| 8 | Jan 4-Jan 10 | Winter break; B 4 (524, 541, 562, 572) | 13.0 | Trees, random forests and gradient boosting (13, cont.) |
+| 9 | Jan 11-Jan 17 | B 4 (524, 541, 562, 572) | 11.2 | Trees, random forests and gradient boosting (1.1, finish); Unsupervised learning (10.1, start) |
+| 10 | Jan 18-Jan 24 | B 4 (524, 541, 562, 572) | 11.2 | Unsupervised learning (2, finish); Milestone project 1: Energy Desk forecaster (9.3, start) |
+| 11 | Jan 25-Jan 31 | B 4 (524, 541, 562, 572) | 11.2 | Milestone project 1: Energy Desk forecaster (3.9, finish); Autograd engine from scratch (7.3, start) - **M1 Foundations and classical ML** |
+| 12 | Feb 1-Feb 7 | B 4 week 5 | 17.5 | Autograd engine from scratch (8.1, finish); Training deep networks (9.4, start) |
+| 13 | Feb 8-Feb 14 | Semester 2 midterm break | 20.0 | Training deep networks (4.9, finish); PyTorch fluency (11); Time series and probabilistic forecasting (4.1, start) |
+| 14 | Feb 15-Feb 21 | B 5 (525, 553, 563, 574) | 12.5 | Time series and probabilistic forecasting (12.5, cont.) |
+| 15 | Feb 22-Feb 28 | B 5 (525, 553, 563, 574) | 11.2 | Time series and probabilistic forecasting (7.6, finish); Optimization and operations research (3.7, start) |
+| 16 | Mar 1-Mar 7 | B 5 (525, 553, 563, 574) | 11.2 | Optimization and operations research (11.2, cont.) |
+| 17 | Mar 8-Mar 14 | B 5 (525, 553, 563, 574) | 11.2 | Optimization and operations research (0.5, finish); SVMs, kernels and k-NN (5.5); Bayesian methods and uncertainty quantification (5.3, start) |
 | 18 | Mar 15-Mar 21 | B 5 week 5 | 17.5 | Bayesian methods and uncertainty quantification (5.7, finish); Milestone project 2: Capacity and power planner (11.8, start) |
 | 19 | Mar 22-Mar 28 | B 6 (532, 542, 554, 575) | 12.5 | Milestone project 2: Capacity and power planner (1.4, finish); Anomaly detection and fault diagnosis (11.1, start) - **M2 Forecasting, optimization and deep-learning core** |
 | 20 | Mar 29-Apr 4 | B 6 (532, 542, 554, 575) | 12.5 | Anomaly detection and fault diagnosis (6.5, finish); Causal inference (6, start) |
@@ -843,13 +925,13 @@ So Hyperscale does four things:
 | 5 Information theory | none | teach fully | n/a |
 | 6 Linear and logistic regression | 561, 573 (B3), 571 (B2) | deepen | **Right after 561/573** (B3 week 5 and winter break): Hyperscale derives and implements what 561 interprets in R |
 | 7 Model evaluation | 571, 573 | accelerate | Right after 573 covers metrics; Hyperscale adds calibration, leakage taxonomy, time-series CV, model comparison tests |
-| 8 Trees and boosting | 571, 573 (applied) | deepen | Boosting internals (XGBoost/LightGBM) absent in MDS |
-| 9 Feature engineering and pipelines | 571, 573, 522 | deepen | Adds point-in-time correctness, production pipelines, data validation |
-| 10 SVMs, kernels, k-NN | 571 (applied) | accelerate | Kernel math, dual, kernel ridge only |
-| 11 Unsupervised | 563 (B5, later) | deepen | Hyperscale goes first with from-scratch EM/PCA and process-monitoring statistics; 563 reinforces |
-| 12–14 Autograd, training, PyTorch | 572 (B4) | teach fully / deepen | **Overlaps the end of 572**: 572 shows the library, then you build the engine underneath it during B4 week 5 and the February break |
-| 15 Time series | 574 (B5) | deepen | **Concurrent with 574**: adds GBM and deep forecasters, probabilistic forecasting, backtesting at scale |
-| 16 Optimization and OR | 512 (DP only) | teach fully | n/a |
+| 8 Feature engineering and pipelines | 571, 573, 522 | deepen | Adds point-in-time correctness, production pipelines, data validation |
+| 9 Trees and boosting | 571, 573 (applied) | deepen | Boosting internals (XGBoost/LightGBM) absent in MDS |
+| 10 Unsupervised | 563 (B5, later) | deepen | Hyperscale goes first with from-scratch EM/PCA and process-monitoring statistics; 563 reinforces |
+| 11–13 Autograd, training, PyTorch | 572 (B4) | teach fully / deepen | **Overlaps the end of 572**: 572 shows the library, then you build the engine underneath it during B4 week 5 and the February break |
+| 14 Time series | 574 (B5) | deepen | **Concurrent with 574** (starts a week earlier, in the February break): adds GBM and deep forecasters, probabilistic forecasting, backtesting at scale |
+| 15 Optimization and OR | 512 (DP only) | teach fully | n/a |
+| 16 SVMs, kernels, k-NN | 571 (applied, B2) | accelerate | Kernel math, dual, kernel ridge only; placed directly before 17 so kernels flow into Gaussian processes |
 | 17 Bayesian and UQ | 553 (B5, R/Stan) | accelerate | **Concurrent with 553**: Python equivalents plus GPs, conformal prediction, deep-learning UQ |
 | 18 Anomaly detection and FDD | 574 (change points only) | teach fully | Right after 574 |
 | 19 Causal inference | 554 (B6, R) | deepen | **Concurrent with 554**: adds DAGs, quasi-experiments, DoWhy/EconML, energy M&V |
@@ -926,6 +1008,21 @@ Everything is cached after first use. The lesson player pre-warms the worker as 
   - `grade(exerciseId, files)`, which returns structured results.
 
   Learner code runs as a module, never via `exec` on the UI thread. Tracebacks are re-mapped to the learner's line numbers.
+- **In-browser performance budget**, measured in research: Pyodide NumPy matmul runs at about 0.4–0.6 GFLOP/s, a small NumPy MLP step takes about 16 ms, and a scalar-autograd op about 5–6 µs. So:
+  - interactive training steps stay under about 50 ms;
+  - in-browser training runs stay under about 60 s;
+  - in-browser models stay at or below about 10⁵ parameters (a character-level transformer with d_model ≤ 64, context ≤ 32 and ≤ 2 layers is feasible);
+  - demos ship pre-trained checkpoints so samples look good.
+
+  Anything larger goes to local labs.
+- **What runs where.**
+  - *In the browser:* NumPy, SciPy, pandas, scikit-learn, statsmodels, LightGBM, XGBoost, Polars, DuckDB, SymPy and pytest from the Pyodide distribution. CVXPY (with Clarabel), CasADi, python-control, filterpy and PySINDy also loaded in testing (some via micropip).
+  - *Locally only:* PyTorch, JAX, numba-based libraries (statsforecast, PyOD) and Gymnasium, which do not run in Pyodide.
+  - *Bundled:* tiktoken's BPE vocabulary files, since the in-browser download failed.
+- **Version skew.** The browser lags PyPI: Pyodide 314.0.7 ships NumPy 2.4.6, scikit-learn 1.8.0, Polars 1.33.1, DuckDB 1.5.1 and XGBoost 2.1.4, while PyPI had NumPy 2.5.4, scikit-learn 1.9.1, Polars 2.1, DuckDB 2.0 and XGBoost 3.4 on Nov 12. So:
+  - in-browser exercises target the Pyodide versions;
+  - `python/constraints-pyodide.txt` pins the local test environment to the same versions, so `tests.py` behaves identically in both places;
+  - local labs that need newer libraries use their own environments and note API differences, especially for Polars 2 and DuckDB 2.
 - **Timeouts.** Default 10 s, configurable per exercise. On timeout the worker is terminated and respawned (about 2 s warm restart from cache). This catches infinite loops without needing cross-origin isolation, which GitHub Pages cannot provide.
 - **Graders run real pytest.** Each exercise ships a `tests.py`. A small pytest plugin (`hsgrade.plugin`) collects every test's outcome, assertion message, duration and the hint tag it maps to, and returns them as JSON. The *same* `tests.py` runs locally with `uv run pytest`, so the browser and your laptop agree.
   - **Verified on Nov 12 in Chrome on this Mac**, with Pyodide 314.0.7 loaded from the CDN:
@@ -998,41 +1095,44 @@ Export writes one JSON file with `schemaVersion`; import runs migrations, previe
 
 ### 8.6 Learning engine
 
-- **Concept graph.** Every lesson, exercise and card is tagged with concepts, e.g. `broadcasting`, `ridge-closed-form`, `leakage-temporal`, `kv-cache-memory`. Concepts have prerequisites, and modules unlock from the graph.
-- **Mastery model.** A lightweight IRT/Elo-style estimate per concept:
-  - each item has a difficulty, and each attempt updates the concept ability;
-  - first-try correctness counts most, and hints and reveals reduce credit;
-  - an idle concept decays toward uncertainty until a successful review restores it.
+Section 3 is the pedagogical spec; this is how the app implements it.
 
-  A concept's mastery percentage is the predicted probability of solving a standard-difficulty item. The model is simple, explainable and unit-tested.
-- **Mastery gates.** A module is mastered when its **checkpoint** scores at least 80% overall, every core concept is at least 70%, and the checkpoint's code tasks pass all hidden tests. Failing shows exactly which concepts to repair and generates targeted practice; you can retake after 24 hours. Modules MDS already covers well start with an optional **test-out**: passing the checkpoint up front skips the introductory lessons and assigns only the extension lessons.
-- **Spaced repetition.** Lessons define review cards:
-  - concept;
-  - equation (cloze on KaTeX);
-  - gotcha;
-  - predict-the-output (code card);
-  - spot-the-bug;
-  - derivation step.
+- **Concept graph.** Every lesson, exercise and card is tagged with skills, for example `broadcasting`, `ridge-closed-form`, `leakage-temporal`, `kv-cache-memory`. Skills have prerequisites; modules unlock from the graph.
+- **Per-skill mastery.** Bayesian knowledge tracing per skill (P(known) ≥ 0.95 counts as mastered; `corbett1995-knowledge-tracing`). It updates from first attempts, discounted for hint use, and FSRS retrievability of the skill's cards serves as a second signal. Unit-tested, explainable on the Progress screen.
+- **Gates.** The section 3.4 rules:
+  - an 85% unhinted checkpoint, plus 100% on critical items, a transfer item and an explain item;
+  - delayed confirmation at 80% after 3–7 days;
+  - a 24-hour retake on new items;
+  - provisional advance after two failed attempts.
 
-  Cards enter the deck when the lesson is completed. Failed exercises auto-add the matching misconception card. FSRS desired retention defaults to 0.90, adjustable in settings. Daily review time is capped as a share of the session so reviews never crowd out new learning.
-- **Daily session planner.** One tap builds today's session from:
-  - minutes available, taken from the calendar and time budget, with a "today I have…" override;
+  Checkpoints draw from item pools with parameterized variants so retakes are fresh.
+- **FSRS.** `ts-fsrs` v6 with the section 3.5 settings. Both the card state and the review-log entry are persisted, since `review()` does not mutate its input. Weights are re-optimized monthly from your log. *Build-time check:* confirm the v6 package bundles for the browser (its Node ≥ 24 engine note concerns the default scheduler setup); fall back to v5 if needed.
+- **Daily session planner.** Inputs:
+  - minutes available (calendar + time budget, with a "today I have…" override);
   - due cards;
-  - the next scheduled lesson steps;
-  - weak concepts;
-  - the challenge pool.
+  - scheduled lesson steps;
+  - weak skills;
+  - pending delayed confirmations and re-derive drills;
+  - the challenge pool;
+  - device type.
 
-  Default split: warm-up reviews about 15% (capped at 15 min), new lesson about 50%, interleaved practice on weak or older concepts about 20%, one hard challenge about 15%. On a phone it prefers reviews, concept checks and predict-the-output items over long code tasks.
-- **Pacing.** `planning/build_schedule.py` (ported to TypeScript) re-flows the week-by-week plan from your time budget and actual pace. The dashboard shows ahead or behind in hours, projected milestone dates against target dates, and countdowns.
-- **Weekly review.** Every Sunday the app produces a short report with no grading:
-  - weakest concepts and slipping cards;
-  - lowest checkpoint items;
-  - time spent against plan;
+  It outputs the section 3.2 structure, choosing lite-day or weekend-lab variants automatically. On a phone it favours reviews, Parsons problems, predictions and concept checks.
+- **Pacing.** `planning/build_schedule.py`, ported to TypeScript, re-flows the week-by-week plan from your time budget and actual pace. The dashboard shows ahead or behind in hours, projected vs target milestone dates, and a gentle behind-plan indicator rather than streak pressure.
+- **Weekly review.** Every Sunday the app produces:
+  - weakest skills and slipping cards;
+  - calibration curve (confidence vs accuracy);
+  - delayed-confirmation results;
+  - hint-use hotspots;
+  - time against plan;
+  - an auto-built 20-minute weakness drill;
   - next week's focus.
+- **Instrumentation.** Every attempt logs item, skills, latency, hint tier, per-step correctness, confidence, and the FSRS entry. Items with high error *and* high confidence are flagged as either misleading items or real misconceptions. Gate thresholds are reviewed against delayed-confirmation pass rates.
 
 ### 8.7 Facility narrative and simulator
 
-- **Setting (fictional).** You join Basalt Cloud as a new ML engineer at **Kestrel Ridge**, a hyperscale campus on a semi-arid interior plateau (hot dry summers, cold winters, many free-cooling hours). Weather comes from public Environment and Climate Change Canada data for a comparable interior BC climate (Open Government Licence). The company, site and staff are invented; names are editable in `content/facility/`.
+- **Setting (fictional).** You join Basalt Cloud as a new ML engineer at **Kestrel Ridge**, a hyperscale campus on a semi-arid inland Pacific Northwest plateau. The climate brings hot, dry summers with low wet-bulb, cold winters (tower freeze protection), and many free-cooling hours.
+  - **Weather:** a typical-year file for a comparable real location (for example Kamloops, BC, or Moses Lake, WA) plus the real hourly record of the late-June 2021 Pacific Northwest heat dome for the heat-wave incident. Both come from public ECCC/NOAA/NSRDB data, and licenses are confirmed before any data ships with the app.
+  - The company, site and staff are invented; names are editable in `content/facility/`.
 - **Map.** A clean blueprint-style SVG campus:
   - Ops Console;
   - Sensor Network;
@@ -1071,7 +1171,28 @@ Export writes one JSON file with `schemaVersion`; import runs migrations, previe
     - a later liquid-cooled AI pod with CDU and cold plates.
   - **Outputs.** PUE, WUE, energy, cost, carbon, and ASHRAE inlet-envelope violations.
   - **Inputs.** Fault injection and scenario files (heat wave, chiller trip, sensor drift, fouling, stuck valve, demand response).
-  - Full equations and parameters come from `research/domain-datacenter.md`.
+  - **Reference hall** (from `research/domain-datacenter.md`, which has the full equations, parameter table, control loops, failure modes and sensor list):
+    - 4.8 MW air-cooled hall in 4 contained pods of 120 racks;
+    - 16 fan-wall CRAHs;
+    - 3 variable-speed chillers in N+1 plus a plate-heat-exchanger economizer and hybrid wet/dry towers;
+    - 2N UPS;
+    - a later 1 MW liquid-cooled AI pod (130 kW racks on a CDU).
+  - **States.** About 31:
+    - cold-aisle, hot-aisle and server-mass temperatures per pod, plus a coil lag per pod;
+    - structure temperature and humidity;
+    - chilled-water headers and a storage tank;
+    - chiller loading, tower basin and UPS state of charge;
+    - the AI-pod liquid loop;
+    - sensor bias/drift states, kept apart from the physics so sensor faults never change the plant.
+  - **Fidelity levels.** Level 1 (about 21 states) for hand tuning, Level 2 for controller and FDD work, Level 3 for the AI pod and power chain.
+  - **Timing.** Physics runs at 1–5 s steps, controllers every 10–60 s, logs every 60 s, plus 5-minute ML snapshots.
+  - **Baseline controls.** Ten control loops form the "BMS v1" you later beat: supply-air PI, containment ΔP, pumping, chilled-water reset, chiller staging, condenser water, economizer mode, humidity, liquid loop, and a supervisory safety cap.
+  - **Validation tests** include:
+    - steady-state energy closure within 1%;
+    - the design point;
+    - fan-affinity checks;
+    - replicating a published cooling-outage temperature-rise case.
+  - **Calibration.** Parameters flagged as estimates in the research notes get calibrated against library sources (ASHRAE guidelines, EnergyPlus chiller and tower curves) before the simulator ships.
   - **Recurring arc.**
     1. Tune setpoints by hand (Induction).
     2. Write a PI controller plus economizer logic (Calculus & optimization).
@@ -1119,6 +1240,7 @@ Today (one-tap session) · Learn (skill tree → module → lesson player) · Pr
   - **Review my code:** rubric-based feedback that points at lines and asks questions.
   - **Debug with me:** reads the grader output and asks what you expected.
   - **Derivation coach:** checks each step you write.
+- **Socratic-only mode** switches on automatically during from-scratch stages (section 3.8): questions and pointers only, no code.
 - **Guardrails.** The tutor never receives the reference solution, so it cannot leak it. Its instructions forbid writing full solutions until you have revealed one yourself. It sees the lesson summary, the exercise prompt, your code, the test results, how many hints you used, and your weak concepts.
 - **Cost display.** A per-session token estimate.
 - **Without a key.** Everything else in the app works with no key.

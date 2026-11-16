@@ -1,5 +1,8 @@
 """Merge research/sources-*.json into research/sources.json.
 
+`modules` holds the brief's topic numbers; `moduleIds` maps them to the stable module ids in
+planning/curriculum.json (topic 24 maps to both optimization-or and control-piml).
+
 Deduplicates by DOI, then by normalized URL, then by id. When records collide,
 the verified record wins, module lists are unioned, notes are kept, and the
 losing ids are stored as `aliases` so lessons may cite either id.
@@ -135,6 +138,16 @@ def main() -> int:
         for a in r.get("aliases", []):
             if a in all_ids:
                 problems.append(f"alias {a} of {r['id']} is also a primary id")
+
+    # Map brief topic numbers (used by the research streams) to stable module ids from the
+    # study-order curriculum, so citations survive any future reordering or renumbering.
+    cur = json.loads((HERE.parent / "planning" / "curriculum.json").read_text())
+    brief_to_ids: dict[int, list[str]] = {0: ["induction"]}
+    for m in cur["modules"]:
+        if m.get("brief") is not None:
+            brief_to_ids.setdefault(int(m["brief"]), []).append(m["id"])
+    for r in out:
+        r["moduleIds"] = sorted({i for b in r["modules"] for i in brief_to_ids.get(b, [])})
 
     (HERE / "sources.json").write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
 

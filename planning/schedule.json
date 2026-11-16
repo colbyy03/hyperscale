@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12",
+  "generated": "2026-11-16",
   "capacityHours": 609.0,
   "neededHours": 546.7,
   "bufferHours": 62.3,
@@ -171,9 +171,15 @@
           "status": "finish"
         },
         {
+          "id": "feature-pipelines",
+          "title": "Feature engineering and data pipelines",
+          "hours": 11.0,
+          "status": "start+finish"
+        },
+        {
           "id": "trees-boosting",
           "title": "Trees, random forests and gradient boosting",
-          "hours": 12.3,
+          "hours": 1.3,
           "status": "start"
         }
       ],
@@ -192,14 +198,8 @@
         {
           "id": "trees-boosting",
           "title": "Trees, random forests and gradient boosting",
-          "hours": 3.1,
-          "status": "finish"
-        },
-        {
-          "id": "feature-pipelines",
-          "title": "Feature engineering and data pipelines",
-          "hours": 9.9,
-          "status": "start"
+          "hours": 13.0,
+          "status": "continue"
         }
       ],
       "spareHours": 0.0
@@ -214,21 +214,15 @@
       ],
       "allocations": [
         {
-          "id": "feature-pipelines",
-          "title": "Feature engineering and data pipelines",
+          "id": "trees-boosting",
+          "title": "Trees, random forests and gradient boosting",
           "hours": 1.1,
           "status": "finish"
         },
         {
-          "id": "kernels-knn",
-          "title": "SVMs, kernels and k-NN",
-          "hours": 5.5,
-          "status": "start+finish"
-        },
-        {
           "id": "unsupervised",
           "title": "Unsupervised learning",
-          "hours": 4.6,
+          "hours": 10.1,
           "status": "start"
         }
       ],
@@ -246,13 +240,13 @@
         {
           "id": "unsupervised",
           "title": "Unsupervised learning",
-          "hours": 7.5,
+          "hours": 2.0,
           "status": "finish"
         },
         {
           "id": "project-1",
           "title": "Milestone project 1: Energy Desk forecaster",
-          "hours": 3.8,
+          "hours": 9.3,
           "status": "start"
         }
       ],
@@ -270,13 +264,13 @@
         {
           "id": "project-1",
           "title": "Milestone project 1: Energy Desk forecaster",
-          "hours": 9.4,
+          "hours": 3.9,
           "status": "finish"
         },
         {
           "id": "autograd",
           "title": "Autograd engine from scratch",
-          "hours": 1.8,
+          "hours": 7.3,
           "status": "start"
         }
       ],
@@ -294,13 +288,13 @@
         {
           "id": "autograd",
           "title": "Autograd engine from scratch",
-          "hours": 13.6,
+          "hours": 8.1,
           "status": "finish"
         },
         {
           "id": "training-deep-nets",
           "title": "Training deep networks",
-          "hours": 3.9,
+          "hours": 9.4,
           "status": "start"
         }
       ],
@@ -318,13 +312,19 @@
         {
           "id": "training-deep-nets",
           "title": "Training deep networks",
-          "hours": 10.4,
+          "hours": 4.9,
           "status": "finish"
         },
         {
           "id": "pytorch",
           "title": "PyTorch fluency",
-          "hours": 9.6,
+          "hours": 11.0,
+          "status": "start+finish"
+        },
+        {
+          "id": "time-series",
+          "title": "Time series and probabilistic forecasting",
+          "hours": 4.1,
           "status": "start"
         }
       ],
@@ -340,16 +340,10 @@
       ],
       "allocations": [
         {
-          "id": "pytorch",
-          "title": "PyTorch fluency",
-          "hours": 1.4,
-          "status": "finish"
-        },
-        {
           "id": "time-series",
           "title": "Time series and probabilistic forecasting",
-          "hours": 11.1,
-          "status": "start"
+          "hours": 12.5,
+          "status": "continue"
         }
       ],
       "spareHours": 0.0
@@ -366,8 +360,14 @@
         {
           "id": "time-series",
           "title": "Time series and probabilistic forecasting",
-          "hours": 11.2,
-          "status": "continue"
+          "hours": 7.6,
+          "status": "finish"
+        },
+        {
+          "id": "optimization-or",
+          "title": "Optimization and operations research",
+          "hours": 3.7,
+          "status": "start"
         }
       ],
       "spareHours": 0.0
@@ -382,16 +382,10 @@
       ],
       "allocations": [
         {
-          "id": "time-series",
-          "title": "Time series and probabilistic forecasting",
-          "hours": 1.8,
-          "status": "finish"
-        },
-        {
           "id": "optimization-or",
           "title": "Optimization and operations research",
-          "hours": 9.4,
-          "status": "start"
+          "hours": 11.2,
+          "status": "continue"
         }
       ],
       "spareHours": 0.0
@@ -408,8 +402,14 @@
         {
           "id": "optimization-or",
           "title": "Optimization and operations research",
-          "hours": 6.0,
+          "hours": 0.5,
           "status": "finish"
+        },
+        {
+          "id": "kernels-knn",
+          "title": "SVMs, kernels and k-NN",
+          "hours": 5.5,
+          "status": "start+finish"
         },
         {
           "id": "bayesian-uq",
@@ -1073,63 +1073,63 @@
       "end": "2026-12-29",
       "endWeek": 7
     },
+    "feature-pipelines": {
+      "start": "2026-12-28",
+      "startWeek": 7,
+      "end": "2027-01-02",
+      "endWeek": 7
+    },
     "trees-boosting": {
       "start": "2026-12-28",
       "startWeek": 7,
-      "end": "2027-01-05",
-      "endWeek": 8
-    },
-    "feature-pipelines": {
-      "start": "2027-01-04",
-      "startWeek": 8,
       "end": "2027-01-11",
-      "endWeek": 9
-    },
-    "kernels-knn": {
-      "start": "2027-01-11",
-      "startWeek": 9,
-      "end": "2027-01-14",
       "endWeek": 9
     },
     "unsupervised": {
       "start": "2027-01-11",
       "startWeek": 9,
-      "end": "2027-01-22",
+      "end": "2027-01-18",
       "endWeek": 10
     },
     "project-1": {
       "start": "2027-01-18",
       "startWeek": 10,
-      "end": "2027-01-30",
+      "end": "2027-01-26",
       "endWeek": 11
     },
     "autograd": {
       "start": "2027-01-25",
       "startWeek": 11,
-      "end": "2027-02-05",
+      "end": "2027-02-03",
       "endWeek": 12
     },
     "training-deep-nets": {
       "start": "2027-02-01",
       "startWeek": 12,
-      "end": "2027-02-11",
+      "end": "2027-02-09",
       "endWeek": 13
     },
     "pytorch": {
       "start": "2027-02-08",
       "startWeek": 13,
-      "end": "2027-02-15",
-      "endWeek": 14
+      "end": "2027-02-13",
+      "endWeek": 13
     },
     "time-series": {
-      "start": "2027-02-15",
-      "startWeek": 14,
-      "end": "2027-03-01",
-      "endWeek": 16
+      "start": "2027-02-08",
+      "startWeek": 13,
+      "end": "2027-02-26",
+      "endWeek": 15
     },
     "optimization-or": {
-      "start": "2027-03-01",
-      "startWeek": 16,
+      "start": "2027-02-22",
+      "startWeek": 15,
+      "end": "2027-03-08",
+      "endWeek": 17
+    },
+    "kernels-knn": {
+      "start": "2027-03-08",
+      "startWeek": 17,
       "end": "2027-03-11",
       "endWeek": 17
     },
@@ -1253,7 +1253,7 @@
       "id": "M1",
       "after": "project-1",
       "title": "Foundations and classical ML",
-      "date": "2027-01-30",
+      "date": "2027-01-26",
       "week": 11
     },
     {

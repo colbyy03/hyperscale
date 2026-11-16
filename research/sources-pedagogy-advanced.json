@@ -1,0 +1,4645 @@
+[
+  {
+    "id": "karpathy-zero-to-hero",
+    "type": "course",
+    "title": "Neural Networks: Zero to Hero",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2022,
+    "venue": "karpathy.ai (video course)",
+    "doi": null,
+    "url": "https://karpathy.ai/zero-to-hero.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      12,
+      13,
+      14,
+      16,
+      17
+    ],
+    "notes": "Eight-lecture build-everything path (micrograd, makemore 1-5, GPT, GPT tokenizer), page marked 'ongoing'. Use as the spine for 12-17 sequencing; page is undated (year = first lecture, not confirmed on page)."
+  },
+  {
+    "id": "karpathy-micrograd",
+    "type": "software",
+    "title": "micrograd: a tiny scalar-valued autograd engine",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2020,
+    "venue": "GitHub",
+    "doi": null,
+    "url": "https://github.com/karpathy/micrograd",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12
+    ],
+    "notes": "Roughly 100-line reverse-mode engine plus a 50-line NN library. Reference shape for the module-12 browser build; learner code must be written independently."
+  },
+  {
+    "id": "karpathy-nanogpt",
+    "type": "software",
+    "title": "nanoGPT",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2022,
+    "venue": "GitHub",
+    "doi": null,
+    "url": "https://github.com/karpathy/nanoGPT",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16
+    ],
+    "notes": "Classic minimal GPT training repo; README now (Nov 2025) marks it deprecated in favour of nanochat. Cite only for history."
+  },
+  {
+    "id": "karpathy-nanochat",
+    "type": "software",
+    "title": "nanochat: The best ChatGPT that $100 can buy",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2025,
+    "venue": "GitHub",
+    "doi": null,
+    "url": "https://github.com/karpathy/nanochat",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16,
+      17,
+      18,
+      29
+    ],
+    "notes": "Single-node full pipeline (BPE tokenizer, pretraining, SFT, RL, CORE/bits-per-byte eval, KV-cache inference, tool use); GPT-2-grade model in about 2-3 h on 8xH100 per its 2026 leaderboard, plus a CPU/MPS toy script. Best local/rented-GPU capstone for 16-18."
+  },
+  {
+    "id": "karpathy-minbpe",
+    "type": "software",
+    "title": "minbpe: minimal byte-level BPE",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2024,
+    "venue": "GitHub",
+    "doi": null,
+    "url": "https://github.com/karpathy/minbpe",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "Minimal byte-level BPE trainer/encoder/decoder used as the tokenizer-lecture exercise. Model for the module-17 tokenizer build and its round-trip tests."
+  },
+  {
+    "id": "karpathy-autoresearch",
+    "type": "software",
+    "title": "autoresearch: AI agents running research on single-GPU nanochat training",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2026,
+    "venue": "GitHub",
+    "doi": null,
+    "url": "https://github.com/karpathy/autoresearch",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      28,
+      29
+    ],
+    "notes": "March 2026 repo where an agent edits training code, runs 5-minute trainings, keeps or discards changes by metric, and repeats; the human edits the agents' Markdown instructions. Concrete example of agentic experiment loops for the AI-native sections."
+  },
+  {
+    "id": "karpathy2019-recipe",
+    "type": "web",
+    "title": "A Recipe for Training Neural Networks",
+    "authors": [
+      "Karpathy, Andrej"
+    ],
+    "year": 2019,
+    "venue": "karpathy.github.io (blog)",
+    "doi": null,
+    "url": "https://karpathy.github.io/2019/04/25/recipe/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      14
+    ],
+    "notes": "Practitioner checklist: know the data, build a skeleton with dumb baselines, overfit, regularize, tune, squeeze. Backbone of the module-13 debugging lesson."
+  },
+  {
+    "id": "fastai-practical-deep-learning",
+    "type": "course",
+    "title": "Practical Deep Learning for Coders (Part 1, 2022; Part 2: Deep Learning Foundations to Stable Diffusion)",
+    "authors": [
+      "Howard, Jeremy"
+    ],
+    "year": 2022,
+    "venue": "fast.ai",
+    "doi": null,
+    "url": "https://course.fast.ai/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      14,
+      15,
+      20
+    ],
+    "notes": "Top-down course: Part 1 (2022, 9 lessons) applications first; Part 2 builds a mini framework (miniai) with callbacks, activation-stat hooks, init (Glorot/LSUV), optimizers, schedulers, then DDPM/DDIM and samplers. Good model for instrumentation and for module 20."
+  },
+  {
+    "id": "stanford-cs231n-2026",
+    "type": "course",
+    "title": "CS231n: Deep Learning for Computer Vision (Spring 2026)",
+    "authors": [
+      "Stanford University"
+    ],
+    "year": 2026,
+    "venue": "Stanford University",
+    "doi": null,
+    "url": "https://cs231n.stanford.edu/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      13,
+      15,
+      20,
+      29
+    ],
+    "notes": "2026 schedule: linear classifiers, optimization, backprop, CNNs, architectures, RNN/LSTM, attention/transformers, detection, video, distributed training, SSL, VAE/GAN/diffusion. A1-A3 cover kNN to diffusion/CLIP; explicit generative-AI policy. Reference sequencing for 13 and 15."
+  },
+  {
+    "id": "stanford-cs224n-2026",
+    "type": "course",
+    "title": "CS224N: Natural Language Processing with Deep Learning (Winter 2026)",
+    "authors": [
+      "Yang, Diyi",
+      "Choi, Yejin"
+    ],
+    "year": 2026,
+    "venue": "Stanford University",
+    "doi": null,
+    "url": "https://web.stanford.edu/class/cs224n/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15,
+      16,
+      17,
+      19
+    ],
+    "notes": "2026 sequence runs word vectors, backprop, RNN LMs, transformers, pretraining (scaling/systems/data), post-training (RLHF/SFT/DPO), prompting+PEFT, agents/tool use/RAG, benchmarking, reasoning, tokenization. Shows evaluation and agents are now core NLP content."
+  },
+  {
+    "id": "stanford-cs336-2026",
+    "type": "course",
+    "title": "CS336: Language Modeling from Scratch (Spring 2026)",
+    "authors": [
+      "Liang, Percy",
+      "Hashimoto, Tatsunori"
+    ],
+    "year": 2026,
+    "venue": "Stanford University",
+    "doi": null,
+    "url": "https://cs336.stanford.edu/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      16,
+      17,
+      18,
+      29
+    ],
+    "notes": "Five assignments: basics (tokenizer, transformer, optimizer), systems (profiling, Triton FlashAttention2, distributed), scaling (fit laws via a training API), data (Common Crawl filtering/dedup), alignment and reasoning RL (optional DPO). Assignments ship as pytest suites wired through an adapters file; the model for local test suites."
+  },
+  {
+    "id": "d2l-2023",
+    "type": "book",
+    "title": "Dive into Deep Learning",
+    "authors": [
+      "Zhang, Aston",
+      "Lipton, Zachary C.",
+      "Li, Mu",
+      "Smola, Alexander J."
+    ],
+    "year": 2023,
+    "venue": "Cambridge University Press / d2l.ai (v1.0.3)",
+    "doi": null,
+    "url": "https://d2l.ai/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      13,
+      14,
+      15,
+      16
+    ],
+    "notes": "Free interactive textbook (v1.0.3 online) with chapters from linear nets through CNNs, RNNs, attention/transformers, optimization and computational performance. Use for parallel readings; authors/year not re-checked on the page this session."
+  },
+  {
+    "id": "prince2023-udl",
+    "type": "book",
+    "title": "Understanding Deep Learning",
+    "authors": [
+      "Prince, Simon J. D."
+    ],
+    "year": 2023,
+    "venue": "MIT Press",
+    "doi": null,
+    "url": "https://udlbook.github.io/udlbook/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      13,
+      15,
+      16,
+      20
+    ],
+    "notes": "Free PDF (updated 9 Feb 2026) with 68 fill-in-the-missing-code Python notebooks, mostly NumPy, so many ideas port to Pyodide. Strong figures-first explanations for optimization, init, VAEs and diffusion."
+  },
+  {
+    "id": "goodfellow2016-deep-learning",
+    "type": "book",
+    "title": "Deep Learning",
+    "authors": [
+      "Goodfellow, Ian",
+      "Bengio, Yoshua",
+      "Courville, Aaron"
+    ],
+    "year": 2016,
+    "venue": "MIT Press",
+    "doi": null,
+    "url": "https://www.deeplearningbook.org/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      13,
+      15,
+      20
+    ],
+    "notes": "Free online classic for math depth (optimization, regularization, sequence models, autoencoders). Reference-level reading for derivations, not a sequencing model for modern LLM topics."
+  },
+  {
+    "id": "cmu-dlsys-2026",
+    "type": "course",
+    "title": "10-414/714 Deep Learning Systems: Algorithms and Implementation (Fall 2026)",
+    "authors": [
+      "Dettmers, Tim",
+      "Chen, Tianqi"
+    ],
+    "year": 2026,
+    "venue": "Carnegie Mellon University",
+    "doi": null,
+    "url": "https://dlsyscourse.org/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      13,
+      14,
+      15,
+      29
+    ],
+    "notes": "Students build the 'needle' framework across HW0-HW4: autodiff, NN library abstractions, normalization/dropout, NDArray CPU/GPU backends, CNNs, RNNs, transformers; mugrade autograder. Best model for growing the module-12 engine into a tensor library."
+  },
+  {
+    "id": "pytorch-tutorials-2026",
+    "type": "web",
+    "title": "PyTorch Tutorials (v2.15)",
+    "authors": [
+      "PyTorch Foundation"
+    ],
+    "year": 2026,
+    "venue": "docs.pytorch.org",
+    "doi": null,
+    "url": "https://docs.pytorch.org/tutorials/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      29
+    ],
+    "notes": "Official tutorials and recipes (site shows build 2.15.0); 'Learn the Basics' path covers tensors, data, models, autograd, optimization, saving. Production reference for module 14."
+  },
+  {
+    "id": "pytorch-autograd-notes",
+    "type": "web",
+    "title": "Autograd mechanics (PyTorch 2.15 documentation)",
+    "authors": [
+      "PyTorch Foundation"
+    ],
+    "year": 2026,
+    "venue": "docs.pytorch.org",
+    "doi": null,
+    "url": "https://docs.pytorch.org/docs/stable/notes/autograd.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      14
+    ],
+    "notes": "Explains how autograd records history, saved tensors, grad modes (no-grad, inference, eval), in-place correctness checks and non-determinism. Source for the 12.6 parity lesson and several misconceptions."
+  },
+  {
+    "id": "pytorch-amp-docs",
+    "type": "web",
+    "title": "Automatic Mixed Precision package - torch.amp",
+    "authors": [
+      "PyTorch Foundation"
+    ],
+    "year": 2026,
+    "venue": "docs.pytorch.org",
+    "doi": null,
+    "url": "https://docs.pytorch.org/docs/stable/amp.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      29
+    ],
+    "notes": "Current AMP reference (last updated Jul 2026) on autocast and gradient scaling for fp16/bf16. Use for the mixed-precision lesson."
+  },
+  {
+    "id": "pytorch-profiler-recipe",
+    "type": "web",
+    "title": "PyTorch Profiler (recipe)",
+    "authors": [
+      "PyTorch Foundation"
+    ],
+    "year": 2026,
+    "venue": "docs.pytorch.org",
+    "doi": null,
+    "url": "https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      29
+    ],
+    "notes": "Official profiling recipe (tutorials build 2.15). Starting point for the module-29 profiling lab."
+  },
+  {
+    "id": "raschka2024-llms-from-scratch",
+    "type": "book",
+    "title": "Build a Large Language Model (From Scratch)",
+    "authors": [
+      "Raschka, Sebastian"
+    ],
+    "year": 2024,
+    "venue": "Manning",
+    "doi": null,
+    "url": "https://www.manning.com/books/build-a-large-language-model-from-scratch",
+    "open_url": "https://github.com/rasbt/LLMs-from-scratch",
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16,
+      17,
+      18
+    ],
+    "notes": "Book (Sept 2024) plus open code repo: text data, attention, GPT model, pretraining, classification and instruction fine-tuning, LoRA appendix; bonus folders add BPE, KV cache, MoE, Llama/Qwen/Gemma from scratch and DPO; sequel on reasoning models. Good PyTorch-level companion for 16-17."
+  },
+  {
+    "id": "jurafsky-martin-slp3-2026",
+    "type": "book",
+    "title": "Speech and Language Processing (3rd ed. draft, August 19, 2026 release)",
+    "authors": [
+      "Jurafsky, Dan",
+      "Martin, James H."
+    ],
+    "year": 2026,
+    "venue": "web.stanford.edu (draft)",
+    "doi": null,
+    "url": "https://web.stanford.edu/~jurafsky/slp3/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15,
+      16,
+      17,
+      19
+    ],
+    "notes": "Aug 2026 draft reorganised: Vol I covers words/tokens, n-grams, embeddings, neural nets, transformers+pretraining, post-training; Vol II has IR/RAG, agents (unwritten), RNNs/LSTMs. Evidence that textbooks now teach transformers before RNNs."
+  },
+  {
+    "id": "hf-llm-course",
+    "type": "course",
+    "title": "Hugging Face LLM Course",
+    "authors": [
+      "Hugging Face"
+    ],
+    "year": 2022,
+    "venue": "huggingface.co/learn",
+    "doi": null,
+    "url": "https://huggingface.co/learn/llm-course/chapter1/1",
+    "open_url": null,
+    "access": "open",
+    "license": "Apache-2.0",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16,
+      17,
+      19
+    ],
+    "notes": "Twelve chapters from pipeline() use and fine-tuning through datasets, tokenizers, curation, LLM fine-tuning and 'build reasoning models'. Production-library comparison for 17; Apache-2.0."
+  },
+  {
+    "id": "hf-deep-rl-course",
+    "type": "course",
+    "title": "Hugging Face Deep Reinforcement Learning Course",
+    "authors": [
+      "Hugging Face"
+    ],
+    "year": 2022,
+    "venue": "huggingface.co/learn",
+    "doi": null,
+    "url": "https://huggingface.co/learn/deep-rl-course/unit0/introduction",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      23
+    ],
+    "notes": "Units: intro, Q-learning, DQN (Atari), Optuna tuning, policy gradients, actor-critic, multi-agent, PPO (incl. Doom). Hands-on library-first complement to Sutton & Barto; year not confirmed on page."
+  },
+  {
+    "id": "sutton-barto-2018",
+    "type": "book",
+    "title": "Reinforcement Learning: An Introduction (2nd ed.)",
+    "authors": [
+      "Sutton, Richard S.",
+      "Barto, Andrew G."
+    ],
+    "year": 2018,
+    "venue": "MIT Press",
+    "doi": null,
+    "url": "http://incompleteideas.net/book/the-book-2nd.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Canonical RL text, free PDF; bandits to policy gradients. Spine for the tabular half of module 23."
+  },
+  {
+    "id": "openai-spinning-up-2018",
+    "type": "course",
+    "title": "Spinning Up in Deep RL",
+    "authors": [
+      "OpenAI"
+    ],
+    "year": 2018,
+    "venue": "OpenAI",
+    "doi": null,
+    "url": "https://spinningup.openai.com/en/latest/",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Concise key-concepts primer plus VPG/TRPO/PPO/DDPG/TD3/SAC docs; repo created 2018, last pushed 2024, so treat code as legacy and keep the conceptual chapters."
+  },
+  {
+    "id": "berkeley-cs285-2026",
+    "type": "course",
+    "title": "CS 185/285: Deep Reinforcement Learning (Spring 2026)",
+    "authors": [
+      "Levine, Sergey"
+    ],
+    "year": 2026,
+    "venue": "UC Berkeley",
+    "doi": null,
+    "url": "https://rail.eecs.berkeley.edu/deeprlcourse/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      23
+    ],
+    "notes": "2026 homeworks: imitation learning, policy gradients, Q-learning and actor-critic, LLM RL, offline RL; lectures include control as inference, model-based and offline RL. Confirms LLM RL is now standard RL-course content."
+  },
+  {
+    "id": "silver2015-ucl-rl",
+    "type": "course",
+    "title": "Reinforcement Learning lectures (UCL Advanced Topics 2015)",
+    "authors": [
+      "Silver, David"
+    ],
+    "year": 2015,
+    "venue": "University College London",
+    "doi": null,
+    "url": "https://www.davidsilver.uk/teaching/",
+    "open_url": null,
+    "access": "open",
+    "license": "CC-BY-NC-4.0",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Ten classic lectures (MDPs, DP, model-free prediction/control, function approximation, policy gradients, planning, exploration, games) plus the Easy21 assignment; CC-BY-NC 4.0."
+  },
+  {
+    "id": "hyndman-fpp3",
+    "type": "book",
+    "title": "Forecasting: Principles and Practice (3rd ed.)",
+    "authors": [
+      "Hyndman, Rob J.",
+      "Athanasopoulos, George"
+    ],
+    "year": 2021,
+    "venue": "OTexts",
+    "doi": null,
+    "url": "https://otexts.com/fpp3/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      21
+    ],
+    "notes": "Free R-based text (site modified 4 Nov 2026): graphics, decomposition, toolbox, ETS, ARIMA, dynamic regression, hierarchical, practical issues. Edition year not shown on page."
+  },
+  {
+    "id": "hyndman-fpppy-2026",
+    "type": "book",
+    "title": "Forecasting: Principles and Practice, the Pythonic Way",
+    "authors": [
+      "Hyndman, Rob J.",
+      "Athanasopoulos, George",
+      "Garza, Azul",
+      "Challu, Cristian",
+      "Mergenthaler, Max",
+      "Olivares, Kin G."
+    ],
+    "year": 2026,
+    "venue": "OTexts",
+    "doi": null,
+    "url": "https://otexts.com/fpppy/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      22
+    ],
+    "notes": "Python edition (last updated 4 Nov 2026) using statsforecast and related Nixtla libraries; adds chapters on neural networks and foundation forecasting models. Primary text for module 21."
+  },
+  {
+    "id": "nixtla-nixtlaverse",
+    "type": "software",
+    "title": "Nixtlaverse documentation (StatsForecast, MLForecast, NeuralForecast, HierarchicalForecast)",
+    "authors": [
+      "Nixtla"
+    ],
+    "year": 2026,
+    "venue": "nixtlaverse.nixtla.io",
+    "doi": null,
+    "url": "https://nixtlaverse.nixtla.io/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      22
+    ],
+    "notes": "Docs for fast statistical, ML (lag/target transforms, LightGBM CV) and neural forecasters (NHITS, NBEATS, TFT, PatchTST, DeepAR, DLinear, TSMixer); publishes an llms.txt index. These libraries need numba, so they run locally, not in Pyodide."
+  },
+  {
+    "id": "huyen2022-dmls",
+    "type": "book",
+    "title": "Designing Machine Learning Systems",
+    "authors": [
+      "Huyen, Chip"
+    ],
+    "year": 2022,
+    "venue": "O'Reilly",
+    "doi": null,
+    "url": "https://stanford-cs329s.github.io/",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      28
+    ],
+    "notes": "The CS329S lecture notes expanded into a book: framing, data, features, training, deployment, distribution shift and monitoring, continual learning, infrastructure, human side. Spine for module 27."
+  },
+  {
+    "id": "huyen2025-ai-engineering",
+    "type": "book",
+    "title": "AI Engineering",
+    "authors": [
+      "Huyen, Chip"
+    ],
+    "year": 2025,
+    "venue": "O'Reilly",
+    "doi": null,
+    "url": "https://huyenchip.com/books/",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      27
+    ],
+    "notes": "Building applications on foundation models: evaluation methodology, prompting, RAG and agents, fine-tuning, dataset engineering, inference optimization, feedback. Primary text for module 19."
+  },
+  {
+    "id": "stanford-cs329s-2022",
+    "type": "course",
+    "title": "CS 329S: Machine Learning Systems Design (Winter 2022)",
+    "authors": [
+      "Huyen, Chip"
+    ],
+    "year": 2022,
+    "venue": "Stanford University",
+    "doi": null,
+    "url": "https://stanford-cs329s.github.io/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27
+    ],
+    "notes": "Last offering 2022; project-heavy (65% final ML application). Syllabus mirrors the DMLS chapters."
+  },
+  {
+    "id": "fsdl-the-full-stack",
+    "type": "course",
+    "title": "Full Stack Deep Learning (2022 Deep Learning Course; 2023 LLM Bootcamp)",
+    "authors": [
+      "The Full Stack"
+    ],
+    "year": 2022,
+    "venue": "fullstackdeeplearning.com",
+    "doi": null,
+    "url": "https://fullstackdeeplearning.com/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      27,
+      28
+    ],
+    "notes": "Product-lifecycle view of deep learning (2022 course) and LLM apps (2023 bootcamp); site now also hosts 'Working with AI Agents' material. Dated but still useful for project structure and troubleshooting lectures."
+  },
+  {
+    "id": "made-with-ml",
+    "type": "course",
+    "title": "Made With ML (MLOps course)",
+    "authors": [
+      "Mohandas, Goku"
+    ],
+    "year": 2023,
+    "venue": "madewithml.com (Anyscale)",
+    "doi": null,
+    "url": "https://madewithml.com/",
+    "open_url": null,
+    "access": "open",
+    "license": "MIT",
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      27,
+      28
+    ],
+    "notes": "Design, data, model (training, tracking, tuning, evaluation, serving), develop, utilities, testing code/data/models, versioning, CI/CD, monitoring. Lesson-order model for module 28; version year not confirmed."
+  },
+  {
+    "id": "zinkevich-rules-of-ml",
+    "type": "web",
+    "title": "Rules of Machine Learning: Best Practices for ML Engineering",
+    "authors": [
+      "Zinkevich, Martin"
+    ],
+    "year": 2017,
+    "venue": "Google for Developers",
+    "doi": null,
+    "url": "https://developers.google.com/machine-learning/guides/rules-of-ml",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      27
+    ],
+    "notes": "Forty-three pragmatic rules (launch heuristics first, simple pipeline, feature engineering, skew, monitoring). Use as discussion prompts in 27; publication year not shown on page."
+  },
+  {
+    "id": "google-mlops-cd",
+    "type": "web",
+    "title": "MLOps: Continuous delivery and automation pipelines in machine learning",
+    "authors": [
+      "Google Cloud"
+    ],
+    "year": 2020,
+    "venue": "Google Cloud Architecture Center",
+    "doi": null,
+    "url": "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      28
+    ],
+    "notes": "Defines MLOps maturity levels 0 (manual), 1 (pipeline automation / continuous training), 2 (CI/CD automation). Scaffold for the module-28 sequence; year not shown on page."
+  },
+  {
+    "id": "rawlings2017-mpc",
+    "type": "book",
+    "title": "Model Predictive Control: Theory, Computation, and Design (2nd ed.)",
+    "authors": [
+      "Rawlings, James B.",
+      "Mayne, David Q.",
+      "Diehl, Moritz M."
+    ],
+    "year": 2017,
+    "venue": "Nob Hill Publishing",
+    "doi": null,
+    "url": "https://sites.engineering.ucsb.edu/~jbraw/mpc/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": false,
+    "modules": [
+      24
+    ],
+    "notes": "Free PDF (6th printing), code, figures and sample exams. Rigorous MPC text for module 24; edition year from prior knowledge, not re-confirmed on page."
+  },
+  {
+    "id": "boyd-ee364a-2026",
+    "type": "course",
+    "title": "EE364a: Convex Optimization I (Summer 2025-2026)",
+    "authors": [
+      "Boyd, Stephen"
+    ],
+    "year": 2026,
+    "venue": "Stanford University",
+    "doi": null,
+    "url": "https://web.stanford.edu/class/ee364a/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Course site with textbook, CVXPY materials and DCP tool. Sequencing model for the convex-optimization lessons."
+  },
+  {
+    "id": "boyd2004-convex-optimization",
+    "type": "book",
+    "title": "Convex Optimization",
+    "authors": [
+      "Boyd, Stephen",
+      "Vandenberghe, Lieven"
+    ],
+    "year": 2004,
+    "venue": "Cambridge University Press",
+    "doi": "10.1017/CBO9780511804441",
+    "url": "https://doi.org/10.1017/CBO9780511804441",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Standard text; the EE364a site links a free PDF. Derivation source for duality and KKT."
+  },
+  {
+    "id": "brunton-kutz-2022",
+    "type": "book",
+    "title": "Data-Driven Science and Engineering (2nd ed.)",
+    "authors": [
+      "Brunton, Steven L.",
+      "Kutz, J. Nathan"
+    ],
+    "year": 2022,
+    "venue": "Cambridge University Press",
+    "doi": "10.1017/9781009089517",
+    "url": "https://doi.org/10.1017/9781009089517",
+    "open_url": "https://databookuw.com/",
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      22,
+      24
+    ],
+    "notes": "SVD/POD/DMD, ML, dynamics and control (SINDy, Koopman, MPC) and reduced-order models, with videos and code at databookuw.com. The best single bridge text for this learner."
+  },
+  {
+    "id": "barocas-hardt-narayanan-2023",
+    "type": "book",
+    "title": "Fairness and Machine Learning: Limitations and Opportunities",
+    "authors": [
+      "Barocas, Solon",
+      "Hardt, Moritz",
+      "Narayanan, Arvind"
+    ],
+    "year": 2023,
+    "venue": "MIT Press",
+    "doi": null,
+    "url": "https://fairmlbook.org/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      30
+    ],
+    "notes": "Free PDF; legitimacy, classification criteria (independence, separation, sufficiency), relative fairness, causality and practice. Primary text for module 30."
+  },
+  {
+    "id": "anthropic2024-building-effective-agents",
+    "type": "web",
+    "title": "Building effective AI agents",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2024,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/building-effective-agents",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Dec 2024 post separating workflows from agents and recommending simple composable patterns (chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer). Page now carries a note that tooling has changed since 2024, so teach the patterns, not the tools."
+  },
+  {
+    "id": "anthropic2025-writing-tools",
+    "type": "web",
+    "title": "Writing effective tools for AI agents - with agents",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2025,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/writing-tools-for-agents",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      28
+    ],
+    "notes": "Sept 2025: prototype tools, generate evaluation tasks, run agents against them, analyse transcripts; principles on tool choice, namespacing, meaningful and token-efficient responses, descriptions."
+  },
+  {
+    "id": "anthropic2025-context-engineering",
+    "type": "web",
+    "title": "Effective context engineering for AI agents",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2025,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Sept 2025: context as a finite budget; agentic retrieval; long-horizon techniques (compaction, structured note-taking, sub-agents). Source for the 19.8 lesson."
+  },
+  {
+    "id": "anthropic2025-code-execution-mcp",
+    "type": "web",
+    "title": "Code execution with MCP: building more efficient agents",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2025,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/code-execution-with-mcp",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Nov 2025 post on letting agents call MCP tools through code to cut token use. Optional reading for the MCP lesson."
+  },
+  {
+    "id": "anthropic2025-long-running-harnesses",
+    "type": "web",
+    "title": "Effective harnesses for long-running agents",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2025,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28
+    ],
+    "notes": "Nov 2025 post on harness design for agents that work across many sessions. Supports the module-28 AI-native workflow discussion."
+  },
+  {
+    "id": "anthropic2025-claude-code-sandboxing",
+    "type": "web",
+    "title": "Beyond permission prompts: making Claude Code more secure and autonomous",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2025,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/claude-code-sandboxing",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28
+    ],
+    "notes": "Oct 2025 post on sandboxing coding agents. Title and date confirmed from the engineering index only; body not read."
+  },
+  {
+    "id": "anthropic2026-demystifying-evals",
+    "type": "web",
+    "title": "Demystifying evals for AI agents",
+    "authors": [
+      "Anthropic"
+    ],
+    "year": 2026,
+    "venue": "Anthropic Engineering",
+    "doi": null,
+    "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      27,
+      28
+    ],
+    "notes": "Jan 2026: vocabulary (task, trial, grader, transcript, outcome, harness), code/model/human graders, capability vs regression suites, pass@k vs pass^k, a roadmap starting from 20-50 tasks drawn from real failures, and 'read the transcripts'. Core source for eval-driven development."
+  },
+  {
+    "id": "mcp-spec-2026-07-28",
+    "type": "standard",
+    "title": "Model Context Protocol Specification (version 2026-07-28)",
+    "authors": [
+      "Model Context Protocol"
+    ],
+    "year": 2026,
+    "venue": "modelcontextprotocol.io",
+    "doi": null,
+    "url": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Current spec: JSON-RPC messages, stateless self-contained requests, per-request capability negotiation; servers offer resources, prompts and tools, clients may offer elicitation; opt-in extensions (Tasks, Skills over MCP, MCP Apps); consent and privacy principles. 2025-era tutorials describe an older model."
+  },
+  {
+    "id": "husain2024-needs-evals",
+    "type": "web",
+    "title": "Your AI Product Needs Evals",
+    "authors": [
+      "Husain, Hamel"
+    ],
+    "year": 2024,
+    "venue": "hamel.dev",
+    "doi": null,
+    "url": "https://hamel.dev/blog/posts/evals/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Mar 2024 essay arguing evaluation infrastructure is what separates successful LLM products; layered unit tests, human/model evals and A/B tests."
+  },
+  {
+    "id": "husain2025-field-guide",
+    "type": "web",
+    "title": "A Field Guide to Rapidly Improving AI Products",
+    "authors": [
+      "Husain, Hamel"
+    ],
+    "year": 2025,
+    "venue": "hamel.dev",
+    "doi": null,
+    "url": "https://hamel.dev/blog/posts/field-guide/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      27
+    ],
+    "notes": "Mar 2025 guide centred on error analysis, custom data viewers and experiment-driven roadmaps."
+  },
+  {
+    "id": "husain-shankar-2026-evals-faq",
+    "type": "web",
+    "title": "AI Evals: Everything You Need to Know",
+    "authors": [
+      "Husain, Hamel",
+      "Shankar, Shreya"
+    ],
+    "year": 2026,
+    "venue": "hamel.dev",
+    "doi": null,
+    "url": "https://hamel.dev/blog/posts/evals-faq/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      27,
+      28
+    ],
+    "notes": "FAQ dated 18 Sept 2026: traces, minimum viable eval setups, error analysis (dataset, open coding, axial coding, refinement), validating evaluators, sampling traces. Primary method source for lesson 19.7."
+  },
+  {
+    "id": "tazi2025-ultrascale-playbook",
+    "type": "web",
+    "title": "The Ultra-Scale Playbook: Training LLMs on GPU Clusters",
+    "authors": [
+      "Tazi, Nouamane",
+      "Mom, Ferdinand",
+      "Zhao, Haojun",
+      "Nguyen, Phuc",
+      "Mekkouri, Mohamed",
+      "von Werra, Leandro",
+      "Wolf, Thomas"
+    ],
+    "year": 2025,
+    "venue": "Hugging Face",
+    "doi": null,
+    "url": "https://huggingface.co/spaces/nanotron/ultrascale-playbook",
+    "open_url": "https://nanotron-ultrascale-playbook.static.hf.space/index.html",
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      29
+    ],
+    "notes": "Feb 2025 interactive book: single-GPU memory anatomy, recomputation, accumulation, profiling, data parallelism, ZeRO, tensor/sequence/context/pipeline/expert parallelism, kernels, mixed precision. Spine for module 29."
+  },
+  {
+    "id": "bekman-ml-engineering",
+    "type": "book",
+    "title": "Machine Learning Engineering Open Book",
+    "authors": [
+      "Bekman, Stas"
+    ],
+    "year": 2020,
+    "venue": "GitHub",
+    "doi": null,
+    "url": "https://github.com/stas00/ml-engineering",
+    "open_url": null,
+    "access": "open",
+    "license": "CC-BY-SA-4.0",
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      29
+    ],
+    "notes": "Living, CC-BY-SA notes on accelerators, networking, storage, debugging, fault tolerance and training/inference operations (year = repo creation; updated through Nov 2026). Reference for module-29 reliability lessons."
+  },
+  {
+    "id": "austin2025-scaling-book",
+    "type": "web",
+    "title": "How to Scale Your Model: A Systems View of LLMs on TPUs",
+    "authors": [
+      "Austin, Jacob",
+      "Douglas, Sholto",
+      "Frostig, Roy",
+      "Levskaya, Anselm",
+      "et al."
+    ],
+    "year": 2025,
+    "venue": "Google DeepMind",
+    "doi": null,
+    "url": "https://jax-ml.github.io/scaling-book/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18,
+      29
+    ],
+    "notes": "Feb 2025 online book: rooflines, accelerators and interconnects, transformer arithmetic, training and inference parallelism. Best source for back-of-envelope cost and latency estimates."
+  },
+  {
+    "id": "he2022-brrr",
+    "type": "web",
+    "title": "Making Deep Learning Go Brrrr From First Principles",
+    "authors": [
+      "He, Horace"
+    ],
+    "year": 2022,
+    "venue": "horace.io",
+    "doi": null,
+    "url": "https://horace.io/brrr_intro.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      29
+    ],
+    "notes": "Compute-bound vs memory-bandwidth-bound vs overhead-bound regimes. Opening reading for module 29."
+  },
+  {
+    "id": "weng2018-policy-gradient",
+    "type": "web",
+    "title": "Policy Gradient Algorithms",
+    "authors": [
+      "Weng, Lilian"
+    ],
+    "year": 2018,
+    "venue": "Lil'Log",
+    "doi": null,
+    "url": "https://lilianweng.github.io/posts/2018-04-08-policy-gradient/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Survey of policy-gradient methods (REINFORCE through PPO, SAC, TD3) with consistent notation. Derivation companion for 23.5-23.6."
+  },
+  {
+    "id": "weng2021-diffusion",
+    "type": "web",
+    "title": "What are Diffusion Models?",
+    "authors": [
+      "Weng, Lilian"
+    ],
+    "year": 2021,
+    "venue": "Lil'Log",
+    "doi": null,
+    "url": "https://lilianweng.github.io/posts/2021-07-11-diffusion-models/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "Derivation-dense diffusion overview, updated through 2024 (guidance, latent diffusion, distillation). Use for module-20 derivations."
+  },
+  {
+    "id": "weng2024-reward-hacking",
+    "type": "web",
+    "title": "Reward Hacking in Reinforcement Learning",
+    "authors": [
+      "Weng, Lilian"
+    ],
+    "year": 2024,
+    "venue": "Lil'Log",
+    "doi": null,
+    "url": "https://lilianweng.github.io/posts/2024-11-28-reward-hacking/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      23,
+      30
+    ],
+    "notes": "Nov 2024 survey of reward hacking in RL and RLHF. Source for misconception exercises in 17, 23 and 30."
+  },
+  {
+    "id": "godbole2023-tuning-playbook",
+    "type": "web",
+    "title": "Deep Learning Tuning Playbook",
+    "authors": [
+      "Godbole, Varun",
+      "Dahl, George E.",
+      "Gilmer, Justin",
+      "Shallue, Christopher J.",
+      "Nado, Zachary"
+    ],
+    "year": 2023,
+    "venue": "GitHub (Google Research)",
+    "doi": null,
+    "url": "https://github.com/google-research/tuning_playbook",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Systematic tuning: choosing architecture/optimizer/batch size, incremental scientific tuning, scientific vs nuisance hyperparameters, training length. Method source for 13.7."
+  },
+  {
+    "id": "huang2022-ppo-37-details",
+    "type": "web",
+    "title": "The 37 Implementation Details of Proximal Policy Optimization",
+    "authors": [
+      "Huang, Shengyi",
+      "Dossa, Rousslan Fernand Julien",
+      "Raffin, Antonin",
+      "Kanervisto, Anssi",
+      "Wang, Weixun"
+    ],
+    "year": 2022,
+    "venue": "ICLR Blog Track",
+    "doi": null,
+    "url": "https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Catalogue of code-level PPO details that change results. Basis for module-23 debugging exercises."
+  },
+  {
+    "id": "holderrieth-mit-6s184-2026",
+    "type": "course",
+    "title": "MIT 6.S184: Generative AI with Stochastic Differential Equations (Flow Matching and Diffusion Models, 2026)",
+    "authors": [
+      "Holderrieth, Peter",
+      "Erives, Ezra"
+    ],
+    "year": 2026,
+    "venue": "MIT",
+    "doi": null,
+    "url": "https://diffusion.csail.mit.edu/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "Notes, lectures and labs from SDEs and Fokker-Planck to building a latent diffusion model from scratch. Best math-first sequencing for module 20 and a natural fit for an engineer."
+  },
+  {
+    "id": "pyodide-packages-314",
+    "type": "software",
+    "title": "Packages built in Pyodide (version 314.0.7)",
+    "authors": [
+      "Pyodide"
+    ],
+    "year": 2026,
+    "venue": "pyodide.org",
+    "doi": null,
+    "url": "https://pyodide.org/en/stable/usage/packages-in-pyodide.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      13,
+      15,
+      17,
+      19,
+      21,
+      22,
+      23,
+      24,
+      27
+    ],
+    "notes": "Lists numpy 2.4.6, scipy 1.18, pandas 3.0.2, scikit-learn 1.8, statsmodels, lightgbm 4.6, xgboost, cvxpy-base 1.8.2, clarabel, highspy, casadi 3.7.2, tiktoken, pydantic, duckdb, polars; no torch, jax or numba. In-session tests: cvxpy/Clarabel, HiGHS linprog, CasADi sqpmethod, ETS, IsolationForest, LightGBM, python-control, filterpy, pysindy worked; gymnasium, statsforecast, PyOD failed; tiktoken could not fetch vocab files."
+  },
+  {
+    "id": "deepmind2018-dc-cooling",
+    "type": "web",
+    "title": "Safety-first AI for autonomous data centre cooling and industrial control",
+    "authors": [
+      "Gamble, Chris",
+      "Gao, Jim"
+    ],
+    "year": 2018,
+    "venue": "Google DeepMind blog",
+    "doi": null,
+    "url": "https://deepmind.google/blog/safety-first-ai-for-autonomous-data-centre-cooling-and-industrial-control/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24,
+      27
+    ],
+    "notes": "Aug 2018: every five minutes a cloud system reads thousands of sensors, neural nets predict the effect of candidate actions on energy, an optimizer picks actions under safety constraints, and local control verifies them. Flagship case for 24 and 27."
+  },
+  {
+    "id": "meta2024-sim-rl-cooling",
+    "type": "web",
+    "title": "Simulator-based reinforcement learning for data center cooling optimization",
+    "authors": [
+      "Zhou, Chi",
+      "Gao, Doris",
+      "Rivalin, Lisa",
+      "Grier, Andrew"
+    ],
+    "year": 2024,
+    "venue": "Engineering at Meta",
+    "doi": null,
+    "url": "https://engineering.fb.com/2024/09/10/data-center-engineering/simulator-based-reinforcement-learning-for-data-center-cooling-optimization/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Sept 2024: offline RL trained in a physics-based thermal simulator from historical states to avoid online-RL risk; reports about 20% supply-fan energy and 4% water savings in a pilot region. Case study for 23.7/24.6."
+  },
+  {
+    "id": "aws-sagemaker-ai-docs",
+    "type": "web",
+    "title": "What is Amazon SageMaker AI? (Developer Guide)",
+    "authors": [
+      "Amazon Web Services"
+    ],
+    "year": 2026,
+    "venue": "AWS Documentation",
+    "doi": null,
+    "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28
+    ],
+    "notes": "Current name is 'SageMaker AI'; managed build/train/deploy service. Reference for lesson 28.7."
+  },
+  {
+    "id": "azure-ml-docs",
+    "type": "web",
+    "title": "What is Azure Machine Learning?",
+    "authors": [
+      "Microsoft"
+    ],
+    "year": 2026,
+    "venue": "Microsoft Learn",
+    "doi": null,
+    "url": "https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28
+    ],
+    "notes": "Azure ML overview (SDK v2 docs): lifecycle management, training, deployment, MLOps. Reference for lesson 28.7."
+  },
+  {
+    "id": "mlflow-docs",
+    "type": "software",
+    "title": "MLflow Documentation",
+    "authors": [
+      "MLflow"
+    ],
+    "year": 2026,
+    "venue": "mlflow.org",
+    "doi": null,
+    "url": "https://mlflow.org/docs/latest/index.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      28
+    ],
+    "notes": "Docs now split into 'LLMs & Agents' (tracing, evaluation, prompt management) and classic ML (tracking, registry, deployment). One tool spans the module-19 and module-28 labs."
+  },
+  {
+    "id": "dvc-docs",
+    "type": "software",
+    "title": "DVC (Data Version Control) documentation",
+    "authors": [
+      "DVC"
+    ],
+    "year": 2026,
+    "venue": "doc.dvc.org",
+    "doi": null,
+    "url": "https://doc.dvc.org/",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28
+    ],
+    "notes": "Data/model versioning, pipelines, experiment tracking, CI/CD for ML. Used in lesson 28.3."
+  },
+  {
+    "id": "sculley2015-hidden-debt",
+    "type": "paper",
+    "title": "Hidden Technical Debt in Machine Learning Systems",
+    "authors": [
+      "Sculley, D.",
+      "Holt, Gary",
+      "Golovin, Daniel",
+      "Davydov, Eugene",
+      "Phillips, Todd",
+      "Ebner, Dietmar",
+      "Chaudhary, Vinay",
+      "Young, Michael",
+      "Crespo, Jean-Francois",
+      "Dennison, Dan"
+    ],
+    "year": 2015,
+    "venue": "NeurIPS 2015",
+    "doi": null,
+    "url": "https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      28
+    ],
+    "notes": "Names ML-specific debt (entanglement, hidden feedback loops, undeclared consumers, data dependencies, glue code, pipeline jungles, configuration debt). Design-review vocabulary for 27."
+  },
+  {
+    "id": "breck2017-ml-test-score",
+    "type": "paper",
+    "title": "The ML test score: A rubric for ML production readiness and technical debt reduction",
+    "authors": [
+      "Breck, Eric",
+      "Cai, Shanqing",
+      "Nielsen, Eric",
+      "Salib, Michael",
+      "Sculley, D."
+    ],
+    "year": 2017,
+    "venue": "IEEE International Conference on Big Data 2017",
+    "doi": "10.1109/BigData.2017.8258038",
+    "url": "https://doi.org/10.1109/BigData.2017.8258038",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      28
+    ],
+    "notes": "Scored checklist of tests for data, model development, infrastructure and monitoring. Use as a mastery rubric for capstones; IEEE copy paywalled, an author copy may exist (not checked)."
+  },
+  {
+    "id": "kreuzberger2023-mlops",
+    "type": "paper",
+    "title": "Machine Learning Operations (MLOps): Overview, Definition, and Architecture",
+    "authors": [
+      "Kreuzberger, Dominik",
+      "Kuhl, Niklas",
+      "Hirschl, Sebastian"
+    ],
+    "year": 2023,
+    "venue": "IEEE Access",
+    "doi": "10.1109/ACCESS.2023.3262138",
+    "url": "https://doi.org/10.1109/ACCESS.2023.3262138",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28
+    ],
+    "notes": "Mixed-method synthesis of MLOps principles, components, roles and architecture. Conceptual map for module 28 (IEEE Access is open access)."
+  },
+  {
+    "id": "paleyes2022-deploying-ml",
+    "type": "paper",
+    "title": "Challenges in Deploying Machine Learning: A Survey of Case Studies",
+    "authors": [
+      "Paleyes, Andrei",
+      "Urma, Raoul-Gabriel",
+      "Lawrence, Neil D."
+    ],
+    "year": 2022,
+    "venue": "ACM Computing Surveys",
+    "doi": "10.1145/3533378",
+    "url": "https://doi.org/10.1145/3533378",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27
+    ],
+    "notes": "Deployment challenges organised by workflow stage with case studies. Reading for 27.1/27.4."
+  },
+  {
+    "id": "shankar2022-operationalizing-ml",
+    "type": "paper",
+    "title": "Operationalizing Machine Learning: An Interview Study",
+    "authors": [
+      "Shankar, Shreya",
+      "Garcia, Rolando",
+      "Hellerstein, Joseph M.",
+      "Parameswaran, Aditya G."
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2209.09125",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      28
+    ],
+    "notes": "Interviews with practitioners on velocity, validation and versioning pain points. Grounds the MLOps lessons in real practice."
+  },
+  {
+    "id": "rabanser2018-failing-loudly",
+    "type": "paper",
+    "title": "Failing Loudly: An Empirical Study of Methods for Detecting Dataset Shift",
+    "authors": [
+      "Rabanser, Stephan",
+      "Gunnemann, Stephan",
+      "Lipton, Zachary C."
+    ],
+    "year": 2018,
+    "venue": "arXiv (NeurIPS 2019)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1810.11953",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      30
+    ],
+    "notes": "Compares two-sample tests on reduced representations for shift detection. Basis for the drift-detector build in 27.5."
+  },
+  {
+    "id": "baydin2015-autodiff-survey",
+    "type": "paper",
+    "title": "Automatic differentiation in machine learning: a survey",
+    "authors": [
+      "Baydin, Atilim Gunes",
+      "Pearlmutter, Barak A.",
+      "Radul, Alexey Andreyevich",
+      "Siskind, Jeffrey Mark"
+    ],
+    "year": 2015,
+    "venue": "arXiv (JMLR 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1502.05767",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12
+    ],
+    "notes": "Forward vs reverse mode, dual numbers, implementation styles and costs. Rigor source for module 12."
+  },
+  {
+    "id": "glorot2010-init",
+    "type": "paper",
+    "title": "Understanding the difficulty of training deep feedforward neural networks",
+    "authors": [
+      "Glorot, Xavier",
+      "Bengio, Yoshua"
+    ],
+    "year": 2010,
+    "venue": "AISTATS 2010 (PMLR 9:249-256)",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v9/glorot10a.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Activation/gradient variance analysis behind Xavier initialization. Derivation target in 13.2."
+  },
+  {
+    "id": "he2015-init",
+    "type": "paper",
+    "title": "Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification",
+    "authors": [
+      "He, Kaiming",
+      "Zhang, Xiangyu",
+      "Ren, Shaoqing",
+      "Sun, Jian"
+    ],
+    "year": 2015,
+    "venue": "arXiv (ICCV 2015)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1502.01852",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Introduces He/Kaiming initialization for ReLU nets (and PReLU). Derivation target in 13.2."
+  },
+  {
+    "id": "kingma2014-adam",
+    "type": "paper",
+    "title": "Adam: A Method for Stochastic Optimization",
+    "authors": [
+      "Kingma, Diederik P.",
+      "Ba, Jimmy"
+    ],
+    "year": 2014,
+    "venue": "arXiv (ICLR 2015)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1412.6980",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Adam with bias correction. Implement and match torch.optim in 13.1."
+  },
+  {
+    "id": "loshchilov2017-adamw",
+    "type": "paper",
+    "title": "Decoupled Weight Decay Regularization",
+    "authors": [
+      "Loshchilov, Ilya",
+      "Hutter, Frank"
+    ],
+    "year": 2017,
+    "venue": "arXiv (ICLR 2019)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1711.05101",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Shows L2 regularization and weight decay differ under adaptive optimizers (AdamW). Misconception source."
+  },
+  {
+    "id": "loshchilov2016-sgdr",
+    "type": "paper",
+    "title": "SGDR: Stochastic Gradient Descent with Warm Restarts",
+    "authors": [
+      "Loshchilov, Ilya",
+      "Hutter, Frank"
+    ],
+    "year": 2016,
+    "venue": "arXiv (ICLR 2017)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1608.03983",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Cosine annealing with restarts. LR-schedule lesson and the annealing bridge."
+  },
+  {
+    "id": "goyal2017-large-minibatch",
+    "type": "paper",
+    "title": "Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour",
+    "authors": [
+      "Goyal, Priya",
+      "Dollar, Piotr",
+      "Girshick, Ross",
+      "Noordhuis, Pieter",
+      "Wesolowski, Lukasz",
+      "Kyrola, Aapo",
+      "Tulloch, Andrew",
+      "Jia, Yangqing",
+      "He, Kaiming"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1706.02677",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      29
+    ],
+    "notes": "Linear LR scaling with batch size plus gradual warmup. Used in 13.5 and 29."
+  },
+  {
+    "id": "ioffe2015-batchnorm",
+    "type": "paper",
+    "title": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+    "authors": [
+      "Ioffe, Sergey",
+      "Szegedy, Christian"
+    ],
+    "year": 2015,
+    "venue": "arXiv (ICML 2015)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1502.03167",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Original BatchNorm. Implement forward/backward in 13.3."
+  },
+  {
+    "id": "santurkar2018-batchnorm",
+    "type": "paper",
+    "title": "How Does Batch Normalization Help Optimization?",
+    "authors": [
+      "Santurkar, Shibani",
+      "Tsipras, Dimitris",
+      "Ilyas, Andrew",
+      "Madry, Aleksander"
+    ],
+    "year": 2018,
+    "venue": "arXiv (NeurIPS 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1805.11604",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Argues BN's benefit comes from smoothing the optimization landscape rather than reducing internal covariate shift. Misconception exercise."
+  },
+  {
+    "id": "ba2016-layernorm",
+    "type": "paper",
+    "title": "Layer Normalization",
+    "authors": [
+      "Ba, Jimmy Lei",
+      "Kiros, Jamie Ryan",
+      "Hinton, Geoffrey E."
+    ],
+    "year": 2016,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1607.06450",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      16
+    ],
+    "notes": "Per-example normalization used in transformers. Lesson 13.3."
+  },
+  {
+    "id": "srivastava2014-dropout",
+    "type": "paper",
+    "title": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+    "authors": [
+      "Srivastava, Nitish",
+      "Hinton, Geoffrey",
+      "Krizhevsky, Alex",
+      "Sutskever, Ilya",
+      "Salakhutdinov, Ruslan"
+    ],
+    "year": 2014,
+    "venue": "Journal of Machine Learning Research 15(56):1929-1958",
+    "doi": null,
+    "url": "https://jmlr.org/papers/v15/srivastava14a.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Canonical dropout paper. Lesson 13.4 and the inverted-dropout scaling bug."
+  },
+  {
+    "id": "he2015-resnet",
+    "type": "paper",
+    "title": "Deep Residual Learning for Image Recognition",
+    "authors": [
+      "He, Kaiming",
+      "Zhang, Xiangyu",
+      "Ren, Shaoqing",
+      "Sun, Jian"
+    ],
+    "year": 2015,
+    "venue": "arXiv (CVPR 2016)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1512.03385",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      15,
+      16
+    ],
+    "notes": "Residual connections. Lessons 13.3, 15.3 and the residual-stream view in 16."
+  },
+  {
+    "id": "zhang2016-rethinking-generalization",
+    "type": "paper",
+    "title": "Understanding deep learning requires rethinking generalization",
+    "authors": [
+      "Zhang, Chiyuan",
+      "Bengio, Samy",
+      "Hardt, Moritz",
+      "Recht, Benjamin",
+      "Vinyals, Oriol"
+    ],
+    "year": 2016,
+    "venue": "arXiv (ICLR 2017)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1611.03530",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Networks can fit random labels. Predict-the-output exercise for 13.4."
+  },
+  {
+    "id": "li2017-loss-landscape",
+    "type": "paper",
+    "title": "Visualizing the Loss Landscape of Neural Nets",
+    "authors": [
+      "Li, Hao",
+      "Xu, Zheng",
+      "Taylor, Gavin",
+      "Studer, Christoph",
+      "Goldstein, Tom"
+    ],
+    "year": 2017,
+    "venue": "arXiv (NeurIPS 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1712.09913",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13
+    ],
+    "notes": "Filter-normalized landscape plots, effect of skip connections. Visualization idea for 13.1/13.3."
+  },
+  {
+    "id": "paszke2019-pytorch",
+    "type": "paper",
+    "title": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+    "authors": [
+      "Paszke, Adam",
+      "Gross, Sam",
+      "et al."
+    ],
+    "year": 2019,
+    "venue": "arXiv (NeurIPS 2019)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1912.01703",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      12,
+      14
+    ],
+    "notes": "Design of eager-mode PyTorch and its autograd. Background for 12.6 and 14."
+  },
+  {
+    "id": "micikevicius2017-mixed-precision",
+    "type": "paper",
+    "title": "Mixed Precision Training",
+    "authors": [
+      "Micikevicius, Paulius",
+      "Narang, Sharan",
+      "et al."
+    ],
+    "year": 2017,
+    "venue": "arXiv (ICLR 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1710.03740",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      29
+    ],
+    "notes": "FP16 training with master weights and loss scaling. Lesson 14.6."
+  },
+  {
+    "id": "ansel2024-pytorch2",
+    "type": "paper",
+    "title": "PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation",
+    "authors": [
+      "Ansel, Jason",
+      "Yang, Edward",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "ASPLOS 2024",
+    "doi": "10.1145/3620665.3640366",
+    "url": "https://doi.org/10.1145/3620665.3640366",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      14,
+      29
+    ],
+    "notes": "torch.compile internals (TorchDynamo, TorchInductor). Optional reading for 14.5."
+  },
+  {
+    "id": "hochreiter1997-lstm",
+    "type": "paper",
+    "title": "Long Short-Term Memory",
+    "authors": [
+      "Hochreiter, Sepp",
+      "Schmidhuber, Jurgen"
+    ],
+    "year": 1997,
+    "venue": "Neural Computation",
+    "doi": "10.1162/neco.1997.9.8.1735",
+    "url": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15,
+      21
+    ],
+    "notes": "Original LSTM. Lesson 15.5."
+  },
+  {
+    "id": "bahdanau2014-attention",
+    "type": "paper",
+    "title": "Neural Machine Translation by Jointly Learning to Align and Translate",
+    "authors": [
+      "Bahdanau, Dzmitry",
+      "Cho, Kyunghyun",
+      "Bengio, Yoshua"
+    ],
+    "year": 2014,
+    "venue": "arXiv (ICLR 2015)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1409.0473",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15
+    ],
+    "notes": "Additive attention in seq2seq; motivates attention as a fix for the fixed-size bottleneck. Lesson 15.6."
+  },
+  {
+    "id": "gu2021-s4",
+    "type": "paper",
+    "title": "Efficiently Modeling Long Sequences with Structured State Spaces",
+    "authors": [
+      "Gu, Albert",
+      "Goel, Karan",
+      "Re, Christopher"
+    ],
+    "year": 2021,
+    "venue": "arXiv (ICLR 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2111.00396",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15,
+      21
+    ],
+    "notes": "Deep state-space (S4) layers built from continuous LTI systems. Bridge lesson 15.7 for a controls-trained learner."
+  },
+  {
+    "id": "gu2023-mamba",
+    "type": "paper",
+    "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "authors": [
+      "Gu, Albert",
+      "Dao, Tri"
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2312.00752",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15
+    ],
+    "notes": "Input-dependent (selective) SSMs with hardware-aware scan. Optional in 15.7."
+  },
+  {
+    "id": "vaswani2017-attention",
+    "type": "paper",
+    "title": "Attention Is All You Need",
+    "authors": [
+      "Vaswani, Ashish",
+      "Shazeer, Noam",
+      "Parmar, Niki",
+      "Uszkoreit, Jakob",
+      "Jones, Llion",
+      "Gomez, Aidan N.",
+      "Kaiser, Lukasz",
+      "Polosukhin, Illia"
+    ],
+    "year": 2017,
+    "venue": "arXiv (NeurIPS 2017)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1706.03762",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15,
+      16
+    ],
+    "notes": "The transformer. Primary paper for module 16."
+  },
+  {
+    "id": "phuong2022-formal-transformers",
+    "type": "paper",
+    "title": "Formal Algorithms for Transformers",
+    "authors": [
+      "Phuong, Mary",
+      "Hutter, Marcus"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2207.09238",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16
+    ],
+    "notes": "Precise pseudocode for transformer variants and training/inference. Rigor reference for 16 mastery tests."
+  },
+  {
+    "id": "xiong2020-preln",
+    "type": "paper",
+    "title": "On Layer Normalization in the Transformer Architecture",
+    "authors": [
+      "Xiong, Ruibin",
+      "Yang, Yunchang",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (ICML 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2002.04745",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16
+    ],
+    "notes": "Pre-LN vs post-LN gradients and why warmup matters for post-LN. Ablation in 16.7."
+  },
+  {
+    "id": "su2021-rope",
+    "type": "paper",
+    "title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
+    "authors": [
+      "Su, Jianlin",
+      "Lu, Yu",
+      "Pan, Shengfeng",
+      "Murtadha, Ahmed",
+      "Wen, Bo",
+      "Liu, Yunfeng"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2104.09864",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16,
+      18
+    ],
+    "notes": "Rotary position embeddings. Implement and test the relative-position property in 16.3."
+  },
+  {
+    "id": "sennrich2015-bpe",
+    "type": "paper",
+    "title": "Neural Machine Translation of Rare Words with Subword Units",
+    "authors": [
+      "Sennrich, Rico",
+      "Haddow, Barry",
+      "Birch, Alexandra"
+    ],
+    "year": 2015,
+    "venue": "arXiv (ACL 2016)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1508.07909",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "Original BPE-for-NLP reference. Lesson 17.1."
+  },
+  {
+    "id": "kaplan2020-scaling-laws",
+    "type": "paper",
+    "title": "Scaling Laws for Neural Language Models",
+    "authors": [
+      "Kaplan, Jared",
+      "McCandlish, Sam",
+      "Henighan, Tom",
+      "Brown, Tom B.",
+      "Chess, Benjamin",
+      "Child, Rewon",
+      "Gray, Scott",
+      "Radford, Alec",
+      "Wu, Jeffrey",
+      "Amodei, Dario"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2001.08361",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "First power-law scaling study. Contrast with Chinchilla in 17.3."
+  },
+  {
+    "id": "hoffmann2022-chinchilla",
+    "type": "paper",
+    "title": "Training Compute-Optimal Large Language Models",
+    "authors": [
+      "Hoffmann, Jordan",
+      "Borgeaud, Sebastian",
+      "Mensch, Arthur",
+      "et al."
+    ],
+    "year": 2022,
+    "venue": "arXiv (NeurIPS 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2203.15556",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "Compute-optimal parameter/token allocation. Fitting exercise in 17.3."
+  },
+  {
+    "id": "brown2020-gpt3",
+    "type": "paper",
+    "title": "Language Models are Few-Shot Learners",
+    "authors": [
+      "Brown, Tom B.",
+      "Mann, Benjamin",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (NeurIPS 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2005.14165",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      19
+    ],
+    "notes": "In-context learning at scale. Background for 17 and prompting in 19."
+  },
+  {
+    "id": "hu2021-lora",
+    "type": "paper",
+    "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "authors": [
+      "Hu, Edward J.",
+      "Shen, Yelong",
+      "Wallis, Phillip",
+      "Allen-Zhu, Zeyuan",
+      "Li, Yuanzhi",
+      "Wang, Shean",
+      "Wang, Lu",
+      "Chen, Weizhu"
+    ],
+    "year": 2021,
+    "venue": "arXiv (ICLR 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2106.09685",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "Low-rank adapters. Build and verify in 17.5."
+  },
+  {
+    "id": "dettmers2023-qlora",
+    "type": "paper",
+    "title": "QLoRA: Efficient Finetuning of Quantized LLMs",
+    "authors": [
+      "Dettmers, Tim",
+      "Pagnoni, Artidoro",
+      "Holtzman, Ari",
+      "Zettlemoyer, Luke"
+    ],
+    "year": 2023,
+    "venue": "arXiv (NeurIPS 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2305.14314",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      18
+    ],
+    "notes": "4-bit NF4 base model plus LoRA, double quantization, paged optimizers. Lesson 17.5."
+  },
+  {
+    "id": "ouyang2022-instructgpt",
+    "type": "paper",
+    "title": "Training language models to follow instructions with human feedback",
+    "authors": [
+      "Ouyang, Long",
+      "Wu, Jeff",
+      "Jiang, Xu",
+      "et al."
+    ],
+    "year": 2022,
+    "venue": "arXiv (NeurIPS 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2203.02155",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "SFT, reward model, PPO pipeline (RLHF). Lesson 17.7."
+  },
+  {
+    "id": "rafailov2023-dpo",
+    "type": "paper",
+    "title": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+    "authors": [
+      "Rafailov, Rafael",
+      "Sharma, Archit",
+      "Mitchell, Eric",
+      "Ermon, Stefano",
+      "Manning, Christopher D.",
+      "Finn, Chelsea"
+    ],
+    "year": 2023,
+    "venue": "arXiv (NeurIPS 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2305.18290",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "Closed-form preference objective. Derive and implement in 17.7."
+  },
+  {
+    "id": "shao2024-deepseekmath",
+    "type": "paper",
+    "title": "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models",
+    "authors": [
+      "Shao, Zhihong",
+      "Wang, Peiyi",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2402.03300",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      23
+    ],
+    "notes": "Introduces GRPO (group-relative advantages, no value network). Lesson 17.8."
+  },
+  {
+    "id": "deepseek2025-r1",
+    "type": "paper",
+    "title": "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+    "authors": [
+      "DeepSeek-AI"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2501.12948",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "RL with verifiable rewards producing long-chain reasoning. Case study in 17.8."
+  },
+  {
+    "id": "lambert2024-tulu3",
+    "type": "paper",
+    "title": "Tulu 3: Pushing Frontiers in Open Language Model Post-Training",
+    "authors": [
+      "Lambert, Nathan",
+      "Morrison, Jacob",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2411.15124",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17
+    ],
+    "notes": "Fully open post-training recipe (SFT, DPO, RL with verifiable rewards). Reference pipeline for 17.4-17.8."
+  },
+  {
+    "id": "grattafiori2024-llama3",
+    "type": "paper",
+    "title": "The Llama 3 Herd of Models",
+    "authors": [
+      "Grattafiori, Aaron",
+      "Dubey, Abhimanyu",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2407.21783",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      29
+    ],
+    "notes": "Detailed report on data, scaling, infrastructure and post-training at frontier scale. Optional case study."
+  },
+  {
+    "id": "liu2025-muon",
+    "type": "paper",
+    "title": "Muon is Scalable for LLM Training",
+    "authors": [
+      "Liu, Jingyuan",
+      "Su, Jianlin",
+      "et al."
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2502.16982",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      17
+    ],
+    "notes": "Evidence for the Muon optimizer at LLM scale (nanochat uses Muon+AdamW). Optional extension to 13.1."
+  },
+  {
+    "id": "pope2022-inference",
+    "type": "paper",
+    "title": "Efficiently Scaling Transformer Inference",
+    "authors": [
+      "Pope, Reiner",
+      "Douglas, Sholto",
+      "Chowdhery, Aakanksha",
+      "et al."
+    ],
+    "year": 2022,
+    "venue": "arXiv (MLSys 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2211.05102",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Latency/throughput/memory tradeoffs and partitioning for inference. Primary for 18.3."
+  },
+  {
+    "id": "dao2022-flashattention",
+    "type": "paper",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+    "authors": [
+      "Dao, Tri",
+      "Fu, Daniel Y.",
+      "Ermon, Stefano",
+      "Rudra, Atri",
+      "Re, Christopher"
+    ],
+    "year": 2022,
+    "venue": "arXiv (NeurIPS 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2205.14135",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18,
+      29
+    ],
+    "notes": "IO-aware tiled attention. Explained in 18/29; implemented in Triton in CS336 A2."
+  },
+  {
+    "id": "kwon2023-pagedattention",
+    "type": "paper",
+    "title": "Efficient Memory Management for Large Language Model Serving with PagedAttention",
+    "authors": [
+      "Kwon, Woosuk",
+      "Li, Zhuohan",
+      "Zhuang, Siyuan",
+      "Sheng, Ying",
+      "Zheng, Lianmin",
+      "Yu, Cody Hao",
+      "Gonzalez, Joseph E.",
+      "Zhang, Hao",
+      "Stoica, Ion"
+    ],
+    "year": 2023,
+    "venue": "arXiv (SOSP 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2309.06180",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "vLLM: paged KV cache and continuous batching. Lesson 18.5."
+  },
+  {
+    "id": "leviathan2022-speculative",
+    "type": "paper",
+    "title": "Fast Inference from Transformers via Speculative Decoding",
+    "authors": [
+      "Leviathan, Yaniv",
+      "Kalman, Matan",
+      "Matias, Yossi"
+    ],
+    "year": 2022,
+    "venue": "arXiv (ICML 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2211.17192",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Draft-and-verify decoding that preserves the target distribution. Simulation lesson 18.6."
+  },
+  {
+    "id": "frantar2022-gptq",
+    "type": "paper",
+    "title": "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers",
+    "authors": [
+      "Frantar, Elias",
+      "Ashkboos, Saleh",
+      "Hoefler, Torsten",
+      "Alistarh, Dan"
+    ],
+    "year": 2022,
+    "venue": "arXiv (ICLR 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2210.17323",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Second-order one-shot weight quantization. Lesson 18.4."
+  },
+  {
+    "id": "dettmers2022-llm-int8",
+    "type": "paper",
+    "title": "LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale",
+    "authors": [
+      "Dettmers, Tim",
+      "Lewis, Mike",
+      "Belkada, Younes",
+      "Zettlemoyer, Luke"
+    ],
+    "year": 2022,
+    "venue": "arXiv (NeurIPS 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2208.07339",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Outlier features and mixed-precision decomposition. Misconception source for 18.4."
+  },
+  {
+    "id": "lin2023-awq",
+    "type": "paper",
+    "title": "AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration",
+    "authors": [
+      "Lin, Ji",
+      "Tang, Jiaming",
+      "et al."
+    ],
+    "year": 2023,
+    "venue": "arXiv (MLSys 2024)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2306.00978",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Activation-aware weight scaling before quantization. Lesson 18.4."
+  },
+  {
+    "id": "shazeer2019-mqa",
+    "type": "paper",
+    "title": "Fast Transformer Decoding: One Write-Head is All You Need",
+    "authors": [
+      "Shazeer, Noam"
+    ],
+    "year": 2019,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1911.02150",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Multi-query attention to shrink the KV cache. Lesson 18.2."
+  },
+  {
+    "id": "ainslie2023-gqa",
+    "type": "paper",
+    "title": "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints",
+    "authors": [
+      "Ainslie, Joshua",
+      "Lee-Thorp, James",
+      "de Jong, Michiel",
+      "Zemlyanskiy, Yury",
+      "Lebron, Federico",
+      "Sanghai, Sumit"
+    ],
+    "year": 2023,
+    "venue": "arXiv (EMNLP 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2305.13245",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18
+    ],
+    "notes": "Grouped-query attention. Lesson 18.2 KV-memory calculations."
+  },
+  {
+    "id": "zheng2023-sglang",
+    "type": "paper",
+    "title": "SGLang: Efficient Execution of Structured Language Model Programs",
+    "authors": [
+      "Zheng, Lianmin",
+      "Yin, Liangsheng",
+      "et al."
+    ],
+    "year": 2023,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2312.07104",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      18,
+      19
+    ],
+    "notes": "Prefix sharing (RadixAttention) and structured generation. Production comparison in 18.5/19.2."
+  },
+  {
+    "id": "lewis2020-rag",
+    "type": "paper",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "authors": [
+      "Lewis, Patrick",
+      "Perez, Ethan",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (NeurIPS 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2005.11401",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Original RAG formulation. Lesson 19.4."
+  },
+  {
+    "id": "yao2022-react",
+    "type": "paper",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "authors": [
+      "Yao, Shunyu",
+      "Zhao, Jeffrey",
+      "Yu, Dian",
+      "Du, Nan",
+      "Shafran, Izhak",
+      "Narasimhan, Karthik",
+      "Cao, Yuan"
+    ],
+    "year": 2022,
+    "venue": "arXiv (ICLR 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2210.03629",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Interleaved reasoning and tool actions. Historical root of the agent loop in 19.5."
+  },
+  {
+    "id": "zheng2023-llm-judge",
+    "type": "paper",
+    "title": "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
+    "authors": [
+      "Zheng, Lianmin",
+      "Chiang, Wei-Lin",
+      "et al."
+    ],
+    "year": 2023,
+    "venue": "arXiv (NeurIPS 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2306.05685",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Agreement and biases (position, verbosity, self-preference) of LLM judges. Lesson 19.7."
+  },
+  {
+    "id": "shankar2024-who-validates",
+    "type": "paper",
+    "title": "Who Validates the Validators? Aligning LLM-Assisted Evaluation of LLM Outputs with Human Preferences",
+    "authors": [
+      "Shankar, Shreya",
+      "Zamfirescu-Pereira, J. D.",
+      "Hartmann, Bjorn",
+      "Parameswaran, Aditya G.",
+      "Arawjo, Ian"
+    ],
+    "year": 2024,
+    "venue": "UIST 2024",
+    "doi": "10.1145/3654777.3676450",
+    "url": "https://doi.org/10.1145/3654777.3676450",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Evaluation criteria drift as people grade outputs; argues for iterative alignment of LLM judges with human judgments. Lesson 19.7."
+  },
+  {
+    "id": "liu2023-lost-in-middle",
+    "type": "paper",
+    "title": "Lost in the Middle: How Language Models Use Long Contexts",
+    "authors": [
+      "Liu, Nelson F.",
+      "Lin, Kevin",
+      "Hewitt, John",
+      "Paranjape, Ashwin",
+      "Bevilacqua, Michele",
+      "Petroni, Fabio",
+      "Liang, Percy"
+    ],
+    "year": 2023,
+    "venue": "arXiv (TACL 2024)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2307.03172",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Position-dependent use of long context. Predict-the-output exercise in 19.4."
+  },
+  {
+    "id": "malkov2016-hnsw",
+    "type": "paper",
+    "title": "Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs",
+    "authors": [
+      "Malkov, Yu. A.",
+      "Yashunin, D. A."
+    ],
+    "year": 2016,
+    "venue": "arXiv (TPAMI 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1603.09320",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "HNSW index. Lesson 19.3."
+  },
+  {
+    "id": "reimers2019-sbert",
+    "type": "paper",
+    "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    "authors": [
+      "Reimers, Nils",
+      "Gurevych, Iryna"
+    ],
+    "year": 2019,
+    "venue": "arXiv (EMNLP 2019)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1908.10084",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19
+    ],
+    "notes": "Bi-encoder sentence embeddings. Background for 19.3."
+  },
+  {
+    "id": "jimenez2023-swebench",
+    "type": "paper",
+    "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+    "authors": [
+      "Jimenez, Carlos E.",
+      "Yang, John",
+      "Wettig, Alexander",
+      "Yao, Shunyu",
+      "Pei, Kexin",
+      "Press, Ofir",
+      "Narasimhan, Karthik"
+    ],
+    "year": 2023,
+    "venue": "arXiv (ICLR 2024)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2310.06770",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      19,
+      28
+    ],
+    "notes": "Repository-level coding benchmark graded by tests. Example of outcome-based agent evals."
+  },
+  {
+    "id": "chan2024-mlebench",
+    "type": "paper",
+    "title": "MLE-bench: Evaluating Machine Learning Agents on Machine Learning Engineering",
+    "authors": [
+      "Chan, Jun Shern",
+      "Chowdhury, Neil",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2410.07095",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      28
+    ],
+    "notes": "Kaggle-style ML engineering tasks for agents. Grounds discussion of what agents can and cannot do in ML work."
+  },
+  {
+    "id": "wijk2024-rebench",
+    "type": "paper",
+    "title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts",
+    "authors": [
+      "Wijk, Hjalmar",
+      "Lin, Tao",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2411.15114",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28,
+      29
+    ],
+    "notes": "AI R&D tasks (e.g., optimizing training code) compared with human experts. Context for agent-driven experimentation."
+  },
+  {
+    "id": "kingma2013-vae",
+    "type": "paper",
+    "title": "Auto-Encoding Variational Bayes",
+    "authors": [
+      "Kingma, Diederik P.",
+      "Welling, Max"
+    ],
+    "year": 2013,
+    "venue": "arXiv (ICLR 2014)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1312.6114",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "VAE and the reparameterization trick. Lessons 20.1-20.2."
+  },
+  {
+    "id": "kingma2019-vae-intro",
+    "type": "paper",
+    "title": "An Introduction to Variational Autoencoders",
+    "authors": [
+      "Kingma, Diederik P.",
+      "Welling, Max"
+    ],
+    "year": 2019,
+    "venue": "Foundations and Trends in Machine Learning",
+    "doi": "10.1561/2200000056",
+    "url": "https://doi.org/10.1561/2200000056",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "Tutorial-length treatment of VAEs; an arXiv copy exists (not checked this session)."
+  },
+  {
+    "id": "ho2020-ddpm",
+    "type": "paper",
+    "title": "Denoising Diffusion Probabilistic Models",
+    "authors": [
+      "Ho, Jonathan",
+      "Jain, Ajay",
+      "Abbeel, Pieter"
+    ],
+    "year": 2020,
+    "venue": "arXiv (NeurIPS 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2006.11239",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "DDPM with the simplified noise-prediction loss. Lesson 20.3."
+  },
+  {
+    "id": "song2020-ddim",
+    "type": "paper",
+    "title": "Denoising Diffusion Implicit Models",
+    "authors": [
+      "Song, Jiaming",
+      "Meng, Chenlin",
+      "Ermon, Stefano"
+    ],
+    "year": 2020,
+    "venue": "arXiv (ICLR 2021)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2010.02502",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "Deterministic, fewer-step sampling. Lesson 20.4."
+  },
+  {
+    "id": "song2020-score-sde",
+    "type": "paper",
+    "title": "Score-Based Generative Modeling through Stochastic Differential Equations",
+    "authors": [
+      "Song, Yang",
+      "Sohl-Dickstein, Jascha",
+      "Kingma, Diederik P.",
+      "Kumar, Abhishek",
+      "Ermon, Stefano",
+      "Poole, Ben"
+    ],
+    "year": 2020,
+    "venue": "arXiv (ICLR 2021)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2011.13456",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "SDE/probability-flow ODE view unifying score models and diffusion. Lesson 20.4."
+  },
+  {
+    "id": "ho2022-cfg",
+    "type": "paper",
+    "title": "Classifier-Free Diffusion Guidance",
+    "authors": [
+      "Ho, Jonathan",
+      "Salimans, Tim"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2207.12598",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "Guidance without a separate classifier. Lesson 20.6."
+  },
+  {
+    "id": "lipman2022-flow-matching",
+    "type": "paper",
+    "title": "Flow Matching for Generative Modeling",
+    "authors": [
+      "Lipman, Yaron",
+      "Chen, Ricky T. Q.",
+      "Ben-Hamu, Heli",
+      "Nickel, Maximilian",
+      "Le, Matt"
+    ],
+    "year": 2022,
+    "venue": "arXiv (ICLR 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2210.02747",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "Simulation-free training of continuous normalizing flows. Lesson 20.4."
+  },
+  {
+    "id": "luo2022-diffusion-tutorial",
+    "type": "paper",
+    "title": "Understanding Diffusion Models: A Unified Perspective",
+    "authors": [
+      "Luo, Calvin"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2208.11970",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      20
+    ],
+    "notes": "ELBO-based derivation tutorial linking VAEs, diffusion and score matching. Derivation companion for 20.1-20.4."
+  },
+  {
+    "id": "salinas2020-deepar",
+    "type": "paper",
+    "title": "DeepAR: Probabilistic Forecasting with Autoregressive Recurrent Networks",
+    "authors": [
+      "Salinas, David",
+      "Flunkert, Valentin",
+      "Gasthaus, Jan",
+      "Januschowski, Tim"
+    ],
+    "year": 2017,
+    "venue": "arXiv; International Journal of Forecasting 2020",
+    "doi": "10.1016/j.ijforecast.2019.07.001",
+    "url": "https://arxiv.org/abs/1704.04110",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Global autoregressive RNN with likelihood outputs. Lesson 21.6."
+  },
+  {
+    "id": "oreshkin2019-nbeats",
+    "type": "paper",
+    "title": "N-BEATS: Neural basis expansion analysis for interpretable time series forecasting",
+    "authors": [
+      "Oreshkin, Boris N.",
+      "Carpov, Dmitri",
+      "Chapados, Nicolas",
+      "Bengio, Yoshua"
+    ],
+    "year": 2019,
+    "venue": "arXiv (ICLR 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1905.10437",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Pure MLP stacks with backcast/forecast residual blocks. Lesson 21.6."
+  },
+  {
+    "id": "lim2021-tft",
+    "type": "paper",
+    "title": "Temporal Fusion Transformers for Interpretable Multi-horizon Time Series Forecasting",
+    "authors": [
+      "Lim, Bryan",
+      "Arik, Sercan O.",
+      "Loeff, Nicolas",
+      "Pfister, Tomas"
+    ],
+    "year": 2019,
+    "venue": "arXiv; International Journal of Forecasting 2021",
+    "doi": "10.1016/j.ijforecast.2021.03.012",
+    "url": "https://arxiv.org/abs/1912.09363",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Attention-based multi-horizon model with covariate handling and quantile outputs. Lesson 21.6."
+  },
+  {
+    "id": "nie2022-patchtst",
+    "type": "paper",
+    "title": "A Time Series is Worth 64 Words: Long-term Forecasting with Transformers",
+    "authors": [
+      "Nie, Yuqi",
+      "Nguyen, Nam H.",
+      "Sinthong, Phanwadee",
+      "Kalagnanam, Jayant"
+    ],
+    "year": 2022,
+    "venue": "arXiv (ICLR 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2211.14730",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Patching plus channel independence for transformer forecasters. Lesson 21.6."
+  },
+  {
+    "id": "zeng2022-dlinear",
+    "type": "paper",
+    "title": "Are Transformers Effective for Time Series Forecasting?",
+    "authors": [
+      "Zeng, Ailing",
+      "Chen, Muxi",
+      "Zhang, Lei",
+      "Xu, Qiang"
+    ],
+    "year": 2022,
+    "venue": "arXiv (AAAI 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2205.13504",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Simple linear models (DLinear) rival many transformer forecasters on long-horizon benchmarks. Key misconception source."
+  },
+  {
+    "id": "ansari2024-chronos",
+    "type": "paper",
+    "title": "Chronos: Learning the Language of Time Series",
+    "authors": [
+      "Ansari, Abdul Fatir",
+      "Stella, Lorenzo",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2403.07815",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Tokenizes scaled values and trains language-model architectures for zero-shot forecasting. Lesson 21.7."
+  },
+  {
+    "id": "das2023-timesfm",
+    "type": "paper",
+    "title": "A decoder-only foundation model for time-series forecasting",
+    "authors": [
+      "Das, Abhimanyu",
+      "Kong, Weihao",
+      "Sen, Rajat",
+      "Zhou, Yichen"
+    ],
+    "year": 2023,
+    "venue": "arXiv (ICML 2024)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2310.10688",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "TimesFM. Lesson 21.7."
+  },
+  {
+    "id": "woo2024-moirai",
+    "type": "paper",
+    "title": "Unified Training of Universal Time Series Forecasting Transformers",
+    "authors": [
+      "Woo, Gerald",
+      "Liu, Chenghao",
+      "Kumar, Akshat",
+      "Xiong, Caiming",
+      "Savarese, Silvio",
+      "Sahoo, Doyen"
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2402.02592",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Moirai, a universal multivariate forecaster. Optional comparison in 21.7."
+  },
+  {
+    "id": "aksu2024-gift-eval",
+    "type": "paper",
+    "title": "GIFT-Eval: A Benchmark For General Time Series Forecasting Model Evaluation",
+    "authors": [
+      "Aksu, Taha",
+      "Woo, Gerald",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2410.10393",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Benchmark for foundation forecasters with attention to leakage. Lesson 21.7."
+  },
+  {
+    "id": "makridakis2020-m4",
+    "type": "paper",
+    "title": "The M4 Competition: 100,000 time series and 61 forecasting methods",
+    "authors": [
+      "Makridakis, Spyros",
+      "Spiliotis, Evangelos",
+      "Assimakopoulos, Vassilios"
+    ],
+    "year": 2020,
+    "venue": "International Journal of Forecasting",
+    "doi": "10.1016/j.ijforecast.2019.04.014",
+    "url": "https://doi.org/10.1016/j.ijforecast.2019.04.014",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Results favoured combinations and hybrid methods over pure ML at the time. Evidence for the benchmarks-first lesson."
+  },
+  {
+    "id": "makridakis2022-m5",
+    "type": "paper",
+    "title": "M5 accuracy competition: Results, findings, and conclusions",
+    "authors": [
+      "Makridakis, Spyros",
+      "Spiliotis, Evangelos",
+      "Assimakopoulos, Vassilios"
+    ],
+    "year": 2022,
+    "venue": "International Journal of Forecasting",
+    "doi": "10.1016/j.ijforecast.2021.11.013",
+    "url": "https://doi.org/10.1016/j.ijforecast.2021.11.013",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Hierarchical retail sales; gradient-boosted trees dominated. Motivates lesson 21.4."
+  },
+  {
+    "id": "gneiting2007-scoring-rules",
+    "type": "paper",
+    "title": "Strictly Proper Scoring Rules, Prediction, and Estimation",
+    "authors": [
+      "Gneiting, Tilmann",
+      "Raftery, Adrian E."
+    ],
+    "year": 2007,
+    "venue": "Journal of the American Statistical Association",
+    "doi": "10.1198/016214506000001437",
+    "url": "https://doi.org/10.1198/016214506000001437",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Theory of proper scoring rules incl. CRPS. Rigor source for 21.5."
+  },
+  {
+    "id": "hewamalage2022-forecast-eval",
+    "type": "paper",
+    "title": "Forecast evaluation for data scientists: common pitfalls and best practices",
+    "authors": [
+      "Hewamalage, Hansika",
+      "Ackermann, Klaus",
+      "Bergmeir, Christoph"
+    ],
+    "year": 2022,
+    "venue": "Data Mining and Knowledge Discovery",
+    "doi": "10.1007/s10618-022-00894-5",
+    "url": "https://doi.org/10.1007/s10618-022-00894-5",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Catalogue of evaluation pitfalls (leakage, unsuitable metrics, benchmark choice). Misconception bank for 21.2."
+  },
+  {
+    "id": "hyndman2006-forecast-accuracy",
+    "type": "paper",
+    "title": "Another look at measures of forecast accuracy",
+    "authors": [
+      "Hyndman, Rob J.",
+      "Koehler, Anne B."
+    ],
+    "year": 2006,
+    "venue": "International Journal of Forecasting",
+    "doi": "10.1016/j.ijforecast.2006.03.001",
+    "url": "https://doi.org/10.1016/j.ijforecast.2006.03.001",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21
+    ],
+    "notes": "Introduces MASE and critiques percentage errors. Derivation target in 21.2."
+  },
+  {
+    "id": "liu2008-isolation-forest",
+    "type": "paper",
+    "title": "Isolation Forest",
+    "authors": [
+      "Liu, Fei Tony",
+      "Ting, Kai Ming",
+      "Zhou, Zhi-Hua"
+    ],
+    "year": 2008,
+    "venue": "IEEE ICDM 2008",
+    "doi": "10.1109/ICDM.2008.17",
+    "url": "https://doi.org/10.1109/ICDM.2008.17",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Anomalies isolate in fewer random splits. Build from scratch in 22.3."
+  },
+  {
+    "id": "chandola2009-anomaly-survey",
+    "type": "paper",
+    "title": "Anomaly detection: A survey",
+    "authors": [
+      "Chandola, Varun",
+      "Banerjee, Arindam",
+      "Kumar, Vipin"
+    ],
+    "year": 2009,
+    "venue": "ACM Computing Surveys",
+    "doi": "10.1145/1541880.1541882",
+    "url": "https://doi.org/10.1145/1541880.1541882",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Taxonomy: point/contextual/collective anomalies, label availability, technique families. Framing for 22.1."
+  },
+  {
+    "id": "ruff2020-unifying-ad",
+    "type": "paper",
+    "title": "A Unifying Review of Deep and Shallow Anomaly Detection",
+    "authors": [
+      "Ruff, Lukas",
+      "Kauffmann, Jacob R.",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (Proceedings of the IEEE 2021)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2009.11732",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Connects density, one-class and reconstruction approaches. Lesson 22.3-22.4."
+  },
+  {
+    "id": "hundman2018-telemanom",
+    "type": "paper",
+    "title": "Detecting Spacecraft Anomalies Using LSTMs and Nonparametric Dynamic Thresholding",
+    "authors": [
+      "Hundman, Kyle",
+      "Constantinou, Valentino",
+      "Laporte, Christopher",
+      "Colwell, Ian",
+      "Soderstrom, Tom"
+    ],
+    "year": 2018,
+    "venue": "KDD 2018",
+    "doi": "10.1145/3219819.3219845",
+    "url": "https://doi.org/10.1145/3219819.3219845",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Forecast-residual detection with dynamic thresholds on telemetry. Lesson 22.4; arXiv copy exists (not checked)."
+  },
+  {
+    "id": "wu2021-tsad-flawed",
+    "type": "paper",
+    "title": "Current Time Series Anomaly Detection Benchmarks are Flawed and are Creating the Illusion of Progress",
+    "authors": [
+      "Wu, Renjie",
+      "Keogh, Eamonn J."
+    ],
+    "year": 2021,
+    "venue": "IEEE Transactions on Knowledge and Data Engineering",
+    "doi": "10.1109/TKDE.2021.3112126",
+    "url": "https://doi.org/10.1109/TKDE.2021.3112126",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Shows trivial solvability, label errors and run-to-failure bias in popular benchmarks. Misconception source for 22.5."
+  },
+  {
+    "id": "kim2022-tsad-rigorous",
+    "type": "paper",
+    "title": "Towards a Rigorous Evaluation of Time-Series Anomaly Detection",
+    "authors": [
+      "Kim, Siwon",
+      "Choi, Kukjin",
+      "Choi, Hyun-Soo",
+      "Lee, Byunghan",
+      "Yoon, Sungroh"
+    ],
+    "year": 2022,
+    "venue": "AAAI 2022",
+    "doi": "10.1609/aaai.v36i7.20680",
+    "url": "https://doi.org/10.1609/aaai.v36i7.20680",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Point-adjusted F1 can make random scores look state-of-the-art; proposes stricter protocol. Predict-the-output exercise."
+  },
+  {
+    "id": "schmidl2022-tsad-eval",
+    "type": "paper",
+    "title": "Anomaly detection in time series: a comprehensive evaluation",
+    "authors": [
+      "Schmidl, Sebastian",
+      "Wenig, Phillip",
+      "Papenbrock, Thorsten"
+    ],
+    "year": 2022,
+    "venue": "Proceedings of the VLDB Endowment",
+    "doi": "10.14778/3538598.3538602",
+    "url": "https://doi.org/10.14778/3538598.3538602",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "Large-scale comparison of many detectors across datasets. Reference for which simple methods are competitive."
+  },
+  {
+    "id": "granderson2023-hvac-faults",
+    "type": "paper",
+    "title": "A labeled dataset for building HVAC systems operating in faulted and fault-free states",
+    "authors": [
+      "Granderson, Jessica",
+      "Lin, Guanjing",
+      "et al."
+    ],
+    "year": 2023,
+    "venue": "Scientific Data",
+    "doi": "10.1038/s41597-023-02197-w",
+    "url": "https://doi.org/10.1038/s41597-023-02197-w",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      22
+    ],
+    "notes": "LBNL labeled HVAC fault data. Ideal capstone data for 22.6 given the learner's HVAC background."
+  },
+  {
+    "id": "mnih2015-dqn",
+    "type": "paper",
+    "title": "Human-level control through deep reinforcement learning",
+    "authors": [
+      "Mnih, Volodymyr",
+      "Kavukcuoglu, Koray",
+      "Silver, David",
+      "et al."
+    ],
+    "year": 2015,
+    "venue": "Nature",
+    "doi": "10.1038/nature14236",
+    "url": "https://doi.org/10.1038/nature14236",
+    "open_url": "https://arxiv.org/abs/1312.5602",
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "DQN with replay and target networks. Lesson 23.4; the 2013 workshop version is open on arXiv."
+  },
+  {
+    "id": "schulman2017-ppo",
+    "type": "paper",
+    "title": "Proximal Policy Optimization Algorithms",
+    "authors": [
+      "Schulman, John",
+      "Wolski, Filip",
+      "Dhariwal, Prafulla",
+      "Radford, Alec",
+      "Klimov, Oleg"
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1707.06347",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      17,
+      23
+    ],
+    "notes": "Clipped surrogate objective. Lesson 23.6 and RLHF in 17.7."
+  },
+  {
+    "id": "schulman2015-gae",
+    "type": "paper",
+    "title": "High-Dimensional Continuous Control Using Generalized Advantage Estimation",
+    "authors": [
+      "Schulman, John",
+      "Moritz, Philipp",
+      "Levine, Sergey",
+      "Jordan, Michael",
+      "Abbeel, Pieter"
+    ],
+    "year": 2015,
+    "venue": "arXiv (ICLR 2016)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1506.02438",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "GAE bias-variance knob. Derive and unit-test in 23.5."
+  },
+  {
+    "id": "henderson2017-deep-rl-matters",
+    "type": "paper",
+    "title": "Deep Reinforcement Learning that Matters",
+    "authors": [
+      "Henderson, Peter",
+      "Islam, Riashat",
+      "Bachman, Philip",
+      "Pineau, Joelle",
+      "Precup, Doina",
+      "Meger, David"
+    ],
+    "year": 2017,
+    "venue": "arXiv (AAAI 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1709.06560",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Seeds, implementations and reporting change conclusions. Basis for multi-seed mastery criteria."
+  },
+  {
+    "id": "engstrom2020-implementation-matters",
+    "type": "paper",
+    "title": "Implementation Matters in Deep Policy Gradients: A Case Study on PPO and TRPO",
+    "authors": [
+      "Engstrom, Logan",
+      "Ilyas, Andrew",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (ICLR 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2005.12729",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Code-level optimizations drive much of PPO's edge. Debugging lesson 23.6."
+  },
+  {
+    "id": "huang2021-cleanrl",
+    "type": "paper",
+    "title": "CleanRL: High-quality Single-file Implementations of Deep Reinforcement Learning Algorithms",
+    "authors": [
+      "Huang, Shengyi",
+      "Dossa, Rousslan Fernand Julien",
+      "Ye, Chang",
+      "Braga, Jeff",
+      "et al."
+    ],
+    "year": 2021,
+    "venue": "arXiv (JMLR 2022)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2111.08819",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Single-file reference implementations. Production comparison for local 23.4/23.6."
+  },
+  {
+    "id": "towers2024-gymnasium",
+    "type": "paper",
+    "title": "Gymnasium: A Standard Interface for Reinforcement Learning Environments",
+    "authors": [
+      "Towers, Mark",
+      "Kwiatkowski, Ariel",
+      "et al."
+    ],
+    "year": 2024,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2407.17032",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Standard env API. Local only: it failed to import in Pyodide 314 (no _multiprocessing), so browser lessons need a tiny compatible env class."
+  },
+  {
+    "id": "lattimore2020-bandits",
+    "type": "book",
+    "title": "Bandit Algorithms",
+    "authors": [
+      "Lattimore, Tor",
+      "Szepesvari, Csaba"
+    ],
+    "year": 2020,
+    "venue": "Cambridge University Press",
+    "doi": "10.1017/9781108571401",
+    "url": "https://doi.org/10.1017/9781108571401",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23
+    ],
+    "notes": "Rigorous bandit theory (UCB, Thompson, regret bounds). Depth for 23.1; free author PDF reported (not checked)."
+  },
+  {
+    "id": "recht2019-tour-rl",
+    "type": "paper",
+    "title": "A Tour of Reinforcement Learning: The View from Continuous Control",
+    "authors": [
+      "Recht, Benjamin"
+    ],
+    "year": 2018,
+    "venue": "arXiv; Annual Review of Control, Robotics, and Autonomous Systems 2019",
+    "doi": "10.1146/annurev-control-053018-023825",
+    "url": "https://arxiv.org/abs/1806.09460",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Frames RL through LQR and optimal control, comparing model-based and model-free sample efficiency. The single best bridge for this learner."
+  },
+  {
+    "id": "lazic2018-dc-mpc",
+    "type": "paper",
+    "title": "Data center cooling using model-predictive control",
+    "authors": [
+      "Lazic, Nevena",
+      "Boutilier, Craig",
+      "Lu, Tyler",
+      "Wong, Eehern",
+      "Roy, Binz",
+      "Ryu, MK",
+      "Imwalle, Greg"
+    ],
+    "year": 2018,
+    "venue": "NeurIPS 2018",
+    "doi": null,
+    "url": "https://papers.nips.cc/paper_files/paper/2018/hash/059fdcd96baeb75112f09fa1dcc740cc-Abstract.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "MPC with a learned linear model for data-center cooling as a safer alternative to model-free RL. Capstone anchor for 24.5-24.6."
+  },
+  {
+    "id": "luo2022-cooling-rl",
+    "type": "paper",
+    "title": "Controlling Commercial Cooling Systems Using Reinforcement Learning",
+    "authors": [
+      "Luo, Jerry",
+      "Paduraru, Cosmin",
+      "et al."
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2211.07357",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      23,
+      24
+    ],
+    "notes": "Deployment lessons from RL control of commercial cooling plants. Case study for 23.7/24.6."
+  },
+  {
+    "id": "raissi2019-pinns",
+    "type": "paper",
+    "title": "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations",
+    "authors": [
+      "Raissi, Maziar",
+      "Perdikaris, Paris",
+      "Karniadakis, George Em"
+    ],
+    "year": 2019,
+    "venue": "Journal of Computational Physics",
+    "doi": "10.1016/j.jcp.2018.10.045",
+    "url": "https://doi.org/10.1016/j.jcp.2018.10.045",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Original PINN formulation (PDE residual in the loss). Lesson 24.7."
+  },
+  {
+    "id": "karniadakis2021-piml",
+    "type": "paper",
+    "title": "Physics-informed machine learning",
+    "authors": [
+      "Karniadakis, George Em",
+      "Kevrekidis, Ioannis G.",
+      "Lu, Lu",
+      "Perdikaris, Paris",
+      "Wang, Sifan",
+      "Yang, Liu"
+    ],
+    "year": 2021,
+    "venue": "Nature Reviews Physics",
+    "doi": "10.1038/s42254-021-00314-5",
+    "url": "https://doi.org/10.1038/s42254-021-00314-5",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Review of ways to embed physics (data, architecture, loss). Framing for 24.7."
+  },
+  {
+    "id": "krishnapriyan2021-pinn-failures",
+    "type": "paper",
+    "title": "Characterizing possible failure modes in physics-informed neural networks",
+    "authors": [
+      "Krishnapriyan, Aditi S.",
+      "Gholami, Amir",
+      "Zhe, Shandian",
+      "Kirby, Robert M.",
+      "Mahoney, Michael W."
+    ],
+    "year": 2021,
+    "venue": "arXiv (NeurIPS 2021)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2109.01050",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "PINNs fail on harder convection/reaction regimes due to ill-conditioned loss landscapes. Misconception source."
+  },
+  {
+    "id": "brunton2016-sindy",
+    "type": "paper",
+    "title": "Discovering governing equations from data by sparse identification of nonlinear dynamical systems",
+    "authors": [
+      "Brunton, Steven L.",
+      "Proctor, Joshua L.",
+      "Kutz, J. Nathan"
+    ],
+    "year": 2016,
+    "venue": "PNAS",
+    "doi": "10.1073/pnas.1517384113",
+    "url": "https://doi.org/10.1073/pnas.1517384113",
+    "open_url": null,
+    "access": "partial",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "SINDy sparse regression over candidate functions. pysindy 2.1.0 ran in Pyodide, so lesson 24.3 can be in-browser."
+  },
+  {
+    "id": "kalman1960-filtering",
+    "type": "paper",
+    "title": "A New Approach to Linear Filtering and Prediction Problems",
+    "authors": [
+      "Kalman, Rudolf E."
+    ],
+    "year": 1960,
+    "venue": "Journal of Basic Engineering",
+    "doi": "10.1115/1.3662552",
+    "url": "https://doi.org/10.1115/1.3662552",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      15,
+      21,
+      22,
+      24
+    ],
+    "notes": "The Kalman filter. Bridge between state-space control and sequence models / forecasting."
+  },
+  {
+    "id": "andersson2018-casadi",
+    "type": "paper",
+    "title": "CasADi: a software framework for nonlinear optimization and optimal control",
+    "authors": [
+      "Andersson, Joel A. E.",
+      "Gillis, Joris",
+      "Horn, Greg",
+      "Rawlings, James B.",
+      "Diehl, Moritz"
+    ],
+    "year": 2018,
+    "venue": "Mathematical Programming Computation",
+    "doi": "10.1007/s12532-018-0139-4",
+    "url": "https://doi.org/10.1007/s12532-018-0139-4",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Symbolic AD plus NLP/OCP tooling. CasADi 3.7.2 loads in Pyodide (sqpmethod+qrqp worked; IPOPT plugin unavailable), so small NMPC can run in-browser."
+  },
+  {
+    "id": "diamond2016-cvxpy",
+    "type": "paper",
+    "title": "CVXPY: A Python-Embedded Modeling Language for Convex Optimization",
+    "authors": [
+      "Diamond, Steven",
+      "Boyd, Stephen"
+    ],
+    "year": 2016,
+    "venue": "Journal of Machine Learning Research 17(83)",
+    "doi": null,
+    "url": "https://www.jmlr.org/papers/v17/15-408.html",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Disciplined convex programming in Python. cvxpy-base 1.8.2 with Clarabel solved a QP in Pyodide, enabling in-browser MPC."
+  },
+  {
+    "id": "chen2018-neural-ode",
+    "type": "paper",
+    "title": "Neural Ordinary Differential Equations",
+    "authors": [
+      "Chen, Ricky T. Q.",
+      "Rubanova, Yulia",
+      "Bettencourt, Jesse",
+      "Duvenaud, David"
+    ],
+    "year": 2018,
+    "venue": "arXiv (NeurIPS 2018)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1806.07366",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      16,
+      24
+    ],
+    "notes": "Continuous-depth models with adjoint gradients. Bridge from ResNets/adjoints to grey-box dynamics."
+  },
+  {
+    "id": "rackauckas2020-ude",
+    "type": "paper",
+    "title": "Universal Differential Equations for Scientific Machine Learning",
+    "authors": [
+      "Rackauckas, Christopher",
+      "Ma, Yingbo",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2001.04385",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Hybrid mechanistic + neural ODE models. Pattern for the grey-box digital-twin capstone."
+  },
+  {
+    "id": "li2020-fno",
+    "type": "paper",
+    "title": "Fourier Neural Operator for Parametric Partial Differential Equations",
+    "authors": [
+      "Li, Zongyi",
+      "Kovachki, Nikola",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (ICLR 2021)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2010.08895",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      24
+    ],
+    "notes": "Operator learning in Fourier space. Overview-only in 24.7."
+  },
+  {
+    "id": "rajbhandari2019-zero",
+    "type": "paper",
+    "title": "ZeRO: Memory Optimizations Toward Training Trillion Parameter Models",
+    "authors": [
+      "Rajbhandari, Samyam",
+      "Rasley, Jeff",
+      "Ruwase, Olatunji",
+      "He, Yuxiong"
+    ],
+    "year": 2019,
+    "venue": "arXiv (SC 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1910.02054",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      29
+    ],
+    "notes": "Sharding optimizer state, gradients and parameters. Memory-calculator lesson 29.4."
+  },
+  {
+    "id": "shoeybi2019-megatron",
+    "type": "paper",
+    "title": "Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism",
+    "authors": [
+      "Shoeybi, Mohammad",
+      "Patwary, Mostofa",
+      "Puri, Raul",
+      "LeGresley, Patrick",
+      "Casper, Jared",
+      "Catanzaro, Bryan"
+    ],
+    "year": 2019,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1909.08053",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      29
+    ],
+    "notes": "Intra-layer tensor parallelism. Lesson 29.4."
+  },
+  {
+    "id": "zhao2023-fsdp",
+    "type": "paper",
+    "title": "PyTorch FSDP: Experiences on Scaling Fully Sharded Data Parallel",
+    "authors": [
+      "Zhao, Yanli",
+      "Gu, Andrew",
+      "et al."
+    ],
+    "year": 2023,
+    "venue": "arXiv (VLDB 2023)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2304.11277",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      29
+    ],
+    "notes": "Design of PyTorch FSDP. Production comparison for 29.5."
+  },
+  {
+    "id": "mitchell2019-model-cards",
+    "type": "paper",
+    "title": "Model Cards for Model Reporting",
+    "authors": [
+      "Mitchell, Margaret",
+      "Wu, Simone",
+      "Zaldivar, Andrew",
+      "Barnes, Parker",
+      "Vasserman, Lucy",
+      "Hutchinson, Ben",
+      "Spitzer, Elena",
+      "Raji, Inioluwa Deborah",
+      "Gebru, Timnit"
+    ],
+    "year": 2019,
+    "venue": "FAT* 2019",
+    "doi": "10.1145/3287560.3287596",
+    "url": "https://doi.org/10.1145/3287560.3287596",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      28,
+      30
+    ],
+    "notes": "Structured model documentation. Deliverable template for 30.5; arXiv copy exists (not checked)."
+  },
+  {
+    "id": "gebru2021-datasheets",
+    "type": "paper",
+    "title": "Datasheets for datasets",
+    "authors": [
+      "Gebru, Timnit",
+      "Morgenstern, Jamie",
+      "Vecchione, Briana",
+      "Vaughan, Jennifer Wortman",
+      "Wallach, Hanna",
+      "Daume III, Hal",
+      "Crawford, Kate"
+    ],
+    "year": 2021,
+    "venue": "Communications of the ACM",
+    "doi": "10.1145/3458723",
+    "url": "https://doi.org/10.1145/3458723",
+    "open_url": null,
+    "access": "paywalled",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      30
+    ],
+    "notes": "Dataset documentation questions. Used in 27.2 and 30.5."
+  },
+  {
+    "id": "nist2023-ai-rmf",
+    "type": "standard",
+    "title": "Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+    "authors": [
+      "Tabassi, Elham"
+    ],
+    "year": 2023,
+    "venue": "NIST AI 100-1",
+    "doi": "10.6028/NIST.AI.100-1",
+    "url": "https://doi.org/10.6028/NIST.AI.100-1",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      30
+    ],
+    "notes": "Govern/map/measure/manage framework. Governance mapping exercise in 30.5."
+  },
+  {
+    "id": "koh2020-wilds",
+    "type": "paper",
+    "title": "WILDS: A Benchmark of in-the-Wild Distribution Shifts",
+    "authors": [
+      "Koh, Pang Wei",
+      "Sagawa, Shiori",
+      "et al."
+    ],
+    "year": 2020,
+    "venue": "arXiv (ICML 2021)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2012.07421",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      27,
+      30
+    ],
+    "notes": "Real distribution-shift benchmark showing IID vs OOD gaps. Lesson 30.4."
+  },
+  {
+    "id": "geirhos2020-shortcut",
+    "type": "paper",
+    "title": "Shortcut Learning in Deep Neural Networks",
+    "authors": [
+      "Geirhos, Robert",
+      "Jacobsen, Jorn-Henrik",
+      "Michaelis, Claudio",
+      "Zemel, Richard",
+      "Brendel, Wieland",
+      "Bethge, Matthias",
+      "Wichmann, Felix A."
+    ],
+    "year": 2020,
+    "venue": "arXiv (Nature Machine Intelligence 2020)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2004.07780",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      30
+    ],
+    "notes": "Models exploit unintended cues. Failure-mode lesson 30.1."
+  },
+  {
+    "id": "goodfellow2014-adversarial",
+    "type": "paper",
+    "title": "Explaining and Harnessing Adversarial Examples",
+    "authors": [
+      "Goodfellow, Ian J.",
+      "Shlens, Jonathon",
+      "Szegedy, Christian"
+    ],
+    "year": 2014,
+    "venue": "arXiv (ICLR 2015)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1412.6572",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      30
+    ],
+    "notes": "FGSM and the linearity explanation. Lesson 30.3."
+  },
+  {
+    "id": "guo2017-calibration",
+    "type": "paper",
+    "title": "On Calibration of Modern Neural Networks",
+    "authors": [
+      "Guo, Chuan",
+      "Pleiss, Geoff",
+      "Sun, Yu",
+      "Weinberger, Kilian Q."
+    ],
+    "year": 2017,
+    "venue": "arXiv (ICML 2017)",
+    "doi": null,
+    "url": "https://arxiv.org/abs/1706.04599",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      13,
+      30
+    ],
+    "notes": "Modern nets are overconfident; temperature scaling fixes much of it. Lesson 30.3."
+  },
+  {
+    "id": "angelopoulos2021-conformal",
+    "type": "paper",
+    "title": "A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification",
+    "authors": [
+      "Angelopoulos, Anastasios N.",
+      "Bates, Stephen"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "doi": null,
+    "url": "https://arxiv.org/abs/2107.07511",
+    "open_url": null,
+    "access": "open",
+    "license": null,
+    "accessed": "2026-11-12",
+    "verified": true,
+    "modules": [
+      21,
+      30
+    ],
+    "notes": "Split conformal prediction with code-level clarity. Lessons 21.5 and 30.3."
+  }
+]
