@@ -12,8 +12,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 26
           cache: npm
@@ -24,7 +24,7 @@ jobs:
         run: npm test
       - name: Validate content
         run: npm run validate -- --quiet
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v10
       - name: Grader library tests (CPython 3.14, Pyodide-matched versions)
         run: npm run test:python
       - name: Verify every exercise in Pyodide (solution passes, starter and known mistakes fail)
