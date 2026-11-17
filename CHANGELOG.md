@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **Live on GitHub Pages:** https://colbyy03.github.io/hyperscale/ (repo: github.com/colbyy03/hyperscale).
+- **Fix (caught by CI on Linux):** re-checking an edit that kept the file's length within the same second could grade the *previous* code. Python validates cached bytecode by whole-second mtime and size. The grader now removes `__pycache__`, invalidates import caches and disables bytecode writing during grading, in both the browser and CI. A regression test covers it.
+
 ## Phase 2: Code runner and grading (2026-11-16)
 
 - **`hsgrade`** (`python/hsgrade`), a grading library that runs unchanged in Pyodide and CPython:

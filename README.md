@@ -3,6 +3,7 @@
 A personal course and interactive learning environment for going from basic Python and ML to mastery of machine learning engineering. It is aimed at ML for data centers, energy and infrastructure, and set at a fictional hyperscale campus.
 
 - **Plan:** [`PLAN.md`](PLAN.md) (curriculum, schedule, architecture, content format)
+- **Live app:** https://colbyy03.github.io/hyperscale/
 - **Status:** see [`CHANGELOG.md`](CHANGELOG.md)
 
 ## Run it

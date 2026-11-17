@@ -44,3 +44,12 @@ def test_fresh_module_each_run(tmp_path):
     wrong = grade("import numpy as np\ndef double(x):\n    return 3 * np.asarray(x)\n", TESTS, tmp_path)
     right = grade("import numpy as np\ndef double(x):\n    return 2 * np.asarray(x)\n", TESTS, tmp_path)
     assert not wrong["allPassed"] and right["allPassed"]
+
+
+def test_same_length_edit_is_not_served_from_stale_bytecode(tmp_path):
+    """Regression: re-checking a same-length edit within one second must grade the new code."""
+    for _ in range(3):
+        wrong = grade("import numpy as np\ndef double(x):\n    return 3 * np.asarray(x)\n", TESTS, tmp_path)
+        right = grade("import numpy as np\ndef double(x):\n    return 2 * np.asarray(x)\n", TESTS, tmp_path)
+        assert not wrong["allPassed"] and right["allPassed"]
+    assert not (tmp_path / "__pycache__").exists() or not any((tmp_path / "__pycache__").iterdir())

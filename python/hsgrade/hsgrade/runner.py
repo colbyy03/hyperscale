@@ -6,8 +6,10 @@ so a test that passes on your laptop passes in the browser.
 
 from __future__ import annotations
 
+import importlib
 import io
 import os
+import shutil
 import sys
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
@@ -23,13 +25,20 @@ def _forget_learner_modules() -> None:
 
 
 def prepare_workdir(workdir: str | os.PathLike[str], solution_code: str, tests_code: str) -> Path:
-    """Write the learner's code and the tests into a fresh folder."""
+    """Write the learner's code and the tests into a fresh folder.
+
+    Cached bytecode is removed: Python validates .pyc files by source mtime (whole seconds) and size,
+    so an edit that keeps the file length (say 2*x -> 3*x) re-checked within the same second would
+    otherwise import the *previous* code.
+    """
     wd = Path(workdir)
     wd.mkdir(parents=True, exist_ok=True)
     for stale in wd.glob("*.py"):
         stale.unlink()
+    shutil.rmtree(wd / "__pycache__", ignore_errors=True)
     (wd / "solution.py").write_text(solution_code)
     (wd / "test_exercise.py").write_text(tests_code)
+    importlib.invalidate_caches()
     return wd
 
 
@@ -41,6 +50,10 @@ def run_grading(workdir: str | os.PathLike[str]) -> dict[str, Any]:
 
     wd = Path(workdir).resolve()
     _forget_learner_modules()
+    importlib.invalidate_caches()
+    # Never write bytecode for learner or test files (see prepare_workdir); pytest honours this too.
+    old_dont_write = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
     sys.path.insert(0, str(wd))
     old_cwd = os.getcwd()
     os.chdir(wd)
@@ -53,6 +66,7 @@ def run_grading(workdir: str | os.PathLike[str]) -> dict[str, Any]:
                 plugins=[collector],
             )
     finally:
+        sys.dont_write_bytecode = old_dont_write
         os.chdir(old_cwd)
         try:
             sys.path.remove(str(wd))
