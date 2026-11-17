@@ -6,4 +6,5 @@ type AnyProps = Record<string, unknown>;
 export const vizRegistry: Record<string, LazyExoticComponent<ComponentType<AnyProps>>> = {
   PueCalculator: lazy(() => import("./PueCalculator")),
   HeatPath: lazy(() => import("./HeatPath")),
+  ControlRoom: lazy(() => import("./ControlRoom")),
 };

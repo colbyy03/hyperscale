@@ -7,9 +7,10 @@
     "Trace electrical power from the utility to the chip and name where it is lost",
     "Trace heat from the chip to the atmosphere, with and without an economizer",
     "Compute PUE, WUE and CUE from facility data and explain what each metric misses",
-    "Use the ASHRAE inlet envelope and chiller lift to reason about cooling setpoints"
+    "Use the ASHRAE inlet envelope and chiller lift to reason about cooling setpoints",
+    "Tune a simulated data hall by hand against a hard inlet-temperature constraint, and explain why total energy, not PUE, is the objective"
   ],
-  "concepts": ["dc-power-chain", "dc-cooling-chain", "heat-balance", "pue", "wue-cue", "ashrae-envelope", "economizer", "chiller-lift-cop", "learning-loop"],
+  "concepts": ["dc-power-chain", "dc-cooling-chain", "heat-balance", "pue", "wue-cue", "ashrae-envelope", "economizer", "chiller-lift-cop", "learning-loop", "fan-affinity", "airflow-management", "setpoint-tradeoffs"],
   "facilityUnlock": "ops-console",
   "incidents": [],
   "sources": ["femp2024-dc-best-practices", "shehabi2024-us-dc-energy", "uptime2026-global-survey"],

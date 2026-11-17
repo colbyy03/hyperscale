@@ -1187,6 +1187,7 @@ Section 3 is the pedagogical spec; this is how the app implements it.
   - **Fidelity levels.** Level 1 (about 21 states) for hand tuning, Level 2 for controller and FDD work, Level 3 for the AI pod and power chain.
   - **Timing.** Physics runs at 1–5 s steps, controllers every 10–60 s, logs every 60 s, plus 5-minute ML snapshots.
   - **Baseline controls.** Ten control loops form the "BMS v1" you later beat: supply-air PI, containment ΔP, pumping, chilled-water reset, chiller staging, condenser water, economizer mode, humidity, liquid loop, and a supervisory safety cap.
+  - **Status:** Level 1 shipped in Phase 3b (`python/sim`, 15 physics tests); the Control Room runs it in a dedicated Pyodide worker.
   - **Validation tests** include:
     - steady-state energy closure within 1%;
     - the design point;

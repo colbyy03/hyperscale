@@ -17,6 +17,7 @@ const ExitRecall = lazy(() => import("@/routes/Review").then((m) => ({ default: 
 const Practice = lazy(() => import("@/routes/Practice").then((m) => ({ default: m.Practice })));
 const PracticeSession = lazy(() => import("@/routes/Practice").then((m) => ({ default: m.PracticeSession })));
 const ExercisePage = lazy(() => import("@/routes/Practice").then((m) => ({ default: m.ExercisePage })));
+const ControlRoomPage = lazy(() => import("@/routes/ControlRoomPage").then((m) => ({ default: m.ControlRoomPage })));
 const Progress = lazy(() => import("@/routes/Progress").then((m) => ({ default: m.Progress })));
 const Sources = lazy(() => import("@/routes/Sources").then((m) => ({ default: m.Sources })));
 const Settings = lazy(() => import("@/routes/Settings").then((m) => ({ default: m.Settings })));
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
         { path: "review", element: suspended(<Review />) },
         { path: "review/exit", element: suspended(<ExitRecall />) },
         { path: "facility", element: <Facility /> },
+        { path: "facility/control-room", element: suspended(<ControlRoomPage />) },
         { path: "projects", element: <Projects /> },
         { path: "progress", element: suspended(<Progress />) },
         { path: "sources", element: suspended(<Sources />) },

@@ -10,6 +10,9 @@ import hsPlugin from "../../python/hsgrade/hsgrade/plugin.py?raw";
 import hsRunner from "../../python/hsgrade/hsgrade/runner.py?raw";
 import { PYODIDE_URL, type GradeResult, type RunResult, type WorkerRequest, type WorkerResponse } from "./protocol";
 
+// The data-hall simulator package (pure Python, no NumPy).
+const simFiles = import.meta.glob<string>("../../python/sim/hyperscale_sim/*.py", { query: "?raw", import: "default", eager: true });
+
 declare const self: DedicatedWorkerGlobalScope;
 
 let pyodide: PyodideAPI | null = null;
@@ -23,15 +26,24 @@ function status(message: string) {
   self.postMessage({ id: 0, status: message } satisfies WorkerResponse);
 }
 
-async function init(): Promise<void> {
+async function init(mode: "grader" | "sim"): Promise<void> {
   status("Starting Python…");
   const mod = (await import(/* @vite-ignore */ `${PYODIDE_URL}pyodide.mjs`)) as { loadPyodide: (opts: { indexURL: string }) => Promise<PyodideAPI> };
   const py = await mod.loadPyodide({ indexURL: PYODIDE_URL });
+  py.FS.mkdirTree("/hs/lib/hsgrade");
+  py.FS.mkdirTree("/hs/lib/hyperscale_sim");
+  py.FS.mkdirTree("/hs/work");
+  for (const [path, source] of Object.entries(simFiles)) py.FS.writeFile(`/hs/lib/hyperscale_sim/${path.split("/").pop()}`, source);
+  if (mode === "sim") {
+    // The simulator needs only the standard library, so it starts without any package download.
+    py.runPython("import sys\nsys.path.insert(0, '/hs/lib')\nimport hyperscale_sim.bridge");
+    pyodide = py;
+    status("Python ready");
+    return;
+  }
   status("Loading NumPy and pytest…");
   await py.loadPackage(["numpy", "pytest"]);
   for (const p of ["numpy", "pytest"]) loaded.add(p);
-  py.FS.mkdirTree("/hs/lib/hsgrade");
-  py.FS.mkdirTree("/hs/work");
   py.FS.writeFile("/hs/lib/hsgrade/__init__.py", hsInit);
   py.FS.writeFile("/hs/lib/hsgrade/checks.py", hsChecks);
   py.FS.writeFile("/hs/lib/hsgrade/plugin.py", hsPlugin);
@@ -40,6 +52,12 @@ async function init(): Promise<void> {
   py.runPython("import sys\nsys.path.insert(0, '/hs/lib')\nimport numpy, pytest, hsgrade");
   pyodide = py;
   status("Python ready");
+}
+
+function sim(request: string): string {
+  const py = pyodide!;
+  py.globals.set("_hs_sim_request", request);
+  return py.runPython("import hyperscale_sim.bridge as _b\n_b.handle_json(_hs_sim_request)") as string;
 }
 
 async function ensurePackages(packages: string[], code?: string): Promise<void> {
@@ -116,10 +134,11 @@ async function grade(solution: string, tests: string, packages: string[]): Promi
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   const req = event.data;
   try {
-    ready ??= init();
+    ready ??= init(req.type === "init" ? (req.mode ?? "grader") : "grader");
     await ready;
     let result: unknown;
     if (req.type === "init") result = true;
+    else if (req.type === "sim") result = sim(req.request);
     else if (req.type === "load") result = await ensurePackages(req.packages, req.code);
     else if (req.type === "run") result = await run(req.code, req.packages);
     else result = await grade(req.solution, req.tests, req.packages);

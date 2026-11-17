@@ -72,6 +72,13 @@ test("a full daily session runs end to end, then reviews and the gate the next d
   await expect(page.getByRole("heading", { level: 1, name: "The data hall in one picture" })).toBeVisible();
   await page.getByRole("button", { name: /Mark lesson complete/ }).click();
   await expect(page.getByText(/10 cards added to your reviews/)).toBeVisible();
+  await page.getByRole("link", { name: /Next in today's session: Hands on the controls/ }).click();
+
+  // The Control Room lesson; the simulator itself only starts on request, so this stays fast.
+  await expect(page.getByRole("heading", { level: 1, name: "Hands on the controls" })).toBeVisible();
+  await expect(page.getByTestId("power-on")).toBeVisible();
+  await page.getByRole("button", { name: /Mark lesson complete/ }).click();
+  await expect(page.getByText(/5 cards added to your reviews/)).toBeVisible();
   await page.getByRole("link", { name: /Next in today's session: Mixed practice/ }).click();
 
   for (;;) {
@@ -144,6 +151,7 @@ test("a failed gate waits 24 hours before a retake", async ({ page }) => {
   await page.clock.setFixedTime(DAY1);
   await completeLesson(page, "/learn/induction/welcome", "Welcome to Kestrel Ridge");
   await completeLesson(page, "/learn/induction/data-hall", "The data hall in one picture");
+  await completeLesson(page, "/learn/induction/controls", "Hands on the controls");
 
   await page.clock.setFixedTime(DAY2);
   await page.goto("/learn/induction/checkpoint");

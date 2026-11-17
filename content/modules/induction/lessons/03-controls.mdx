@@ -1,0 +1,86 @@
+---
+id: induction/controls
+title: Hands on the controls
+minutes: 30
+concepts: [fan-affinity, airflow-management, setpoint-tradeoffs, economizer, chiller-lift-cop, ashrae-envelope, pue]
+sources: [femp2024-dc-best-practices, energyplus96-eng-ref-ite, energyplus96-eng-ref-chillers, energyplus96-eng-ref-cooling-towers, lazic2018-dc-cooling-mpc, gamble-gao2018-safety-first-cooling, meta2024-sim-rl-dc-cooling, schneider-wp179-cooling-outage-temp-rise]
+cards: [fan-cube-law, recirculation-cause, chws-reset-limit, pue-server-fan-trap, coil-needs-a-gap]
+---
+
+<Situation from="Dev, controls engineer">
+You've walked the hall; now take the console. The building management system keeps Hall A inside its limits, but we tuned it conservatively when the hall opened and nobody has touched it since. Before any model of yours gets near the real plant, I want a human baseline: the best day you can run by hand on the simulator. Everything you build later has to beat it.
+</Situation>
+
+## What you control, and what runs itself
+
+The Control Room below is a live model of Hall A. It's built from the same kind of physics engineers use for design studies: energy balances on the air in each aisle, the servers' thermal mass, coil heat-exchanger equations, a chiller whose efficiency depends on its lift, and towers that can only cool water toward the outdoor wet-bulb temperature. It runs one simulated day in a few seconds.
+
+You set four things:
+
+1. **Supply air**: the temperature the fan walls deliver to the cold aisle.
+2. **Chilled water**: the temperature the plant sends to the coils.
+3. **Fan walls**: automatic (they hold the cold aisle slightly above the hot aisle's pressure) or a fixed manual speed.
+4. **Economizer**: allowed to run when the towers can make water colder than what's coming back, or switched off.
+
+The building's own loops do the rest. Each coil's valve opens until the supply air hits your setpoint, chillers stage on and off, tower fans chase the coldest water the weather allows. That split between what you decide and what the inner loops decide is how real plants work. The setpoints are where the money is.
+
+**The score** is total facility energy for the day, with one hard rule: no rack inlet may spend a single minute above 27 °C, the top of ASHRAE's recommended range. A run that breaks the rule doesn't count, however little energy it used.
+
+## Predict first
+
+<Predict
+  id="fan-speed"
+  question="The fan walls slow from 100% to 70% speed. Roughly what happens to their electrical power?"
+  options={["It falls by about 30%", "It falls by about 50%", "It falls by about 60–65%", "It barely changes"]}
+  answer={2}
+  explain="Fan power scales roughly with the cube of speed (the affinity laws; real fans come out nearer the 2.7th power). 0.7³ ≈ 0.34, so power falls by about two thirds. That's why slowing fans is the cheapest win in most data halls, and why it's tempting to overdo it."
+/>
+
+<Predict
+  id="chws-up"
+  question="You raise the chilled-water setpoint from 16 °C to 18 °C and leave everything else alone. What happens to chiller power?"
+  options={["It rises, because warmer water carries less heat", "It falls", "It stays the same"]}
+  answer={1}
+  explain="Warmer chilled water means a smaller lift between the evaporator and the condenser, so each kilowatt of cooling needs less compressor work. On top of that, the economizer can carry more of the load, because tower water only has to get below a higher target."
+/>
+
+<Predict
+  id="fans-too-slow"
+  question="On a busy afternoon you set the fans to a fixed 55%. What happens to the hottest rack inlets?"
+  options={["They fall, because the fans add less heat", "They climb: the servers pull hot air back from the hot aisle", "Nothing: the coil valves compensate"]}
+  answer={1}
+  explain="Servers pull a fixed amount of air through themselves. If the fan walls supply less than that, the shortfall comes from the hot aisle, over the tops of the racks or through gaps. The supply air can be exactly on setpoint while the top of every rack breathes recirculated exhaust."
+/>
+
+## Run the plant
+
+<Viz name="ControlRoom" />
+
+How to work it:
+
+1. **Run the day once on the defaults.** That's the hall as it's tuned today. Note its energy and PUE.
+2. **Change one thing at a time** and run the day again. When a change helps, keep it and try the next.
+3. **Watch the warnings.** The pod tiles show the hottest rack inlet in each pod and flag recirculation. The inlet chart has the 27 °C line on it.
+4. **Save your best valid run** as your baseline. It's stored on this device, and your controllers race it later in the course.
+
+Some things worth trying, without spoiling the answers: raise the chilled water in half-degree steps and watch what happens to the coil valves; try manual fans and find the speed where the recirculation warning appears; see what the economizer is worth by switching it off for a day; and run the spring day, where the weather does most of the work.
+
+<KeyIdea title="A coil needs a temperature gap">
+A coil can only cool air *toward* the water flowing through it. To pull 1.25 MW out of a pod's return air it needs enough temperature difference between the hot air coming back and the chilled water going in. Raise the water temperature and the gap shrinks, so the valve opens wider to compensate. Once the valve is wide open, the supply air can't reach its setpoint any more and starts to float up, and so do the inlets. The best chilled-water setpoint sits just below that edge, and the edge moves with the load and the weather.
+</KeyIdea>
+
+<Craft title="PUE is not the objective">
+Server fans speed up when their inlet air gets warmer, roughly above 25 °C. Their power counts as *IT* power, so warming the hall can grow the bottom of the PUE ratio faster than the top. Facility overhead falls a little, PUE improves, and the total electricity bill goes **up**. Industry teams that apply ML to cooling optimize total energy under hard safety constraints for exactly this reason. Your score here does the same.
+</Craft>
+
+<Bridge title="Engineering bridge: a constrained optimization">
+What you're doing by hand is constrained optimization: minimize energy over a few decision variables, subject to an inequality constraint on every inlet temperature. The constraint is *active*, because the best settings sit right against it. Later in the course you'll solve the same problem properly: a PI loop for the supply air, an optimizer for the setpoints, then model-predictive control and a reinforcement-learning agent. Each one has to beat the number you set today.
+</Bridge>
+
+<Craft title="Try a fault (practice only)">
+The **Inject a fault** panel can trip a chiller, fail a fan wall, prop a containment door open, or drop the utility. Tripping a chiller on a hot afternoon shows how much margin the plant really has. The utility outage reproduces the classic temperature spike: no airflow for a minute while generators start, then a climb while the chillers restart. Runs with faults aren't saved as baselines.
+</Craft>
+
+<Check items={["fan-power-70", "coil-limit", "recirc-symptom", "pue-trap", "night-economizer"]} />
+
+Next comes a short placement diagnostic, so the course can skip what you already know.

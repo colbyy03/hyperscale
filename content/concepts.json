@@ -63,6 +63,24 @@
     "prereqs": []
   },
   {
+    "id": "fan-affinity",
+    "title": "Fan affinity laws: flow, pressure and power versus speed",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "airflow-management",
+    "title": "Airflow management: containment, bypass and recirculation",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
+    "id": "setpoint-tradeoffs",
+    "title": "Cooling setpoint trade-offs: supply air, chilled water and the coil limit",
+    "module": "induction",
+    "prereqs": []
+  },
+  {
     "id": "numpy-memory-model",
     "title": "NumPy arrays: dtypes, strides, views vs copies",
     "module": "python-mle",

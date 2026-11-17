@@ -150,6 +150,20 @@ describe("daily planner", () => {
     expect(plan.items.filter((i) => i.kind === "lesson").map((i) => i.key)).toEqual(["lesson:l1"]);
     expect(plan.items.find((i) => i.key === "lesson:l1")?.minutes).toBe(25);
   });
+  it("keeps exit recall when lessons finished today fill the budget", () => {
+    const done = [
+      { id: "a", title: "A", minutes: 12, href: "/a", done: true },
+      { id: "b", title: "B", minutes: 25, href: "/b", done: true },
+      { id: "c", title: "C", minutes: 30, href: "/c", done: true },
+    ];
+    const plan = planToday({ ...base, dueCards: 0, newCards: 0, lessons: done });
+    const kinds = plan.items.map((i) => i.kind);
+    expect(kinds.at(-1)).toBe("exit");
+    expect(kinds).toContain("practice");
+    expect(total(plan)).toBeLessThanOrEqual(75);
+    const over = planToday({ ...base, dueCards: 0, newCards: 0, lessons: [...done, { id: "d", title: "D", minutes: 20, href: "/d", done: true }] });
+    expect(over.items.at(-1)!.kind).toBe("exit");
+  });
   it("makes lite days of reviews plus three items, and lab days with a weakness drill", () => {
     const lite = planToday({ ...base, minutes: 15 });
     expect(lite.variant).toBe("lite");

@@ -92,5 +92,45 @@
     "front": "N+1 versus 2N redundancy?",
     "back": "N+1: one spare unit beyond what the load needs. 2N: two complete, independent paths, each able to carry the full load.",
     "concepts": ["dc-power-chain"]
+  },
+  {
+    "id": "fan-cube-law",
+    "type": "equation",
+    "front": "A fan wall slows from 100% to 80% speed. Roughly how much does its power fall, and why?",
+    "back": "About 45–50%. Fan power scales with about the cube of speed (affinity laws; real fans nearer the 2.7th power): $0.8^3 \\approx 0.51$.",
+    "concepts": ["fan-affinity"],
+    "critical": false
+  },
+  {
+    "id": "recirculation-cause",
+    "type": "concept",
+    "front": "What happens when the fan walls supply less air than the servers pull through?",
+    "back": "The servers draw the shortfall from the hot aisle: exhaust recirculates over the tops of the racks, so the hottest inlets climb even while the supply air is on setpoint.",
+    "concepts": ["airflow-management"],
+    "critical": true
+  },
+  {
+    "id": "chws-reset-limit",
+    "type": "concept",
+    "front": "Why does raising the chilled-water setpoint save energy, and what stops you raising it indefinitely?",
+    "back": "Warmer water shrinks the chiller's lift (higher COP) and gives the economizer more hours. But the coils need a temperature gap to the return air: past a point the valves are wide open, supply air floats above setpoint and the inlets rise.",
+    "concepts": ["setpoint-tradeoffs", "chiller-lift-cop"],
+    "critical": false
+  },
+  {
+    "id": "pue-server-fan-trap",
+    "type": "gotcha",
+    "front": "A setpoint change lowered PUE but raised total facility energy. How is that possible?",
+    "back": "Warmer inlets speed up the server fans, and their power counts as IT. The denominator of PUE grows while overhead falls a little, so PUE improves as the bill rises. Optimize total energy under the inlet constraint, not PUE.",
+    "concepts": ["pue", "setpoint-tradeoffs"],
+    "critical": true
+  },
+  {
+    "id": "coil-needs-a-gap",
+    "type": "concept",
+    "front": "Supply air is stuck above its setpoint and the coil valve reads 100%. What's the most likely cause, and the fix?",
+    "back": "The coil has run out of temperature difference: the chilled water is too warm for this load and airflow. Lower the chilled-water setpoint, or raise the supply-air setpoint if the inlets have margin.",
+    "concepts": ["setpoint-tradeoffs"],
+    "critical": false
   }
 ]

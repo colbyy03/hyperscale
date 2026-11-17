@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## Phase 3b: Data-hall simulator and Control Room (2026-11-17)
+
+- **`hyperscale_sim` v0.1** (`python/sim`), Level 1 of the Hall A spec, pure Python with no dependencies:
+  - per pod: cold-aisle, hot-aisle, server-mass and coil leaving-air temperatures; server fans that speed up with inlet temperature; airflow balance with bypass, recirculation and containment leakage; top-of-rack hot spots;
+  - fan walls with affinity-law power, ε-NTU coils whose valves hold the supply-air setpoint until they run out of temperature difference;
+  - chilled-water headers, a waterside economizer with hysteresis, three chillers (Carnot-fraction COP with a part-load curve, staging timers, ramp limits, trips with restart delays), towers on an approach curve with fan control and water use, pumps on a system curve, a 2N UPS, distribution and transformer losses;
+  - four synthetic days at Kestrel Ridge (summer, spring, heat wave, winter) with diurnal web load, a training-job pod, time-of-use prices and grid carbon;
+  - faults: chiller trip, fan-wall failure, containment breach, coil fouling, tower degradation, IT load steps, utility outage; a separate measurement layer with sensor bias, drift and stuck faults (a biased control sensor mis-controls the real temperature);
+  - KPIs: energy, PUE, WUE, cost, carbon, economizer hours, and pod-minutes above the 27 °C and 32 °C inlet limits.
+- **15 physics tests**, including energy closure within 1%, the design point (PUE 1.30, chilled water 16/26.6 °C) and the published cooling-outage shape (spike, recovery, a 40.7 °C peak about 3 minutes later than published, recovery). A summer day runs in about 0.5 s in CPython.
+- **Control Room** (`/facility/control-room`, and `<Viz name="ControlRoom" />` in lessons): runs the simulator in its own Pyodide worker (no package downloads, so it starts in seconds and never blocks code grading). It has setpoint sliders, auto or manual fans, the economizer switch, pod heat tiles with recirculation warnings, plant status, KPI tiles, day-long charts, fault injection, and an end-of-day summary compared with a default-settings run. Valid runs (no faults, no inlet violations) can be saved as your baseline, with a leaderboard per scenario. The layout uses container queries, so it adapts to a lesson column or a full page.
+- **Induction lesson 3, "Hands on the controls"**: three predictions, the Control Room, the coil limit, why PUE isn't the objective, the constrained-optimization framing, five new cards and five new questions, and three new concepts (fan affinity, airflow management, setpoint trade-offs).
+- **Fix**: on a day when finished lessons used most of the budget, the planner dropped exit recall. Practice, drill and challenge now leave room for it, and a day with lessons always closes with it (new unit test).
+- **Tests**: 39 unit tests, 15 simulator tests, 27 Playwright tests, including the Control Room booting Pyodide, running a full day and saving a baseline on three viewports.
+
 ## Phase 3a: Learning engine (2026-11-17)
 
 - **Daily session planner** (`src/engine/planner.ts`): sizes today's session to the minutes available. Reviews (hard cap 15 min) → due delayed checks and gates → new lessons → mixed practice → weakness drill (lab days) → a challenge (desktop, 45+ min, never on a gate day) → exit recall. New material has priority over the challenge; practice shrinks so a lesson fits whole. Lessons finished today stay in the plan, checked off. Today shows the plan with a one-tap Start/Continue, and every screen's finish state links to the next step.

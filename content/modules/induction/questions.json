@@ -138,5 +138,51 @@
     "answer": 1,
     "concepts": ["learning-loop"],
     "explain": "Retrieval practice beats restudy on delayed tests, and it feels less fluent while you do it. That gap between feeling and result is why the app schedules reviews for you."
+  },
+  {
+    "kind": "numeric",
+    "id": "fan-power-70",
+    "prompt": "A fan wall runs at 70% of full speed. With the ideal cube law, what fraction of its full-speed power does it draw?",
+    "answer": 0.343,
+    "tolerance": 0.03,
+    "concepts": ["fan-affinity"],
+    "explain": "0.7³ = 0.343: about a third of full power for 70% of the airflow. Real fans land a little higher (nearer the 2.7th power), around 0.38."
+  },
+  {
+    "kind": "choice",
+    "id": "coil-limit",
+    "prompt": "You raise chilled water from 16 °C to 21 °C and leave supply air at 24 °C. On a warm afternoon the hottest rack inlets climb past 27 °C. Why?",
+    "options": ["The chillers trip when the water is warm", "The coils can't cool the return air to 24 °C with 21 °C water, so the supply air floats up", "The economizer switches off above 20 °C"],
+    "answer": 1,
+    "concepts": ["setpoint-tradeoffs"],
+    "explain": "With the valves wide open the coils have run out of temperature difference. The setpoint is no longer reachable, so supply air and inlets rise with the load."
+  },
+  {
+    "kind": "choice",
+    "id": "recirc-symptom",
+    "prompt": "Pod 3's supply air is exactly on setpoint, but its top-of-rack inlets read 4 K hotter than the bottom of the racks. What's the likeliest cause?",
+    "options": ["Drift in the supply-air sensor", "Recirculation: the fans supply less air than the servers pull, or the containment is leaking", "Chilled water that's too cold"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["airflow-management"],
+    "explain": "A hot top with a correct supply temperature points at air paths, not at the coil. Check fan speed against server airflow, the containment pressure, and doors or missing blanking panels."
+  },
+  {
+    "kind": "choice",
+    "id": "pue-trap",
+    "prompt": "A setpoint change cut PUE from 1.214 to 1.209 and raised total facility power by 5 kW. Was it an improvement?",
+    "options": ["Yes: PUE fell", "No: total energy rose, and faster server fans moved energy into the IT side of the ratio", "You can't tell without water use"],
+    "answer": 1,
+    "concepts": ["pue", "setpoint-tradeoffs"],
+    "explain": "The bill follows total energy. When inlets get warmer, server fan power (counted as IT) grows the denominator of PUE, so the ratio can improve while the facility uses more."
+  },
+  {
+    "kind": "choice",
+    "id": "night-economizer",
+    "prompt": "At 03:00 on the summer day (outdoor wet-bulb about 12 °C), what carries most of Hall A's cooling?",
+    "options": ["All three chillers at full load", "The economizer, with the chillers trimming or off", "The generators"],
+    "answer": 1,
+    "concepts": ["economizer"],
+    "explain": "Towers can make water around 15–17 °C at that wet-bulb, colder than the water coming back from the coils, so the plate heat exchanger does most of the work and the chillers only trim to the setpoint."
   }
 ]

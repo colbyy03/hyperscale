@@ -1,7 +1,7 @@
 import clsx from "clsx";
-import { Lock } from "lucide-react";
+import { ArrowRight, Lock, Zap } from "lucide-react";
 import { Link } from "react-router";
-import { Card, PageHeader } from "@/components/ui";
+import { ButtonLink, Card, PageHeader } from "@/components/ui";
 import { displayNumber, moduleById } from "@/content";
 import { ZONES } from "@/facility/zones";
 import { moduleCompletion, useProgress } from "@/hooks/data";
@@ -18,8 +18,20 @@ export function Facility() {
   return (
     <div>
       <PageHeader eyebrow="Kestrel Ridge · Basalt Cloud (fictional)" title="Facility">
-        A hyperscale campus on a semi-arid inland plateau. Each room comes online as you master the modules behind it. The Control Room's live data-hall simulator arrives with the simulator build.
+        A hyperscale campus on a semi-arid inland plateau. Each room comes online as you master the modules behind it.
       </PageHeader>
+
+      <Card className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="flex items-center gap-2 font-semibold">
+            <Zap size={16} className="text-accent" /> Plant Control Room
+          </div>
+          <p className="mt-1 max-w-xl text-sm text-muted">Run Hall A's simulator: set supply air, chilled water, fans and the economizer, then see what a whole day costs. Inject faults to see how much margin the plant has.</p>
+        </div>
+        <ButtonLink variant="primary" to="/facility/control-room" className="shrink-0">
+          Open the Control Room <ArrowRight size={16} />
+        </ButtonLink>
+      </Card>
 
       <div className="hidden overflow-hidden rounded-2xl border border-line bg-surface p-3 sm:block">
         <div className="relative grid aspect-[12/8] grid-cols-12 grid-rows-8 gap-2 bg-[linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] p-2">

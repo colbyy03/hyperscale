@@ -125,18 +125,22 @@ export function planToday(input: PlannerInput): DayPlan {
     lessonsTaken += 1;
   }
 
-  if (practiceMin > 0 && left >= 3) {
-    const minutes = Math.min(practiceMin, left);
+  // Exit recall closes any day with new material, so the blocks after the lessons leave room for it.
+  const exitNeeded = lessonsTaken > 0;
+  const reserve = exitNeeded ? EXIT_MIN : 0;
+  if (practiceMin > 0 && left - reserve >= 3) {
+    const minutes = Math.min(practiceMin, left - reserve);
     const n = practiceItemsFor(minutes, input.practicePool);
     take({ kind: "practice", key: "practice", title: `Mixed practice · ${plural(n, "item")}`, minutes, href: `/practice/session?n=${n}`, detail: "Confidence rating before each answer" });
   }
-  if (drillMin > 0 && left >= drillMin) {
+  if (drillMin > 0 && left - reserve >= drillMin) {
     take({ kind: "drill", key: "drill", title: "Weakness drill", minutes: drillMin, href: "/practice/session?mode=drill&n=15", detail: input.weakSkills.slice(0, 3).join(", ") });
   }
-  if (challengeMin > 0 && input.challenge && left >= challengeMin) {
+  if (challengeMin > 0 && input.challenge && left - reserve >= challengeMin) {
     take({ kind: "challenge", key: `challenge:${input.challenge.id}`, title: input.challenge.title, minutes: challengeMin, href: input.challenge.href, detail: "One hard problem, from a blank editor" });
   }
-  if (lessonsTaken > 0 && left >= EXIT_MIN) {
+  // Lessons already finished today can fill the budget on their own; the day still gets its exit recall.
+  if (exitNeeded && (left >= EXIT_MIN || input.lessons.some((l) => l.done))) {
     take({ kind: "exit", key: "exit", title: "Exit recall", minutes: EXIT_MIN, href: "/review/exit", detail: "Two closed-book questions, today's draft cards" });
   }
   return { variant: budget >= 90 ? "lab" : "standard", items, minutes: budget - left };

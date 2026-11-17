@@ -1,0 +1,17 @@
+[project]
+name = "hyperscale-sim"
+version = "0.1.0"
+description = "Lumped-parameter simulator of a hyperscale data hall and its chilled-water plant (runs in Pyodide and CPython)"
+requires-python = ">=3.12"
+# Pure Python on purpose: it starts instantly in the browser without downloading NumPy.
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest==9.0.2"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -18,7 +18,8 @@
     "validate": "tsx scripts/validate-content.ts",
     "check": "npm run typecheck && npm run test && npm run validate && npm run verify:exercises",
     "verify:exercises": "tsx scripts/verify-exercises.ts",
-    "test:python": "cd python/hsgrade && uv run --python 3.14 pytest -q"
+    "test:python": "cd python/hsgrade && uv run --python 3.14 pytest -q && cd ../sim && uv run --python 3.14 pytest -q",
+    "test:sim": "cd python/sim && uv run --python 3.14 pytest -q"
   },
   "dependencies": {
     "@codemirror/autocomplete": "6.20.4",

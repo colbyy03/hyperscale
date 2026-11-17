@@ -34,7 +34,8 @@ export interface GradeResult {
 }
 
 export type WorkerRequest =
-  | { id: number; type: "init" }
+  | { id: number; type: "init"; mode?: "grader" | "sim" }
+  | { id: number; type: "sim"; request: string }
   | { id: number; type: "load"; packages: string[]; code: string }
   | { id: number; type: "run"; code: string; packages: string[] }
   | { id: number; type: "grade"; solution: string; tests: string; packages: string[] };

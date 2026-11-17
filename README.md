@@ -27,7 +27,8 @@ The app opens at http://localhost:5173.
 | `npm run preview` | Serves the production build at http://localhost:4173 |
 | `npm run check` | Type-check + unit tests + content validation + exercise verification |
 | `npm run verify:exercises` | Runs every exercise in Pyodide on Node: solution passes, starter fails, each known-wrong variant fails with its expected message |
-| `npm run test:python` | Tests for the `hsgrade` grading library (CPython 3.14 with the same NumPy/pytest versions as Pyodide) |
+| `npm run test:python` | Tests for the `hsgrade` grading library (CPython 3.14 with the same NumPy/pytest versions as Pyodide) and the simulator's physics tests |
+| `npm run test:sim` | Only the simulator's physics tests (`python/sim`) |
 | `npm run e2e` | Playwright tests on desktop/tablet/phone viewports (uses installed Chrome; build first): smoke checks, a two-day simulated session (lessons, practice, exit recall, reviews, passing a gate), a failed gate's retake wait, real Pyodide grading, and overflow checks on every screen |
 
 ## Deploy
@@ -79,12 +80,26 @@ Everything is local to your device and derived from what you do:
 - **Practice** mixes 40% current module, 30% the two before it and 30% older material, weighted toward weak concepts and recent misses, with a confidence rating before each answer.
 - **Progress** shows pace against the schedule (planned hours before today vs curriculum covered), mastery by module, and a weekly review: calibration, sure-but-wrong items, hint hotspots, review retention, time studied and a weakness drill.
 
+## The simulator
+
+`python/sim` holds `hyperscale_sim`, the Kestrel Ridge data-hall simulator: Hall A's four contained pods, sixteen fan walls with ε-NTU coils, the chilled-water loop with a waterside economizer and three staged chillers, cooling towers, pumps and the electrical chain (Level 1 of the spec in `research/domain-datacenter.md` §3). It is pure Python with no dependencies, so the in-app Control Room starts it in a Pyodide worker without downloading NumPy. The same package runs locally:
+
+```bash
+cd python/sim && uv run --python 3.14 python -c "from hyperscale_sim import Hall; h = Hall('summer-day'); h.set_controls(chws_sp=18); h.run(24 * 3600); print(h.metrics.summary())"
+```
+
+The building's baseline loops (valves, fans, chiller staging, towers, economizer) close inside each step; you change setpoints with `set_controls`, inject faults (`trip_chiller`, `fail_crah`, `set_containment`, `utility_outage`, sensor bias/drift/stuck), and read instruments with `read()` (the true values stay in `truth()`). The physics tests check steady-state energy closure (within 1%), the design point (supply 24 °C, chilled water 16/26 °C, PUE 1.30), full-economizer operation, the fan affinity law, chiller sensitivity to chilled-water temperature, the coil limit on chilled-water reset, the server-fan PUE trap, recirculation and containment breaches, chiller trips and fan-wall failures, sensor faults, and the shape of a published cooling-outage temperature rise.
+
+The Control Room (`/facility/control-room`, also embedded in Induction lesson 3) scores a simulated day on total facility energy with zero minutes above 27 °C at any rack inlet, and keeps your best valid runs on this device as the baseline later controllers must beat.
+
 ## Repository layout
 
 | Path | What it is |
 |---|---|
 | `src/` | The app (React + TypeScript): `routes/` screens, `lesson/` MDX components, `learn/` question views, grading and derived learner state, `viz/` interactive explainers, `engine/` pure learning logic (FSRS deck, knowledge tracing, gates, daily planner, practice selection, pacing, weekly review, schedule), `db/` IndexedDB storage and backups |
-| `content/` | Lessons, exercises, concepts |
+| `content/` | Lessons, exercises, question pools, cards, checkpoints, concepts |
+| `python/hsgrade/` | Grading helpers and pytest plugin (Pyodide and CPython) |
+| `python/sim/` | `hyperscale_sim`, the data-hall simulator, with physics tests |
 | `research/` | Research notes and `sources.json` (566 sources, 533 verified); `merge_sources.py`, `build_foundations_sources.py` |
 | `planning/` | MDS calendar, time budget, curriculum order, Python schedule generator (the app's TypeScript engine matches it exactly) |
 | `scripts/` | Content index and validation, SPA fallback |

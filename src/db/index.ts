@@ -100,10 +100,14 @@ export interface IncidentRow {
 
 export interface SimRunRow {
   id?: number;
-  controller: string;
+  controller: string; // "manual" | "default" | later "pi", "mpc", "rl", ...
   scenario: string;
   kpis: Record<string, number>;
   createdAt: string;
+  /** Setpoints used (manual runs). */
+  settings?: Record<string, unknown>;
+  /** Full day, no injected faults, no minutes outside the recommended inlet envelope. */
+  valid?: boolean;
 }
 
 export interface NoteRow {

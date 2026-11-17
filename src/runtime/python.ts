@@ -23,6 +23,8 @@ type Status = { phase: "idle" | "starting" | "ready" | "busy"; message: string }
 const INIT_TIMEOUT_MS = 180_000;
 
 class PythonRuntime {
+  /** "grader" loads NumPy and pytest for exercises; "sim" starts bare for the simulator. */
+  constructor(private readonly mode: "grader" | "sim" = "grader") {}
   private worker: Worker | null = null;
   private pending = new Map<number, Pending>();
   private nextId = 1;
@@ -91,7 +93,7 @@ class PythonRuntime {
 
   /** Start Python in the background (call when a lesson with code opens). */
   warm(): Promise<void> {
-    this.initPromise ??= this.send<boolean>({ type: "init" }, INIT_TIMEOUT_MS).then(
+    this.initPromise ??= this.send<boolean>({ type: "init", mode: this.mode }, INIT_TIMEOUT_MS).then(
       () => undefined,
       (e: Error) => {
         this.initPromise = null;
@@ -134,10 +136,23 @@ class PythonRuntime {
       }
     });
   }
+
+  /** One JSON request to the simulator bridge (hyperscale_sim.bridge.handle). */
+  sim<T>(request: Record<string, unknown>, timeoutMs = 60_000): Promise<T> {
+    return this.serialize(async () => {
+      await this.warm();
+      const text = await this.send<string>({ type: "sim", request: JSON.stringify(request) }, timeoutMs);
+      return JSON.parse(text) as T;
+    });
+  }
 }
 
-export const python = new PythonRuntime();
+export const python = new PythonRuntime("grader");
+/** A separate worker for the Control Room, so a long simulation never blocks grading (or vice versa). */
+export const simPython = new PythonRuntime("sim");
 
-export function usePythonStatus(): Status {
-  return useSyncExternalStore(python.subscribe, python.getStatus, python.getStatus);
+export type { Status as PythonStatus, PythonRuntime };
+
+export function usePythonStatus(runtime: PythonRuntime = python): Status {
+  return useSyncExternalStore(runtime.subscribe, runtime.getStatus, runtime.getStatus);
 }
