@@ -4,7 +4,7 @@ title: The data hall in one picture
 minutes: 25
 concepts: [dc-power-chain, dc-cooling-chain, pue, wue-cue, ashrae-envelope, economizer, chiller-lift-cop]
 sources: [femp2024-dc-best-practices, schneider-wp179-cooling-outage-temp-rise, uptime2026-global-survey, google-dc-pue-page, microsoft2026-esr, amazon2025-sustainability-report, meta2025-environmental-data-index, nvidia-dgx-gb200-user-guide, shehabi2024-us-dc-energy, iso-iec-30134-2-pue, tgg2011-wp35-wue, tgg2010-wp32-cue]
-cards: []
+cards: [pue-definition, pue-typical-values, pue-psu-paradox, ashrae-recommended, carnot-cop, warm-water-saves, economizer-what, ups-generator-gap, wue-definition, redundancy-terms]
 ---
 
 <Situation from="Dev, controls engineer">
@@ -90,37 +90,6 @@ Two more metrics complete the picture:
 - **What isn't counted.** PUE says nothing about how much useful computing each kWh buys, or about water and carbon. An ML system that improves PUE by pushing inlet temperatures up may make the servers' own fans work harder. The facility metric improves while the IT side gets worse.
 </Craft>
 
-<Check
-  questions={[
-    {
-      id: "pue-calc",
-      prompt: "A site draws 12.6 GWh in a year, of which 10.5 GWh reaches IT equipment. What is its PUE?",
-      answer: 1.2,
-      tolerance: 0.01,
-      explain: "12.6 / 10.5 = 1.20. The 2.1 GWh of overhead is the target for cooling and power-chain improvements."
-    },
-    {
-      id: "psu-upgrade",
-      prompt: "The site upgrades all server power supplies to a more efficient model. Total facility energy falls. What happens to PUE?",
-      options: ["It improves substantially", "It stays roughly flat or gets slightly worse", "It can't be computed any more"],
-      answer: 1,
-      explain: "Power-supply losses sit inside the IT boundary. IT energy falls, and the cooling load falls a little with it, so the ratio barely moves and can even rise. A good reminder to track total energy, not only PUE."
-    },
-    {
-      id: "carnot",
-      prompt: "Ideal (Carnot) cooling COP for chilled water at 16 °C and condenser water at 30 °C? (Use kelvin.)",
-      answer: 20.7,
-      tolerance: 0.03,
-      explain: "T_cold = 289.15 K and the lift is 14 K, so 289.15 / 14 ≈ 20.7. Real chillers reach a fraction of this, and the fraction is a useful efficiency diagnostic you'll fit from plant data later."
-    },
-    {
-      id: "envelope",
-      prompt: "What is ASHRAE's recommended server inlet temperature range?",
-      options: ["10–20 °C", "18–27 °C", "25–35 °C"],
-      answer: 1,
-      explain: "18–27 °C is the recommended envelope. Allowable classes go wider, but controllers in this course treat 27 °C as the line not to cross."
-    }
-  ]}
-/>
+<Check items={["pue-calc", "psu-upgrade", "carnot", "envelope"]} />
 
 Next comes the Control Room, where you'll tune Hall A's setpoints by hand and set the baseline score your later controllers must beat. It opens with the simulator build.

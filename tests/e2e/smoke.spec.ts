@@ -33,9 +33,13 @@ test("deep links, sources and settings load", async ({ page }) => {
   await expect(page.getByRole("button", { name: /Export backup/ })).toBeVisible();
 });
 
-test("no horizontal overflow on the lesson page", async ({ page }) => {
-  await page.goto("/learn/induction/data-hall");
-  await expect(page.getByTestId("viz-pue")).toBeVisible();
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  expect(overflow).toBeLessThanOrEqual(1);
+// Compare against clientWidth: on phones Chrome widens innerWidth to fit overflowing content.
+test("no horizontal overflow on any screen", async ({ page }) => {
+  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
+    await page.goto(path);
+    await page.locator("main h1").first().waitFor();
+    await page.waitForTimeout(150);
+    const overflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - document.documentElement.clientWidth);
+    expect(overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(1);
+  }
 });

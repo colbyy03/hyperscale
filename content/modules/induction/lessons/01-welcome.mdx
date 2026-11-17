@@ -4,7 +4,7 @@ title: Welcome to Kestrel Ridge
 minutes: 12
 concepts: [learning-loop, heat-balance]
 sources: [shehabi2024-us-dc-energy, iea2025-energy-and-ai, evans-gao2016-deepmind-cooling-40, gamble-gao2018-safety-first-cooling, meta2024-sim-rl-dc-cooling, roediger2006-test-enhanced-learning, cepeda2008-spacing-ridgeline, freeman2014-active-learning]
-cards: []
+cards: [it-power-becomes-heat, retrieval-beats-restudy, dc-share-us-electricity]
 ---
 
 <Situation from="Mara, site lead">
@@ -78,23 +78,6 @@ These are company reports from pilots or single sites. They are best-case number
 You already know the most important fact about a data center from thermodynamics: at steady state, essentially every watt of electrical power the servers draw leaves the building as heat. A 4.8 MW hall is a 4.8 MW heater, running all year. Cooling is the work of moving that heat outdoors, and Lesson 2 traces exactly how it travels.
 </Bridge>
 
-<Check
-  questions={[
-    {
-      id: "it-heat",
-      prompt: "Hall A's servers draw 4.8 MW of electricity. Roughly how much heat do they release into the hall?",
-      options: ["Much less than 4.8 MW, because computation stores energy", "About 4.8 MW", "About 9.6 MW, because of fan friction"],
-      answer: 1,
-      explain: "Computation stores a negligible amount of energy, so the electrical power becomes heat at about the same rate."
-    },
-    {
-      id: "session-order",
-      prompt: "Why does every explainer in this course ask for a prediction before you can use the sliders?",
-      options: ["To grade you", "Because committing to a prediction makes the result stick and exposes misconceptions", "To slow you down"],
-      answer: 1,
-      explain: "Predicting first improves understanding compared with only watching, and a wrong prediction tells the app which misconception to drill."
-    }
-  ]}
-/>
+<Check items={["it-heat", "session-order"]} />
 
 Next: a walk through Hall A, following the power in and the heat out.

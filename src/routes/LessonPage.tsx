@@ -1,13 +1,16 @@
 import { MDXProvider } from "@mdx-js/react";
-import { ArrowLeft, ArrowRight, CheckCircle2, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ExternalLink, Lock } from "lucide-react";
 import type { MDXContent } from "mdx/types";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
-import { Badge, Button } from "@/components/ui";
-import { displayNumber, lessonsOf, loadLesson, moduleById } from "@/content";
+import { Badge, Button, ButtonLink, Card } from "@/components/ui";
+import { content, displayNumber, lessonsOf, loadLesson, moduleById } from "@/content";
 import { formatAuthors, loadSources, sourceLink, type SourceRecord } from "@/content/sources";
 import { db } from "@/db";
+import { enrollCards } from "@/engine/cards";
 import { useProgress } from "@/hooks/data";
+import { useDayPlan } from "@/hooks/learning";
+import { getSettings } from "@/state/settings";
 import { lessonComponents } from "@/lesson/components";
 import { LessonContext } from "@/lesson/context";
 import { NotFound } from "./NotFound";
@@ -58,6 +61,22 @@ function LessonSources({ ids }: { ids: string[] }) {
   );
 }
 
+function sessionPeek(moduleId: string): boolean {
+  try {
+    return sessionStorage.getItem(`hs-peek:${moduleId}`) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function rememberPeek(moduleId: string) {
+  try {
+    sessionStorage.setItem(`hs-peek:${moduleId}`, "1");
+  } catch {
+    /* best effort: the in-memory flag still works */
+  }
+}
+
 export function LessonPage() {
   const { moduleId = "", lessonSlug = "" } = useParams();
   const lessons = lessonsOf(moduleId);
@@ -67,9 +86,22 @@ export function LessonPage() {
   const progress = useProgress();
   const [Body, setBody] = useState<MDXContent | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // "Open anyway" on a locked module lasts for this browser session.
+  const [peeked, setPeeked] = useState<Set<string>>(() => new Set());
+  const peek = peeked.has(moduleId) || sessionPeek(moduleId);
+  const setPeek = () => {
+    rememberPeek(moduleId);
+    setPeeked((p) => new Set(p).add(moduleId));
+  };
+  const [added, setAdded] = useState<number | null>(null);
+  const { learning, next: nextStep } = useDayPlan();
+  const modState = learning.modules[moduleId];
+  const locked = learning.loaded && modState !== undefined && !modState.unlocked && !peek;
+  const gateKnown = learning.loaded;
 
   useEffect(() => {
-    if (!lesson) return;
+    // Wait until we know whether the module is open, so a locked lesson isn't marked as started.
+    if (!lesson || !gateKnown || locked) return;
     let alive = true;
     setBody(null);
     loadLesson(lesson.file)
@@ -82,7 +114,7 @@ export function LessonPage() {
     return () => {
       alive = false;
     };
-  }, [lesson, moduleId]);
+  }, [lesson, moduleId, locked, gateKnown]);
 
   const ctx = useMemo(() => ({ lessonId: lesson?.id ?? "", moduleId, concepts: lesson?.concepts ?? [] }), [lesson, moduleId]);
   if (!lesson || !plan) return <NotFound />;
@@ -91,9 +123,45 @@ export function LessonPage() {
   const next = lessons[idx + 1];
 
   const complete = async () => {
-    const now = new Date().toISOString();
-    await db.progress.put({ lessonId: lesson.id, moduleId, status: "completed", updatedAt: now, completedAt: now });
+    const now = new Date();
+    let n = 0;
+    try {
+      // The lesson's cards join the review deck. Enrol before recording completion so the
+      // background card sync (which watches completions) never races this count.
+      const settings = await getSettings();
+      const defs = lesson.cards.filter((id) => content.cards[id]).map((id) => ({ id, critical: content.cards[id]!.critical }));
+      n = await enrollCards(defs, `lesson:${lesson.id}`, now, settings.desiredRetention);
+    } finally {
+      await db.progress.put({ lessonId: lesson.id, moduleId, status: "completed", updatedAt: now.toISOString(), completedAt: now.toISOString() });
+      setAdded(n);
+    }
   };
+
+  if (locked) {
+    const blocker = modState?.blockedBy;
+    return (
+      <article className="mx-auto max-w-2xl py-6">
+        <Card className="text-center">
+          <Lock size={26} className="mx-auto text-faint" />
+          <h1 className="mt-3 text-xl font-semibold">{lesson.title}</h1>
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted">
+            Module {displayNumber[moduleId]} opens once you pass the checkpoint for{" "}
+            {blocker ? `Module ${displayNumber[blocker]}, ${content.modules[blocker]?.title ?? moduleById(blocker)?.title}` : "the previous module"}. Mastery first keeps the later material from resting on gaps.
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            {blocker && (
+              <ButtonLink variant="primary" to={content.checkpoints[blocker] ? `/learn/${blocker}/checkpoint` : `/learn/${blocker}`}>
+                Go to Module {displayNumber[blocker]}
+              </ButtonLink>
+            )}
+            <Button variant="ghost" onClick={setPeek}>
+              Open anyway
+            </Button>
+          </div>
+        </Card>
+      </article>
+    );
+  }
 
   return (
     <article className="mx-auto max-w-3xl">
@@ -124,9 +192,16 @@ export function LessonPage() {
 
       <footer className="mt-10 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
         {done ? (
-          <span className="inline-flex items-center gap-2 text-sm text-accent">
-            <CheckCircle2 size={18} /> Lesson complete
-          </span>
+          <div className="flex flex-col gap-2">
+            <span className="inline-flex items-center gap-2 text-sm text-accent">
+              <CheckCircle2 size={18} /> Lesson complete{added ? ` · ${added} card${added === 1 ? "" : "s"} added to your reviews` : ""}
+            </span>
+            {nextStep && nextStep.key !== `lesson:${lesson.id}` && (
+              <ButtonLink variant="primary" className="self-start" to={nextStep.href}>
+                Next in today's session: {nextStep.title} <ArrowRight size={16} />
+              </ButtonLink>
+            )}
+          </div>
         ) : (
           <Button variant="primary" onClick={() => void complete()}>
             <CheckCircle2 size={16} /> Mark lesson complete

@@ -1278,6 +1278,7 @@ content/
       tests.py                    # pytest; visible + hidden tests
       variants/<name>.py          # known-wrong implementations that must FAIL with a specific message
     checkpoint.json               # mastery gate: items, weights, thresholds
+    questions.json                # question pool: lesson <Check items> and mixed practice
     cards.json                    # spaced-repetition cards for the module (lessons can also inline cards)
     project/README.md             # module build: brief, rubric, starter repo pointer
     ai-workflow.mdx               # "How I'd do this with AI tools"

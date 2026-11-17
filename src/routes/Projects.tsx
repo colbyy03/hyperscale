@@ -23,7 +23,7 @@ export function Projects() {
       <PageHeader eyebrow="Portfolio" title="Projects">
         Every module ends with a small build. These larger projects each become their own repo and a post for your Quarto site.
       </PageHeader>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {projects.map((p) => {
           const span = schedule.spans[p.id];
           return (

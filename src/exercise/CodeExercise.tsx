@@ -4,31 +4,18 @@
  */
 import clsx from "clsx";
 import { CheckCircle2, CircleAlert, Eye, Lightbulb, Loader2, Play, RotateCcw, ShieldCheck, XCircle } from "lucide-react";
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { InlineText } from "@/components/InlineText";
 import { Badge, Button } from "@/components/ui";
 import { content } from "@/content";
+import { enrollCards } from "@/engine/cards";
+import { markItemDone } from "@/hooks/learning";
 import { recordAttempt } from "@/lesson/context";
+import { getSettings } from "@/state/settings";
 import type { GradeResult, RunResult } from "@/runtime/protocol";
 import { python, usePythonStatus } from "@/runtime/python";
 import { CodeEditor } from "./CodeEditor";
 import { loadExerciseFile } from "./files";
-
-/** Minimal inline formatting for prompts and hints: `code`, **bold**, blank-line paragraphs. */
-export function InlineText({ text }: { text: string }) {
-  return (
-    <>
-      {text.split(/\n\s*\n/).map((para, i) => (
-        <p key={i} className={i ? "mt-2" : undefined}>
-          {para.split(/(`[^`]+`|\*\*[^*]+\*\*)/g).map((part, j) => {
-            if (part.startsWith("`") && part.endsWith("`")) return <code key={j}>{part.slice(1, -1)}</code>;
-            if (part.startsWith("**") && part.endsWith("**")) return <strong key={j}>{part.slice(2, -2)}</strong>;
-            return <Fragment key={j}>{part}</Fragment>;
-          })}
-        </p>
-      ))}
-    </>
-  );
-}
 
 function draftKey(id: string) {
   return `hs-draft:${id}`;
@@ -53,8 +40,15 @@ type Output = { kind: "run"; result: RunResult } | { kind: "grade"; result: Grad
 
 const TIER_LABEL = ["", "Hint 1 · orient", "Hint 2 · principle", "Hint 3 · next step"];
 
-export function CodeExercise({ id }: { id: string }) {
+export type ExerciseMode = "lesson" | "challenge" | "checkpoint";
+
+/**
+ * Modes: "lesson" keeps a draft and offers hints and a guarded reveal; "challenge" starts from a
+ * blank starter (no draft); "checkpoint" has no hints or reveal and reports results to the gate.
+ */
+export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mode?: ExerciseMode; onResult?: (r: { allPassed: boolean; checks: number }) => void }) {
   const ex = useMemo(() => content.exercises.find((e) => e.id === id), [id]);
+  const keepDraft = mode === "lesson";
   const [starter, setStarter] = useState<string | null>(null);
   const [tests, setTests] = useState<string | null>(null);
   const [code, setCode] = useState<string>("");
@@ -76,18 +70,18 @@ export function CodeExercise({ id }: { id: string }) {
     void Promise.all([loadExerciseFile(ex.dir, ex.language === "sql" ? "starter.sql" : "starter.py"), loadExerciseFile(ex.dir, "tests.py")]).then(([s, t]) => {
       setStarter(s ?? "");
       setTests(t ?? "");
-      setCode(readDraft(ex.id) ?? s ?? "");
+      setCode((keepDraft ? readDraft(ex.id) : null) ?? s ?? "");
     });
     const timer = setInterval(() => setNow(Date.now()), 5000);
     return () => clearInterval(timer);
-  }, [ex]);
+  }, [ex, keepDraft]);
 
   const onChange = useCallback(
     (v: string) => {
       setCode(v);
-      if (ex) writeDraft(ex.id, v === starter ? null : v);
+      if (ex && keepDraft) writeDraft(ex.id, v === starter ? null : v);
     },
-    [ex, starter],
+    [ex, starter, keepDraft],
   );
 
   const run = useCallback(async () => {
@@ -108,30 +102,41 @@ export function CodeExercise({ id }: { id: string }) {
     try {
       const result = await python.grade(code, tests, ex.packages, ex.constraints.timeoutMs);
       setOutput({ kind: "grade", result });
-      setAttempts((a) => a + 1);
+      const checks = attempts + 1;
+      setAttempts(checks);
       if (result.allPassed) setSolved(true);
-      void recordAttempt({
-        itemId: ex.id,
-        kind: "code",
-        correct: result.allPassed,
-        seconds: (Date.now() - started.current) / 1000,
-        skills: ex.concepts,
-        payload: { passed: result.passed, total: result.total, hintTier: solution ? 4 : hintTier, misconceptions: result.tests.filter((t) => t.outcome === "failed" && t.misconception).map((t) => t.misconception) },
-      });
+      onResult?.({ allPassed: result.allPassed, checks });
+      const misconceptions = [...new Set(result.tests.filter((t) => t.outcome === "failed" && t.misconception).map((t) => t.misconception!))];
+      if (mode !== "checkpoint") {
+        // The gate records its own attempt; everywhere else this check is evidence for mastery.
+        void recordAttempt({
+          itemId: ex.id,
+          kind: "code",
+          correct: result.allPassed,
+          seconds: (Date.now() - started.current) / 1000,
+          skills: ex.concepts,
+          payload: { passed: result.passed, total: result.total, hintTier: solution ? 4 : hintTier, misconceptions, mode },
+        });
+        // A known misconception puts its card in the deck right away.
+        const known = misconceptions.filter((m) => content.cards[m]);
+        if (known.length) void getSettings().then((st) => enrollCards(known.map((m) => ({ id: m, critical: content.cards[m]!.critical })), `misconception:${ex.id}`, new Date(), st.desiredRetention));
+      }
+      if (mode === "challenge") void markItemDone(`challenge:${ex.id}`, Math.max(10, ex.minutes));
     } catch (e) {
       setOutput({ kind: "error", message: (e as Error).message });
       setAttempts((a) => a + 1);
     } finally {
       setBusy(null);
     }
-  }, [ex, busy, tests, code, hintTier, solution]);
+  }, [ex, busy, tests, code, hintTier, solution, attempts, onResult, mode]);
 
   if (!ex) {
     return <div className="my-6 rounded-2xl border border-danger p-4 text-sm text-danger">Unknown exercise "{id}".</div>;
   }
 
   const hintUnlocked = attempts > 0 || now - started.current >= 60_000;
-  const canReveal = hintTier >= 3 || attempts >= 3;
+  const allowHelp = mode !== "checkpoint";
+  const canReveal = allowHelp && (hintTier >= 3 || attempts >= 3);
 
   const reveal = async () => {
     const s = await loadExerciseFile(ex.dir, ex.language === "sql" ? "solution.sql" : "solution.py");
@@ -142,7 +147,7 @@ export function CodeExercise({ id }: { id: string }) {
   return (
     <section className="not-prose my-8 rounded-2xl border border-line bg-surface-2/40 p-4 sm:p-5" data-testid={`exercise-${id.split("/")[1]}`}>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold tracking-wider text-accent uppercase">{ex.type === "debug" ? "Debug" : ex.type === "fill-in" ? "Fill in" : "Code"}</span>
+        <span className="text-xs font-semibold tracking-wider text-accent uppercase">{mode === "challenge" ? "Challenge" : ex.type === "debug" ? "Debug" : ex.type === "fill-in" ? "Fill in" : "Code"}</span>
         <h3 className="mr-auto font-semibold">{ex.title}</h3>
         <Badge>{ex.minutes} min</Badge>
         {ex.constraints.requireVectorized && <Badge tone="info">no Python loops</Badge>}
@@ -170,9 +175,11 @@ export function CodeExercise({ id }: { id: string }) {
         <Button variant="primary" onClick={() => void check()} disabled={!!busy || tests === null} title="Check with tests (Shift+Ctrl/Cmd+Enter)">
           {busy === "check" ? <Loader2 size={15} className="animate-spin" /> : <ShieldCheck size={15} />} Check
         </Button>
-        <Button variant="ghost" disabled={hintTier >= 3 || !hintUnlocked} onClick={() => setHintTier((h) => Math.min(3, h + 1))} title={hintUnlocked ? "Show the next hint" : "Try it first: hints unlock after your first check or a minute of work"}>
-          <Lightbulb size={15} /> {hintTier === 0 ? "Hint" : hintTier < 3 ? "Next hint" : "No more hints"}
-        </Button>
+        {allowHelp && (
+          <Button variant="ghost" disabled={hintTier >= 3 || !hintUnlocked} onClick={() => setHintTier((h) => Math.min(3, h + 1))} title={hintUnlocked ? "Show the next hint" : "Try it first: hints unlock after your first check or a minute of work"}>
+            <Lightbulb size={15} /> {hintTier === 0 ? "Hint" : hintTier < 3 ? "Next hint" : "No more hints"}
+          </Button>
+        )}
         {confirmReset ? (
           <>
             <Button variant="danger" onClick={() => (onChange(starter ?? ""), setConfirmReset(false))}>
@@ -192,7 +199,7 @@ export function CodeExercise({ id }: { id: string }) {
         </span>
       </div>
 
-      {hintTier > 0 && (
+      {allowHelp && hintTier > 0 && (
         <ol className="mt-4 flex flex-col gap-2 [&_code]:rounded [&_code]:bg-surface-3 [&_code]:px-1 [&_code]:font-mono [&_code]:text-[0.88em]">
           {ex.hints.slice(0, hintTier).map((h, i) => (
             <li key={i} className="rounded-xl border border-heat/30 bg-heat-soft p-3 text-sm leading-relaxed">

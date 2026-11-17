@@ -4,7 +4,7 @@ title: Vectorization and broadcasting
 minutes: 30
 concepts: [numpy-vectorization, numpy-broadcasting, standardization]
 sources: [harris2020-numpy, numpy-docs-2-5, gorelick2025-hpp3, mckinney2022-pda3]
-cards: []
+cards: [broadcasting-rule, broadcast-n-n1, keepdims-row-mean, why-vectorize, standardize-constant-column, population-vs-sample-std, broadcast-shape-check]
 ---
 
 <Situation from="Ines, reliability lead">
@@ -92,28 +92,4 @@ Standardizing (z-scoring) puts every sensor on the same scale: subtract the colu
 This is the same move as going from index notation to matrix form in a finite-element or CFD code. Instead of looping over nodes and writing `T[i] = ...`, you write one operation over the whole field and let an optimized kernel (BLAS, or NumPy's C loops) do the iteration. MATLAB users learn this as "vectorize your code" for exactly the same reason.
 </Bridge>
 
-<Check
-  questions={[
-    {
-      id: "bcast-1",
-      prompt: "X has shape (500, 8). Which expression subtracts each row's own mean from that row?",
-      options: ["X - X.mean(axis=0)", "X - X.mean(axis=1)", "X - X.mean(axis=1, keepdims=True)"],
-      answer: 2,
-      explain: "X.mean(axis=1) has shape (500,), which right-aligns against the 8 columns and fails to broadcast. keepdims=True keeps the shape (500, 1), which stretches across the columns."
-    },
-    {
-      id: "bcast-2",
-      prompt: "Shapes (7, 1, 5) and (3, 1). Do they broadcast, and to what?",
-      options: ["No, they're incompatible", "Yes, to (7, 3, 5)", "Yes, to (7, 1, 5)"],
-      answer: 1,
-      explain: "Right-align: (7, 1, 5) and (1, 3, 1). Axis by axis: 7 vs 1 → 7; 1 vs 3 → 3; 5 vs 1 → 5."
-    },
-    {
-      id: "stuck-sensor",
-      prompt: "Why does a stuck sensor need special handling when you standardize?",
-      options: ["Its mean is undefined", "Its standard deviation is 0, so dividing produces NaN", "It makes the other columns' standard deviations wrong"],
-      answer: 1,
-      explain: "A constant column has zero spread. (x − μ)/σ becomes 0/0 = NaN, which spreads into any model that touches it. Mapping it to zeros, or dropping it and flagging the sensor, is the safe choice."
-    }
-  ]}
-/>
+<Check items={["bcast-1", "bcast-2", "stuck-sensor"]} />

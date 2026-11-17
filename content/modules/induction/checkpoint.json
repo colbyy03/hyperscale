@@ -1,0 +1,173 @@
+{
+  "passThreshold": 0.85,
+  "delayedThreshold": 0.8,
+  "allowTestOut": false,
+  "items": [
+    {
+      "kind": "numeric",
+      "id": "pue-from-energy",
+      "prompt": "A site used 9.0 GWh in a year, and 7.5 GWh of it reached the IT equipment. What is its PUE?",
+      "answer": 1.2,
+      "tolerance": 0.01,
+      "concepts": ["pue"],
+      "critical": true,
+      "explain": "PUE = facility energy / IT energy = 9.0 / 7.5 = 1.20."
+    },
+    {
+      "kind": "choice",
+      "id": "envelope",
+      "prompt": "What is ASHRAE's recommended range for server inlet air?",
+      "options": ["15–32 °C", "18–27 °C", "21–24 °C", "10–35 °C"],
+      "answer": 1,
+      "concepts": ["ashrae-envelope"],
+      "critical": true,
+      "explain": "18–27 °C is the recommended envelope; the wider ranges are the allowable classes A1 and A2."
+    },
+    {
+      "kind": "choice",
+      "id": "heat-path",
+      "prompt": "Which sequence follows the heat from the hot aisle to the atmosphere in a chilled-water plant with the economizer off?",
+      "options": [
+        "Hot aisle → CRAH coil → chilled water → chiller → condenser water → cooling tower",
+        "Hot aisle → chiller → CRAH coil → chilled water → cooling tower → condenser water",
+        "Hot aisle → cooling tower → chilled water → CRAH coil → chiller → condenser water"
+      ],
+      "answer": 0,
+      "concepts": ["dc-cooling-chain"],
+      "explain": "Air gives its heat to the CRAH coil, the chilled water carries it to the chiller, which pumps it into the condenser water, which the towers reject outdoors."
+    },
+    {
+      "kind": "choice",
+      "id": "cool-night",
+      "prompt": "It's a cold, dry night: the outdoor wet-bulb is 4 °C and the chilled-water supply setpoint is 16 °C. What should the plant do?",
+      "options": ["Stage on more chillers to be safe", "Switch to the waterside economizer and turn the chillers off or down", "Raise the condenser-water temperature setpoint"],
+      "answer": 1,
+      "transfer": true,
+      "concepts": ["economizer"],
+      "explain": "With a wet-bulb far below the chilled-water setpoint, tower water can cool the loop through the plate heat exchanger and the chillers can rest."
+    },
+    {
+      "kind": "numeric",
+      "id": "carnot-transfer",
+      "prompt": "A new liquid-cooling loop runs chilled water at 18 °C against condenser water at 28 °C. What is the ideal (Carnot) cooling COP?",
+      "answer": 29.1,
+      "tolerance": 0.03,
+      "transfer": true,
+      "concepts": ["chiller-lift-cop"],
+      "explain": "T_c = 291.15 K and the lift is 10 K, so 291.15 / 10 ≈ 29.1. Warmer water and a smaller lift mean far less compressor work."
+    },
+    {
+      "kind": "choice",
+      "id": "psu-paradox",
+      "prompt": "Which change lowers total facility energy but may leave PUE flat or slightly worse?",
+      "options": ["Upgrading server power supplies", "Raising the chilled-water temperature", "Turning on the economizer"],
+      "answer": 0,
+      "concepts": ["pue"],
+      "explain": "Power-supply losses are inside the IT boundary, so IT energy falls along with total energy and the ratio barely moves."
+    },
+    {
+      "kind": "choice",
+      "id": "wue-driver",
+      "prompt": "Which part of the plant dominates a site's water usage effectiveness (WUE)?",
+      "options": ["UPS systems", "Cooling towers", "Air-handler fans", "Chiller compressors"],
+      "answer": 1,
+      "concepts": ["wue-cue"],
+      "explain": "Evaporative cooling towers consume most of the site's water."
+    },
+    {
+      "kind": "explain",
+      "id": "warm-water-explain",
+      "prompt": "Explain to a new operator why running warmer chilled water saves energy, and what limits how warm you can go.",
+      "rubric": [
+        "Warmer chilled water shrinks the chiller's lift, raising its COP",
+        "It increases the hours when the economizer can do the cooling",
+        "Server inlet temperatures must stay inside the ASHRAE envelope, which bounds supply air and therefore water temperature",
+        "Warmer water reduces coil capacity, so fans may need to move more air (a fan-energy trade-off)"
+      ],
+      "concepts": ["chiller-lift-cop", "economizer", "ashrae-envelope"],
+      "explain": "A strong answer connects lift and COP, economizer hours, the inlet-temperature limit, and the coil and fan trade-off."
+    }
+  ],
+  "delayedItems": [
+    {
+      "kind": "numeric",
+      "id": "pue-from-energy-b",
+      "prompt": "A site drew 14.3 GWh last year and delivered 11.0 GWh to IT equipment. What is its PUE?",
+      "answer": 1.3,
+      "tolerance": 0.01,
+      "concepts": ["pue"],
+      "critical": true,
+      "explain": "14.3 / 11.0 = 1.30."
+    },
+    {
+      "kind": "choice",
+      "id": "envelope-b",
+      "prompt": "A rack inlet sensor reads 29 °C. Relative to ASHRAE's recommended envelope, it is:",
+      "options": ["Inside it", "Above it", "Below it"],
+      "answer": 1,
+      "concepts": ["ashrae-envelope"],
+      "critical": true,
+      "explain": "The recommended envelope tops out at 27 °C."
+    },
+    {
+      "kind": "choice",
+      "id": "economizer-bypass-b",
+      "prompt": "With the waterside economizer fully carrying the load, which component is no longer needed?",
+      "options": ["Cooling towers", "Chillers", "CRAH units", "Chilled-water pumps"],
+      "answer": 1,
+      "concepts": ["economizer"],
+      "explain": "Tower water cools the chilled-water loop directly through the plate heat exchanger, so the chillers can switch off."
+    },
+    {
+      "kind": "numeric",
+      "id": "carnot-transfer-b",
+      "prompt": "A legacy plant runs chilled water at 12 °C against condenser water at 32 °C. What is its ideal (Carnot) cooling COP?",
+      "answer": 14.26,
+      "tolerance": 0.03,
+      "transfer": true,
+      "concepts": ["chiller-lift-cop"],
+      "explain": "285.15 K / 20 K ≈ 14.3, about half the ideal COP of the warm-water loop."
+    },
+    {
+      "kind": "choice",
+      "id": "ups-load-b",
+      "prompt": "Two UPS modules share a load in N+1. Why do they waste a larger fraction of power than one fully loaded module?",
+      "options": ["Each runs at 50% or less, where fixed no-load losses are a bigger share", "They convert the power twice", "Their batteries are always discharging"],
+      "answer": 0,
+      "concepts": ["dc-power-chain"],
+      "explain": "UPS losses include a fixed no-load part; at low load it dominates."
+    },
+    {
+      "kind": "choice",
+      "id": "dry-coolers-b",
+      "prompt": "A site replaces evaporative cooling towers with dry coolers. What happens to WUE?",
+      "options": ["It rises", "It falls", "It's unchanged"],
+      "answer": 1,
+      "transfer": true,
+      "concepts": ["wue-cue"],
+      "explain": "Dry coolers don't evaporate water, so site water use falls, usually at some cost in energy on hot days."
+    },
+    {
+      "kind": "choice",
+      "id": "psu-metric-b",
+      "prompt": "Which metric would show the benefit of a server power-supply upgrade?",
+      "options": ["PUE", "Total facility energy", "WUE"],
+      "answer": 1,
+      "concepts": ["pue"],
+      "explain": "Total energy falls; PUE barely moves because the savings are inside the IT boundary."
+    },
+    {
+      "kind": "explain",
+      "id": "pue-limits-explain-b",
+      "prompt": "Explain why PUE alone can mislead you when you evaluate an efficiency project.",
+      "rubric": [
+        "PUE is a ratio, so IT-side savings can leave it flat or worse",
+        "It ignores how much useful computing each kWh buys",
+        "It ignores water (WUE) and carbon (CUE)",
+        "Instantaneous values mislead; report energy-weighted annual or trailing-twelve-month PUE"
+      ],
+      "concepts": ["pue", "wue-cue"],
+      "explain": "A strong answer covers the ratio effect, the missing useful-work measure, water and carbon, and averaging."
+    }
+  ]
+}

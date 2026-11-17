@@ -1,0 +1,84 @@
+[
+  {
+    "kind": "choice",
+    "id": "bcast-1",
+    "prompt": "X has shape (500, 8). Which expression subtracts each row's own mean from that row?",
+    "options": ["X - X.mean(axis=0)", "X - X.mean(axis=1)", "X - X.mean(axis=1, keepdims=True)"],
+    "answer": 2,
+    "concepts": ["numpy-broadcasting"],
+    "explain": "X.mean(axis=1) has shape (500,), which right-aligns against the 8 columns and fails to broadcast. keepdims=True keeps the shape (500, 1), which stretches across the columns."
+  },
+  {
+    "kind": "choice",
+    "id": "bcast-2",
+    "prompt": "Shapes (7, 1, 5) and (3, 1). Do they broadcast, and to what?",
+    "options": ["No, they're incompatible", "Yes, to (7, 3, 5)", "Yes, to (7, 1, 5)"],
+    "answer": 1,
+    "concepts": ["numpy-broadcasting"],
+    "explain": "Right-align: (7, 1, 5) and (1, 3, 1). Axis by axis: 7 vs 1 → 7; 1 vs 3 → 3; 5 vs 1 → 5."
+  },
+  {
+    "kind": "choice",
+    "id": "stuck-sensor",
+    "prompt": "Why does a stuck sensor need special handling when you standardize?",
+    "options": ["Its mean is undefined", "Its standard deviation is 0, so dividing produces NaN", "It makes the other columns' standard deviations wrong"],
+    "answer": 1,
+    "concepts": ["standardization"],
+    "explain": "A constant column has zero spread. (x − μ)/σ becomes 0/0 = NaN, which spreads into any model that touches it. Mapping it to zeros, or dropping it and flagging the sensor, is the safe choice."
+  },
+  {
+    "kind": "choice",
+    "id": "bcast-3",
+    "prompt": "a has shape (4, 3) and b has shape (4,). What does a + b do?",
+    "options": ["Adds b[i] to every element of row i", "Raises a ValueError because the shapes don't broadcast", "Adds b to each column"],
+    "answer": 1,
+    "concepts": ["numpy-broadcasting"],
+    "explain": "Right-aligned, the trailing axes are 3 and 4: different, and neither is 1, so NumPy refuses. To add b[i] to row i, write a + b[:, None], which has shape (4, 1)."
+  },
+  {
+    "kind": "choice",
+    "id": "pairwise-shape",
+    "prompt": "x has shape (5,). What is the shape of x[:, None] - x[None, :]?",
+    "options": ["(5,)", "(5, 5)", "(1, 5)"],
+    "answer": 1,
+    "concepts": ["numpy-broadcasting"],
+    "explain": "(5, 1) against (1, 5) stretches to (5, 5): entry [i, j] is x[i] − x[j]. This is the standard trick for all pairwise differences or distances without a loop."
+  },
+  {
+    "kind": "choice",
+    "id": "why-fast",
+    "prompt": "Why is X.sum(axis=0) on a (1,000,000, 8) float64 array typically 50–100× faster than a Python double loop?",
+    "options": ["NumPy sends the work to the GPU", "The loop runs in compiled code over contiguous memory, with no per-element Python object overhead", "NumPy caches the result from the last call"],
+    "answer": 1,
+    "concepts": ["numpy-vectorization"],
+    "explain": "Each Python-level iteration boxes a float, dispatches an add and checks types. NumPy runs one tight compiled loop (often SIMD) over raw memory."
+  },
+  {
+    "kind": "numeric",
+    "id": "pop-std",
+    "prompt": "A column holds 10, 12, 14, 16, 18. What is its population standard deviation (ddof=0)?",
+    "answer": 2.828,
+    "tolerance": 0.01,
+    "concepts": ["standardization"],
+    "explain": "Mean 14; squared deviations 16, 4, 0, 4, 16 sum to 40; divide by n = 5 to get 8; √8 ≈ 2.83. With ddof=1 you'd divide by 4 and get √10 ≈ 3.16."
+  },
+  {
+    "kind": "numeric",
+    "id": "z-score",
+    "prompt": "A sensor column has mean 22.0 °C and population standard deviation 0.5 °C. What z-score does a reading of 23.2 °C get?",
+    "answer": 2.4,
+    "tolerance": 0.01,
+    "concepts": ["standardization"],
+    "explain": "(23.2 − 22.0) / 0.5 = 2.4: the reading sits 2.4 standard deviations above that sensor's mean."
+  },
+  {
+    "kind": "choice",
+    "id": "stuck-in-production",
+    "prompt": "You standardize with statistics from the training set. A sensor that varied during training gets stuck in production. What do its standardized values look like?",
+    "options": ["They become NaN", "A constant equal to (stuck value − training mean) ÷ training std", "Exactly zero, automatically"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["standardization"],
+    "explain": "The scaler keeps the training mean and std, so a stuck input maps to one constant z-score. Nothing crashes, which is exactly why stuck sensors need their own detector."
+  }
+]

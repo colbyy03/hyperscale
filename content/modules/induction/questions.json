@@ -1,0 +1,142 @@
+[
+  {
+    "kind": "choice",
+    "id": "it-heat",
+    "prompt": "Hall A's servers draw 4.8 MW of electricity. Roughly how much heat do they release into the hall?",
+    "options": ["Much less than 4.8 MW, because computation stores energy", "About 4.8 MW", "About 9.6 MW, because of fan friction"],
+    "answer": 1,
+    "concepts": ["heat-balance"],
+    "explain": "Computation stores a negligible amount of energy, so the electrical power becomes heat at about the same rate."
+  },
+  {
+    "kind": "choice",
+    "id": "session-order",
+    "prompt": "Why does every explainer in this course ask for a prediction before you can use the sliders?",
+    "options": ["To grade you", "Because committing to a prediction makes the result stick and exposes misconceptions", "To slow you down"],
+    "answer": 1,
+    "concepts": ["learning-loop"],
+    "explain": "Predicting first improves understanding compared with only watching, and a wrong prediction tells the app which misconception to drill."
+  },
+  {
+    "kind": "numeric",
+    "id": "pue-calc",
+    "prompt": "A site draws 12.6 GWh in a year, of which 10.5 GWh reaches IT equipment. What is its PUE?",
+    "answer": 1.2,
+    "tolerance": 0.01,
+    "concepts": ["pue"],
+    "explain": "12.6 / 10.5 = 1.20. The 2.1 GWh of overhead is the target for cooling and power-chain improvements."
+  },
+  {
+    "kind": "choice",
+    "id": "psu-upgrade",
+    "prompt": "The site upgrades all server power supplies to a more efficient model. Total facility energy falls. What happens to PUE?",
+    "options": ["It improves substantially", "It stays roughly flat or gets slightly worse", "It can't be computed any more"],
+    "answer": 1,
+    "concepts": ["pue"],
+    "explain": "Power-supply losses sit inside the IT boundary. IT energy falls, and the cooling load falls a little with it, so the ratio barely moves and can even rise. A good reminder to track total energy, not only PUE."
+  },
+  {
+    "kind": "numeric",
+    "id": "carnot",
+    "prompt": "Ideal (Carnot) cooling COP for chilled water at 16 °C and condenser water at 30 °C? (Use kelvin.)",
+    "answer": 20.7,
+    "tolerance": 0.03,
+    "concepts": ["chiller-lift-cop"],
+    "explain": "T_cold = 289.15 K and the lift is 14 K, so 289.15 / 14 ≈ 20.7. Real chillers reach a fraction of this, and the fraction is a useful efficiency diagnostic you'll fit from plant data later."
+  },
+  {
+    "kind": "choice",
+    "id": "envelope",
+    "prompt": "What is ASHRAE's recommended server inlet temperature range?",
+    "options": ["10–20 °C", "18–27 °C", "25–35 °C"],
+    "answer": 1,
+    "concepts": ["ashrae-envelope"],
+    "explain": "18–27 °C is the recommended envelope. Allowable classes go wider, but controllers in this course treat 27 °C as the line not to cross."
+  },
+  {
+    "kind": "choice",
+    "id": "ups-n-plus-1",
+    "prompt": "Hall A's UPS is described as N+1, where the load needs four modules. What does that mean?",
+    "options": ["Five modules are installed, so any one can fail without dropping the load", "Four modules are installed, each oversized by 25%", "Eight modules are installed in two independent paths"],
+    "answer": 0,
+    "concepts": ["dc-power-chain"],
+    "explain": "N+1 means one spare beyond what the load needs. Two fully independent sets, each able to carry the whole load, is 2N."
+  },
+  {
+    "kind": "choice",
+    "id": "ups-gap",
+    "prompt": "Utility power fails. What carries the IT load for the 10–15 seconds before the generators take over?",
+    "options": ["Thermal storage in the chilled-water loop", "The UPS batteries or flywheels", "Nothing: servers ride through on their own capacitors"],
+    "answer": 1,
+    "concepts": ["dc-power-chain"],
+    "explain": "Generators need seconds to start and synchronize. The UPS bridges that gap. Cooling has its own, separate ride-through problem, which is why chilled-water storage exists."
+  },
+  {
+    "kind": "numeric",
+    "id": "wue-calc",
+    "prompt": "In a year a site evaporates 54 million litres of water in its cooling towers while its IT equipment uses 30 GWh. What is its WUE?",
+    "answer": 1.8,
+    "tolerance": 0.02,
+    "unit": "L/kWh",
+    "concepts": ["wue-cue"],
+    "explain": "WUE = site water ÷ IT energy = 54,000,000 L ÷ 30,000,000 kWh = 1.8 L/kWh."
+  },
+  {
+    "kind": "numeric",
+    "id": "cue-calc",
+    "prompt": "A site with PUE 1.25 runs entirely on grid power with an emission factor of 0.4 kg CO₂e/kWh. What is its CUE?",
+    "answer": 0.5,
+    "tolerance": 0.02,
+    "unit": "kg CO₂e/kWh",
+    "concepts": ["wue-cue"],
+    "explain": "Every IT kWh drags 1.25 kWh from the grid, so CUE = 0.4 × 1.25 = 0.5 kg CO₂e per IT kWh."
+  },
+  {
+    "kind": "choice",
+    "id": "economizer-site",
+    "prompt": "Which site gets the most free-cooling hours from a waterside economizer with a 16 °C chilled-water supply?",
+    "options": ["A humid coastal site where the wet-bulb rarely drops below 22 °C", "A dry, high plateau where the wet-bulb is below 10 °C on most nights", "A hot desert site, measured at midday"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["economizer"],
+    "explain": "The economizer works when the towers can make water colder than the chilled-water setpoint, and tower water can only approach the wet-bulb. Cool, dry air gives the most hours."
+  },
+  {
+    "kind": "choice",
+    "id": "lift-effect",
+    "prompt": "You raise the chilled-water supply setpoint from 10 °C to 16 °C and leave the condenser water alone. What happens to the chiller's work per unit of heat removed?",
+    "options": ["It rises, because warmer water carries less heat", "It falls, because the lift shrinks and COP rises", "It stays the same, because COP depends only on the refrigerant"],
+    "answer": 1,
+    "concepts": ["chiller-lift-cop"],
+    "explain": "COP grows as the lift between evaporator and condenser shrinks. Warmer chilled water means less lift, so less compressor work per kW of cooling."
+  },
+  {
+    "kind": "numeric",
+    "id": "rack-airflow",
+    "prompt": "A 40 kW rack is cooled by air that warms by 12 K as it crosses the servers. Air's volumetric heat capacity is about 1.2 kJ/(m³·K). What airflow does the rack need?",
+    "answer": 2.78,
+    "tolerance": 0.03,
+    "unit": "m³/s",
+    "transfer": true,
+    "concepts": ["heat-balance"],
+    "explain": "At steady state the air must carry away all 40 kW: V̇ = P ÷ (ρc_p ΔT) = 40 ÷ (1.2 × 12) ≈ 2.78 m³/s. Halve the temperature rise and you need twice the airflow."
+  },
+  {
+    "kind": "choice",
+    "id": "envelope-excursion",
+    "prompt": "A CRAH fails and the cold aisle climbs to 29 °C for twenty minutes. In ASHRAE terms, where is it?",
+    "options": ["Still inside the recommended range", "Outside recommended, but inside the class A1 allowable range (15–32 °C)", "Outside every class, so servers shut down at 28 °C"],
+    "answer": 1,
+    "concepts": ["ashrae-envelope"],
+    "explain": "Recommended is 18–27 °C. Short excursions into the allowable range are tolerated, but they cost reliability margin and the controller should pull back fast."
+  },
+  {
+    "kind": "choice",
+    "id": "retrieval-week",
+    "prompt": "Two ways to spend 20 minutes before a test: re-read your notes twice, or close them, write down everything you remember, then check. Which gives better recall a week later?",
+    "options": ["Re-reading, because it covers more material", "Retrieval from memory, even though it feels harder", "They come out about the same"],
+    "answer": 1,
+    "concepts": ["learning-loop"],
+    "explain": "Retrieval practice beats restudy on delayed tests, and it feels less fluent while you do it. That gap between feeling and result is why the app schedules reviews for you."
+  }
+]

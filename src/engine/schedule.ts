@@ -188,3 +188,8 @@ export function todayIso(now: Date = new Date()): string {
   const d = String(now.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 }
+
+/** Local calendar date of an ISO timestamp. */
+export function localDay(iso: string): string {
+  return todayIso(new Date(iso));
+}

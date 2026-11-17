@@ -6,14 +6,20 @@ import fs from "node:fs";
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
 import {
+  cardSchema,
+  checkpointSchema,
   curriculumSchema,
   exerciseSchema,
   lessonFrontmatterSchema,
   moduleSchema,
+  questionItemSchema,
   type ContentIndex,
+  type CardContent,
+  type CheckpointContent,
   type ExerciseIndexEntry,
   type LessonIndexEntry,
   type ModuleContent,
+  type PoolQuestion,
 } from "../src/content/schema.ts";
 
 export interface BuildResult {
@@ -60,18 +66,22 @@ export function buildContentIndex(root: string): BuildResult {
   const modules: Record<string, ModuleContent> = {};
   const lessons: LessonIndexEntry[] = [];
   const exercises: ExerciseIndexEntry[] = [];
+  const cards: Record<string, CardContent & { moduleId: string }> = {};
+  const checkpoints: Record<string, CheckpointContent> = {};
+  const questions: Record<string, PoolQuestion> = {};
+  const concepts: Record<string, { title: string; module?: string }> = {};
 
   const curriculum = curriculumSchema.safeParse(readJson(path.join(root, "planning", "curriculum.json")));
   if (!curriculum.success) {
     errors.push(`planning/curriculum.json: ${curriculum.error.message}`);
-    return { index: { modules, lessons, exercises }, errors, warnings };
+    return { index: { modules, lessons, exercises, cards, checkpoints, questions, concepts }, errors, warnings };
   }
   const known = new Set(curriculum.data.modules.map((m) => m.id));
   const sourceIds = loadSourceIds(root);
   const conceptsFile = path.join(root, "content", "concepts.json");
-  const conceptIds = new Set<string>(
-    fs.existsSync(conceptsFile) ? (readJson(conceptsFile) as Array<{ id: string }>).map((c) => c.id) : [],
-  );
+  const conceptList = fs.existsSync(conceptsFile) ? (readJson(conceptsFile) as Array<{ id: string; title?: string; module?: string }>) : [];
+  const conceptIds = new Set<string>(conceptList.map((c) => c.id));
+  for (const c of conceptList) concepts[c.id] = { title: c.title ?? c.id, module: c.module };
 
   const checkSources = (where: string, ids: string[]) => {
     for (const s of ids) if (!sourceIds.has(s)) errors.push(`${where}: unknown source id "${s}" (add it to research/sources.json)`);
@@ -99,6 +109,60 @@ export function buildContentIndex(root: string): BuildResult {
     checkSources(`${rel}/module.json`, parsed.data.sources);
     checkConcepts(`${rel}/module.json`, parsed.data.concepts);
 
+    // cards
+    const cardsFile = path.join(modulesDir, dirName, "cards.json");
+    if (fs.existsSync(cardsFile)) {
+      const raw = readJson(cardsFile);
+      if (!Array.isArray(raw)) errors.push(`${rel}/cards.json: must be an array`);
+      else
+        raw.forEach((c, i) => {
+          const parsed = cardSchema.safeParse(c);
+          if (!parsed.success) {
+            errors.push(`${rel}/cards.json[${i}]: ${parsed.error.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ")}`);
+            return;
+          }
+          if (cards[parsed.data.id]) errors.push(`${rel}/cards.json: duplicate card id "${parsed.data.id}"`);
+          checkConcepts(`${rel}/cards.json:${parsed.data.id}`, parsed.data.concepts);
+          cards[parsed.data.id] = { ...parsed.data, moduleId: dirName };
+        });
+    }
+
+    // question pool
+    const qFile = path.join(modulesDir, dirName, "questions.json");
+    if (fs.existsSync(qFile)) {
+      const raw = readJson(qFile);
+      if (!Array.isArray(raw)) errors.push(`${rel}/questions.json: must be an array`);
+      else
+        raw.forEach((q, i) => {
+          const parsed = questionItemSchema.safeParse(q);
+          if (!parsed.success) {
+            errors.push(`${rel}/questions.json[${i}]: ${parsed.error.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ")}`);
+            return;
+          }
+          const key = `${dirName}/${parsed.data.id}`;
+          if (questions[key]) errors.push(`${rel}/questions.json: duplicate question id "${parsed.data.id}"`);
+          if (parsed.data.kind === "choice" && parsed.data.answer >= parsed.data.options.length) errors.push(`${rel}/questions.json:${parsed.data.id}: answer index out of range`);
+          checkConcepts(`${rel}/questions.json:${parsed.data.id}`, parsed.data.concepts);
+          questions[key] = { ...parsed.data, moduleId: dirName, key };
+        });
+    }
+
+    // checkpoint (exercise references are checked after all modules are read)
+    const cpFile = path.join(modulesDir, dirName, "checkpoint.json");
+    if (fs.existsSync(cpFile)) {
+      const cp = checkpointSchema.safeParse(readJson(cpFile));
+      if (!cp.success) errors.push(`${rel}/checkpoint.json: ${cp.error.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ")}`);
+      else {
+        for (const item of [...cp.data.items, ...(cp.data.delayedItems ?? [])]) {
+          if (item.kind === "choice" && item.answer >= item.options.length) errors.push(`${rel}/checkpoint.json:${item.id}: answer index out of range`);
+          if (item.kind !== "exercise") checkConcepts(`${rel}/checkpoint.json:${item.id}`, item.concepts);
+        }
+        if (!cp.data.items.some((i) => i.kind === "explain")) errors.push(`${rel}/checkpoint.json: needs at least one "explain" item`);
+        if (!cp.data.items.some((i) => (i.kind === "choice" || i.kind === "numeric" || i.kind === "exercise") && i.transfer)) errors.push(`${rel}/checkpoint.json: needs at least one transfer item`);
+        checkpoints[dirName] = cp.data;
+      }
+    }
+
     // lessons
     const lessonDir = path.join(modulesDir, dirName, "lessons");
     const lessonFiles = fs.existsSync(lessonDir) ? fs.readdirSync(lessonDir).filter((f) => f.endsWith(".mdx")).sort() : [];
@@ -109,7 +173,8 @@ export function buildContentIndex(root: string): BuildResult {
         errors.push(`${lrel}: file name must look like 01-some-slug.mdx`);
         return;
       }
-      const fm = lessonFrontmatterSchema.safeParse(frontmatterOf(fs.readFileSync(path.join(lessonDir, file), "utf8")));
+      const source = fs.readFileSync(path.join(lessonDir, file), "utf8");
+      const fm = lessonFrontmatterSchema.safeParse(frontmatterOf(source));
       if (!fm.success) {
         errors.push(`${lrel}: frontmatter ${fm.error.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ")}`);
         return;
@@ -117,7 +182,9 @@ export function buildContentIndex(root: string): BuildResult {
       if (fm.data.id !== `${dirName}/${m[2]}`) errors.push(`${lrel}: id must be "${dirName}/${m[2]}"`);
       checkSources(lrel, fm.data.sources);
       checkConcepts(lrel, fm.data.concepts);
-      lessons.push({ ...fm.data, moduleId: dirName, order: i, file: `/${lrel}` });
+      if (/<Check\b[^>]*\bquestions=/.test(source)) errors.push(`${lrel}: <Check> takes items={[...]} from questions.json, not inline questions`);
+      const checks = [...source.matchAll(/<Check\b[^>]*?\bitems=\{\[([^\]]*)\]\}/g)].flatMap((m) => [...(m[1] ?? "").matchAll(/["']([a-z0-9-]+)["']/g)].map((x) => x[1]!));
+      lessons.push({ ...fm.data, moduleId: dirName, order: i, file: `/${lrel}`, checks });
     });
 
     // exercises
@@ -149,8 +216,27 @@ export function buildContentIndex(root: string): BuildResult {
     if (lessonFiles.length === 0) warnings.push(`${rel}: module has no lessons yet`);
   }
 
+  // cross-references: lesson cards and checkpoint exercises
+  for (const l of lessons) {
+    for (const c of l.cards) {
+      if (!cards[c]) errors.push(`${l.file.slice(1)}: card "${c}" is not defined in a cards.json`);
+      else if (cards[c]!.moduleId !== l.moduleId) errors.push(`${l.file.slice(1)}: card "${c}" belongs to module ${cards[c]!.moduleId}`);
+    }
+  }
+  for (const l of lessons) {
+    for (const q of l.checks) if (!questions[`${l.moduleId}/${q}`]) errors.push(`${l.file.slice(1)}: <Check> item "${q}" is not in content/modules/${l.moduleId}/questions.json`);
+  }
+  const exerciseIds = new Set(exercises.map((e) => e.id));
+  for (const [mid, cp] of Object.entries(checkpoints)) {
+    for (const item of [...cp.items, ...(cp.delayedItems ?? [])]) {
+      if (item.kind === "exercise" && !exerciseIds.has(item.id)) errors.push(`content/modules/${mid}/checkpoint.json: unknown exercise "${item.id}"`);
+    }
+  }
+  const enrolled = new Set(lessons.flatMap((l) => l.cards));
+  for (const id of Object.keys(cards)) if (!enrolled.has(id)) warnings.push(`card "${id}" is not listed in any lesson's frontmatter, so it never enters the deck`);
+
   for (const id of known) {
     if (!modules[id]) warnings.push(`module "${id}" has no content folder yet`);
   }
-  return { index: { modules, lessons, exercises }, errors, warnings };
+  return { index: { modules, lessons, exercises, cards, checkpoints, questions, concepts }, errors, warnings };
 }

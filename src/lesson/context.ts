@@ -18,6 +18,8 @@ export async function recordAttempt(args: {
   itemId: string;
   kind: string;
   correct: boolean;
+  /** 0..1; defaults to 1 or 0 from `correct`. */
+  score?: number;
   seconds: number;
   skills: string[];
   confidence?: number;
@@ -28,7 +30,7 @@ export async function recordAttempt(args: {
     kind: args.kind,
     submittedAt: new Date().toISOString(),
     correct: args.correct,
-    score: args.correct ? 1 : 0,
+    score: args.score ?? (args.correct ? 1 : 0),
     hintTier: 0,
     seconds: Math.round(args.seconds),
     confidence: args.confidence,

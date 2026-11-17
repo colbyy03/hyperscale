@@ -5,6 +5,8 @@ test.describe.configure({ timeout: 120_000 });
 
 test("a code exercise runs real pytest in the browser", async ({ page }) => {
   await page.goto("/learn/python-mle/vectorization");
+  // Module 1 is locked until the Induction gate is passed; look ahead anyway.
+  await page.getByRole("button", { name: "Open anyway" }).click();
   const ex = page.getByTestId("exercise-standardize-columns");
   await expect(ex.getByText("Python ready")).toBeVisible({ timeout: 90_000 });
 

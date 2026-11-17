@@ -1,0 +1,96 @@
+[
+  {
+    "id": "it-power-becomes-heat",
+    "type": "concept",
+    "front": "Hall A's servers draw 4.8 MW. About how much heat must the cooling system remove, and why?",
+    "back": "About 4.8 MW. At steady state essentially every watt the IT equipment draws leaves as heat (first law); computation stores a negligible amount of energy.",
+    "concepts": ["heat-balance"],
+    "critical": true
+  },
+  {
+    "id": "retrieval-beats-restudy",
+    "type": "concept",
+    "front": "Why does this course ask you to predict and recall instead of rereading?",
+    "back": "Retrieval practice produces better long-term retention than restudying, even though restudying feels more effective at the time.",
+    "concepts": ["learning-loop"]
+  },
+  {
+    "id": "dc-share-us-electricity",
+    "type": "concept",
+    "front": "Roughly what share of US electricity did data centers use in 2023, and what is the 2028 range?",
+    "back": "About 4.4% (176 TWh) in 2023; the national-laboratory 2028 scenarios span roughly 6.7–12%.",
+    "concepts": ["pue"]
+  },
+  {
+    "id": "pue-definition",
+    "type": "equation",
+    "front": "Define PUE.",
+    "back": "$\\mathrm{PUE} = E_{\\text{facility}} / E_{\\text{IT}}$: total facility energy divided by the energy delivered to IT equipment. 1.0 would mean zero overhead.",
+    "concepts": ["pue"],
+    "critical": true
+  },
+  {
+    "id": "pue-typical-values",
+    "type": "concept",
+    "front": "Industry-average PUE in the 2026 survey, versus hyperscale fleets?",
+    "back": "Industry average about 1.52; hyperscalers about 1.08–1.17 (Google 1.09, Meta 1.08, AWS 1.14, Microsoft 1.17).",
+    "concepts": ["pue"]
+  },
+  {
+    "id": "pue-psu-paradox",
+    "type": "gotcha",
+    "front": "A server power-supply upgrade lowers total facility energy. Why might PUE not improve?",
+    "back": "Power-supply losses sit inside the IT boundary: IT energy falls (and cooling only a little), so the ratio barely moves and can even rise. Track total energy, not only PUE.",
+    "concepts": ["pue"]
+  },
+  {
+    "id": "ashrae-recommended",
+    "type": "concept",
+    "front": "ASHRAE's recommended server inlet temperature range?",
+    "back": "18–27 °C (64.4–80.6 °F).",
+    "concepts": ["ashrae-envelope"],
+    "critical": true
+  },
+  {
+    "id": "carnot-cop",
+    "type": "equation",
+    "front": "Ideal (Carnot) cooling COP in terms of the two temperatures?",
+    "back": "$\\mathrm{COP} = \\dfrac{T_c}{T_h - T_c}$ with temperatures in kelvin; the denominator is the lift.",
+    "concepts": ["chiller-lift-cop"]
+  },
+  {
+    "id": "warm-water-saves",
+    "type": "concept",
+    "front": "Why does raising the chilled-water supply temperature save energy?",
+    "back": "It shrinks the chiller's lift, which raises its COP, and it adds economizer hours when the outdoor wet-bulb is low enough.",
+    "concepts": ["chiller-lift-cop", "economizer"]
+  },
+  {
+    "id": "economizer-what",
+    "type": "concept",
+    "front": "What does a waterside economizer do?",
+    "back": "A plate heat exchanger lets cooling-tower water cool the chilled-water loop directly when the outdoor wet-bulb is low enough, so the chillers can switch off.",
+    "concepts": ["economizer"]
+  },
+  {
+    "id": "ups-generator-gap",
+    "type": "concept",
+    "front": "During a utility outage the servers stay up. Why can room temperatures still spike?",
+    "back": "The UPS carries the servers instantly, but fans, pumps and chillers often aren't on UPS. Generators take about a minute and chillers several more to restart, while the servers keep making heat.",
+    "concepts": ["dc-power-chain"]
+  },
+  {
+    "id": "wue-definition",
+    "type": "equation",
+    "front": "Define WUE and name what dominates it.",
+    "back": "WUE = annual site water ÷ IT energy (L/kWh). Evaporative cooling towers dominate it.",
+    "concepts": ["wue-cue"]
+  },
+  {
+    "id": "redundancy-terms",
+    "type": "discrimination",
+    "front": "N+1 versus 2N redundancy?",
+    "back": "N+1: one spare unit beyond what the load needs. 2N: two complete, independent paths, each able to carry the full load.",
+    "concepts": ["dc-power-chain"]
+  }
+]

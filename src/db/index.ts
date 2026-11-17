@@ -35,11 +35,18 @@ export interface AttemptRow {
 
 export interface CardRow {
   id: string;
-  source: string; // e.g. lesson:linear-models/ridge or misconception:<id>
+  source: string; // lesson:<lesson-id> | misconception:<exercise-id> | predict:<lesson-id>#<id>
   due: string; // ISO timestamp
-  state: unknown; // serialized FSRS card
+  state: unknown; // serialized FSRS card (null while a draft)
   critical?: boolean;
   suspended?: boolean;
+  /** Drafted from a wrong prediction; enters the deck once approved at exit recall. */
+  draft?: boolean;
+  /** Text for learner-made cards (authored cards take theirs from content). */
+  front?: string;
+  back?: string;
+  concepts?: string[];
+  createdAt?: string;
 }
 
 export interface ReviewLogRow {
@@ -48,13 +55,22 @@ export interface ReviewLogRow {
   rating: number;
   reviewedAt: string;
   log: unknown;
+  /** FSRS state before this review (0 new, 1 learning, 2 review, 3 relearning). */
+  prevState?: number;
+  seconds?: number;
+}
+
+export interface SessionItemDone {
+  key: string;
+  minutes: number;
+  doneAt: string;
 }
 
 export interface SessionRow {
-  date: string; // YYYY-MM-DD
+  date: string; // YYYY-MM-DD (local)
   plannedMinutes: number;
   doneMinutes: number;
-  items: unknown[];
+  items: SessionItemDone[];
 }
 
 export interface CheckpointRow {

@@ -5,6 +5,10 @@ import clsx from "clsx";
 import { Building2, Check as CheckIcon, Lightbulb, Radio, Wrench, X } from "lucide-react";
 import { lazy, Suspense, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui";
+import { content } from "@/content";
+import { draftCard } from "@/engine/cards";
+import { QuestionView } from "@/learn/QuestionView";
+import { questionAttemptId } from "@/learn/state";
 import { vizRegistry } from "@/viz/registry";
 import { recordAttempt, useLesson } from "./context";
 
@@ -82,14 +86,13 @@ export function Predict({ id, question, options, answer, explain }: { id: string
   const commit = () => {
     if (choice === null) return;
     setCommitted(true);
-    void recordAttempt({
-      itemId: `${lesson.lessonId}#${id}`,
-      kind: "predict",
-      correct: choice === answer,
-      seconds: (Date.now() - started.current) / 1000,
-      skills: lesson.concepts,
-      payload: { choice },
-    });
+    const itemId = `${lesson.lessonId}#${id}`;
+    void recordAttempt({ itemId, kind: "predict", correct: choice === answer, seconds: (Date.now() - started.current) / 1000, skills: lesson.concepts, payload: { choice } });
+    if (choice !== answer && lesson.lessonId) {
+      // A wrong prediction becomes a draft card you approve or edit at exit recall.
+      const back = `${options[answer] ?? ""}.${typeof explain === "string" ? ` ${explain}` : ""}`;
+      void draftCard({ id: `predict:${itemId}`, source: `predict:${itemId}`, front: question, back, concepts: lesson.concepts }, new Date());
+    }
   };
   return (
     <div className="not-prose my-6 rounded-2xl border border-line bg-surface p-4 sm:p-5" data-testid={`predict-${id}`}>
@@ -134,93 +137,32 @@ export function Predict({ id, question, options, answer, explain }: { id: string
 
 /* ---------- Retrieval checks ---------- */
 
-export interface Question {
-  id: string;
-  prompt: string;
-  /** Multiple choice when present; otherwise a numeric answer. */
-  options?: string[];
-  answer: number;
-  /** Relative tolerance for numeric answers (default 2%). */
-  tolerance?: number;
-  unit?: string;
-  explain: string;
-}
-
-function QuestionItem({ q }: { q: Question }) {
+/** Retrieval questions from the module's question pool (content/modules/<id>/questions.json). */
+export function Check({ title = "Check yourself", items }: { title?: string; items: string[] }) {
   const lesson = useLesson();
-  const [value, setValue] = useState<string>("");
-  const [choice, setChoice] = useState<number | null>(null);
-  const [result, setResult] = useState<null | boolean>(null);
-  const started = useRef(Date.now());
-  const submit = () => {
-    let correct: boolean;
-    if (q.options) {
-      if (choice === null) return;
-      correct = choice === q.answer;
-    } else {
-      const x = Number(value.replace(/,/g, ""));
-      if (!Number.isFinite(x)) return;
-      const tol = (q.tolerance ?? 0.02) * Math.max(Math.abs(q.answer), 1e-9);
-      correct = Math.abs(x - q.answer) <= tol;
-    }
-    setResult(correct);
-    void recordAttempt({
-      itemId: `${lesson.lessonId}#${q.id}`,
-      kind: "check",
-      correct,
-      seconds: (Date.now() - started.current) / 1000,
-      skills: lesson.concepts,
-      payload: q.options ? { choice } : { value },
-    });
-  };
-  return (
-    <li className="rounded-xl border border-line p-3.5">
-      <div className="mb-2 text-sm font-medium">{q.prompt}</div>
-      {q.options ? (
-        <div className="flex flex-col gap-1.5">
-          {q.options.map((o, i) => (
-            <label key={o} className={clsx("flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm", result !== null && i === q.answer && "bg-accent-soft")}>
-              <input type="radio" name={q.id} disabled={result !== null} checked={choice === i} onChange={() => setChoice(i)} className="accent-[var(--accent)]" />
-              {o}
-            </label>
-          ))}
-        </div>
-      ) : (
-        <div className="flex items-center gap-2">
-          <input
-            inputMode="decimal"
-            className="w-32 rounded-lg border border-line bg-surface-2 px-3 py-1.5 text-sm tabular-nums"
-            value={value}
-            disabled={result !== null}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && submit()}
-            aria-label={q.prompt}
-          />
-          {q.unit && <span className="text-sm text-muted">{q.unit}</span>}
-        </div>
-      )}
-      {result === null ? (
-        <Button className="mt-2.5" onClick={submit}>
-          Check
-        </Button>
-      ) : (
-        <p className="mt-2.5 text-sm leading-relaxed">
-          <span className={clsx("font-semibold", result ? "text-accent" : "text-heat")}>{result ? "Correct. " : `Answer: ${q.options ? q.options[q.answer] : `${q.answer}${q.unit ? ` ${q.unit}` : ""}`}. `}</span>
-          {q.explain}
-        </p>
-      )}
-    </li>
-  );
-}
-
-export function Check({ title = "Check yourself", questions }: { title?: string; questions: Question[] }) {
+  const questions = items.map((id) => ({ id, q: content.questions[`${lesson.moduleId}/${id}`] }));
   return (
     <section className="not-prose my-8 rounded-2xl border border-line bg-surface p-4 sm:p-5">
       <div className="mb-3 text-xs font-semibold tracking-wider text-accent uppercase">{title}</div>
       <ol className="flex flex-col gap-3">
-        {questions.map((q) => (
-          <QuestionItem key={q.id} q={q} />
-        ))}
+        {questions.map(({ id, q }) =>
+          q ? (
+            <li key={q.key}>
+              <QuestionView
+                item={q}
+                mode="lesson"
+                testId={`check-${id}`}
+                onGraded={(g) =>
+                  void recordAttempt({ itemId: questionAttemptId(q), kind: "check", correct: g.correct, score: g.score, seconds: g.seconds, skills: q.concepts, payload: { format: q.kind, response: g.response, lessonId: lesson.lessonId } })
+                }
+              />
+            </li>
+          ) : (
+            <li key={id} className="text-sm text-danger">
+              Unknown question "{id}".
+            </li>
+          ),
+        )}
       </ol>
     </section>
   );

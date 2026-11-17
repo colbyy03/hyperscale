@@ -17,6 +17,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { curriculum } from "@/content";
 import { daysUntil, formatDate, useSchedule, useToday } from "@/hooks/data";
+import { useCardSync, useDeck, useNow } from "@/hooks/learning";
 import { useSettings } from "@/state/settings";
 import { useApplyTheme } from "@/state/theme";
 import { UpdatePrompt } from "@/pwa";
@@ -78,7 +79,24 @@ function MilestoneChip() {
   );
 }
 
+/** Cards due now (reviews plus today's new cards), shown on the Review link. */
+function useDueCount(): number {
+  const now = useNow(60_000);
+  const deck = useDeck(now);
+  return deck.loaded ? deck.dueCount + deck.freshCount : 0;
+}
+
+function DueBadge({ n, className }: { n: number; className?: string }) {
+  if (n <= 0) return null;
+  return (
+    <span className={clsx("rounded-full bg-accent px-1.5 py-px text-[10px] leading-4 font-semibold text-[#04201c] tabular-nums", className)} aria-label={`${n} cards due`}>
+      {n > 99 ? "99+" : n}
+    </span>
+  );
+}
+
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+  const due = useDueCount();
   return (
     <nav className="flex flex-col gap-0.5" aria-label="Main">
       {NAV.map((item) => (
@@ -96,6 +114,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
         >
           {item.icon}
           {item.label}
+          {item.to === "/review" && <DueBadge n={due} className="ml-auto" />}
         </NavLink>
       ))}
     </nav>
@@ -108,6 +127,8 @@ export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const today = useToday();
+  const due = useDueCount();
+  useCardSync();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -154,10 +175,11 @@ export function Layout() {
             key={item.to}
             to={item.to}
             end={item.end}
-            className={({ isActive }) => clsx("flex flex-col items-center gap-1 py-2.5 text-[11px]", isActive ? "text-accent" : "text-muted")}
+            className={({ isActive }) => clsx("relative flex flex-col items-center gap-1 py-2.5 text-[11px]", isActive ? "text-accent" : "text-muted")}
           >
             {item.icon}
             {item.label}
+            {item.to === "/review" && <DueBadge n={due} className="absolute top-1 left-1/2 ml-2" />}
           </NavLink>
         ))}
       </nav>
