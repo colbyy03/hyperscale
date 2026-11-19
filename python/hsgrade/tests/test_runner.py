@@ -1,3 +1,4 @@
+import pytest
 from hsgrade import grade
 
 TESTS = '''
@@ -53,3 +54,24 @@ def test_same_length_edit_is_not_served_from_stale_bytecode(tmp_path):
         right = grade("import numpy as np\ndef double(x):\n    return 2 * np.asarray(x)\n", TESTS, tmp_path)
         assert not wrong["allPassed"] and right["allPassed"]
     assert not (tmp_path / "__pycache__").exists() or not any((tmp_path / "__pycache__").iterdir())
+
+
+def test_sql_solution_file_and_support_files(tmp_path):
+    """SQL exercises write solution.sql plus data.py; the tests read both."""
+    pytest.importorskip("duckdb")
+    data = "import duckdb\n\ndef make_db():\n    con = duckdb.connect()\n    con.execute(\"CREATE TABLE t AS SELECT * FROM (VALUES (1, 2.0), (1, 4.0), (2, 5.0)) v(k, x)\")\n    return con\n"
+    tests = (
+        "from data import make_db\n"
+        "from hsgrade.sql import run_learner, assert_columns, assert_rows\n\n"
+        "def test_avg():\n"
+        "    r = run_learner(make_db())\n"
+        "    assert_columns(r, ['k', 'avg_x'])\n"
+        "    assert_rows(r, [(1, 3.0), (2, 5.0)])\n"
+    )
+    good = grade("SELECT k, AVG(x) AS avg_x FROM t GROUP BY k", tests, tmp_path / "w", "solution.sql", {"data.py": data})
+    assert good["allPassed"], good
+    wrong = grade("SELECT k, SUM(x) AS avg_x FROM t GROUP BY k", tests, tmp_path / "w", "solution.sql", {"data.py": data})
+    assert not wrong["allPassed"]
+    assert "avg_x should be 3" in wrong["tests"][0]["message"]
+    broken = grade("SELEC k FROM t", tests, tmp_path / "w", "solution.sql", {"data.py": data})
+    assert "DuckDB couldn't run your query" in broken["tests"][0]["message"]

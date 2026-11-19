@@ -11,6 +11,7 @@ import { QuestionView } from "@/learn/QuestionView";
 import { questionAttemptId } from "@/learn/state";
 import { vizRegistry } from "@/viz/registry";
 import { recordAttempt, useLesson } from "./context";
+import { Placement } from "./Placement";
 
 /* ---------- Callouts ---------- */
 
@@ -199,4 +200,4 @@ export function CodeExercise({ id }: { id: string }) {
   );
 }
 
-export const lessonComponents = { Situation, Bridge, Craft, KeyIdea, Figure, Predict, Check, Viz, CodeExercise };
+export const lessonComponents = { Situation, Bridge, Craft, KeyIdea, Figure, Predict, Check, Viz, CodeExercise, Parsons: CodeExercise, Placement };

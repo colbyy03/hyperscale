@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## Phase 4a: new exercise types, placement check, Module 1 lessons 1 and 3 (2026-11-18)
+
+- **SQL exercises** graded on DuckDB 1.5.1 inside Pyodide (the version Pyodide ships), so the browser, CI verification and local tests use one engine. `hsgrade.sql` adds `run_learner`, `assert_columns`, `assert_rows` (order-insensitive, float tolerance, row-level messages) and `preview`. The grader now takes the solution file name and support files (`data.py`, CSVs). Run prints the result table.
+- **Parsons problems**: tap blocks into order, with distractor blocks, reordering arrows, hints and a guarded reveal. Graded by pytest when the exercise ships tests (any correct order passes), otherwise by order. The verifier checks that the reference order passes and a reversed order fails.
+- **Induction lesson 4, "Placement check"**: twelve closed-book questions across Python, linear algebra, calculus and probability, with a live summary per area (move briskly, normal pace, full depth, or try the test-out where the module allows it). Placement questions are kept out of mixed practice (`"practice": false`).
+- **Module 1, lesson 1, "How NumPy stores your data"**: buffer, dtype, shape and strides; views vs copies; NumPy 2's promotion rules and integer wraparound, every claim checked against NumPy 2.4.6. A new **stride explorer** shows strides, offsets and copies over one buffer. Three exercises: a stride calculator, the view-mutation bug from the lesson's story (debug), and a rolling mean with `sliding_window_view` (Parsons).
+- **Module 1, lesson 3, "Numerical hygiene and measuring speed"**: machine epsilon, non-associativity, catastrophic cancellation, log-sum-exp, profiling first. Exercises: a stable softmax and log-sum-exp (vectorized), and Welford's one-pass mean and variance, graded on a counter near 4.2 × 10¹⁰ where the textbook formula returns 262,144 instead of 9.06.
+- 14 new cards and 23 new questions; 6 new concepts for upcoming modules (used by the placement check).
+- **Tests**: 41 unit tests, 30 grader and simulator tests, 6 exercises verified with 14 wrong variants, 30 Playwright tests (including a Parsons problem in the browser and the placement summary).
+
 ## Phase 3b: Data-hall simulator and Control Room (2026-11-17)
 
 - **`hyperscale_sim` v0.1** (`python/sim`), Level 1 of the Hall A spec, pure Python with no dependencies:

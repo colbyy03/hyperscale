@@ -1,0 +1,92 @@
+---
+id: python-mle/memory-model
+title: How NumPy stores your data
+minutes: 35
+concepts: [numpy-memory-model]
+sources: [harris2020-numpy, numpy-docs-2-5, gorelick2025-hpp3, mckinney2022-pda3]
+cards: [ndarray-anatomy, stride-offset, slice-is-copy, transpose-1d, reshape-may-copy, uint8-wraps, telemetry-memory]
+---
+
+<Situation from="Ines, reliability lead">
+Something odd from last night's batch job. We keep the raw sensor export in an array called `raw` and run a cleaning step that's supposed to produce a separate `clean` array. This morning `raw` had NaNs in it too, so the "raw record" isn't raw any more. Nobody touched it directly. Can you work out how that happened before we trust any model trained on this data?
+</Situation>
+
+<Predict
+  id="slice-write"
+  question="a = np.arange(10.0); b = a[2:5]; b[0] = -1. What is a[2] afterwards?"
+  options={["2.0: b is a separate copy", "-1.0: b and a share memory", "It raises an error"]}
+  answer={1}
+  explain="Basic slicing doesn't copy anything. It returns a new array object that looks into the same memory with a different starting point, so writing through b writes into a. That's exactly what happened to Ines's raw array."
+/>
+
+## An array is a buffer plus a recipe
+
+A NumPy array has two parts. The **data buffer** is one flat run of bytes in memory. The **metadata** is the recipe for reading it:
+
+- **dtype**: how many bytes each element takes and what they mean (`float64` is 8 bytes of IEEE floating point, `int32` is 4 bytes of signed integer);
+- **shape**: how many elements along each axis;
+- **strides**: how many *bytes* to jump to move one step along each axis.
+
+The element at index $(i_0, i_1, \dots)$ lives at
+
+$$
+\text{offset} = \sum_k i_k \, s_k
+$$
+
+bytes from the start, where $s_k$ is the stride of axis $k$. A 3×4 array of `int32` in row-major ("C") order has strides (16, 4). The next row is 16 bytes away (four elements of 4 bytes) and the next column 4 bytes away, so element [2, 3] sits at 2·16 + 3·4 = 44 bytes.
+
+The payoff of this design is that many operations only *edit the recipe*. A transpose swaps the strides; a step slice multiplies one; a sub-block slice moves the starting point. None of them touch the data, so they're instant and use no extra memory. Try it:
+
+<Viz name="StrideExplorer" />
+
+<KeyIdea title="Views and copies">
+If NumPy can describe the result as the same buffer with a new shape, new strides and a new starting point, it returns a **view**: basic slicing (`a[1:3]`, `a[::2]`), transposes, and `reshape` or `ravel` on contiguous data. If it can't, it **copies**. That covers fancy indexing with lists or arrays of indices (`a[[0, 2]]`), boolean masks (`a[a > 30]`), and reshaping data whose order no stride can walk. When in doubt, ask NumPy: `np.shares_memory(a, b)` tells you whether two arrays overlap.
+</KeyIdea>
+
+<Predict
+  id="fancy-write"
+  question="a = np.arange(10.0); c = a[[2, 3]]; c[0] = 99. What is a[2] afterwards?"
+  options={["2.0", "99.0", "It raises an error"]}
+  answer={0}
+  explain="A list of indices is fancy indexing, which always copies, even when a slice could have described the same elements. c is a new array, so a is untouched. This asymmetry, where slices are views and lists are copies, is worth memorizing."
+/>
+
+<Predict
+  id="transpose-1d"
+  question="x = np.arange(5.0). What is x.T.shape?"
+  options={["(5, 1)", "(1, 5)", "(5,)"]}
+  answer={2}
+  explain="A transpose reverses the axes, and a 1-D array has only one, so .T does nothing. To get a column, add an axis explicitly: x[:, None] or x.reshape(-1, 1). Expecting .T to make a column is a classic source of silent broadcasting bugs."
+/>
+
+## dtypes are a contract
+
+The dtype fixes both memory and meaning. One month of one-minute readings from Hall A's 360 inlet sensors is 360 × 43,200 ≈ 15.6 million numbers: about 124 MB as `float64` and 62 MB as `float32`. Halving precision halves memory and bandwidth, which is why ML workloads use 32-bit and smaller types. The cost is precision, which Lesson 3 covers.
+
+Integer dtypes add a sharper edge: they **wrap around**. Some old loggers export 8-bit readings, and `np.array([250], dtype=np.uint8) + 10` gives `[4]`, silently. NumPy 2 changed the rules for mixing Python numbers with arrays: a plain Python number now *adapts to the array's dtype* rather than widening it. So the `uint8` array stays `uint8` and wraps, and a constant that doesn't fit at all (`+ 300`) raises an `OverflowError`. Mixing a `float32` array with a Python float stays `float32`; mixing it with a NumPy `float64` value upgrades it to `float64`.
+
+<Bridge>
+Strided views are how finite-difference codes avoid copying grids. A 2-D Laplacian on a temperature field is four shifted views of the same array, `T[:-2, 1:-1] + T[2:, 1:-1] + T[1:-1, :-2] + T[1:-1, 2:] - 4 * T[1:-1, 1:-1]`, and each shift is a view, not a copy. If you learned MATLAB first, note one difference: NumPy defaults to row-major order, MATLAB to column-major, so the fast loop index is the last axis here, not the first.
+</Bridge>
+
+## Hands on
+
+<CodeExercise id="python-mle/stride-calculator" />
+
+Now Ines's bug. The cleaning function below is close to what ran last night.
+
+<CodeExercise id="python-mle/mask-hot" />
+
+<Craft title="Habits that prevent this class of bug">
+- A function that receives an array shouldn't modify it unless its name says so (`normalize_inplace`). Return new arrays at module boundaries.
+- `np.where(condition, a, b)` and arithmetic always allocate a result, so they're safe defaults for "cleaned" data. Indexed assignment (`x[mask] = ...`) writes into whatever `x` points at.
+- When you need to be sure, check with `np.shares_memory`, or make the copy explicit with `.copy()`. Don't rely on `.base`: it points at the array that owns the buffer, which may be several views back.
+</Craft>
+
+Views also enable a trick worth knowing: `sliding_window_view` presents every window of a series as rows of a 2-D array with no copying, because both axes simply step one element at a time.
+
+<CodeExercise id="python-mle/rolling-window" />
+
+<Check items={["mm-offset", "mm-strides-t", "mm-which-copies", "mm-megabytes", "mm-uint8"]} />
+
+Next: vectorization and broadcasting, where these views pay off in speed.

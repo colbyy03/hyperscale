@@ -1,0 +1,23 @@
+{
+  "id": "python-mle/stable-softmax",
+  "type": "code",
+  "language": "python",
+  "title": "Softmax that survives big logits",
+  "prompt": "Write `logsumexp(x)`, which returns log(Σᵢ exp(xᵢ)) over the last axis, and `softmax(x)`, which returns exp(xᵢ) / Σⱼ exp(xⱼ) over the last axis. Both must work for logits like 1000 or −1000, where `np.exp` overflows to inf or underflows to 0.\n\n`x` may be 1-D, or 2-D with one row per example. For a 2-D input, `logsumexp` returns one value per row and `softmax` returns the input's shape. No Python loops.",
+  "concepts": ["log-sum-exp", "floating-point"],
+  "difficulty": 0.4,
+  "minutes": 10,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "exp(1000) overflows, yet softmax([1000, 1001]) is perfectly well defined. What can you subtract from every logit without changing the softmax?",
+    "Softmax is unchanged by adding a constant to every logit, and log Σ exp(xᵢ) = m + log Σ exp(xᵢ − m) for any m. Choose m = max(x), so the largest exponent is exp(0) = 1. Reduce over `axis=-1` with `keepdims=True` so the max broadcasts back against each row.",
+    "m = x.max(axis=-1, keepdims=True); softmax: e = np.exp(x - m); return e / e.sum(axis=-1, keepdims=True). logsumexp: return (m + np.log(np.exp(x - m).sum(axis=-1, keepdims=True))).squeeze(-1)"
+  ],
+  "misconceptions": {
+    "softmax-shift": "exp() overflows above about 709 in float64 (88 in float32); subtract the row maximum first, which changes nothing mathematically.",
+    "keepdims-row-mean": "A reduction over the last axis drops that axis; keepdims=True keeps it so the result broadcasts back against each row."
+  },
+  "sources": ["goldberg1991-floating-point", "numpy-docs-2-5"]
+}

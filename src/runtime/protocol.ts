@@ -38,7 +38,7 @@ export type WorkerRequest =
   | { id: number; type: "sim"; request: string }
   | { id: number; type: "load"; packages: string[]; code: string }
   | { id: number; type: "run"; code: string; packages: string[] }
-  | { id: number; type: "grade"; solution: string; tests: string; packages: string[] };
+  | { id: number; type: "grade"; solution: string; tests: string; packages: string[]; solutionFile?: string; extraFiles?: Record<string, string> };
 
 export type WorkerResponse =
   | { id: number; ok: true; result: unknown }

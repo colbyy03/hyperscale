@@ -15,7 +15,7 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from typing import Any
 
-LEARNER_MODULES = ("solution", "test_exercise")
+LEARNER_MODULES = ("solution", "test_exercise", "data")
 
 
 def _forget_learner_modules() -> None:
@@ -24,20 +24,32 @@ def _forget_learner_modules() -> None:
             del sys.modules[name]
 
 
-def prepare_workdir(workdir: str | os.PathLike[str], solution_code: str, tests_code: str) -> Path:
-    """Write the learner's code and the tests into a fresh folder.
+def prepare_workdir(
+    workdir: str | os.PathLike[str],
+    solution_code: str,
+    tests_code: str,
+    solution_file: str = "solution.py",
+    extra_files: dict[str, str] | None = None,
+) -> Path:
+    """Write the learner's code, the tests and any support files (data.py, CSVs) into a fresh folder.
 
+    `solution_file` is "solution.py" for Python exercises and "solution.sql" for SQL ones.
     Cached bytecode is removed: Python validates .pyc files by source mtime (whole seconds) and size,
     so an edit that keeps the file length (say 2*x -> 3*x) re-checked within the same second would
     otherwise import the *previous* code.
     """
     wd = Path(workdir)
     wd.mkdir(parents=True, exist_ok=True)
-    for stale in wd.glob("*.py"):
-        stale.unlink()
+    for stale in wd.iterdir():
+        if stale.is_file():
+            stale.unlink()
     shutil.rmtree(wd / "__pycache__", ignore_errors=True)
-    (wd / "solution.py").write_text(solution_code)
+    (wd / solution_file).write_text(solution_code)
     (wd / "test_exercise.py").write_text(tests_code)
+    for name, content in (extra_files or {}).items():
+        if "/" in name or name in (solution_file, "test_exercise.py"):
+            raise ValueError(f"bad support file name {name!r}")
+        (wd / name).write_text(content)
     importlib.invalidate_caches()
     return wd
 
@@ -87,6 +99,12 @@ def run_grading(workdir: str | os.PathLike[str]) -> dict[str, Any]:
     }
 
 
-def grade(solution_code: str, tests_code: str, workdir: str | os.PathLike[str] = "/tmp/hsgrade-work") -> dict[str, Any]:
+def grade(
+    solution_code: str,
+    tests_code: str,
+    workdir: str | os.PathLike[str] = "/tmp/hsgrade-work",
+    solution_file: str = "solution.py",
+    extra_files: dict[str, str] | None = None,
+) -> dict[str, Any]:
     """Convenience: prepare the folder and run the tests."""
-    return run_grading(prepare_workdir(workdir, solution_code, tests_code))
+    return run_grading(prepare_workdir(workdir, solution_code, tests_code, solution_file, extra_files))

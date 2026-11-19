@@ -69,6 +69,13 @@ export const exerciseSchema = z.object({
   hints: z.array(z.string().min(3)).length(3, "exactly three hint tiers (T1 orient, T2 principle, T3 next step)"),
   misconceptions: z.record(z.string(), z.string()).default({}),
   sources: z.array(z.string()).default([]),
+  /** Parsons problems: the solution's lines in order (indentation included) and blocks that don't belong. */
+  parsons: z
+    .object({
+      lines: z.array(z.string().min(1)).min(3),
+      distractors: z.array(z.string().min(1)).default([]),
+    })
+    .optional(),
 });
 export type ExerciseContent = z.infer<typeof exerciseSchema>;
 
@@ -105,7 +112,15 @@ export const cardSchema = z.object({
 });
 export type CardContent = z.infer<typeof cardSchema>;
 
-const questionBase = { id: slug, prompt: z.string().min(5), concepts: z.array(slug).min(1), critical: z.boolean().default(false), explain: z.string().min(3) };
+const questionBase = {
+  id: slug,
+  prompt: z.string().min(5),
+  concepts: z.array(slug).min(1),
+  critical: z.boolean().default(false),
+  explain: z.string().min(3),
+  /** false keeps a question out of mixed practice (diagnostics). */
+  practice: z.boolean().optional(),
+};
 const choiceItem = z.object({ kind: z.literal("choice"), ...questionBase, transfer: z.boolean().default(false), options: z.array(z.string().min(1)).min(2), answer: z.number().int().min(0) });
 const numericItem = z.object({ kind: z.literal("numeric"), ...questionBase, transfer: z.boolean().default(false), answer: z.number(), tolerance: z.number().positive().default(0.02), unit: z.string().optional() });
 const explainItem = z.object({ kind: z.literal("explain"), ...questionBase, rubric: z.array(z.string().min(3)).length(4) });

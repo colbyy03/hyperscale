@@ -7,4 +7,5 @@ export const vizRegistry: Record<string, LazyExoticComponent<ComponentType<AnyPr
   PueCalculator: lazy(() => import("./PueCalculator")),
   HeatPath: lazy(() => import("./HeatPath")),
   ControlRoom: lazy(() => import("./ControlRoom")),
+  StrideExplorer: lazy(() => import("./StrideExplorer")),
 };

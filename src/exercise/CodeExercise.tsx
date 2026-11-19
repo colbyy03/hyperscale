@@ -2,9 +2,8 @@
  * An interactive code exercise: editor, Run, Check (real pytest in Pyodide), tiered hints,
  * and a guarded solution reveal. Attempts are recorded for mastery and review scheduling.
  */
-import clsx from "clsx";
-import { CheckCircle2, CircleAlert, Eye, Lightbulb, Loader2, Play, RotateCcw, ShieldCheck, XCircle } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { CheckCircle2, Eye, Lightbulb, Loader2, Play, RotateCcw, ShieldCheck } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { InlineText } from "@/components/InlineText";
 import { Badge, Button } from "@/components/ui";
 import { content } from "@/content";
@@ -12,10 +11,11 @@ import { enrollCards } from "@/engine/cards";
 import { markItemDone } from "@/hooks/learning";
 import { recordAttempt } from "@/lesson/context";
 import { getSettings } from "@/state/settings";
-import type { GradeResult, RunResult } from "@/runtime/protocol";
 import { python, usePythonStatus } from "@/runtime/python";
 import { CodeEditor } from "./CodeEditor";
-import { loadExerciseFile } from "./files";
+import { loadExerciseFile, supportFileNames } from "./files";
+import { OutputPanel, type Output } from "./OutputPanel";
+import { ParsonsExercise } from "./ParsonsExercise";
 
 function draftKey(id: string) {
   return `hs-draft:${id}`;
@@ -36,7 +36,6 @@ function writeDraft(id: string, code: string | null) {
   }
 }
 
-type Output = { kind: "run"; result: RunResult } | { kind: "grade"; result: GradeResult } | { kind: "error"; message: string } | null;
 
 const TIER_LABEL = ["", "Hint 1 · orient", "Hint 2 · principle", "Hint 3 · next step"];
 
@@ -46,9 +45,24 @@ export type ExerciseMode = "lesson" | "challenge" | "checkpoint";
  * Modes: "lesson" keeps a draft and offers hints and a guarded reveal; "challenge" starts from a
  * blank starter (no draft); "checkpoint" has no hints or reveal and reports results to the gate.
  */
-export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mode?: ExerciseMode; onResult?: (r: { allPassed: boolean; checks: number }) => void }) {
+type ExerciseProps = { id: string; mode?: ExerciseMode; onResult?: (r: { allPassed: boolean; checks: number }) => void };
+
+/** Every exercise type renders through here: code, fill-in, debug and SQL in the editor; Parsons as blocks. */
+export function CodeExercise(props: ExerciseProps) {
+  const ex = content.exercises.find((e) => e.id === props.id);
+  if (ex?.type === "parsons") return <ParsonsExercise ex={ex} mode={props.mode ?? "lesson"} onResult={props.onResult} />;
+  return <EditorExercise {...props} />;
+}
+
+/** Python script for the SQL Run button: build the exercise's tables, run the query, print a table. */
+function sqlRunScript(sql: string, support: Record<string, string>): string {
+  return `${support["data.py"] ?? ""}\n\nfrom hsgrade.sql import run as _hs_run, preview as _hs_preview\nprint(_hs_preview(_hs_run(make_db(), ${JSON.stringify(sql)})))\n`;
+}
+
+function EditorExercise({ id, mode = "lesson", onResult }: ExerciseProps) {
   const ex = useMemo(() => content.exercises.find((e) => e.id === id), [id]);
   const keepDraft = mode === "lesson";
+  const [support, setSupport] = useState<Record<string, string>>({});
   const [starter, setStarter] = useState<string | null>(null);
   const [tests, setTests] = useState<string | null>(null);
   const [code, setCode] = useState<string>("");
@@ -67,7 +81,9 @@ export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mo
   useEffect(() => {
     if (!ex) return;
     void python.warm().catch(() => undefined);
-    void Promise.all([loadExerciseFile(ex.dir, ex.language === "sql" ? "starter.sql" : "starter.py"), loadExerciseFile(ex.dir, "tests.py")]).then(([s, t]) => {
+    const names = supportFileNames(ex.files);
+    void Promise.all([loadExerciseFile(ex.dir, ex.language === "sql" ? "starter.sql" : "starter.py"), loadExerciseFile(ex.dir, "tests.py"), ...names.map((n) => loadExerciseFile(ex.dir, n))]).then(([s, t, ...extra]) => {
+      setSupport(Object.fromEntries(names.map((n, i) => [n, extra[i] ?? ""])));
       setStarter(s ?? "");
       setTests(t ?? "");
       setCode((keepDraft ? readDraft(ex.id) : null) ?? s ?? "");
@@ -88,19 +104,20 @@ export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mo
     if (!ex || busy) return;
     setBusy("run");
     try {
-      setOutput({ kind: "run", result: await python.run(code, ex.packages, ex.constraints.timeoutMs) });
+      const script = ex.language === "sql" ? sqlRunScript(code, support) : code;
+      setOutput({ kind: "run", result: await python.run(script, ex.packages, ex.constraints.timeoutMs) });
     } catch (e) {
       setOutput({ kind: "error", message: (e as Error).message });
     } finally {
       setBusy(null);
     }
-  }, [ex, busy, code]);
+  }, [ex, busy, code, support]);
 
   const check = useCallback(async () => {
     if (!ex || busy || tests === null) return;
     setBusy("check");
     try {
-      const result = await python.grade(code, tests, ex.packages, ex.constraints.timeoutMs);
+      const result = await python.grade(code, tests, ex.packages, ex.constraints.timeoutMs, { solutionFile: ex.language === "sql" ? "solution.sql" : "solution.py", extraFiles: support });
       setOutput({ kind: "grade", result });
       const checks = attempts + 1;
       setAttempts(checks);
@@ -128,7 +145,7 @@ export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mo
     } finally {
       setBusy(null);
     }
-  }, [ex, busy, tests, code, hintTier, solution, attempts, onResult, mode]);
+  }, [ex, busy, tests, code, hintTier, solution, attempts, onResult, mode, support]);
 
   if (!ex) {
     return <div className="my-6 rounded-2xl border border-danger p-4 text-sm text-danger">Unknown exercise "{id}".</div>;
@@ -147,7 +164,7 @@ export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mo
   return (
     <section className="not-prose my-8 rounded-2xl border border-line bg-surface-2/40 p-4 sm:p-5" data-testid={`exercise-${id.split("/")[1]}`}>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold tracking-wider text-accent uppercase">{mode === "challenge" ? "Challenge" : ex.type === "debug" ? "Debug" : ex.type === "fill-in" ? "Fill in" : "Code"}</span>
+        <span className="text-xs font-semibold tracking-wider text-accent uppercase">{mode === "challenge" ? "Challenge" : ex.type === "debug" ? "Debug" : ex.type === "fill-in" ? "Fill in" : ex.type === "sql" ? "SQL" : "Code"}</span>
         <h3 className="mr-auto font-semibold">{ex.title}</h3>
         <Badge>{ex.minutes} min</Badge>
         {ex.constraints.requireVectorized && <Badge tone="info">no Python loops</Badge>}
@@ -238,57 +255,5 @@ export function CodeExercise({ id, mode = "lesson", onResult }: { id: string; mo
         ) : null}
       </div>
     </section>
-  );
-}
-
-function Pre({ children, tone }: { children: ReactNode; tone?: "danger" }) {
-  return <pre className={clsx("mt-2 max-h-72 overflow-auto rounded-xl border bg-surface p-3 font-mono text-[13px] leading-relaxed whitespace-pre-wrap", tone === "danger" ? "border-danger/40 text-danger" : "border-line")}>{children}</pre>;
-}
-
-function OutputPanel({ output }: { output: Output }) {
-  if (!output) return null;
-  if (output.kind === "error") {
-    return (
-      <div className="mt-4 rounded-xl border border-danger/40 bg-danger-soft p-3 text-sm" role="alert">
-        <CircleAlert size={15} className="mr-1 inline text-danger" /> {output.message}
-      </div>
-    );
-  }
-  if (output.kind === "run") {
-    const r = output.result;
-    const empty = !r.stdout && !r.stderr && !r.value && !r.error;
-    return (
-      <div className="mt-4" data-testid="run-output">
-        <div className="text-xs font-semibold tracking-wider text-faint uppercase">Output · {r.seconds.toFixed(2)} s</div>
-        {empty && <Pre>(no output: print something, or end with an expression)</Pre>}
-        {r.stdout && <Pre>{r.stdout}</Pre>}
-        {r.value && <Pre>{r.value}</Pre>}
-        {r.stderr && <Pre tone="danger">{r.stderr}</Pre>}
-        {r.error && <Pre tone="danger">{r.error}</Pre>}
-      </div>
-    );
-  }
-  const g = output.result;
-  return (
-    <div className="mt-4" data-testid="grade-output">
-      <div className={clsx("flex items-center gap-2 font-medium", g.allPassed ? "text-accent" : "text-heat")}>
-        {g.allPassed ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
-        {g.allPassed ? `All ${g.total} tests pass.` : g.collectionErrors.length ? "Your code didn't load." : `${g.passed} of ${g.total} tests pass.`}
-        <span className="text-xs font-normal text-faint">{g.seconds.toFixed(2)} s</span>
-      </div>
-      {g.collectionErrors.length > 0 && <Pre tone="danger">{g.collectionErrors[0]!.split("\n").slice(-12).join("\n")}</Pre>}
-      <ul className="mt-2 flex flex-col gap-1.5">
-        {g.tests.map((t) => (
-          <li key={t.name} className={clsx("rounded-xl border p-2.5 text-sm", t.outcome === "passed" ? "border-line" : "border-heat/40 bg-heat-soft")}>
-            <div className="flex items-center gap-2">
-              {t.outcome === "passed" ? <CheckCircle2 size={15} className="shrink-0 text-accent" /> : <XCircle size={15} className="shrink-0 text-heat" />}
-              <span className={clsx(t.outcome === "passed" && "text-muted")}>{t.description ?? t.name.replace(/^test_/, "").replace(/_/g, " ")}</span>
-              {t.hidden && <Badge className="ml-auto">hidden test</Badge>}
-            </div>
-            {t.message && <div className="mt-1.5 pl-6 font-mono text-[13px] leading-relaxed whitespace-pre-wrap text-ink">{t.message}</div>}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

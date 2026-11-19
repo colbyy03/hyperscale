@@ -1,0 +1,22 @@
+{
+  "id": "python-mle/welford",
+  "type": "code",
+  "language": "python",
+  "title": "Running mean and variance in one pass",
+  "prompt": "Write `running_mean_var(values)`: it takes an iterable of readings and returns `(mean, variance)` with the **population** variance. The iterable may be a generator, so you can read it only once.\n\nIt must stay accurate for features with a huge offset, such as a cumulative energy counter near 4.2 × 10¹⁰ Wh that wobbles by a few Wh. Update running totals one value at a time (Welford's method) without storing the values. Raise `ValueError` for an empty input.",
+  "concepts": ["floating-point"],
+  "difficulty": 0.45,
+  "minutes": 10,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["numpy", "statistics"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "The textbook shortcut, mean of squares minus square of mean, subtracts two enormous, nearly equal numbers when the data sits far from zero. What could you accumulate instead that stays small?",
+    "Track the count n, the running mean, and M2, the sum of squared deviations from the current mean. For each new x: n += 1; delta = x − mean; mean += delta / n; M2 += delta · (x − mean). The variance is M2 / n.",
+    "Loop over values with those three updates; after the loop, raise ValueError if n == 0, else return mean, M2 / n."
+  ],
+  "misconceptions": {
+    "catastrophic-cancellation": "E[x²] − E[x]² subtracts two huge, nearly equal numbers when data has a large offset, and the true variance vanishes into rounding error."
+  },
+  "sources": ["goldberg1991-floating-point", "gorelick2025-hpp3"]
+}

@@ -6,6 +6,10 @@ requires-python = ">=3.12"
 # Pinned to the versions bundled with Pyodide 314.0.7 so local runs match the browser exactly.
 dependencies = ["numpy==2.4.6", "pytest==9.0.2"]
 
+[dependency-groups]
+# For testing the SQL helpers locally with the same DuckDB version Pyodide ships.
+dev = ["duckdb==1.5.1"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

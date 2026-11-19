@@ -1,0 +1,27 @@
+{
+  "id": "python-mle/rolling-window",
+  "type": "parsons",
+  "language": "python",
+  "title": "A rolling mean without copying",
+  "prompt": "Arrange the blocks into `rolling_mean(x, k)`: the mean of every window of `k` consecutive readings, so a 1-D array of length n gives n − k + 1 values. Use `sliding_window_view`, which builds a strided view of all windows without copying any data. Two blocks don't belong.",
+  "concepts": ["numpy-memory-model", "numpy-vectorization"],
+  "difficulty": 0.25,
+  "minutes": 4,
+  "packages": [],
+  "parsons": {
+    "lines": [
+      "import numpy as np",
+      "from numpy.lib.stride_tricks import sliding_window_view",
+      "def rolling_mean(x, k):",
+      "    windows = sliding_window_view(x, k)",
+      "    return windows.mean(axis=-1)"
+    ],
+    "distractors": ["    windows = x.reshape(-1, k)", "    return windows.mean(axis=0)"]
+  },
+  "hints": [
+    "Imports first, then the function. What shape does `sliding_window_view(x, k)` have for a length-n array?",
+    "It has shape (n − k + 1, k): one row per window. `reshape(-1, k)` instead chops x into non-overlapping pieces, which isn't a rolling window.",
+    "Average across each window, which is the last axis: `windows.mean(axis=-1)`."
+  ],
+  "sources": ["numpy-docs-2-5"]
+}

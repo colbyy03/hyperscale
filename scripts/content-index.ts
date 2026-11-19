@@ -205,8 +205,19 @@ export function buildContentIndex(root: string): BuildResult {
       const files = fs.readdirSync(path.join(exDir, ex)).filter((f) => f !== "exercise.json").sort();
       if (CODE_TYPES.has(e.data.type)) {
         const ext = e.data.language === "sql" ? "sql" : "py";
-        for (const need of [`starter.${ext}`, `solution.${ext}`, e.data.language === "sql" ? "tests.json" : "tests.py"]) {
+        for (const need of [`starter.${ext}`, `solution.${ext}`, "tests.py"]) {
           if (!files.includes(need)) errors.push(`${erel}: missing ${need}`);
+        }
+        if (e.data.language === "sql") {
+          if (!files.includes("data.py")) errors.push(`${erel}: SQL exercises need data.py with make_db()`);
+          if (!e.data.packages.includes("duckdb")) errors.push(`${erel}: SQL exercises must list "duckdb" in packages`);
+        }
+      }
+      if (e.data.type === "parsons") {
+        if (!e.data.parsons) errors.push(`${erel}: a Parsons exercise needs a "parsons" block with its lines`);
+        else {
+          const dup = e.data.parsons.lines.find((l, i, all) => all.indexOf(l) !== i || e.data.parsons!.distractors.includes(l));
+          if (dup) errors.push(`${erel}: Parsons block "${dup.trim()}" appears twice; every block must be unique`);
         }
       }
       checkSources(erel, e.data.sources);

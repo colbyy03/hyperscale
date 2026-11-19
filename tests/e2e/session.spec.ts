@@ -114,6 +114,17 @@ test("a full daily session runs end to end, then reviews and the gate the next d
   await page.goto("/");
   await expect(page.getByText("Today's session is done.")).toBeVisible();
 
+  // The placement check (Induction lesson 4), done as extra study on day 1.
+  await page.goto("/learn/induction/placement");
+  for (const [id, option] of [["place-py-mean-shape", "(3,)"], ["place-py-view", "-1"], ["place-py-transpose", "(3, 2)"]] as const) {
+    const q = page.getByTestId(`check-${id}`);
+    await q.getByRole("radio", { name: option, exact: true }).click();
+    await q.getByRole("button", { name: "Check" }).click();
+  }
+  await expect(page.getByTestId("placement")).toContainText("Strong. Move briskly");
+  await page.getByRole("button", { name: /Mark lesson complete/ }).click();
+  await expect(page.getByText(/Lesson complete/)).toBeVisible();
+
   // Day 2: yesterday's cards are due (12 new per day), and the Induction gate is scheduled.
   await page.clock.setFixedTime(DAY2);
   await page.goto("/");
@@ -143,7 +154,7 @@ test("a full daily session runs end to end, then reviews and the gate the next d
 
   // Passing the gate opens Module 1, whose lesson now joins the plan.
   await page.goto("/");
-  await expect(page.getByTestId("plan")).toContainText("Vectorization and broadcasting");
+  await expect(page.getByTestId("plan")).toContainText("How NumPy stores your data");
   await expect(page.getByTestId("plan-checkpoint")).toHaveAttribute("data-done", "true");
 });
 
@@ -152,6 +163,7 @@ test("a failed gate waits 24 hours before a retake", async ({ page }) => {
   await completeLesson(page, "/learn/induction/welcome", "Welcome to Kestrel Ridge");
   await completeLesson(page, "/learn/induction/data-hall", "The data hall in one picture");
   await completeLesson(page, "/learn/induction/controls", "Hands on the controls");
+  await completeLesson(page, "/learn/induction/placement", "Placement check");
 
   await page.clock.setFixedTime(DAY2);
   await page.goto("/learn/induction/checkpoint");

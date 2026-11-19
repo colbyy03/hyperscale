@@ -1,0 +1,21 @@
+{
+  "id": "python-mle/mask-hot",
+  "type": "debug",
+  "language": "python",
+  "title": "The cleaner that edits the raw data",
+  "prompt": "`mask_hot(readings, limit)` should return a **new** array where every reading above `limit` is replaced by NaN, leaving `readings` untouched (callers keep it as the raw record). It has two bugs. It quietly edits the caller's array, and it crashes on integer readings, which some older loggers export.\n\nFix both. Readings exactly equal to `limit` are kept.",
+  "concepts": ["numpy-memory-model"],
+  "difficulty": 0.3,
+  "minutes": 8,
+  "critical": true,
+  "packages": [],
+  "hints": [
+    "Run it on a small array, then print the input again. Is `readings[:]` a new array or another view of the same memory? And can an integer array hold NaN?",
+    "Basic slicing returns a view, so assigning into `cleaned` writes into `readings`. Build the result as a new float array instead, for example with `np.where(condition, value_if_true, value_if_false)`.",
+    "return np.where(readings > limit, np.nan, readings), which allocates a new array; NaN makes the result float even for integer input."
+  ],
+  "misconceptions": {
+    "slice-is-copy": "Basic slicing (`a[:]`, `a[2:5]`) returns a view: writing into it changes the original array."
+  },
+  "sources": ["numpy-docs-2-5"]
+}

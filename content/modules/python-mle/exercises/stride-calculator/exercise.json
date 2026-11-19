@@ -1,0 +1,21 @@
+{
+  "id": "python-mle/stride-calculator",
+  "type": "code",
+  "language": "python",
+  "title": "Find an element from its strides",
+  "prompt": "A view is a flat buffer plus strides. Write three small functions, using only arithmetic on shapes and strides (no indexing of the view itself):\n\n**byte_offset(index, strides)**: how many bytes from the start of the view to the element at `index` (a tuple of ints).\n\n**read_strided(buffer, strides, index)**: read that element from `buffer`, the flat 1-D array the view looks into. Strides are in bytes; `buffer.itemsize` is the size of one element.\n\n**transposed(shape, strides)**: the shape and strides of the view's transpose (all axes reversed), as two tuples.",
+  "concepts": ["numpy-memory-model"],
+  "difficulty": 0.35,
+  "minutes": 10,
+  "critical": true,
+  "packages": [],
+  "hints": [
+    "Moving one step along axis k moves `strides[k]` bytes. How far do you move for `index[k]` steps on every axis at once?",
+    "The offset is the sum of `index[k] * strides[k]` over the axes. It's measured in bytes, but `buffer` is indexed by element, so divide by `buffer.itemsize`. A transpose reverses the axes, so reverse both tuples.",
+    "offset = sum(i * s for i, s in zip(index, strides)); return buffer[offset // buffer.itemsize]; transposed returns (tuple(reversed(shape)), tuple(reversed(strides)))"
+  ],
+  "misconceptions": {
+    "strides-are-bytes": "Strides count bytes, not elements: divide a byte offset by the item size before indexing the buffer."
+  },
+  "sources": ["harris2020-numpy", "numpy-docs-2-5"]
+}

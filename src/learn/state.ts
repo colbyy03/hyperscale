@@ -111,7 +111,7 @@ export function practiceCandidates(state: LearningState, attempts: AttemptRow[])
     if (!prev || prev.submittedAt < a.submittedAt) last.set(a.itemId, a);
   }
   return Object.values(content.questions)
-    .filter((q) => checked.has(q.key) || q.concepts.every((c) => state.introduced.has(c)))
+    .filter((q) => q.practice !== false && (checked.has(q.key) || q.concepts.every((c) => state.introduced.has(c))))
     .map((q) => {
       const a = last.get(questionAttemptId(q));
       return { key: q.key, moduleIndex: moduleIndex[q.moduleId] ?? 0, concepts: q.concepts, lastAttemptAt: a?.submittedAt, lastCorrect: a?.correct, question: q };

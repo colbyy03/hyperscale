@@ -185,5 +185,41 @@
     "title": "uv projects, lockfiles and reproducible environments",
     "module": "python-mle",
     "prereqs": []
+  },
+  {
+    "id": "linear-maps",
+    "title": "Matrices as linear maps: products, shapes and inverses",
+    "module": "linear-algebra",
+    "prereqs": []
+  },
+  {
+    "id": "least-squares",
+    "title": "Least squares, projections and the normal equations",
+    "module": "linear-algebra",
+    "prereqs": []
+  },
+  {
+    "id": "derivatives-chain-rule",
+    "title": "Derivatives, partial derivatives and the chain rule",
+    "module": "calculus-optimization",
+    "prereqs": []
+  },
+  {
+    "id": "gradient-descent",
+    "title": "Gradients and gradient descent",
+    "module": "calculus-optimization",
+    "prereqs": []
+  },
+  {
+    "id": "probability-rules",
+    "title": "Probability rules, conditional probability and Bayes' rule",
+    "module": "probability-statistics",
+    "prereqs": []
+  },
+  {
+    "id": "expectation-variance",
+    "title": "Expectation, variance and common distributions",
+    "module": "probability-statistics",
+    "prereqs": []
   }
 ]

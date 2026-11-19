@@ -1,0 +1,91 @@
+---
+id: python-mle/numerics
+title: Numerical hygiene and measuring speed
+minutes: 35
+concepts: [floating-point, log-sum-exp, profiling]
+sources: [goldberg1991-floating-point, numpy-docs-2-5, gorelick2025-hpp3, harris2020-numpy]
+cards: [machine-epsilon, float-not-associative, catastrophic-cancellation, logsumexp-trick, softmax-shift, welford-update, measure-first]
+---
+
+<Situation from="Ines, reliability lead">
+Two strange results this week. Our GPU feature job reported a *negative* variance for one temperature feature, which shouldn't be possible. And a classifier prototype returns NaN probabilities whenever its scores get large. Same root cause, I suspect: we're treating floating-point numbers as if they were real numbers.
+</Situation>
+
+<Predict
+  id="float32-sum"
+  question="You add 0.1 to a float32 running total ten million times, one value at a time. What total do you get?"
+  options={["Exactly 1,000,000", "About 1,000,000, give or take 0.01", "About 1,088,000: the error grows to several percent"]}
+  answer={2}
+  explain="A float32 has about 7 significant digits. Once the total reaches the hundreds of thousands, each 0.1 added is rounded to what the total's precision can represent, and the rounding errors pile up in one direction. The result is 1,087,937. NumPy's own np.sum on the same array gets 1,000,000.1, because it adds in a pairwise tree, so each value meets totals of similar size."
+/>
+
+## Floating point is a finite ruler
+
+A float stores a sign, an exponent and a fixed number of significant bits: 53 for `float64` (about 16 decimal digits) and 24 for `float32` (about 7). The gap between 1 and the next representable number is **machine epsilon**, about 2.2 × 10⁻¹⁶ for `float64` and 1.2 × 10⁻⁷ for `float32`. In `float32`, `1 + 10⁻⁸` is exactly `1`.
+
+Three consequences matter every week in ML work:
+
+1. **Rounding happens on every operation**, so `0.1 + 0.2 == 0.3` is `False`. Compare floats with a tolerance (`np.isclose`, `pytest.approx`), never with `==`.
+2. **Addition isn't associative**: `(0.1 + 0.2) + 0.3` and `0.1 + (0.2 + 0.3)` differ in the last bit. The order of a sum changes its result, which is why parallel and GPU reductions aren't bit-for-bit reproducible.
+3. **Subtracting nearly equal numbers destroys digits.** If two numbers agree in their first 15 digits, their difference has at most one or two digits that mean anything. This is *catastrophic cancellation*.
+
+<Predict
+  id="naive-variance"
+  question="A cumulative energy counter reads about 4.2 × 10¹⁰ Wh and wobbles with a variance of about 9 Wh². What does the shortcut mean(x²) − mean(x)² give, in float64?"
+  options={["About 9", "About 9, with an error near 10⁻¹⁰", "Garbage: something like 262,144"]}
+  answer={2}
+  explain="Both terms are near 1.8 × 10²¹, and float64 can only resolve differences of about 4 × 10⁵ at that size. The true variance of 9 is far below the rounding noise. A float32 GPU job hits the same wall with ordinary temperatures: readings of 21.5 ± 0.01 °C come out 40% wrong, and sometimes negative."
+/>
+
+## Two cures for cancellation
+
+**Center first.** The variance only depends on deviations from the mean, so compute those: two passes (mean first, then the mean of squared deviations) are stable. That is what `np.var` does.
+
+**Or update as you go.** When data streams past once (a sensor feed, a dataset too large for memory), Welford's method keeps a count $n$, the running mean $\bar{x}$, and $M_2$, the sum of squared deviations. For each new value $x$:
+
+$$
+n \leftarrow n + 1, \quad \delta = x - \bar{x}, \quad \bar{x} \leftarrow \bar{x} + \frac{\delta}{n}, \quad M_2 \leftarrow M_2 + \delta\,(x - \bar{x})
+$$
+
+and the variance is $M_2 / n$. Every quantity it accumulates is small, so nothing cancels.
+
+<CodeExercise id="python-mle/welford" />
+
+## Overflow and underflow: log-sum-exp
+
+`np.exp` overflows to `inf` above about 709 in `float64`, and above 88 in `float32`. Softmax turns scores into probabilities, $\mathrm{softmax}(x)_i = e^{x_i} / \sum_j e^{x_j}$, and with scores of 1000 the naive formula computes inf / inf = NaN. That's Ines's second bug.
+
+The fix rests on one identity. Subtracting the same constant $m$ from every score changes nothing:
+
+$$
+\log \sum_i e^{x_i} = m + \log \sum_i e^{x_i - m}
+$$
+
+Choose $m = \max_i x_i$. Then the largest exponent is $e^0 = 1$, nothing overflows, and the sum is at least 1, so its logarithm is safe too. Softmax gets the same shift. This **log-sum-exp trick** appears in every cross-entropy loss, every log-likelihood, and every attention layer you'll write.
+
+<CodeExercise id="python-mle/stable-softmax" />
+
+<Craft title="Where these bite in production">
+- Losses computed in `float32` or `bfloat16` on accelerators. Frameworks fuse log-softmax and cross-entropy precisely to apply this trick, so use the fused version rather than `log(softmax(x))`.
+- Feature statistics computed in one pass on a GPU or a stream. Use Welford-style updates, or center first.
+- Timestamps in seconds since 1970, about 1.8 × 10⁹. In `float32` you lose minute-level resolution. Keep time as integers or in `float64`.
+- Tests that compare floats with `==` pass on your laptop and fail in CI on a different CPU. Always compare with a tolerance.
+</Craft>
+
+## Measure, then optimize
+
+Making code fast starts with measuring where the time goes, because intuition is usually wrong about it.
+
+- **`timeit`** times a small snippet many times and reports the best run: `python -m timeit -s "import numpy as np; x = np.random.rand(10**6)" "x.sum()"`, or `%timeit` in a notebook.
+- **`cProfile`** shows which functions consume the time in a whole program: `python -m cProfile -s cumtime pipeline.py`. Sort by cumulative time and read from the top.
+- **Line-level and memory tools** (`line_profiler`, `tracemalloc`, `memray`) come out once the profile has pointed you at a function.
+
+Then work down the usual list: a better algorithm; vectorizing the hot loop; avoiding needless copies and temporaries; smaller dtypes; and only then compiling (Numba) or parallelizing. After each change, check that results still match within a stated tolerance. A 10× speedup that changes the answer is a bug.
+
+<Bridge>
+Profiling is an energy audit for code. You'd never retrofit a chiller plant before metering it, because the losses are rarely where you'd guess. The same goes for a slow pipeline: meter first, fix the biggest loss, then meter again.
+</Bridge>
+
+<Check items={["nh-float32-one", "nh-cancellation", "nh-lse-value", "nh-softmax-nan", "nh-first-step"]} />
+
+Next: SQL for telemetry, with DuckDB.

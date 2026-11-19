@@ -80,5 +80,116 @@
     "transfer": true,
     "concepts": ["standardization"],
     "explain": "The scaler keeps the training mean and std, so a stuck input maps to one constant z-score. Nothing crashes, which is exactly why stuck sensors need their own detector."
+  },
+  {
+    "kind": "numeric",
+    "id": "mm-offset",
+    "prompt": "An int32 array has shape (5, 4) in C order. What is the byte offset of element [2, 3]?",
+    "answer": 44,
+    "tolerance": 0.001,
+    "concepts": ["numpy-memory-model"],
+    "explain": "Strides are (16, 4): 2 × 16 + 3 × 4 = 44 bytes."
+  },
+  {
+    "kind": "choice",
+    "id": "mm-strides-t",
+    "prompt": "a has shape (3, 4), dtype float64, C order, so its strides are (32, 8). What are a.T's strides?",
+    "options": ["(32, 8)", "(8, 32)", "(24, 8)", "a.T is a copy, so it gets new strides"],
+    "answer": 1,
+    "concepts": ["numpy-memory-model"],
+    "explain": "A transpose reverses the strides as well as the shape, over the same buffer: (8, 32)."
+  },
+  {
+    "kind": "choice",
+    "id": "mm-which-copies",
+    "prompt": "Which of these returns a copy rather than a view of a?",
+    "options": ["a[1:3]", "a[::2]", "a[[0, 2]]", "a.T"],
+    "answer": 2,
+    "concepts": ["numpy-memory-model"],
+    "explain": "A list of indices is fancy indexing, which always copies. Slices and transposes are views."
+  },
+  {
+    "kind": "numeric",
+    "id": "mm-megabytes",
+    "prompt": "How many megabytes (10⁶ bytes) does a float32 array of 360 sensors × 43,200 readings take?",
+    "answer": 62.2,
+    "tolerance": 0.01,
+    "unit": "MB",
+    "concepts": ["numpy-memory-model"],
+    "explain": "360 × 43,200 × 4 bytes = 62,208,000 bytes ≈ 62.2 MB."
+  },
+  {
+    "kind": "choice",
+    "id": "mm-uint8",
+    "prompt": "In NumPy 2, what does np.array([250], dtype=np.uint8) + 10 return?",
+    "options": ["array([260]) as int64", "array([4], dtype=uint8)", "OverflowError"],
+    "answer": 1,
+    "concepts": ["numpy-memory-model"],
+    "explain": "The Python int 10 adapts to uint8, and 250 + 10 wraps around to 4 with no error. Only a constant that can't fit in uint8 at all, such as 300, raises OverflowError."
+  },
+  {
+    "kind": "choice",
+    "id": "mm-laplacian",
+    "prompt": "T[2:, 1:-1] - 2 * T[1:-1, 1:-1] + T[:-2, 1:-1] builds a finite-difference stencil on a 2-D temperature grid. How many full copies of T does indexing create?",
+    "options": ["Three, one per term", "None: each slice is a view; only the arithmetic allocates results", "One"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["numpy-memory-model"],
+    "explain": "Basic slices are views over T's buffer. Memory is allocated for the arithmetic results, not for the shifted views themselves."
+  },
+  {
+    "kind": "choice",
+    "id": "nh-float32-one",
+    "prompt": "In float32, what does np.float32(1) + np.float32(1e-8) equal?",
+    "options": ["1.00000001", "Exactly 1.0", "It overflows"],
+    "answer": 1,
+    "concepts": ["floating-point"],
+    "explain": "float32 resolves about 1.2 × 10⁻⁷ near 1, so 10⁻⁸ is lost in rounding and the sum is exactly 1."
+  },
+  {
+    "kind": "choice",
+    "id": "nh-cancellation",
+    "prompt": "A GPU job reports a negative variance for a temperature feature (readings 21.5 ± 0.01 °C, float32). The most likely cause?",
+    "options": ["A corrupted sensor", "Catastrophic cancellation in mean(x²) − mean(x)²", "Integer overflow"],
+    "answer": 1,
+    "concepts": ["floating-point"],
+    "explain": "Both terms are about 462 and differ by about 10⁻⁴, below float32's resolution at that size. Center first, or use Welford's update."
+  },
+  {
+    "kind": "numeric",
+    "id": "nh-lse-value",
+    "prompt": "What is logsumexp([1000, 1000]), that is, log(e¹⁰⁰⁰ + e¹⁰⁰⁰)? Give three decimals.",
+    "answer": 1000.693,
+    "tolerance": 1e-06,
+    "concepts": ["log-sum-exp"],
+    "explain": "1000 + log(e⁰ + e⁰) = 1000 + log 2 ≈ 1000.693. The naive formula overflows to inf."
+  },
+  {
+    "kind": "choice",
+    "id": "nh-softmax-nan",
+    "prompt": "softmax computed as np.exp(x) / np.exp(x).sum() on x = [1000, 1001] returns?",
+    "options": ["[0.269, 0.731]", "[nan, nan]", "[0, 1]"],
+    "answer": 1,
+    "concepts": ["log-sum-exp"],
+    "explain": "Both exponentials overflow to inf and inf / inf is NaN. Subtracting the maximum first gives [0.269, 0.731]."
+  },
+  {
+    "kind": "choice",
+    "id": "nh-first-step",
+    "prompt": "A nightly feature pipeline takes 3 hours. What's the best first step to speed it up?",
+    "options": ["Rewrite the slowest-looking loop in Numba", "Profile the run (for example python -m cProfile -s cumtime) to find where the time goes", "Switch every array to float32"],
+    "answer": 1,
+    "concepts": ["profiling"],
+    "explain": "Measure before you optimize: the hotspot is rarely where you'd guess. Then fix the biggest one and test that the results still match."
+  },
+  {
+    "kind": "choice",
+    "id": "nh-timestamps",
+    "prompt": "You store Unix timestamps (about 1.8 × 10⁹ seconds) as float32 to save memory. What breaks?",
+    "options": ["Nothing; float32 reaches 3.4 × 10³⁸", "Resolution: neighbouring float32 values are about two minutes apart at that size, so one-minute samples collide", "Timestamps become negative"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["floating-point"],
+    "explain": "float32 keeps about 7 significant digits, so near 1.8 × 10⁹ the spacing between representable values is 128 s. Keep time as int64, or float64."
   }
 ]

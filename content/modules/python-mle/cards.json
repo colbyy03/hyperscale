@@ -50,5 +50,117 @@
     "front": "`mse = np.mean((y - model.predict(X)) ** 2)` runs without error, but the MSE looks far too large. Most likely bug?",
     "back": "A shape mismatch: y is (n,) and the predictions are (n, 1), so the difference broadcasts to (n, n). Ravel the predictions or assert matching shapes.",
     "concepts": ["numpy-broadcasting"]
+  },
+  {
+    "id": "ndarray-anatomy",
+    "type": "concept",
+    "front": "What four pieces of information describe how a NumPy array is laid out in memory?",
+    "back": "A flat data buffer, plus metadata: the dtype (bytes per element and their meaning), the shape, and the strides (bytes to jump per step along each axis).",
+    "concepts": ["numpy-memory-model"],
+    "critical": false
+  },
+  {
+    "id": "stride-offset",
+    "type": "equation",
+    "front": "Byte offset of element $(i, j)$ in a C-ordered `int32` array of shape (3, 4)?",
+    "back": "Strides are (16, 4), so offset $= 16i + 4j$ bytes. In general offset $= \\sum_k i_k s_k$.",
+    "concepts": ["numpy-memory-model"],
+    "critical": false
+  },
+  {
+    "id": "slice-is-copy",
+    "type": "gotcha",
+    "front": "Does `b = a[2:5]` copy the data? Does `c = a[[2, 3, 4]]`?",
+    "back": "`a[2:5]` is basic slicing: a view, and writes through `b` change `a`. `a[[2, 3, 4]]` is fancy indexing: always a copy. Check with `np.shares_memory`.",
+    "concepts": ["numpy-memory-model"],
+    "critical": true
+  },
+  {
+    "id": "transpose-1d",
+    "type": "gotcha",
+    "front": "What does `.T` do to a 1-D array, and how do you make a column vector?",
+    "back": "Nothing: a 1-D array has one axis to reverse. Use `x[:, None]` or `x.reshape(-1, 1)` to get shape (n, 1).",
+    "concepts": ["numpy-memory-model", "numpy-broadcasting"],
+    "critical": false
+  },
+  {
+    "id": "reshape-may-copy",
+    "type": "concept",
+    "front": "When does `reshape` (or `ravel`) have to copy?",
+    "back": "When no single set of strides can walk the existing buffer in the requested order, typically after a transpose or a step slice. On contiguous data it returns a view.",
+    "concepts": ["numpy-memory-model"],
+    "critical": false
+  },
+  {
+    "id": "uint8-wraps",
+    "type": "gotcha",
+    "front": "`np.array([250], dtype=np.uint8) + 10` gives what in NumPy 2, and why?",
+    "back": "`[4]`: the Python int adapts to the array's dtype (NumPy 2 promotion rules) and uint8 arithmetic wraps silently. `+ 300` raises OverflowError because 300 doesn't fit in uint8.",
+    "concepts": ["numpy-memory-model"],
+    "critical": false
+  },
+  {
+    "id": "telemetry-memory",
+    "type": "concept",
+    "front": "Rough memory for 360 sensors × 30 days of one-minute readings in float64, and in float32?",
+    "back": "360 × 43,200 ≈ 15.6 M values: ≈ 124 MB in float64 (8 bytes each), ≈ 62 MB in float32.",
+    "concepts": ["numpy-memory-model"],
+    "critical": false
+  },
+  {
+    "id": "machine-epsilon",
+    "type": "concept",
+    "front": "Machine epsilon for float64 and float32, and roughly how many decimal digits each keeps?",
+    "back": "float64: about 2.2 × 10⁻¹⁶ (about 16 digits). float32: about 1.2 × 10⁻⁷ (about 7 digits). In float32, 1 + 10⁻⁸ == 1.",
+    "concepts": ["floating-point"],
+    "critical": false
+  },
+  {
+    "id": "float-not-associative",
+    "type": "gotcha",
+    "front": "Is floating-point addition associative? What does that mean for summing an array?",
+    "back": "No: (a + b) + c can differ from a + (b + c). Summation order changes the result; sequential float32 accumulation drifts badly, while NumPy's pairwise summation stays accurate. Parallel reductions aren't bit-reproducible.",
+    "concepts": ["floating-point"],
+    "critical": false
+  },
+  {
+    "id": "catastrophic-cancellation",
+    "type": "gotcha",
+    "front": "Why does Var = mean(x²) − mean(x)² fail for data far from zero, and what are the fixes?",
+    "back": "It subtracts two huge, nearly equal numbers, so the small true variance drowns in rounding error (it can even come out negative). Center first (two-pass), or use Welford's one-pass update.",
+    "concepts": ["floating-point"],
+    "critical": true
+  },
+  {
+    "id": "logsumexp-trick",
+    "type": "equation",
+    "front": "Write log Σᵢ exp(xᵢ) so that it can't overflow.",
+    "back": "$m + \\log \\sum_i e^{x_i - m}$ with $m = \\max_i x_i$: the largest exponent becomes $e^0 = 1$ and the sum is at least 1.",
+    "concepts": ["log-sum-exp"],
+    "critical": true
+  },
+  {
+    "id": "softmax-shift",
+    "type": "gotcha",
+    "front": "softmax([1000, 1001]) computed naively gives NaN. Why, and what's the fix?",
+    "back": "exp(1000) overflows to inf and inf/inf = NaN. Softmax is unchanged by subtracting a constant from every logit, so subtract the row maximum first (keepdims=True for batches).",
+    "concepts": ["log-sum-exp"],
+    "critical": false
+  },
+  {
+    "id": "welford-update",
+    "type": "equation",
+    "front": "Welford's update for a new value $x$ (count $n$, mean $\\bar x$, sum of squared deviations $M_2$)?",
+    "back": "$n \\leftarrow n+1$; $\\delta = x - \\bar x$; $\\bar x \\leftarrow \\bar x + \\delta / n$; $M_2 \\leftarrow M_2 + \\delta (x - \\bar x)$. Population variance $= M_2 / n$.",
+    "concepts": ["floating-point"],
+    "critical": false
+  },
+  {
+    "id": "measure-first",
+    "type": "concept",
+    "front": "What's the first step when code is too slow, and the last step after you've sped it up?",
+    "back": "First, profile (cProfile for where, timeit for how long) and fix the biggest hotspot. Last, test that results still match the original within a stated tolerance.",
+    "concepts": ["profiling"],
+    "critical": false
   }
 ]

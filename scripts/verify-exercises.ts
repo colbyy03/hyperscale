@@ -1,9 +1,10 @@
 /**
- * Verifies every Python exercise in the same engine the browser uses (Pyodide, here on Node):
+ * Verifies every graded exercise in the same engine the browser uses (Pyodide, here on Node):
  *   1. the reference solution passes every test;
  *   2. the starter code fails at least one test (so no test passes trivially);
- *   3. every known-wrong variant in variants/*.py fails, and some failure message contains
- *      the text named on its first line ("# expect: <text>").
+ *   3. every known-wrong variant in variants/ fails, and some failure message contains the text
+ *      named on its first line ("# expect: <text>" in Python, "-- expect: <text>" in SQL);
+ *   4. Parsons problems with tests: the reference order passes and a scrambled order fails.
  *
  *   npm run verify:exercises            # all exercises
  *   npm run verify:exercises -- <filter> # ids containing <filter>
@@ -42,11 +43,16 @@ async function setup(): Promise<PyodideAPI> {
   return py;
 }
 
-function grade(py: PyodideAPI, solution: string, tests: string): Grade {
+function grade(py: PyodideAPI, solution: string, tests: string, solutionFile = "solution.py", extra: Record<string, string> = {}): Grade {
   py.globals.set("_s", solution);
   py.globals.set("_t", tests);
-  return JSON.parse(py.runPython("import json, hsgrade\njson.dumps(hsgrade.grade(_s, _t, '/hs/work'))") as string) as Grade;
+  py.globals.set("_f", solutionFile);
+  py.globals.set("_x", JSON.stringify(extra));
+  return JSON.parse(py.runPython("import json, hsgrade\njson.dumps(hsgrade.grade(_s, _t, '/hs/work', _f, json.loads(_x)))") as string) as Grade;
 }
+
+const STANDARD = new Set(["exercise.json", "starter.py", "starter.sql", "solution.py", "solution.sql", "tests.py"]);
+const supportFiles = (files: string[]) => files.filter((f) => /\.(py|sql|csv|json)$/.test(f) && !STANDARD.has(f));
 
 function failureText(g: Grade): string {
   return [...g.collectionErrors, ...g.tests.filter((t) => t.outcome !== "passed").map((t) => t.message ?? "")].join("\n");
@@ -58,9 +64,11 @@ async function main() {
     console.error("content has errors; run npm run validate first");
     process.exit(1);
   }
-  const exercises = index.exercises.filter((e) => e.language === "python" && ["code", "fill-in", "debug"].includes(e.type) && (!filter || e.id.includes(filter)));
+  const graded = (e: (typeof index.exercises)[number]) =>
+    (e.language === "python" && ["code", "fill-in", "debug"].includes(e.type)) || e.type === "sql" || (e.type === "parsons" && e.files.includes("tests.py"));
+  const exercises = index.exercises.filter((e) => graded(e) && (!filter || e.id.includes(filter)));
   if (!exercises.length) {
-    console.log("no Python exercises to verify");
+    console.log("no graded exercises to verify");
     return;
   }
   const t0 = Date.now();
@@ -73,25 +81,39 @@ async function main() {
     if (ex.packages.length) await py.loadPackage(ex.packages, { messageCallback: () => {} });
     const read = (f: string) => fs.readFileSync(path.join(dir, f), "utf8");
     const tests = read("tests.py");
+    const extra = Object.fromEntries(supportFiles(ex.files).map((f) => [f, read(f)]));
     const lines: string[] = [];
 
-    const sol = grade(py, read("solution.py"), tests);
+    if (ex.type === "parsons") {
+      const ordered = ex.parsons!.lines.join("\n") + "\n";
+      const sol = grade(py, ordered, tests, "solution.py", extra);
+      if (!sol.allPassed) problems.push(`${ex.id}: the reference order fails:\n${failureText(sol)}`);
+      const scrambled = [...ex.parsons!.lines].reverse().join("\n") + "\n";
+      if (grade(py, scrambled, tests, "solution.py", extra).allPassed) problems.push(`${ex.id}: a reversed order passes the tests (tests don't check the order)`);
+      lines.push(`order ${sol.passed}/${sol.total}`, "reversed ✗");
+      console.log(`  ${problems.some((p) => p.startsWith(ex.id)) ? "✗" : "✓"} ${ex.id}: ${lines.join(", ")}`);
+      continue;
+    }
+
+    const ext = ex.language === "sql" ? "sql" : "py";
+    const solutionFile = `solution.${ext}`;
+    const sol = grade(py, read(solutionFile), tests, solutionFile, extra);
     if (!sol.allPassed) problems.push(`${ex.id}: reference solution fails:\n${failureText(sol)}`);
     lines.push(`solution ${sol.passed}/${sol.total}`);
 
-    const start = grade(py, read("starter.py"), tests);
+    const start = grade(py, read(`starter.${ext}`), tests, solutionFile, extra);
     if (start.allPassed) problems.push(`${ex.id}: starter code passes every test (tests are too weak)`);
     lines.push(`starter ${start.passed}/${start.total}`);
 
     const vdir = path.join(dir, "variants");
-    const variants = fs.existsSync(vdir) ? fs.readdirSync(vdir).filter((f) => f.endsWith(".py")).sort() : [];
+    const variants = fs.existsSync(vdir) ? fs.readdirSync(vdir).filter((f) => f.endsWith(`.${ext}`)).sort() : [];
     for (const v of variants) {
       const src = fs.readFileSync(path.join(vdir, v), "utf8");
-      const expect = /^#\s*expect:\s*(.+)$/m.exec(src)?.[1]?.trim();
-      const g = grade(py, src, tests);
+      const expect = /^(?:#|--)\s*expect:\s*(.+)$/m.exec(src)?.[1]?.trim();
+      const g = grade(py, src, tests, solutionFile, extra);
       if (g.allPassed) problems.push(`${ex.id}: variant ${v} passes every test (a known mistake goes undetected)`);
       else if (expect && !failureText(g).includes(expect)) problems.push(`${ex.id}: variant ${v} fails, but no message contains "${expect}". Messages:\n${failureText(g)}`);
-      lines.push(`${v.replace(/\.py$/, "")} ✗`);
+      lines.push(`${v.replace(/\.(py|sql)$/, "")} ✗`);
     }
     console.log(`  ${problems.some((p) => p.startsWith(ex.id)) ? "✗" : "✓"} ${ex.id}: ${lines.join(", ")}`);
   }

@@ -66,7 +66,13 @@ An exercise folder holds:
 - `tests.py`: pytest, importing the learner's code with `from solution import ...` and the helpers in `hsgrade`. Mark edge cases with `@pytest.mark.hidden` and link failures to misconceptions with `@pytest.mark.misconception("id")`;
 - optional `variants/*.py`: known-wrong implementations whose first line is `# expect: <text a failure message must contain>`.
 
-Embed an exercise in a lesson with `<CodeExercise id="module-id/slug" />`. In the app it runs real pytest inside Pyodide, with hint tiers, a guarded solution reveal and an 8–10 s infinite-loop guard.
+**SQL exercises** (`"type": "sql"`, `"language": "sql"`, `"packages": ["duckdb"]`) hold `starter.sql`, `solution.sql`, a `data.py` whose `make_db()` builds the tables in DuckDB, and pytest `tests.py` that call `hsgrade.sql` (`run_learner`, `assert_columns`, `assert_rows`). Wrong variants are `variants/*.sql` with `-- expect: <text>`. Run shows the query's result as a table. DuckDB runs inside Pyodide, so the browser and CI use the same engine.
+
+**Parsons problems** (`"type": "parsons"`) list the solution's `lines` in order (indentation included) and optional `distractors` in a `parsons` block. With a `tests.py`, the assembled code is graded by pytest, so any correct order passes; without one, the order is compared directly. Learners tap blocks to build the answer, which works on a phone.
+
+Any other `.py`, `.csv` or `.json` file in an exercise folder is written next to the learner's code when grading. Questions with `"practice": false` (such as the placement check) stay out of mixed practice.
+
+Embed an exercise in a lesson with `<CodeExercise id="module-id/slug" />` (any type). In the app it runs real pytest inside Pyodide, with hint tiers, a guarded solution reveal and an 8–10 s infinite-loop guard.
 
 `npm run validate` checks every file against the schemas in `src/content/schema.ts`. It covers ids, concepts, source ids and the required exercise files. The build refuses to ship invalid content.
 

@@ -124,13 +124,13 @@ class PythonRuntime {
     });
   }
 
-  grade(solution: string, tests: string, packages: string[] = [], timeoutMs = 10_000): Promise<GradeResult> {
+  grade(solution: string, tests: string, packages: string[] = [], timeoutMs = 10_000, opts: { solutionFile?: string; extraFiles?: Record<string, string> } = {}): Promise<GradeResult> {
     return this.serialize(async () => {
       await this.warm();
-      await this.send<void>({ type: "load", packages: ["pytest", ...packages], code: `${solution}\n${tests}` }, INIT_TIMEOUT_MS);
+      await this.send<void>({ type: "load", packages: ["pytest", ...packages], code: `${solution}\n${tests}\n${Object.values(opts.extraFiles ?? {}).join("\n")}` }, INIT_TIMEOUT_MS);
       this.setStatus({ phase: "busy", message: "Checking…" });
       try {
-        return await this.send<GradeResult>({ type: "grade", solution, tests, packages }, timeoutMs + 5_000);
+        return await this.send<GradeResult>({ type: "grade", solution, tests, packages, ...opts }, timeoutMs + 5_000);
       } finally {
         if (this.worker) this.setStatus({ phase: "ready", message: "Python ready" });
       }

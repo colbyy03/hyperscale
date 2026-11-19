@@ -8,6 +8,7 @@ import hsInit from "../../python/hsgrade/hsgrade/__init__.py?raw";
 import hsChecks from "../../python/hsgrade/hsgrade/checks.py?raw";
 import hsPlugin from "../../python/hsgrade/hsgrade/plugin.py?raw";
 import hsRunner from "../../python/hsgrade/hsgrade/runner.py?raw";
+import hsSql from "../../python/hsgrade/hsgrade/sql.py?raw";
 import { PYODIDE_URL, type GradeResult, type RunResult, type WorkerRequest, type WorkerResponse } from "./protocol";
 
 // The data-hall simulator package (pure Python, no NumPy).
@@ -48,6 +49,7 @@ async function init(mode: "grader" | "sim"): Promise<void> {
   py.FS.writeFile("/hs/lib/hsgrade/checks.py", hsChecks);
   py.FS.writeFile("/hs/lib/hsgrade/plugin.py", hsPlugin);
   py.FS.writeFile("/hs/lib/hsgrade/runner.py", hsRunner);
+  py.FS.writeFile("/hs/lib/hsgrade/sql.py", hsSql);
   // Pre-import so the first grade is fast.
   py.runPython("import sys\nsys.path.insert(0, '/hs/lib')\nimport numpy, pytest, hsgrade");
   pyodide = py;
@@ -120,13 +122,15 @@ function cleanTraceback(tb: string): string {
   return keep.join("\n").trim();
 }
 
-async function grade(solution: string, tests: string, packages: string[]): Promise<GradeResult> {
+async function grade(solution: string, tests: string, packages: string[], solutionFile = "solution.py", extraFiles: Record<string, string> = {}): Promise<GradeResult> {
   const py = pyodide!;
-  await ensurePackages(["pytest", ...packages], `${solution}\n${tests}`);
+  await ensurePackages(["pytest", ...packages], `${solution}\n${tests}\n${Object.values(extraFiles).join("\n")}`);
   const t0 = performance.now();
   py.globals.set("_hs_solution", solution);
   py.globals.set("_hs_tests", tests);
-  const json = py.runPython("import json, hsgrade\njson.dumps(hsgrade.grade(_hs_solution, _hs_tests, '/hs/work'))") as string;
+  py.globals.set("_hs_file", solutionFile);
+  py.globals.set("_hs_extra", JSON.stringify(extraFiles));
+  const json = py.runPython("import json, hsgrade\njson.dumps(hsgrade.grade(_hs_solution, _hs_tests, '/hs/work', _hs_file, json.loads(_hs_extra)))") as string;
   const result = JSON.parse(json) as Omit<GradeResult, "seconds">;
   return { ...result, seconds: (performance.now() - t0) / 1000 };
 }
@@ -141,7 +145,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     else if (req.type === "sim") result = sim(req.request);
     else if (req.type === "load") result = await ensurePackages(req.packages, req.code);
     else if (req.type === "run") result = await run(req.code, req.packages);
-    else result = await grade(req.solution, req.tests, req.packages);
+    else result = await grade(req.solution, req.tests, req.packages, req.solutionFile, req.extraFiles);
     self.postMessage({ id: req.id, ok: true, result } satisfies WorkerResponse);
   } catch (e) {
     self.postMessage({ id: req.id, ok: false, error: String((e as Error)?.message ?? e) } satisfies WorkerResponse);

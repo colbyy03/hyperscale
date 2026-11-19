@@ -28,3 +28,15 @@ test("a code exercise runs real pytest in the browser", async ({ page }) => {
   await ex2.getByRole("button", { name: "Check" }).click();
   await expect(ex2.getByText("All 7 tests pass.")).toBeVisible({ timeout: 30_000 });
 });
+
+test("a Parsons problem is assembled by tapping and graded by real tests", async ({ page }) => {
+  await page.goto("/learn/python-mle/memory-model");
+  await page.getByRole("button", { name: "Open anyway" }).click();
+  const ex = page.getByTestId("exercise-rolling-window");
+  for (const line of ["import numpy as np", "from numpy.lib.stride_tricks import sliding_window_view", "def rolling_mean(x, k):", "windows = sliding_window_view(x, k)", "return windows.mean(axis=-1)"]) {
+    await ex.getByTestId("parsons-pool").getByRole("button", { name: `Add line: ${line}` }).click();
+  }
+  await expect(ex.getByTestId("parsons-answer").getByRole("listitem")).toHaveCount(5);
+  await ex.getByRole("button", { name: "Check" }).click();
+  await expect(ex.getByRole("status")).toHaveText(/All tests pass/, { timeout: 90_000 });
+});
