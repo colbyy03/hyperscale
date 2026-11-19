@@ -1,6 +1,6 @@
 [project]
 name = "hyperscale-sim"
-version = "0.1.0"
+version = "0.2.0"
 description = "Lumped-parameter simulator of a hyperscale data hall and its chilled-water plant (runs in Pyodide and CPython)"
 requires-python = ">=3.12"
 # Pure Python on purpose: it starts instantly in the browser without downloading NumPy.

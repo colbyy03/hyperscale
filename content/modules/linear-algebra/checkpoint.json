@@ -1,0 +1,267 @@
+{
+  "passThreshold": 0.85,
+  "delayedThreshold": 0.8,
+  "allowTestOut": false,
+  "items": [
+    {
+      "kind": "numeric",
+      "id": "cp-proj-multiplier",
+      "prompt": "Project b = (1, 3, 2) onto the line through a = (2, 0, 1). The projection is t·a. What is t?",
+      "answer": 0.8,
+      "tolerance": 0.01,
+      "concepts": ["vector-geometry"],
+      "critical": true,
+      "explain": "t = (a · b)/(a · a) = (2 + 0 + 2)/(4 + 0 + 1) = 4/5 = 0.8."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-unit-distance",
+      "prompt": "Your embeddings and query are all normalized to unit length. Does ranking by smallest Euclidean distance give the same order as ranking by largest cosine similarity?",
+      "options": ["No: distance and cosine measure different things", "Yes: for unit vectors ‖e − q‖² = 2 − 2 cos θ, so the two orders match", "Only in two dimensions"],
+      "answer": 1,
+      "concepts": ["cosine-similarity", "vector-geometry"],
+      "transfer": true,
+      "explain": "‖e − q‖² = ‖e‖² + ‖q‖² − 2e · q = 2 − 2 cos θ for unit vectors, which decreases as the cosine increases. Normalizing removes size, so only the angle is left for either measure."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-rank-shifts",
+      "prompt": "A design matrix has an intercept, the outdoor temperature in °C, the same temperature in °F, and an indicator for each of 3 shifts (morning, afternoon, night). It has 6 columns. What is its rank?",
+      "answer": 4,
+      "tolerance": 0.01,
+      "concepts": ["rank-subspaces"],
+      "critical": true,
+      "explain": "Two dependencies: °F = 32·(intercept) + 1.8·°C, and the three shift indicators add up to the intercept. 6 − 2 = 4."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-tiny-residual",
+      "prompt": "You solve Ax = b with np.linalg.solve, where κ(A) ≈ 10¹⁴. The relative residual ‖Ax − b‖/‖b‖ is 10⁻¹⁶. How accurate is x?",
+      "options": ["Accurate to about 16 digits: the residual is tiny", "It may have only about 2 correct digits: a tiny residual doesn't mean an accurate x when κ is large", "Completely wrong: solve fails at this condition number"],
+      "answer": 1,
+      "concepts": ["conditioning"],
+      "critical": true,
+      "explain": "solve is backward stable, so it exactly solves a problem within rounding of yours, which gives the tiny residual. With κ = 10¹⁴, that nearby problem's solution can differ from yours in all but the first couple of digits (16 − 14 = 2)."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-lstsq-method",
+      "prompt": "Which is the most accurate way to compute a least-squares fit when X is ill-conditioned?",
+      "options": ["np.linalg.inv(X.T @ X) @ X.T @ y", "np.linalg.solve(X.T @ X, X.T @ y)", "QR, or np.linalg.lstsq"],
+      "answer": 2,
+      "concepts": ["least-squares", "qr-decomposition"],
+      "critical": true,
+      "explain": "Both of the first two form XᵀX, whose condition number is κ(X)². QR and the SVD (which lstsq uses) work with κ(X) itself."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-through-origin",
+      "prompt": "Fit y ≈ w·x through the origin (one coefficient) to x = (1, 2, 3) and y = (2, 3, 7). What is w?",
+      "answer": 2.0714,
+      "tolerance": 0.005,
+      "concepts": ["least-squares", "vector-geometry"],
+      "explain": "It's the projection of y onto the line through x: w = (x · y)/(x · x) = (2 + 6 + 21)/14 = 29/14 ≈ 2.07."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-complex-unstable",
+      "prompt": "A discrete-time controller model has eigenvalues 0.5 ± 0.9i. Is it stable?",
+      "options": ["Yes: the real parts are below 1", "No: |λ| = √(0.25 + 0.81) ≈ 1.03 > 1, so it oscillates with growing amplitude", "It's neutrally stable"],
+      "answer": 1,
+      "concepts": ["eigendecomposition"],
+      "critical": true,
+      "explain": "Stability depends on the magnitude of each eigenvalue, not its real part. A complex pair rotates the state each step while scaling it by |λ| ≈ 1.03, so the oscillation grows by about 3% per step."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-slowest-tau",
+      "prompt": "A two-node thermal model's matrix C⁻¹K has eigenvalues 0.02 and 0.5 per second. What is the slowest time constant, in seconds?",
+      "answer": 50,
+      "tolerance": 0.01,
+      "unit": "s",
+      "concepts": ["eigendecomposition"],
+      "explain": "Time constants are the reciprocals of the rates: 1/0.02 = 50 s and 1/0.5 = 2 s. The slowest mode is the one with the smallest eigenvalue."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-which-pd",
+      "prompt": "Which of these symmetric matrices is positive definite?",
+      "options": ["[[2, −1], [−1, 2]]", "[[1, 3], [3, 1]]", "[[0, 0], [0, 1]]"],
+      "answer": 0,
+      "concepts": ["quadratic-forms"],
+      "explain": "The eigenvalues are 1 and 3 for the first (positive definite), 4 and −2 for the second (indefinite: xᵀAx < 0 along (1, −1)) and 0 and 1 for the third (only semidefinite)."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-rank2-2norm",
+      "prompt": "A matrix has singular values 5, 4, 1 and 0.5. What is the 2-norm error of its best rank-2 approximation?",
+      "answer": 1,
+      "tolerance": 0.01,
+      "concepts": ["low-rank-approximation"],
+      "critical": true,
+      "explain": "Eckart–Young: in the 2-norm, the error is the first singular value you drop, σ₃ = 1. (In the Frobenius norm it would be √(1² + 0.5²) ≈ 1.12.)"
+    },
+    {
+      "kind": "choice",
+      "id": "cp-rank1-numpy",
+      "prompt": "U, s, Vt = np.linalg.svd(A). Which expression is the best rank-1 approximation of A?",
+      "options": ["s[0] * np.outer(U[:, 0], Vt[0])", "s[0] * np.outer(U[0], Vt[:, 0])", "s[0] * (U[:, 0] @ Vt[0])"],
+      "answer": 0,
+      "concepts": ["svd", "low-rank-approximation"],
+      "explain": "The first left singular vector is the first column of U and the first right singular vector is the first row of Vt; their outer product, scaled by σ₁, is σ₁u₁v₁ᵀ. The third option is a dot product, a single number."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-mixed-units",
+      "prompt": "You run PCA on 30 days of chiller-plant data: chilled-water temperatures (°C), pump powers (kW) and flows (L/s), without standardizing. The first component is almost entirely the flow columns. Why?",
+      "options": ["Flow matters most to the plant", "The flow columns have the largest variance in their own units, so they dominate: standardize mixed-unit columns first", "PCA always favours the last columns"],
+      "answer": 1,
+      "concepts": ["pca-pod"],
+      "transfer": true,
+      "explain": "PCA ranks directions by variance, and variance depends on units: flows in L/s may vary by hundreds while temperatures vary by a few degrees. With mixed units, standardize (PCA on the correlation matrix)."
+    },
+    {
+      "kind": "explain",
+      "id": "cp-explain-projection",
+      "prompt": "Explain how least squares, orthogonal projection and the pseudoinverse fit together, and why you'd compute a fit with QR or the SVD rather than the normal equations.",
+      "concepts": ["least-squares", "svd", "conditioning"],
+      "rubric": ["The fitted vector Xw is the orthogonal projection of y onto the column space of X, so the residual is perpendicular to every column (Xᵀ(y − Xw) = 0, the normal equations)", "The pseudoinverse X⁺ = VΣ⁺Uᵀ gives that solution, and the minimum-norm one when the columns are dependent", "Forming XᵀX squares the condition number, so the normal equations lose twice as many digits", "QR (Rw = Qᵀy) and the SVD work with X itself, keeping κ(X), and the SVD also reveals rank deficiency"],
+      "explain": "One picture (projection), one formula (pseudoinverse), and one numerical lesson (don't square κ)."
+    },
+    {
+      "kind": "exercise",
+      "id": "linear-algebra/leverage-qr"
+    }
+  ],
+  "delayedItems": [
+    {
+      "kind": "numeric",
+      "id": "cp-proj-multiplier-b",
+      "prompt": "Project b = (3, 0, 3) onto the line through a = (1, 2, 2). The projection is t·a. What is t?",
+      "answer": 1,
+      "tolerance": 0.01,
+      "concepts": ["vector-geometry"],
+      "critical": true,
+      "explain": "t = (a · b)/(a · a) = (3 + 0 + 6)/(1 + 4 + 4) = 9/9 = 1."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-correlation-cosine",
+      "prompt": "Two sensors' hourly readings have a Pearson correlation of 0.98. What is the cosine similarity of their centered profiles?",
+      "options": ["0.98: correlation is the cosine of centered vectors", "It can't be determined without the means", "0.98² ≈ 0.96"],
+      "answer": 0,
+      "concepts": ["cosine-similarity"],
+      "transfer": true,
+      "explain": "Pearson's correlation is exactly Σ(xᵢ − x̄)(yᵢ − ȳ) / (‖x − x̄‖‖y − ȳ‖), the cosine of the angle between the centered vectors."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-rank-seasons",
+      "prompt": "A design matrix has an intercept, an indicator for each of the 4 seasons, the IT load in kW and the same load in W. It has 7 columns. What is its rank?",
+      "answer": 5,
+      "tolerance": 0.01,
+      "concepts": ["rank-subspaces"],
+      "critical": true,
+      "explain": "Two dependencies: the season indicators add up to the intercept, and the W column is 1000 × the kW column. 7 − 2 = 5."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-standardize-cond",
+      "prompt": "You build features T, T² and T³ from an outdoor temperature between 15 and 35 °C. What does standardizing T first do to the condition number of the feature matrix?",
+      "options": ["Nothing: rescaling never changes conditioning", "It lowers it by orders of magnitude (about 2 × 10⁶ down to about 6 in this course's example)", "It raises it, because standardized values are smaller"],
+      "answer": 1,
+      "concepts": ["conditioning"],
+      "critical": true,
+      "explain": "Raw powers of a number near 25 point in nearly the same direction (all large and growing together), so the columns are nearly collinear. Centering and scaling first makes the powers far more distinct."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-qr-why",
+      "prompt": "Why does solving least squares with QR avoid the normal equations' loss of accuracy?",
+      "options": ["It uses higher precision internally", "It solves Rw = Qᵀy, and R has the same condition number as X instead of κ(X)²", "It discards the smallest singular values"],
+      "answer": 1,
+      "concepts": ["qr-decomposition", "least-squares"],
+      "critical": true,
+      "explain": "Q is orthonormal, so multiplying by Qᵀ doesn't amplify errors, and κ(R) = κ(X). The normal equations work with XᵀX, whose condition number is κ(X)²."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-through-origin-b",
+      "prompt": "Fit y ≈ w·x through the origin (one coefficient) to x = (1, 1, 2) and y = (1, 3, 4). What is w?",
+      "answer": 2,
+      "tolerance": 0.01,
+      "concepts": ["least-squares", "vector-geometry"],
+      "explain": "w = (x · y)/(x · x) = (1 + 3 + 8)/(1 + 1 + 4) = 12/6 = 2."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-slow-decay",
+      "prompt": "A discrete-time model has eigenvalues 0.99 and −0.3. What does a disturbance do?",
+      "options": ["It grows", "It decays, but slowly: after 100 steps the 0.99 mode is still at about 37% of its size", "It oscillates forever at constant amplitude"],
+      "answer": 1,
+      "concepts": ["eigendecomposition"],
+      "critical": true,
+      "explain": "Both magnitudes are below 1, so it decays. The −0.3 mode flips sign and vanishes within a few steps; the 0.99 mode dominates, and 0.99¹⁰⁰ ≈ 0.37."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-euler-limit",
+      "prompt": "A single thermal node has a heat capacity of 900 J/K and a 30 W/K conductance to the coolant. What is the largest stable forward-Euler time step, in seconds?",
+      "answer": 60,
+      "tolerance": 0.01,
+      "unit": "s",
+      "concepts": ["eigendecomposition"],
+      "explain": "The rate is λ = G/C = 1/30 per second (τ = 30 s), and forward Euler is stable for Δt ≤ 2/λ = 60 s."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-sample-cov",
+      "prompt": "A covariance matrix is estimated from 10 snapshots of 25 sensors. It is…",
+      "options": ["positive definite", "positive semidefinite but singular, with rank at most 9", "indefinite"],
+      "answer": 1,
+      "concepts": ["quadratic-forms", "rank-subspaces"],
+      "explain": "After centering, 10 snapshots span at most 9 directions, so at least 16 eigenvalues are zero. A covariance is always positive semidefinite; it's definite only with enough independent snapshots."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp-rank2-frob",
+      "prompt": "A matrix has singular values 5, 4, 1 and 0.5. What is the Frobenius-norm error of its best rank-2 approximation?",
+      "answer": 1.118,
+      "tolerance": 0.01,
+      "concepts": ["low-rank-approximation"],
+      "critical": true,
+      "explain": "Eckart–Young: √(σ₃² + σ₄²) = √(1 + 0.25) ≈ 1.118. In the 2-norm it would be σ₃ = 1."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-numerical-rank",
+      "prompt": "A 3 × 3 matrix has singular values 3, 2 and 10⁻¹⁵. What is its numerical rank?",
+      "options": ["3", "2", "1"],
+      "answer": 1,
+      "concepts": ["svd", "rank-subspaces"],
+      "explain": "10⁻¹⁵ is below the usual tolerance (σ₁ × 3 × 2.2 × 10⁻¹⁶ ≈ 2 × 10⁻¹⁵), so it counts as zero: rounding, not a real direction."
+    },
+    {
+      "kind": "choice",
+      "id": "cp-season-modes",
+      "prompt": "You fit POD modes on winter data and use them in summer to fill a dead sensor, when the economizer is off and the airflow pattern differs. What should you expect?",
+      "options": ["The same accuracy: modes describe the hall permanently", "Possibly large errors, because the summer field may contain patterns the winter modes don't span; watch the residual on working sensors and refit", "Better accuracy, because summer temperatures are higher"],
+      "answer": 1,
+      "concepts": ["pca-pod"],
+      "transfer": true,
+      "explain": "Modes describe the data they were fitted on. A new operating mode can put energy in directions the old modes can't represent, which shows up as a growing reconstruction residual on the working sensors."
+    },
+    {
+      "kind": "explain",
+      "id": "cp-explain-ai-pca",
+      "prompt": "An agent wrote a PCA function for the inlet sensors. Explain how you would verify it before using it.",
+      "concepts": ["pca-pod", "svd"],
+      "rubric": ["Checks the conventions: rows are snapshots, columns are centered (and scaled only if units differ), modes taken from Vt", "Asserts invariants: orthonormal modes, reconstruction from all modes equals the data, energy fractions sum to 1", "Compares with a trusted implementation (np.linalg.eigh of the covariance, or scikit-learn) up to sign", "Tests on synthetic data with known modes, and evaluates anything learned on held-out snapshots"],
+      "explain": "Conventions, invariants, an independent reference and synthetic ground truth catch nearly every plausible-looking PCA bug."
+    },
+    {
+      "kind": "exercise",
+      "id": "linear-algebra/mahalanobis"
+    }
+  ]
+}

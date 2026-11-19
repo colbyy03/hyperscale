@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/mahalanobis",
+  "type": "code",
+  "language": "python",
+  "title": "Unusual pattern or just a warm day?",
+  "prompt": "A snapshot of pod 3 can be unusual because of its **pattern** rather than its size: one sensor 1 °C warmer than its neighbours is far stranger than the whole pod 1 °C warmer, which happens every time the supply setpoint moves. The Mahalanobis distance captures that: d(x)² = (x − μ)ᵀ Σ⁻¹ (x − μ), where μ and Σ are the mean and covariance of healthy snapshots.\n\n1. Write `fit(X, ridge=1e-6)`, which returns `(mu, L)`: the mean of the snapshots (rows of `X`) and the Cholesky factor `L` of Σ + ridge·(trace(Σ)/p)·I, where Σ is the covariance across columns. The small ridge keeps the factorization working when there are fewer snapshots than sensors.\n2. Write `distances(Y, mu, L)`, which returns d for each row of `Y`. Don't form Σ⁻¹: since Σ = LLᵀ, d is the length of z, where L z = y − μ.\n\nNo loops. The support file `field.py` has the pod's inlet field.",
+  "concepts": ["quadratic-forms", "conditioning", "pca-pod"],
+  "difficulty": 0.55,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": true, "timeoutMs": 10000 },
+  "hints": [
+    "In the eigenvector coordinates of Σ, d² = Σᵢ yᵢ²/λᵢ: each direction is measured in units of its own spread. Which directions have a tiny spread in a temperature field?",
+    "(x − μ)ᵀΣ⁻¹(x − μ) = (x − μ)ᵀ(LLᵀ)⁻¹(x − μ) = ‖L⁻¹(x − μ)‖². Compute L⁻¹(x − μ) by solving with L, all snapshots at once with the deviations as columns. Use np.cov(X, rowvar=False): by default np.cov treats each row as a variable.",
+    "fit: mu = X.mean(axis=0); S = np.cov(X, rowvar=False); S = S + ridge * np.trace(S) / S.shape[0] * np.eye(S.shape[0]); return mu, np.linalg.cholesky(S). distances: Z = np.linalg.solve(L, (Y - mu).T); return np.sqrt(np.sum(Z**2, axis=0))."
+  ],
+  "misconceptions": {
+    "np-cov-rowvar": "np.cov treats each row as a variable unless you pass rowvar=False, so a (480, 72) array of snapshots gives a 480 × 480 matrix.",
+    "solve-not-inverse": "Use the Cholesky factor and a solve instead of forming Σ⁻¹: cheaper, and far more accurate when Σ is ill-conditioned."
+  },
+  "sources": ["deisenroth2020-mml", "strang2019-lalfd"]
+}

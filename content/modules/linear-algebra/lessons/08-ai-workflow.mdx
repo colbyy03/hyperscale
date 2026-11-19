@@ -1,0 +1,91 @@
+---
+id: linear-algebra/ai-workflow
+title: How I'd do this with AI tools
+minutes: 12
+concepts: [pca-pod, least-squares, matrix-calculus]
+sources: [trefethen1997-nla, numpy-docs-2-5, deisenroth2020-mml]
+cards: [ai-invariant-tests, ai-state-conventions, np-cov-rowvar, ai-pinv-crutch]
+---
+
+<Situation from="Noor, energy analyst">
+These days a coding assistant writes most of my linear algebra. Ask for "PCA of the inlet sensors" or "fit the chiller curve" and working code appears in seconds. It runs, the plots look reasonable, and that's exactly what worries me. What should I check before I trust it?
+</Situation>
+
+## Check the mathematics with mathematics
+
+Module 1's rule still holds: you own the specification and the tests, the agent owns the first draft. Linear algebra adds a gift that makes the tests easy to write. Almost every result in this module satisfies an **invariant** you can check in a line or two, without knowing how the code computed it:
+
+| Result | Invariant to assert |
+|---|---|
+| A solution of Ax = b | small relative residual ‖Ax − b‖ / ‖b‖, plus κ(A) to say how far to trust x |
+| A least-squares fit | Xᵀ(y − Xw) ≈ 0, and the rank that `lstsq` returns equals the number of columns |
+| A QR factorization | QᵀQ ≈ I, R upper triangular, QR ≈ A |
+| An eigendecomposition | Av ≈ λv for every pair; real λ when A is symmetric |
+| An SVD or a PCA | orthonormal modes, reconstruction from all modes ≈ the data, energy fractions that add up to 1 |
+| A hand-derived gradient | central-difference check, relative error below 10⁻⁶ at a random point |
+| A gappy reconstruction | error on sensors you hid yourself, on days the modes never saw |
+
+These checks are independent of the implementation, so they catch a wrong answer however plausible the code looks. Ask the agent to write them too, and read them before you read the implementation.
+
+## State the conventions out loud
+
+Most wrong linear-algebra code from an agent isn't wrong mathematics. It's a silently different convention. Put these in the prompt instead of hoping:
+
+- **Orientation**: rows are snapshots and columns are sensors (or the reverse). `np.cov` treats *rows* as variables unless you pass `rowvar=False`, so a (480, 72) array quietly produces a 480 × 480 matrix.
+- **Centering and scaling**: centered, yes; standardized or not, and why.
+- **Which factor**: `np.linalg.svd` returns `Vt`, not `V`; the modes are its rows. scikit-learn's `components_` has shape (modes, features).
+- **Signs**: singular vectors and eigenvectors are defined up to sign. Ask for a sign convention, or compare up to sign.
+- **Solvers**: `solve` or `lstsq`, never `inv`; `eigh` for symmetric matrices; QR for least squares. A pseudoinverse used everywhere is a crutch: it hides rank deficiency instead of reporting it, so ask for the rank and κ alongside any `pinv`.
+- **Tolerances**: relative ones, and say what they are relative to.
+
+## Module 2's tasks, done with an agent
+
+**Least squares.** Ask for `lstsq` or QR, and for κ(X) and the returned rank in the output. Then check the orthogonality condition yourself. If the code forms `X.T @ X`, ask why: occasionally it's justified (well-conditioned features, streaming), usually it's habit.
+
+**Eigenproblems.** For thermal or structural models, ask for the generalized form (`scipy.linalg.eigh(K, C)`) or the symmetric scaling you used in Lesson 4, and for a residual check on every eigenpair. Ask how it handles stiffness before letting it pick a time step.
+
+**PCA, POD and gappy reconstruction.** Specify orientation, centering, scaling and the sign convention. Ask for the singular-value spectrum on a log scale and for a held-out test of the reconstruction, with the error as a function of k, *before* any plots of modes. Modes are where a plausible story is easiest to tell and hardest to check.
+
+**Derivations.** Agents are good at matrix calculus and occasionally wrong in exactly the ways Lesson 7 listed. Let them derive, but make the central-difference check part of the deliverable, on random non-square inputs.
+
+<KeyIdea title="The one rule">
+If a linear-algebra result has an invariant, assert it in a test. Never accept a fix that loosens a tolerance, drops a check, or switches to `pinv` just to make a warning go away, whoever proposed it.
+</KeyIdea>
+
+## A prompt worth keeping
+
+For this module's build, a first prompt might look like this:
+
+```text
+Context: uv project, Python 3.14, numpy 2.4, polars 1.33, pytest 9.
+Data: data/field.parquet, long format (ts, sensor, value), 10-minute snapshots
+of 288 rack-inlet sensors from hyperscale-sim. Rows = snapshots, columns = sensors.
+Task: implement field/pod.py per docs/spec.md:
+  fit_pod(X_train) -> mean, modes (k_max x p, unit rows), energy fractions
+  fill_missing(X, observed, mean, modes) -> X with dead columns estimated
+Rules:
+- Center each sensor; do not standardize (all columns are degrees C).
+- SVD via np.linalg.svd(full_matrices=False); modes are rows of Vt;
+  sign convention: each mode's largest-magnitude entry is positive.
+- Coefficients by least squares on the working sensors (np.linalg.lstsq);
+  never project, never form inv(...).
+- Tests first in tests/test_pod.py: orthonormal modes, exact recovery of a
+  field built from 3 modes, energy fractions sum to 1, and a held-out test
+  hiding 3 sensors that reports RMS error for k = 1..10.
+- Run `uv run pytest -q` and show the output. Don't edit tests or tolerances;
+  if one looks wrong, stop and explain.
+```
+
+It fixes the orientation, the centering, the factor and the sign convention, names the solver and the forbidden shortcuts, and asks for the invariant tests and the held-out experiment before anything else.
+
+<Craft title="Review checklist for AI-written linear algebra">
+- Are the conventions in the code the ones you specified: orientation, centering, scaling, `Vt` vs `V`, signs?
+- Is every result checked by an invariant test, and did you see those tests run?
+- Any `inv`, `pinv` or `X.T @ X`? Each needs a reason.
+- Are tolerances relative, and stated?
+- For anything learned from data (modes, fits), is there a held-out evaluation, not just a reconstruction of the training data?
+</Craft>
+
+<Check items={["ai-la-invariant", "ai-la-rowvar", "ai-la-pinv", "ai-la-heldout"]} />
+
+That's Module 2. The checkpoint is next, and the build, sensor field reconstruction, turns Lesson 6 into a tool you could run on a real hall.

@@ -99,6 +99,8 @@ cd python/sim && uv run --python 3.14 python -c "from hyperscale_sim import Hall
 
 The building's baseline loops (valves, fans, chiller staging, towers, economizer) close inside each step; you change setpoints with `set_controls`, inject faults (`trip_chiller`, `fail_crah`, `set_containment`, `utility_outage`, sensor bias/drift/stuck), and read instruments with `read()` (the true values stay in `truth()`). The physics tests check steady-state energy closure (within 1%), the design point (supply 24 °C, chilled water 16/26 °C, PUE 1.30), full-economizer operation, the fan affinity law, chiller sensitivity to chilled-water temperature, the coil limit on chilled-water reset, the server-fan PUE trap, recirculation and containment breaches, chiller trips and fan-wall failures, sensor faults, and the shape of a published cooling-outage temperature rise.
 
+`InletField` (v0.2) spreads each pod's lumped state over a rack layout: inlet sensors at three heights on every rack (288 in Hall A), with recirculation that collects at the tops of the racks and spills over the row ends, airflow starvation at the far end from the CRAH when the fans slow, fixed per-sensor offsets and sensor noise. Module 2's build reconstructs failed sensors from it; its tests check that it reduces to the lumped model and that breaches and slow fans move the expected sensors.
+
 The Control Room (`/facility/control-room`, also embedded in Induction lesson 3) scores a simulated day on total facility energy with zero minutes above 27 °C at any rack inlet, and keeps your best valid runs on this device as the baseline later controllers must beat.
 
 ## Repository layout

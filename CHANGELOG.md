@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## Phase 5c: Module 2 complete (2026-11-19)
+
+- **Lesson 8, "How I'd do this with AI tools"**: check the mathematics with mathematics (an invariant for every result in the module), the conventions to state out loud (orientation, `np.cov`'s `rowvar`, `Vt` vs `V`, signs, solvers, relative tolerances), Module 2's tasks done with an agent, a reusable prompt for the build, and a review checklist.
+- **Module 2 checkpoint**: 14 items with a parallel 14-item delayed form, covering projections, rank (feature sets with hidden dependencies), conditioning and backward stability, QR vs the normal equations, stability of complex eigenvalue pairs, time constants and Euler limits, positive definiteness, Eckart–Young in both norms, PCA scaling and drifting modes, two rubric-scored explanations, and a fresh exercise in each form: leverages through a thin QR (graded with tracemalloc so the n × n hat matrix can't sneak in) and a Mahalanobis anomaly score through a Cholesky factor (a one-sensor bump scores far above a whole-pod warming).
+- **Module 2 build brief, "Sensor field reconstruction"**: a uv package that fits a POD of the hall's 288 inlet sensors, chooses k by hiding working sensors on held-out days, fills three dead sensors by gappy POD and flags untrustworthy estimates from the working-sensor residual, evaluated against a sealed truth file. The export script was run as written, and a reference solution set the brief's targets: about 0.05 °C in normal operation, about 4 °C during an unseen CRAH failure, and a flag that caught every snapshot of it with under 1% false alarms.
+- **`hyperscale_sim` 0.2 adds `InletField`**: rack-level inlet sensors at three heights, derived from each pod's state (recirculation over the row ends, far-end starvation when fans slow, fixed offsets, noise), with five new tests.
+- 4 cards, 4 questions, 2 checkpoint exercises. Module 2 totals: 8 lessons, 18 exercises verified with 55 known-wrong variants and 40 rejected derivation answers, 74 cards, 65 questions, 4 explainers.
+
 ## Phase 5b: Module 2 lessons 4-7 (2026-11-19)
 
 - **Lesson 4, "Eigenvalues and systems that evolve"**: eigenvectors as directions a matrix only stretches, diagonalization and powers, the spectral theorem, stability of x₍ₖ₊₁₎ = Axₖ (settle, run away, oscillate), the time constants of a cold-plate stack as eigenvalues of C⁻¹K (12.4 s, 2.65 s and 0.79 s), stiffness and the forward-Euler step limit, quadratic forms and positive definiteness, and transient growth in non-symmetric systems. Exercises: thermal time constants through the symmetric scaling C^(−1/2)KC^(−1/2) with the Euler limit checked by simulation, and power iteration from scratch (negative dominant eigenvalues, convergence speed, giving up).

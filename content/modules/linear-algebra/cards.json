@@ -516,5 +516,35 @@
     "front": "Two cheap checks on a hand-derived gradient, before any numerics.",
     "back": "Its shape must equal the parameter's shape, and the test inputs should be random and non-square (8 × 3, not 3 × 3), at a random point, so missing transposes can't hide.",
     "concepts": ["matrix-calculus"]
+  },
+  {
+    "id": "ai-invariant-tests",
+    "type": "concept",
+    "front": "How do you check AI-written linear-algebra code without trusting how it was implemented?",
+    "back": "Assert invariants: residuals (‖Ax − b‖, Xᵀr ≈ 0), QᵀQ ≈ I, Av ≈ λv, reconstruction, energy fractions summing to 1, gradient checks, and held-out error for anything learned from data.",
+    "concepts": ["least-squares", "pca-pod"],
+    "critical": true
+  },
+  {
+    "id": "ai-state-conventions",
+    "type": "concept",
+    "front": "Conventions to state when asking an agent for PCA or SVD code.",
+    "back": "Orientation (rows = snapshots), centering and scaling, `Vt` vs `V`, a sign convention, the solver (`lstsq`, `eigh`, never `inv`), and relative tolerances.",
+    "concepts": ["pca-pod", "svd"]
+  },
+  {
+    "id": "np-cov-rowvar",
+    "type": "gotcha",
+    "front": "`np.cov(X)` with X of shape (480, 72) and one snapshot per row: what comes back?",
+    "back": "A 480 × 480 matrix: np.cov treats rows as variables by default. Use `np.cov(X, rowvar=False)`.",
+    "concepts": ["pca-pod"],
+    "critical": true
+  },
+  {
+    "id": "ai-pinv-crutch",
+    "type": "gotcha",
+    "front": "Why is \"just use pinv\" a red flag in a code review?",
+    "back": "It hides rank deficiency instead of reporting it. Ask for the rank and κ, and fix the cause: a dependent feature, a dummy-variable trap, a missing boundary condition.",
+    "concepts": ["rank-subspaces", "low-rank-approximation"]
   }
 ]

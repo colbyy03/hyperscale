@@ -1,0 +1,22 @@
+{
+  "id": "linear-algebra/leverage-qr",
+  "type": "code",
+  "language": "python",
+  "title": "Leverage without the hat matrix",
+  "prompt": "A reading with high **leverage** sits far from the others in feature space, so it can pull a least-squares fit towards itself. The leverages are the diagonal entries hᵢᵢ of the hat matrix H = X(XᵀX)⁻¹Xᵀ, which has one row and one column per reading: far too big to form for a year of data.\n\n1. Write `leverages(X)` without forming H or XᵀX. With X = QR (thin), H = QQᵀ, so hᵢᵢ is the squared length of row i of Q.\n2. Write `high_leverage(X, factor=2.0)`, which returns the indices of the readings whose leverage exceeds `factor` × p/n (p/n is the average leverage), highest leverage first.\n\nNo loops.",
+  "concepts": ["least-squares", "qr-decomposition"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn", "statsmodels"], "requireVectorized": true, "timeoutMs": 10000 },
+  "hints": [
+    "H projects onto the column space of X. Which matrix from a QR factorization has orthonormal columns spanning that same space?",
+    "With X = QR, H = QQᵀ, and the diagonal entry (QQᵀ)ᵢᵢ is row i of Q dotted with itself. The leverages always add up to p, the number of columns, so their average is p/n.",
+    "Q, _ = np.linalg.qr(X); h = np.sum(Q**2, axis=1). For high_leverage: idx = np.flatnonzero(h > factor * p / n); return idx[np.argsort(-h[idx], kind=\"stable\")]."
+  ],
+  "misconceptions": {
+    "hat-matrix-memory": "The hat matrix is n × n: 128 MB for 4,000 readings and 3 TB for a year of one-minute data. Its diagonal is the row-wise squared norm of Q from a thin QR."
+  },
+  "sources": ["trefethen1997-nla", "boyd2018-vmls"]
+}

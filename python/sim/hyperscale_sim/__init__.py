@@ -6,9 +6,10 @@
     hall.run(24 * 3600)
     print(hall.metrics.summary())
 """
+from .field import InletField, Layout
 from .hall import Controls, Hall, Metrics, chiller_power, counterflow_effectiveness, fan_power
 from .params import Params
 from .scenarios import SCENARIOS, Scenario, constant, get_scenario
 
-__all__ = ["Controls", "Hall", "Metrics", "Params", "SCENARIOS", "Scenario", "chiller_power", "constant", "counterflow_effectiveness", "fan_power", "get_scenario"]
-__version__ = "0.1.0"
+__all__ = ["Controls", "Hall", "InletField", "Layout", "Metrics", "Params", "SCENARIOS", "Scenario", "chiller_power", "constant", "counterflow_effectiveness", "fan_power", "get_scenario"]
+__version__ = "0.2.0"

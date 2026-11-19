@@ -1,0 +1,132 @@
+---
+title: Sensor field reconstruction
+hours: 8
+sources: [berkooz1993-pod, brunton-kutz-2022, manohar2018-sensor-placement, jolliffe2016-pca, trefethen1997-nla]
+---
+
+<Situation from="Mara, site lead">
+Three inlet sensors in pod 3 died in a firmware update, all at the tops of end racks, and the replacements are two weeks out. I want estimates for those three that the high-temperature alarms can use, and I want to know, at every moment, whether the estimate can be trusted. An estimate that's quietly wrong during an incident is worse than no estimate at all.
+</Situation>
+
+## What you'll build
+
+A small Python package, `field-recon`, that:
+
+1. **fits a POD** of the hall's rack-inlet temperature field from healthy history: the mean field, the modes and their energies;
+2. **chooses the number of modes** by hiding working sensors on held-out days and measuring how well they're recovered;
+3. **fills dead sensors** in new snapshots by least squares on the working ones (gappy POD), vectorized over snapshots;
+4. **flags untrustworthy estimates** from the residual on the working sensors: when the field stops looking like anything the modes have seen, say so;
+5. ships a **command-line tool**: `recon fit field.parquet --until 2026-07-22` saves a model; `recon fill field.parquet --out filled.parquet` writes the estimates with a trust flag per snapshot.
+
+Then evaluate it honestly against the true values of the dead sensors, which you set aside at the start and don't look at until the end.
+
+## Get the data
+
+Generate a month of 10-minute snapshots from this course's simulator: 288 inlet sensors (4 pods × 2 rows × 12 racks × 3 heights), with daily setpoint and IT-load changes, a containment door propped open for two days, and, in the last week, an incident the training data never saw. Install the simulator (version 0.2 or later, which adds the inlet field) from the course repository:
+
+```bash
+uv add "hyperscale-sim @ git+https://github.com/colbyy03/hyperscale#subdirectory=python/sim" polars numpy
+```
+
+```python
+import datetime as dt
+import random
+
+import polars as pl
+from hyperscale_sim import Hall, InletField
+
+DEAD = ["pod3.A01.top", "pod3.A12.top", "pod3.B12.top"]  # killed by a firmware update on day 22
+
+hall = Hall("summer-day", dt=30.0, seed=11)
+field = InletField(hall.p.n_pods, seed=11)  # 288 sensors: 4 pods x 2 rows x 12 racks x 3 heights
+rng = random.Random(11)
+start = dt.datetime(2026, 7, 1)
+rows = []
+for step in range(28 * 24 * 6):  # 28 days, one snapshot every 10 minutes
+    day, minute = divmod(step * 10, 1440)
+    if minute == 0:  # each night: a new supply-air setpoint and an IT load change in one pod
+        hall.set_controls(t_sa_sp=24 + rng.choice([-2, -1, 0, 0, 1, 2]))
+        hall.it_step(rng.randrange(4), rng.uniform(-0.15, 0.15))
+    if (day, minute) == (9, 600):
+        hall.set_containment(1, 0.25)  # pod 2: a containment door propped open...
+    if (day, minute) == (11, 600):
+        hall.set_containment(1, 0.03)  # ...and closed two days later
+    if (day, minute) == (24, 840):
+        hall.fail_crah(2, units=2)  # pod 3 loses two of its four CRAHs for six hours
+    if (day, minute) == (24, 1200):
+        hall.restore_crah(2)
+    hall.run(600)
+    rows.append({"ts": start + dt.timedelta(minutes=10 * (step + 1)), **field.read(hall)})
+
+df = pl.DataFrame(rows)
+cutoff = start + dt.timedelta(days=21)
+df.filter(pl.col("ts") > cutoff).select("ts", *DEAD).write_parquet("dead_truth.parquet")  # for scoring only
+df.with_columns([pl.when(pl.col("ts") > cutoff).then(None).otherwise(pl.col(c)).alias(c) for c in DEAD]).write_parquet("field.parquet")
+```
+
+It runs in a few seconds and writes `field.parquet` (4,032 snapshots: a `ts` column and one column per sensor, with the three dead sensors empty from day 22) and `dead_truth.parquet`. Treat the second file as sealed: nothing you choose (the number of modes, the flag threshold) may depend on it. Keep the export script in the repository.
+
+## Requirements
+
+- A **uv project** with a `src/field_recon/` layout, a committed `uv.lock`, type hints, and ruff and a type checker passing.
+- **POD from scratch** with `np.linalg.svd` on the centered snapshots (rows are snapshots), with a stated sign convention. Then compare it with `sklearn.decomposition.PCA`: the two must span the same subspace (compare projection matrices, not individual modes, which can differ in sign).
+- **Gappy fill** by least squares on the working sensors, one `np.linalg.lstsq` call for all snapshots, with no inverses and no projections.
+- **Choosing k** on healthy data only: fit on the first 18 days, hide random working top-of-rack sensors on days 19–21, and pick the k that recovers them best. Plot the validation error against k.
+- **A trust flag**: the RMS residual of the fit on the working sensors, with a threshold set from healthy data (for example, its 99.9th percentile). Every filled value carries the flag.
+- **Tests** (pytest): orthonormal modes; exact recovery of a synthetic field built from k modes; energy fractions that sum to 1; working sensors left untouched; a clear error when fewer sensors work than there are modes; the flag raised on a snapshot from a pattern the modes have never seen.
+- **Speed**: fitting and filling the whole month takes well under a second. Measure it.
+- A **README** with installation, usage, every choice you made (k, the threshold, the validation scheme) and the final scores.
+
+## Evaluate it honestly
+
+Only now, open `dead_truth.parquet` and report:
+
+1. the RMS error at the three dead sensors in **normal operation**, and **while the flag is raised**;
+2. the same for two baselines: the **mean field** alone, and the **same rack's mid-height sensor** plus its average offset from the top sensor in training;
+3. the flag's **hit rate** during the incident and its **false-alarm rate** elsewhere.
+
+For calibration, our reference solution's validation curve flattened from 7 modes on (it picked 10), and it recovered the dead sensors to about 0.05 °C in normal operation, which is the sensors' own noise, against 1.3 °C for the mean field and 0.09 °C for the neighbour baseline. During the incident its error rose to about 4 °C, slightly worse than the neighbour baseline's 3.6 °C, and a residual flag at the 99.9th percentile of healthy data caught every one of those snapshots, with under 1% false alarms elsewhere. Your numbers will differ a little. The pattern shouldn't: excellent inside the training experience, wrong outside it, and detectably so.
+
+## Suggested structure
+
+```text
+field-recon/
+  pyproject.toml  uv.lock  README.md
+  scripts/export_field.py
+  src/field_recon/
+    __init__.py
+    io.py        # load the wide parquet, split healthy and dead, keep sensor names
+    pod.py       # fit_pod, fill_missing, the residual
+    select.py    # choose k by hiding working sensors on held-out days
+    cli.py       # `recon fit` and `recon fill`
+  tests/
+    test_pod.py  test_select.py  test_cli.py
+  report/
+    report.qmd   # spectrum, modes as heat maps, error vs k, a dead sensor's estimate with the flag
+```
+
+## Milestones
+
+1. **Skeleton.** `uv init --package`, add dependencies, ruff, the type checker and pytest. Commit the export script and the data-loading code.
+2. **POD, tested.** Write the invariant tests first, then `fit_pod`. Plot the singular values on a log scale and find the noise floor.
+3. **Gappy fill and k.** Implement `fill_missing`, then the hide-and-recover validation. Decide k.
+4. **The trust flag.** Compute the working-sensor residual over the healthy days, set the threshold, and test the flag on a synthetic snapshot that breaks the pattern.
+5. **Evaluate and write up.** Unseal the truth file, score everything, and write the README and the report.
+
+## Rubric
+
+| Area | Meets | Strong |
+|---|---|---|
+| Correctness | Dead sensors within about 0.1 °C in normal operation; k and the threshold chosen without the truth file | Explains the incident error from the spectrum and the residual, with a plot |
+| Honesty | Reports normal and flagged errors separately, with both baselines and the flag's hit and false-alarm rates | Tests a fallback for flagged periods (for example, the neighbour baseline) and reports whether it helps |
+| Linear algebra | Own POD spans the same subspace as scikit-learn's; least squares by `lstsq` or QR; no inverses | Sensor placement: QR with column pivoting on the modes picks the 24 most informative sensors, and the field is rebuilt from those alone |
+| Code quality | Typed, tested, ruff and type-checker clean, small functions | Clean public API with docstrings, and a frozen config for k and the threshold |
+| Performance | Month fitted and filled in under a second, measured | A note on what dominates the cost, and how it would scale to a year of one-minute data |
+
+## Using AI tools
+
+Use them the way Lesson 8 describes: state the orientation, centering, sign convention and solver in the prompt, write the invariant tests yourself, and make the held-out experiment part of the request. Never let an agent tune k or the threshold against `dead_truth.parquet`; that's the one shortcut that makes the whole evaluation meaningless. Keep a short note in the README of what you delegated and what you had to fix.
+
+## When you're done
+
+Push it to a GitHub repository named `field-recon`. It makes a good second portfolio piece and a short post for your Quarto site: *virtual sensors from POD, and how to know when not to trust them*.

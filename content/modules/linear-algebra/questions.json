@@ -565,5 +565,43 @@
     "concepts": ["matrix-calculus", "least-squares"],
     "rubric": ["Uses the definition f(w + d) ≈ f(w) + g·d, or the chain rule through the residual r = Xw − y", "A step d moves the residual by Xd, so the change is r·Xd = (Xᵀr)·d, giving g = Xᵀ(Xw − y)", "Checks shapes: the gradient has w's shape", "Confirms with central differences at a random point and a relative-error threshold (around 10⁻⁶ in float64)"],
     "explain": "Derive from the definition, check shapes, then check numerically: three independent guards against sign, transpose and factor-of-2 slips."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-la-invariant",
+    "prompt": "An agent hands you a QR factorization routine. Which test checks it regardless of how it was written?",
+    "options": ["It runs without errors on a 5 × 3 matrix", "QᵀQ ≈ I, R is upper triangular and QR ≈ A, on random and ill-conditioned inputs", "Its output matches the example in the agent's own docstring"],
+    "answer": 1,
+    "concepts": ["qr-decomposition"],
+    "explain": "Invariants test the mathematics, not the code path. Include an ill-conditioned input: classical Gram–Schmidt passes on random matrices and fails orthogonality on a polynomial basis."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-la-rowvar",
+    "prompt": "X has shape (480, 72), one snapshot per row. An agent's code computes np.cov(X). What shape is the result?",
+    "options": ["(72, 72)", "(480, 480)", "(480, 72)"],
+    "answer": 1,
+    "concepts": ["pca-pod"],
+    "critical": true,
+    "explain": "np.cov treats each row as a variable unless you pass rowvar=False, so it returns the 480 × 480 covariance between snapshots. State the orientation in the prompt and check shapes in the tests."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-la-pinv",
+    "prompt": "An agent 'fixes' a LinAlgError: Singular matrix by replacing np.linalg.solve with np.linalg.pinv. What should you ask first?",
+    "options": ["Nothing: pinv is more general, so it's strictly better", "Why the matrix is singular: check the rank and κ, because a dependent feature or a missing boundary condition is usually the real problem", "Whether to switch to float32"],
+    "answer": 1,
+    "concepts": ["rank-subspaces", "low-rank-approximation"],
+    "transfer": true,
+    "explain": "A singular matrix is information: a redundant column, a dummy-variable trap, a thermal network with no fixed temperature. pinv returns an answer anyway and hides the cause."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-la-heldout",
+    "prompt": "An agent reports that 5 POD modes reconstruct your sensors with 0.02 °C RMS error. What's missing?",
+    "options": ["Nothing: 0.02 °C is excellent", "A held-out test: that error was measured on the snapshots used to find the modes; hide sensors on other days and measure again", "A plot of the five modes"],
+    "answer": 1,
+    "concepts": ["pca-pod"],
+    "explain": "Reconstruction error on training snapshots always falls as you add modes, even into the noise. Only held-out data, with sensors you hid yourself, tells you how well dead sensors will be estimated."
   }
 ]
