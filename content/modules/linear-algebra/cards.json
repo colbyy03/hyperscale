@@ -1,0 +1,211 @@
+[
+  {
+    "id": "dot-product-two-views",
+    "type": "equation",
+    "front": "Write the dot product $a \\cdot b$ two ways, and say what its sign tells you.",
+    "back": "$\\sum_i a_i b_i = \\|a\\|\\,\\|b\\|\\cos\\theta$. Positive: within 90°. Zero: orthogonal. Negative: more than 90° apart.",
+    "concepts": ["vector-geometry"],
+    "critical": true
+  },
+  {
+    "id": "norms-l1-l2-linf",
+    "type": "concept",
+    "front": "Which norm of an error vector gives RMSE, MAE and the worst single error?",
+    "back": "RMSE = $\\|r\\|_2/\\sqrt{n}$, MAE = $\\|r\\|_1/n$, worst error = $\\|r\\|_\\infty$ (the largest absolute entry).",
+    "concepts": ["vector-geometry"]
+  },
+  {
+    "id": "projection-formula",
+    "type": "equation",
+    "front": "Projection of $b$ onto the line through $a$, and the property of its residual.",
+    "back": "$p = \\dfrac{a \\cdot b}{a \\cdot a}\\,a$, and $r = b - p$ satisfies $a \\cdot r = 0$: the residual is perpendicular to the line.",
+    "concepts": ["vector-geometry"],
+    "critical": true
+  },
+  {
+    "id": "projection-multiplier",
+    "type": "gotcha",
+    "front": "Is the projection of $b$ onto $a$ equal to $(a \\cdot b / \\|a\\|)\\,a$?",
+    "back": "Only if $\\|a\\| = 1$. The multiplier is $(a \\cdot b)/\\|a\\|^2$; $(a \\cdot b)/\\|a\\|$ is the signed length of the projection.",
+    "concepts": ["vector-geometry"]
+  },
+  {
+    "id": "residual-orthogonal",
+    "type": "concept",
+    "front": "Why is the projection the closest point on the line?",
+    "back": "For any other point q on the line, $\\|b - q\\|^2 = \\|b - p\\|^2 + \\|p - q\\|^2$ (Pythagoras), because $b - p$ is perpendicular to the line.",
+    "concepts": ["vector-geometry"]
+  },
+  {
+    "id": "cosine-ignores-scale",
+    "type": "discrimination",
+    "front": "Cosine similarity vs Euclidean distance: which ignores size?",
+    "back": "Cosine: $\\cos\\theta = a \\cdot b / (\\|a\\|\\|b\\|)$ compares directions only, so $3a$ has cosine 1 with $a$. Distance $\\|a - b\\|$ mixes size and shape.",
+    "concepts": ["cosine-similarity"]
+  },
+  {
+    "id": "cosine-needs-centering",
+    "type": "gotcha",
+    "front": "Two daily load profiles share a 10 kW baseline but peak 12 hours apart. Raw cosine similarity?",
+    "back": "About 0.94: the baseline dominates both vectors. Center each profile first; the centered cosine is −1, and it equals the Pearson correlation.",
+    "concepts": ["cosine-similarity"],
+    "critical": true
+  },
+  {
+    "id": "cosine-zero-vector",
+    "type": "gotcha",
+    "front": "What is the cosine similarity between a flat (constant) profile and anything, after centering?",
+    "back": "Undefined: the centered vector is zero, which has no direction (0/0 = NaN). Exclude it explicitly.",
+    "concepts": ["cosine-similarity"]
+  },
+  {
+    "id": "high-dim-near-orthogonal",
+    "type": "concept",
+    "front": "Typical cosine between two random directions in $d$ dimensions?",
+    "back": "About 0, with standard deviation ≈ $1/\\sqrt{d}$ (0.036 for d = 768). Random high-dimensional directions are nearly orthogonal.",
+    "concepts": ["cosine-similarity"]
+  },
+  {
+    "id": "matvec-column-picture",
+    "type": "concept",
+    "front": "Two ways to read $Ax$.",
+    "back": "Column picture: $Ax = x_1 a_1 + \\dots + x_n a_n$, a combination of the columns (column j is where $e_j$ lands). Row picture: entry i is (row i) · x.",
+    "concepts": ["linear-maps"],
+    "critical": true
+  },
+  {
+    "id": "matmul-composition-order",
+    "type": "gotcha",
+    "front": "Apply A, then B. Which product is the combined map?",
+    "back": "$BA$: $B(Ax) = (BA)x$. The first map sits next to $x$. In general $AB \\neq BA$.",
+    "concepts": ["linear-maps"]
+  },
+  {
+    "id": "determinant-area",
+    "type": "concept",
+    "front": "What does $\\det A$ measure geometrically?",
+    "back": "The factor by which A scales areas (volumes), negative if it flips orientation. $\\det A = 0$: A squashes space onto a lower dimension.",
+    "concepts": ["linear-maps"]
+  },
+  {
+    "id": "rank-nullity",
+    "type": "equation",
+    "front": "State rank–nullity for an $m \\times n$ matrix.",
+    "back": "rank + dim(null space) = n, the number of columns.",
+    "concepts": ["rank-subspaces"],
+    "critical": true
+  },
+  {
+    "id": "null-space-meaning",
+    "type": "concept",
+    "front": "A design matrix X has a nonzero null-space vector v. What does that mean for the fitted coefficients?",
+    "back": "$Xv = 0$, so $w$ and $w + cv$ give identical predictions: the coefficients aren't unique (not identifiable), though the predictions are.",
+    "concepts": ["rank-subspaces"],
+    "critical": true
+  },
+  {
+    "id": "dummy-variable-trap",
+    "type": "gotcha",
+    "front": "Intercept plus one indicator per category: what goes wrong?",
+    "back": "The indicators sum to the intercept column, so X is rank deficient (null vector (1, −1, …, −1)). Drop one category or the intercept.",
+    "concepts": ["rank-subspaces"],
+    "critical": true
+  },
+  {
+    "id": "rank-needs-scaling",
+    "type": "gotcha",
+    "front": "Why scale columns before computing a numerical rank?",
+    "back": "Rank counts singular values above a tolerance relative to the largest. A column 10¹⁰ times smaller than another looks like rounding noise unless columns are scaled first.",
+    "concepts": ["rank-subspaces"]
+  },
+  {
+    "id": "solve-not-inverse",
+    "type": "gotcha",
+    "front": "`x = np.linalg.inv(A) @ b`: what should it be, and why?",
+    "back": "`np.linalg.solve(A, b)`: about a third of the work, and residuals that can be orders of magnitude smaller (10⁻¹⁶ vs 10⁻⁸ on an 8 × 8 Hilbert matrix).",
+    "concepts": ["conditioning", "linear-maps"],
+    "critical": true
+  },
+  {
+    "id": "condition-number-digits",
+    "type": "equation",
+    "front": "Condition number: definition and rule of thumb.",
+    "back": "$\\kappa(A) = \\sigma_{\\max}/\\sigma_{\\min}$ (largest stretch over smallest). Relative error in x ≤ κ × relative error in the data: you lose about $\\log_{10}\\kappa$ digits.",
+    "concepts": ["conditioning"],
+    "critical": true
+  },
+  {
+    "id": "small-det-not-ill-conditioned",
+    "type": "discrimination",
+    "front": "Does a tiny determinant mean a matrix is ill-conditioned?",
+    "back": "No. $0.1 I$ in 20 dimensions has $\\det = 10^{-20}$ but $\\kappa = 1$. Conditioning compares stretches; the determinant multiplies them.",
+    "concepts": ["conditioning"]
+  },
+  {
+    "id": "singular-floating-network",
+    "type": "bridge",
+    "front": "Why is the conductance matrix of a thermal network with no link to a fixed temperature singular?",
+    "back": "Adding the same constant to every temperature changes no heat flow, so (1, 1, …, 1) is in the null space, like a rigid-body mode of an unsupported structure's stiffness matrix.",
+    "concepts": ["rank-subspaces", "linear-maps"]
+  },
+  {
+    "id": "least-squares-geometry",
+    "type": "concept",
+    "front": "Least squares, geometrically.",
+    "back": "$X\\hat w$ is the orthogonal projection of y onto the column space of X; the residual $y - X\\hat w$ is perpendicular to every column.",
+    "concepts": ["least-squares"],
+    "critical": true
+  },
+  {
+    "id": "normal-equations",
+    "type": "derivation",
+    "front": "Derive the normal equations from orthogonality.",
+    "back": "$X^\\top(y - Xw) = 0 \\Rightarrow X^\\top X w = X^\\top y$, so $w = (X^\\top X)^{-1}X^\\top y$ on paper (never computed that way).",
+    "concepts": ["least-squares"],
+    "critical": true
+  },
+  {
+    "id": "hat-matrix-projection",
+    "type": "concept",
+    "front": "Two properties of the hat matrix $H = X(X^\\top X)^{-1}X^\\top$.",
+    "back": "It's a projection: $H^2 = H$. Its trace is p, the number of columns (parameters).",
+    "concepts": ["least-squares"]
+  },
+  {
+    "id": "residuals-sum-zero",
+    "type": "predict",
+    "front": "A least-squares fit with an intercept: what do the training residuals sum to?",
+    "back": "Zero (up to rounding): the residual is perpendicular to the column of ones.",
+    "concepts": ["least-squares"]
+  },
+  {
+    "id": "normal-equations-square-kappa",
+    "type": "gotcha",
+    "front": "What does forming $X^\\top X$ do to the condition number?",
+    "back": "Squares it: $\\kappa(X^\\top X) = \\kappa(X)^2$. With κ(X) = 2×10⁷, QR keeps about 9 digits and the normal equations about 2.",
+    "concepts": ["least-squares", "conditioning"],
+    "critical": true
+  },
+  {
+    "id": "qr-least-squares",
+    "type": "equation",
+    "front": "Least squares with $X = QR$.",
+    "back": "Solve $R w = Q^\\top y$ by back substitution. $\\kappa(R) = \\kappa(X)$, and the fitted values are $QQ^\\top y$.",
+    "concepts": ["qr-decomposition", "least-squares"],
+    "critical": true
+  },
+  {
+    "id": "classical-gram-schmidt",
+    "type": "gotcha",
+    "front": "Classical vs modified Gram–Schmidt in floating point.",
+    "back": "Same in exact arithmetic. Classical projects against the original columns and can lose orthogonality completely (‖QᵀQ − I‖ ≈ 2 at κ ≈ 10⁸); modified subtracts from the updated columns (a few × 10⁻⁹). Libraries use Householder.",
+    "concepts": ["qr-decomposition"]
+  },
+  {
+    "id": "lstsq-rank-deficient",
+    "type": "concept",
+    "front": "What does `np.linalg.lstsq` return when X is rank deficient?",
+    "back": "The minimum-norm solution among all least-squares solutions (it uses the SVD), along with the numerical rank and the singular values.",
+    "concepts": ["least-squares", "rank-subspaces"]
+  }
+]

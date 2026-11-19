@@ -1,0 +1,22 @@
+{
+  "id": "linear-algebra/lstsq-qr",
+  "type": "code",
+  "language": "python",
+  "title": "Least squares through QR",
+  "prompt": "Fit least squares the stable way.\n\n1. Write `back_substitute(R, b)`, which solves `R x = b` for an upper-triangular `R` with a nonzero diagonal. Start from the last row, which has one unknown, and work upwards. A loop over the rows is fine.\n2. Write `lstsq_qr(X, y)`, which returns the `w` minimizing ‖Xw − y‖, using `np.linalg.qr` and your `back_substitute`.\n\nDon't use `np.linalg.solve`, `lstsq`, `inv` or `pinv`, and never form `X.T @ X`.",
+  "concepts": ["least-squares", "qr-decomposition", "conditioning"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "With X = QR, the fit Xw = Q(Rw) lives in the column space of Q. What does multiplying by Qᵀ do to the length of a vector in that space?",
+    "Q has orthonormal columns, so minimizing ‖QRw − y‖ comes down to making Rw equal Qᵀy: an upper-triangular system. Row k of R x = b reads R[k, k]·x[k] + R[k, k+1:] @ x[k+1:] = b[k], and x[k+1:] is already known when you go from the bottom up.",
+    "back_substitute: x = np.zeros(n); for k in range(n - 1, -1, -1): x[k] = (b[k] - R[k, k+1:] @ x[k+1:]) / R[k, k]. lstsq_qr: Q, R = np.linalg.qr(X); return back_substitute(R, Q.T @ y)."
+  ],
+  "misconceptions": {
+    "normal-equations-square-kappa": "Forming XᵀX squares the condition number, so the normal equations lose twice as many digits as QR. A fit with κ(X) = 10⁷ keeps about 9 digits through QR and 2 or 3 through XᵀX."
+  },
+  "sources": ["trefethen1997-nla", "boyd2018-vmls"]
+}

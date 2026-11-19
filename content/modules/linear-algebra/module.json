@@ -1,0 +1,21 @@
+{
+  "id": "linear-algebra",
+  "title": "Linear algebra for ML",
+  "summary": "Vectors and matrices as the working language of ML: geometry and projections, matrices as maps, least squares solved stably, eigenvalues as dynamics, the SVD and low-rank structure, PCA and POD of a temperature field, and the matrix calculus that Module 3 builds on.",
+  "objectives": [
+    "Read vectors and matrices geometrically: dot products, projections, matrices as maps of space, rank, column and null spaces",
+    "Solve linear systems and least-squares problems stably (solve and QR, never an explicit inverse) and predict the accuracy you'll get from the condition number",
+    "Use eigendecomposition to analyse linear dynamics, thermal time constants and quadratic forms",
+    "Compute and interpret the SVD: low-rank approximation, numerical rank and the pseudoinverse",
+    "Apply PCA and POD to a sensor field: center it, choose the number of modes from the energy captured, and reconstruct missing readings",
+    "Derive gradients of linear and quadratic forms and verify them with finite differences"
+  ],
+  "concepts": ["vector-geometry", "cosine-similarity", "linear-maps", "rank-subspaces", "conditioning", "least-squares", "qr-decomposition", "eigendecomposition", "quadratic-forms", "svd", "low-rank-approximation", "pca-pod", "matrix-calculus"],
+  "facilityUnlock": "sensor-network",
+  "incidents": ["dead-inlet-sensors"],
+  "sources": ["strang2019-lalfd", "trefethen1997-nla", "boyd2018-vmls", "deisenroth2020-mml", "strang-mit1806-2010"],
+  "build": {
+    "title": "Sensor field reconstruction",
+    "summary": "POD of the data hall's rack-inlet temperature field, used to reconstruct three failed sensors from the rest, with a held-out evaluation and an honest error budget."
+  }
+}

@@ -25,7 +25,7 @@ test("math and explainers render in the data hall lesson", async ({ page }) => {
 });
 
 test("deep links, sources and settings load", async ({ page }) => {
-  await page.goto("/learn/linear-algebra");
+  await page.goto("/learn/calculus-optimization");
   await expect(page.getByText("This module hasn't been authored yet")).toBeVisible();
   await page.goto("/sources");
   await expect(page.getByText(/verified against Crossref/)).toBeVisible();
@@ -35,9 +35,15 @@ test("deep links, sources and settings load", async ({ page }) => {
 
 // Compare against clientWidth: on phones Chrome widens innerWidth to fit overflowing content.
 test("no horizontal overflow on any screen", async ({ page }) => {
-  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
+  // Look ahead into locked modules so their lessons (and explainers) are measured, not the lock screen.
+  await page.addInitScript(() => {
+    for (const m of ["python-mle", "linear-algebra"]) sessionStorage.setItem(`hs-peek:${m}`, "1");
+  });
+  const explainer: Record<string, string> = { "/learn/linear-algebra/vectors": "viz-projection", "/learn/linear-algebra/linear-maps": "viz-matrixmap" };
+  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", "/learn/linear-algebra/vectors", "/learn/linear-algebra/linear-maps", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
     await page.goto(path);
     await page.locator("main h1").first().waitFor();
+    if (explainer[path]) await page.getByTestId(explainer[path]).waitFor();
     await page.waitForTimeout(150);
     const overflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - document.documentElement.clientWidth);
     expect(overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(1);

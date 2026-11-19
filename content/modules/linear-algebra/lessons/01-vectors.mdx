@@ -1,0 +1,111 @@
+---
+id: linear-algebra/vectors
+title: Vectors, dot products and projections
+minutes: 35
+concepts: [vector-geometry, cosine-similarity]
+sources: [boyd2018-vmls, strang2019-lalfd, sanderson-3b1b-linear-algebra, deisenroth2020-mml, reimers2019-sbert]
+cards: [dot-product-two-views, norms-l1-l2-linf, projection-formula, projection-multiplier, residual-orthogonal, cosine-ignores-scale, cosine-needs-centering, cosine-zero-vector, high-dim-near-orthogonal]
+---
+
+<Situation from="Noor, energy analyst">
+Last Tuesday a breaker tripped on rack C-14 during the afternoon peak. Before next week's heat wave I want a list of the racks whose daily power profile looks like C-14's, so we can check their breakers first. I computed the Euclidean distance from C-14's profile to every other rack's, and the "closest" ones are small racks with flat profiles. That can't be right.
+</Situation>
+
+<Predict
+  id="raw-cosine-opposite"
+  question="Rack A averages 10 kW and peaks at 3 pm. Rack B has the same average and swing but peaks at 3 am, exactly out of phase. What is the cosine similarity of their 24-hour profiles?"
+  options={["About −1: they're opposites", "About 0: they're unrelated", "About 0.94: they point in nearly the same direction"]}
+  answer={2}
+  explain="Both vectors are dominated by the shared 10 kW baseline, so in 24-dimensional space they point almost the same way: the cosine is 0.94. Subtract each profile's own mean first and it becomes exactly −1. That centered cosine is the Pearson correlation, and it's what Noor's search needs."
+/>
+
+## A vector is a list of numbers, and an arrow
+
+Almost everything in ML is a vector. Rack C-14's day is 24 hourly power readings, a vector in $\mathbb{R}^{24}$. One row of a feature table (inlet temperature, IT load, fan speed) is a vector in $\mathbb{R}^3$. A sentence embedding from a language model is a vector in $\mathbb{R}^{768}$.
+
+You can do two things with vectors: add them, and scale them by a number. Combining the two gives a **linear combination**, $c_1 v_1 + c_2 v_2 + \dots + c_k v_k$, and nearly every idea in this module is built from linear combinations.
+
+The useful trick is to picture a vector as an arrow from the origin, even in 24 or 768 dimensions. Lengths, angles, distances and "closest points" all keep their everyday meaning, so you can reason about high-dimensional data with the geometry you already have.
+
+## The dot product, two ways
+
+$$
+a \cdot b = \sum_i a_i b_i = \|a\|\,\|b\|\cos\theta
+$$
+
+The left-hand form is algebra: multiply matching entries and add. The right-hand form is geometry: the lengths times the cosine of the angle between the arrows. They're the same number, so the sign of a dot product tells you about the angle:
+
+- **positive**: the vectors point within 90° of each other;
+- **zero**: they're perpendicular, or **orthogonal**;
+- **negative**: they point more than 90° apart.
+
+Dot products are everywhere. A linear model's prediction $w \cdot x$ is one. Every entry of a matrix product is one. A transformer's attention score is the dot product of a query vector and a key vector.
+
+## Norms: how big is a vector?
+
+The length of a vector is its **norm**. Three are in daily use:
+
+$$
+\|x\|_2 = \sqrt{\textstyle\sum_i x_i^2}, \qquad \|x\|_1 = \textstyle\sum_i |x_i|, \qquad \|x\|_\infty = \max_i |x_i|
+$$
+
+Each answers a different question about a vector of prediction errors $r$. RMSE is $\|r\|_2/\sqrt{n}$, MAE is $\|r\|_1/n$, and $\|r\|_\infty$ is the worst single error, which is the one that trips an alarm on the hottest rack. For errors of (0.5, −0.2, 3.0, 0.1, −0.4) °C, the three norms are 3.08, 4.2 and 3.0: the one large error dominates the 2-norm and the ∞-norm, while the 1-norm weighs every error by its size. The distance between two vectors is the norm of their difference, $\|a - b\|$.
+
+## Projection: the closest point on a line
+
+Here is the most useful construction in this module. Given a vector $b$ and a direction $a$, which multiple $t\,a$ is closest to $b$?
+
+The leftover piece $r = b - t\,a$ is shortest when it meets the line at a right angle, so $a \cdot (b - t\,a) = 0$. Solving for $t$:
+
+$$
+p = \frac{a \cdot b}{a \cdot a}\, a, \qquad r = b - p, \qquad a \cdot r = 0
+$$
+
+If $a$ has length 1, the multiplier is just $a \cdot b$. Otherwise you divide by $a \cdot a = \|a\|^2$, not by $\|a\|$: dividing by $\|a\|$ gives the signed *length* of $p$, a different quantity.
+
+<Viz name="ProjectionViz" />
+
+Keep this picture in mind for the rest of the module. Project onto a subspace instead of a line and you get least squares (Lesson 3). Ask which subspace captures the most of a whole cloud of vectors and you get PCA (Lesson 6).
+
+<CodeExercise id="linear-algebra/project-onto" />
+
+<Bridge>
+You've done projections since first-year statics. A block on an incline: resolve its weight into the component along the slope and the component normal to it. The work done by a force $F$ over a displacement $d$ is $F \cdot d$, because only the component of the force along the motion does work. The projection formula is that same decomposition, written for vectors of any length.
+</Bridge>
+
+## Cosine similarity: direction without size
+
+Divide the dot product by both lengths and you're left with the angle alone:
+
+$$
+\cos\theta = \frac{a \cdot b}{\|a\|\,\|b\|} \in [-1, 1]
+$$
+
+Cosine similarity ignores size. A rack twice as big as C-14 with exactly the same shape scores 1. Euclidean distance mixes size and shape together, which is what went wrong in Noor's search: with C-14 averaging 10 kW, a rack drawing exactly twice its power at every hour is 49.7 kW away, while a same-size rack with the *opposite* daily shape is only 17.3 kW away.
+
+Raw cosine has its own trap, as the prediction above showed. When every vector sits on a large positive baseline, the baseline dominates, and every pair looks similar. So subtract each vector's own mean first. The cosine of centered vectors is exactly the Pearson correlation coefficient, which measures shape alone.
+
+One more case needs care: a perfectly flat profile centers to the zero vector, which has no direction. Its cosine with anything is 0/0, so exclude it explicitly rather than letting a NaN slip into a ranking.
+
+<CodeExercise id="linear-algebra/cosine-top-k" />
+
+## A preview: embeddings
+
+Models can turn text, images and windows of sensor data into vectors called **embeddings**, trained so that related inputs point in similar directions. Sentence-BERT, for example, is trained so that sentences with similar meanings have embeddings with high cosine similarity. Searching maintenance logs for "similar past incidents" then becomes Noor's rack search with 768-dimensional vectors (you'll build exactly that in Module 20).
+
+Two facts make this practical:
+
+- **Normalize once.** Store every embedding at unit length. Then cosine similarity is a plain dot product, and one matrix–vector product scores a query against a million stored vectors.
+- **High dimensions are roomy.** Two random directions in $\mathbb{R}^{768}$ are nearly perpendicular: their cosine has a standard deviation of about $1/\sqrt{768} \approx 0.036$. A cosine of 0.3 between embeddings is therefore strong evidence that they're related, while in three dimensions it would mean little.
+
+<Craft title="Vector habits worth keeping">
+- Decide whether size matters before choosing a similarity. For energy totals it does: use distances, or compare totals separately. For shape it doesn't: center, then normalize.
+- Compute row norms with `np.linalg.norm(X, axis=1, keepdims=True)`, so they broadcast back against the rows.
+- Guard against zero vectors before dividing by a norm.
+- Clip cosines to [−1, 1] before calling `np.arccos`. Rounding can produce 1.0000000000000002, and `arccos` of that is NaN.
+- Store large embedding tables normalized and in `float32`: half the memory, and plenty of precision for ranking.
+</Craft>
+
+<Check items={["vec-dot-sign", "vec-proj-value", "vec-proj-multiplier", "vec-norms", "vec-cos-scale", "vec-centered-cos", "vec-highdim"]} />
+
+Next: matrices as maps of space.

@@ -216,6 +216,7 @@ export function buildContentIndex(root: string): BuildResult {
           if (!e.data.packages.includes("duckdb")) errors.push(`${erel}: SQL exercises must list "duckdb" in packages`);
         }
       }
+      if (e.data.type === "derivation" && !e.data.derivation) errors.push(`${erel}: a derivation exercise needs a "derivation" block with variables and steps`);
       if (e.data.type === "parsons") {
         if (!e.data.parsons) errors.push(`${erel}: a Parsons exercise needs a "parsons" block with its lines`);
         else {

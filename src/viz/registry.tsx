@@ -8,4 +8,6 @@ export const vizRegistry: Record<string, LazyExoticComponent<ComponentType<AnyPr
   HeatPath: lazy(() => import("./HeatPath")),
   ControlRoom: lazy(() => import("./ControlRoom")),
   StrideExplorer: lazy(() => import("./StrideExplorer")),
+  MatrixMap: lazy(() => import("./MatrixMap")),
+  ProjectionViz: lazy(() => import("./ProjectionViz")),
 };

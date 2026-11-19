@@ -15,6 +15,7 @@ import { python, usePythonStatus } from "@/runtime/python";
 import { CodeEditor } from "./CodeEditor";
 import { loadExerciseFile, supportFileNames } from "./files";
 import { OutputPanel, type Output } from "./OutputPanel";
+import { DerivationExercise } from "./DerivationExercise";
 import { ParsonsExercise } from "./ParsonsExercise";
 
 function draftKey(id: string) {
@@ -51,6 +52,7 @@ type ExerciseProps = { id: string; mode?: ExerciseMode; onResult?: (r: { allPass
 export function CodeExercise(props: ExerciseProps) {
   const ex = content.exercises.find((e) => e.id === props.id);
   if (ex?.type === "parsons") return <ParsonsExercise ex={ex} mode={props.mode ?? "lesson"} onResult={props.onResult} />;
+  if (ex?.type === "derivation") return <DerivationExercise ex={ex} mode={props.mode ?? "lesson"} onResult={props.onResult} />;
   return <EditorExercise {...props} />;
 }
 

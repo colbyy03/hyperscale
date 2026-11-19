@@ -1,0 +1,101 @@
+---
+id: linear-algebra/least-squares
+title: Least squares as projection
+minutes: 40
+concepts: [least-squares, qr-decomposition, conditioning]
+sources: [trefethen1997-nla, strang2019-lalfd, boyd2018-vmls, strang-mit1806-2010]
+cards: [least-squares-geometry, normal-equations, hat-matrix-projection, residuals-sum-zero, normal-equations-square-kappa, qr-least-squares, classical-gram-schmidt, lstsq-rank-deficient]
+---
+
+<Situation from="Noor, energy analyst">
+I'm fitting a chiller power curve: power against part-load ratio and condenser lift, with powers of the lift up to the fourth. Our old spreadsheet macro solves "XᵀX w = Xᵀy". My Python version calls `np.linalg.lstsq`. The fitted curves agree to three digits, but the coefficients don't agree at all, and the spreadsheet's change when I add a single week of data. Which one should I believe?
+</Situation>
+
+<Predict
+  id="normal-equations-digits"
+  question="A degree-10 polynomial fit on [0, 1] with exact data (every true coefficient is 1). Roughly how many correct digits do the normal equations recover, compared with a QR-based solver?"
+  options={["Both about 15", "Normal equations about 9, QR about 15", "Normal equations about 2, QR about 9"]}
+  answer={2}
+  explain="Here κ(X) ≈ 2 × 10⁷, so a good solver loses about 7 of float64's 16 digits and keeps about 9. The normal equations work with XᵀX, whose condition number is κ(X)² ≈ 4 × 10¹⁴, so they lose about 14. Measured in this course's Python: errors of about 5 × 10⁻³ through the normal equations and 10⁻⁹ through QR."
+/>
+
+## The problem, and its picture
+
+With more observations than coefficients, $Xw = y$ has no exact solution: $n$ equations, $p$ unknowns, $n > p$. Least squares picks the $w$ that makes the total squared residual as small as possible:
+
+$$
+\hat w = \arg\min_w \|y - Xw\|^2
+$$
+
+Now use Lesson 1's picture. As $w$ varies, $Xw$ sweeps out the column space of $X$, a flat $p$-dimensional subspace inside $\mathbb{R}^n$. The point of that subspace closest to $y$ is its **orthogonal projection** $\hat y$, and the residual $y - \hat y$ sticks straight out of the subspace: it's perpendicular to every column of $X$. That single fact gives you the whole theory.
+
+<CodeExercise id="linear-algebra/normal-equations" />
+
+## What the projection gives you for free
+
+The orthogonality condition $X^\top(y - X\hat w) = 0$ has consequences you'll use for the rest of the course:
+
+- **Residuals sum to zero when there's an intercept.** The column of ones is one of the columns, and its dot product with the residual is $\sum_i r_i$.
+- **Residuals are uncorrelated with every feature** in the training data. A pattern left in a residual plot against a feature means a term is missing, such as a curve or an interaction, not that the fit failed to use the feature.
+- **The hat matrix is a projection.** $H = X(X^\top X)^{-1}X^\top$ maps $y$ to $\hat y$. Projecting twice changes nothing, so $H^2 = H$, and its trace is $p$, the number of parameters. That trace is where "a model with $p$ parameters uses $p$ degrees of freedom" comes from. Its diagonal entries, the **leverages**, return in Module 7.
+- **Pythagoras splits the variation.** Because $\hat y$ and the residual are perpendicular, $\|y\|^2 = \|\hat y\|^2 + \|y - \hat y\|^2$. With centered $y$, that's the decomposition behind $R^2$.
+
+## Why you never invert XᵀX
+
+The normal equations $X^\top X w = X^\top y$ are correct, and solving them is often fine. The trouble is accuracy: **$\kappa(X^\top X) = \kappa(X)^2$**. Forming $X^\top X$ doubles the number of digits you can lose.
+
+Noor's features show why this bites in practice. A cubic in condenser lift, with the lift between 15 and 35 K, has κ(X) ≈ 2 × 10⁶, so κ(XᵀX) ≈ 4 × 10¹²: the normal equations can lose 12 of the 16 digits before any noise enters. The table shows the effect on polynomial fits with exact data and every true coefficient equal to 1:
+
+| Degree | κ(X) | Normal equations error | QR error |
+|---|---|---|---|
+| 6 | 2 × 10⁴ | about 10⁻⁸ | about 10⁻¹² |
+| 10 | 2 × 10⁷ | about 5 × 10⁻³ | about 10⁻⁹ |
+| 14 | 2 × 10¹⁰ | over 100%: garbage | about 10⁻⁶ |
+
+So Noor's answer has two parts. Believe `lstsq`, which never forms XᵀX. And neither set of coefficients means much while the features are raw powers of a number near 25: standardize the lift before building its powers, and the coefficients become stable as well as the curve.
+
+The normal equations do have a legitimate niche: when κ(X) is small and the data arrive in chunks, you can accumulate $X^\top X$ and $X^\top y$ one batch at a time and solve a small $p \times p$ system at the end.
+
+## QR: least squares without squaring
+
+Any $X$ with independent columns factors as $X = QR$, where $Q$ ($n \times p$) has orthonormal columns spanning the same space as $X$, and $R$ ($p \times p$) is upper triangular. Substitute into the least-squares problem: multiplying by $Q^\top$ preserves lengths within the column space, so the best $w$ satisfies
+
+$$
+R\,w = Q^\top y
+$$
+
+an upper-triangular system that **back substitution** solves from the last row up. Since $\kappa(R) = \kappa(X)$, nothing is squared. The projection itself becomes $\hat y = QQ^\top y$.
+
+Where does $Q$ come from? **Gram–Schmidt** is Lesson 1's projection, repeated: take the columns of $X$ one at a time, subtract their projections onto the directions you already have, and normalize what's left. *How* you subtract matters in floating point. On polynomial features $1, t, \dots, t^{11}$ (κ ≈ 10⁸):
+
+- **classical** Gram–Schmidt, which projects each column against the original columns, ends with ‖QᵀQ − I‖ ≈ 2: orthogonality is gone entirely;
+- **modified** Gram–Schmidt, which subtracts each new direction from the remaining, already-updated columns, reaches a few times 10⁻⁹;
+- **Householder** reflections, which LAPACK and `np.linalg.qr` use, reach about 10⁻¹⁵.
+
+<CodeExercise id="linear-algebra/gram-schmidt" />
+
+<CodeExercise id="linear-algebra/lstsq-qr" />
+
+## The library versions
+
+- `np.linalg.lstsq(X, y, rcond=None)` uses the SVD (Lesson 5). It handles rank-deficient $X$ by returning the minimum-norm solution, and it returns the numerical rank and singular values too: check the rank.
+- `scipy.linalg.lstsq` offers other LAPACK drivers, including a faster QR-based one (`lapack_driver="gelsy"`).
+- scikit-learn's `LinearRegression` calls `scipy.linalg.lstsq`; statsmodels' `OLS` uses the pseudoinverse by default and offers `method="qr"`.
+
+None of them forms XᵀX.
+
+<Bridge>
+Experimental mechanics is full of least squares. A strain-gauge rosette with more gauges than unknown strain components gives an overdetermined system; least squares finds the strain state that best fits every gauge, and a large residual on one gauge flags it as faulty. Surveyors adjust redundant angle measurements the same way. The orthogonality condition says the leftover errors carry no trace of the quantities you solved for.
+</Bridge>
+
+<Craft title="Least-squares habits worth keeping">
+- Center and scale features before building polynomial or interaction terms.
+- Fit with `lstsq` (or a library that wraps it), check the returned rank, and look at κ before interpreting coefficients.
+- Plot residuals against the fitted values and against each feature. Structure means a missing term.
+- Judge a model by predictions on held-out data, not by how plausible its coefficients look.
+- If you must stream, accumulate XᵀX and Xᵀy only when the features are well conditioned.
+</Craft>
+
+<Check items={["ls-orthogonal", "ls-residual-mean", "ls-trace-hat", "ls-kappa-squared", "ls-qr-step", "ls-gs-classical", "ls-noor"]} />
+
+Next: eigenvalues, and what they say about systems that evolve in time.

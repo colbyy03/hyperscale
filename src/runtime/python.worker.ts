@@ -9,6 +9,7 @@ import hsChecks from "../../python/hsgrade/hsgrade/checks.py?raw";
 import hsPlugin from "../../python/hsgrade/hsgrade/plugin.py?raw";
 import hsRunner from "../../python/hsgrade/hsgrade/runner.py?raw";
 import hsSql from "../../python/hsgrade/hsgrade/sql.py?raw";
+import hsDerive from "../../python/hsgrade/hsgrade/derive.py?raw";
 import { PYODIDE_URL, type GradeResult, type RunResult, type WorkerRequest, type WorkerResponse } from "./protocol";
 
 // The data-hall simulator package (pure Python, no NumPy).
@@ -50,6 +51,7 @@ async function init(mode: "grader" | "sim"): Promise<void> {
   py.FS.writeFile("/hs/lib/hsgrade/plugin.py", hsPlugin);
   py.FS.writeFile("/hs/lib/hsgrade/runner.py", hsRunner);
   py.FS.writeFile("/hs/lib/hsgrade/sql.py", hsSql);
+  py.FS.writeFile("/hs/lib/hsgrade/derive.py", hsDerive);
   // Pre-import so the first grade is fast.
   py.runPython("import sys\nsys.path.insert(0, '/hs/lib')\nimport numpy, pytest, hsgrade");
   pyodide = py;

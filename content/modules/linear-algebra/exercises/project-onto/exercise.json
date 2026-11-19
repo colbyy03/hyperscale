@@ -1,0 +1,22 @@
+{
+  "id": "linear-algebra/project-onto",
+  "type": "code",
+  "language": "python",
+  "title": "Project onto a line",
+  "prompt": "Write `project(B, a)`, which projects vectors onto the line through the vector `a`. Return `(P, R)`: the projections and the residuals `R = B - P`.\n\n`B` is either one vector of shape (d,) or a matrix of shape (n, d) with one vector per row; `P` and `R` have the same shape as `B`. Raise `ValueError` if `a` is the zero vector. No Python loops.",
+  "concepts": ["vector-geometry"],
+  "difficulty": 0.3,
+  "minutes": 8,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": [], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "The projection of b is the multiple t·a that gets closest to b. What has to be true of the leftover piece, b − t·a, at the closest point?",
+    "At the closest point the residual is perpendicular to a: a · (b − t a) = 0, so t = (a · b) / (a · a). Dividing by ‖a‖ instead gives the length of the projection, not the multiplier. For many rows at once, `B @ a` computes every a · b in one product.",
+    "t = (B @ a) / (a @ a) has shape () or (n,). Then `P = np.asarray(t)[..., None] * a` scales one copy of a per row, and `R = B - P`."
+  ],
+  "misconceptions": {
+    "projection-multiplier": "The multiplier is (a · b) / (a · a). Dividing by ‖a‖ gives the scalar projection, the length of p, which equals the multiplier only when ‖a‖ = 1."
+  },
+  "sources": ["boyd2018-vmls", "strang2019-lalfd"]
+}

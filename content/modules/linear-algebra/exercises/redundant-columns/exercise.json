@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/redundant-columns",
+  "type": "code",
+  "language": "python",
+  "title": "Columns that add nothing",
+  "prompt": "Before fitting a model, find the feature columns that add no information: those that are linear combinations of the columns before them. Fitting with one of them in the matrix makes the coefficients non-unique.\n\nWrite `redundant_columns(X, names, rtol=1e-8)`. `X` has shape (n, p) and `names` holds its p column names. Walk through the columns from left to right, and return the names of the columns that don't increase the rank of the columns kept so far. An all-zero column is redundant.\n\nColumns come in wildly different units (an energy counter in watt-hours next to a valve fraction), so scale every column to unit length before testing. Use `np.linalg.matrix_rank` with its `rtol=` argument, which sets the tolerance relative to the largest singular value.",
+  "concepts": ["rank-subspaces", "linear-maps"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["sklearn", "statsmodels"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "Keep a list of the columns that have earned their place. A new column earns it only if adding it makes the kept set's rank go up by one.",
+    "Rank in floating point needs a tolerance: singular values below rtol × (largest singular value) count as zero. That comparison is unfair when one column is 10¹⁰ times bigger than another, so divide each column by its norm first. Check for zero-norm columns before dividing.",
+    "norms = np.linalg.norm(X, axis=0). Loop j over the columns: skip (as redundant) if norms[j] == 0; otherwise cand = kept + [j]; Z = X[:, cand] / norms[cand]; keep j if np.linalg.matrix_rank(Z, rtol=rtol) == len(cand), else it's redundant."
+  ],
+  "misconceptions": {
+    "dummy-variable-trap": "An intercept plus one indicator column per category is rank deficient: the indicators always sum to the intercept column. Drop one category, or drop the intercept.",
+    "rank-needs-scaling": "Numerical rank compares singular values with a tolerance relative to the largest one. Columns on scales 10¹⁰ apart make the small one look like rounding noise; scale columns first."
+  },
+  "sources": ["strang2019-lalfd", "boyd2018-vmls", "numpy-docs-2-5"]
+}

@@ -65,7 +65,7 @@ async function main() {
     process.exit(1);
   }
   const graded = (e: (typeof index.exercises)[number]) =>
-    (e.language === "python" && ["code", "fill-in", "debug"].includes(e.type)) || e.type === "sql" || (e.type === "parsons" && e.files.includes("tests.py"));
+    (e.language === "python" && ["code", "fill-in", "debug"].includes(e.type)) || e.type === "sql" || e.type === "derivation" || (e.type === "parsons" && e.files.includes("tests.py"));
   const exercises = index.exercises.filter((e) => graded(e) && (!filter || e.id.includes(filter)));
   if (!exercises.length) {
     console.log("no graded exercises to verify");
@@ -80,9 +80,36 @@ async function main() {
     const dir = path.join(root, ex.dir.replace(/^\//, ""));
     if (ex.packages.length) await py.loadPackage(ex.packages, { messageCallback: () => {} });
     const read = (f: string) => fs.readFileSync(path.join(dir, f), "utf8");
-    const tests = read("tests.py");
+    const tests = ex.files.includes("tests.py") ? read("tests.py") : "";
     const extra = Object.fromEntries(supportFiles(ex.files).map((f) => [f, read(f)]));
     const lines: string[] = [];
+
+    if (ex.type === "derivation") {
+      // Every reference answer passes; every known-wrong answer fails.
+      const d = ex.derivation!;
+      py.globals.set("_v", JSON.stringify(d.variables));
+      py.globals.set("_s", JSON.stringify(d.steps.map((st) => ({ answer: st.answer }))));
+      const run = (responses: string[]) => {
+        py.globals.set("_r", JSON.stringify(responses));
+        return JSON.parse(py.runPython("import json\nfrom hsgrade.derive import check\njson.dumps(check(json.loads(_v), json.loads(_s), json.loads(_r)))") as string) as Array<{ ok: boolean; message: string }>;
+      };
+      const ref = run(d.steps.map((st) => st.answer));
+      ref.forEach((r, i) => {
+        if (!r.ok) problems.push(`${ex.id}: step ${i + 1}'s reference answer fails its own check: ${r.message}`);
+      });
+      let wrongs = 0;
+      d.steps.forEach((st, i) => {
+        for (const w of st.wrong) {
+          wrongs += 1;
+          const responses = d.steps.map((x) => x.answer);
+          responses[i] = w;
+          if (run(responses)[i]!.ok) problems.push(`${ex.id}: step ${i + 1} accepts the known-wrong answer "${w}"`);
+        }
+      });
+      lines.push(`steps ${ref.filter((r) => r.ok).length}/${ref.length}`, `${wrongs} wrong answers ✗`);
+      console.log(`  ${problems.some((p) => p.startsWith(ex.id)) ? "✗" : "✓"} ${ex.id}: ${lines.join(", ")}`);
+      continue;
+    }
 
     if (ex.type === "parsons") {
       const ordered = ex.parsons!.lines.join("\n") + "\n";

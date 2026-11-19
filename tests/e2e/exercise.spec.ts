@@ -40,3 +40,19 @@ test("a Parsons problem is assembled by tapping and graded by real tests", async
   await ex.getByRole("button", { name: "Check" }).click();
   await expect(ex.getByRole("status")).toHaveText(/All tests pass/, { timeout: 90_000 });
 });
+
+test("a derivation is graded step by step, accepting equivalent forms and naming slips", async ({ page }) => {
+  await page.goto("/learn/linear-algebra/least-squares");
+  await page.getByRole("button", { name: "Open anyway" }).click();
+  const ex = page.getByTestId("exercise-normal-equations");
+  await ex.getByRole("textbox", { name: "Step 1" }).fill("y - X @ w");
+  await ex.getByRole("textbox", { name: "Step 2" }).fill("X.T @ y - X.T @ X @ w"); // equivalent to Xᵀ(y − Xw)
+  await ex.getByRole("textbox", { name: "Step 3" }).fill("X.T @ y");
+  await ex.getByRole("textbox", { name: "Step 5" }).fill("X @ inv(X.T @ X) @ X.T - eye(8)");
+  await ex.getByRole("button", { name: "Check steps" }).click();
+  await expect(ex.getByTestId("step-1").getByText("Correct.")).toBeVisible({ timeout: 90_000 });
+  await expect(ex.getByTestId("step-2").getByText("Correct.")).toBeVisible();
+  await expect(ex.getByTestId("step-3").getByText(/Not equal to the expected expression/)).toBeVisible();
+  await expect(ex.getByTestId("step-4").getByText("No answer yet.")).toBeVisible();
+  await expect(ex.getByTestId("step-5").getByText(/exactly the negative/)).toBeVisible();
+});

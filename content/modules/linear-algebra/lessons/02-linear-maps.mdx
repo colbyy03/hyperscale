@@ -1,0 +1,105 @@
+---
+id: linear-algebra/linear-maps
+title: Matrices as maps of space
+minutes: 40
+concepts: [linear-maps, rank-subspaces, conditioning]
+sources: [strang2019-lalfd, sanderson-3b1b-linear-algebra, trefethen1997-nla, boyd2018-vmls, numpy-docs-2-5]
+cards: [matvec-column-picture, matmul-composition-order, determinant-area, rank-nullity, null-space-meaning, dummy-variable-trap, rank-needs-scaling, singular-floating-network, solve-not-inverse, condition-number-digits, small-det-not-ill-conditioned]
+---
+
+<Situation from="Dev, controls engineer">
+I'm modelling server fan power from the two inlet sensors in each rack, plus an intercept and an indicator for each season. Two things worry me. The library warns that "the design matrix may be singular". And the two inlet coefficients flip around every week: +1.80 and +1.21 one week, +1.29 and +1.75 another. The predictions are fine every time. Is the model broken, or is my data?
+</Situation>
+
+<Predict
+  id="collinear-coefficients"
+  question="Dev's two inlet sensors read the same air to within 0.05 °C. Refit every week: what do you expect their two coefficients to do?"
+  options={["Stay put: thousands of rows pin them down", "Both shrink towards zero", "Swing around, while their sum stays nearly constant"]}
+  answer={2}
+  explain="The data pin down the sum (how fan power responds to inlet temperature) but barely constrain the difference, because the sensors almost always agree: moving weight from one to the other changes almost no prediction. In a simulation of Dev's setup, the pair moved from (1.80, 1.21) to (1.29, 1.75) between datasets while the sum stayed within about 1% of the true 3.0."
+/>
+
+## A matrix is a function
+
+A matrix $A$ with $m$ rows and $n$ columns is a function that takes a vector $x \in \mathbb{R}^n$ and returns $y = Ax \in \mathbb{R}^m$. It's **linear**: $A(\alpha x + \beta z) = \alpha Ax + \beta Az$. Conversely, every linear function between such spaces is a matrix, so "linear map" and "matrix" are the same idea.
+
+There are two ways to read $Ax$, and you'll want both:
+
+- **The column picture.** $Ax = x_1 a_1 + x_2 a_2 + \dots + x_n a_n$, a linear combination of the columns $a_j$. Column $j$ is exactly where the basis vector $e_j$ lands.
+- **The row picture.** Entry $i$ of $Ax$ is the dot product of row $i$ with $x$. A linear model's predictions $Xw$ are one dot product per sample.
+
+Drag the entries below and watch what the matrix does to the whole plane: grid lines stay straight and evenly spaced (that's linearity), the green and orange arrows are the columns, and the unit circle becomes an ellipse.
+
+<Viz name="MatrixMap" />
+
+Doing one map after another is a matrix product: first $A$, then $B$, is $B(Ax) = (BA)x$. The first map sits next to $x$. Shapes have to chain, $(m \times n)(n \times p)$, and order matters: rotating and then shearing isn't the same as shearing and then rotating.
+
+For a square matrix, the **determinant** is the factor by which it scales areas (volumes in higher dimensions), with a negative sign if it flips orientation. A determinant of zero means the map squashes the plane onto a line or a point. Try the "rank 1" preset.
+
+## Rank, column space and null space
+
+Three linked ideas tell you what a matrix can and can't do.
+
+- The **column space** is every output $Ax$ can produce: all combinations of the columns.
+- The **rank** is the dimension of the column space: the number of independent columns (always equal to the number of independent rows).
+- The **null space** is every input that maps to zero: $Ax = 0$.
+
+They're tied together by **rank–nullity**: rank + dim(null space) = $n$, the number of columns. Every column that fails to add a new direction adds a dimension to the null space instead.
+
+For a design matrix $X$ (one row per sample, one column per feature), a nonzero null-space vector $v$ means $Xv = 0$: some combination of features is identically zero. Then $w$ and $w + c\,v$ give exactly the same predictions for every $c$, so the coefficients aren't unique. Two classic ways to get there:
+
+- **The dummy-variable trap.** An intercept plus an indicator for every season: the indicators always add up to the intercept column, so (1, −1, −1, −1, …) is in the null space. That's the warning Dev saw.
+- **One sensor logged twice.** A temperature in °F is $32 + 1.8\,T_{°C}$: a combination of the intercept and the °C column.
+
+In floating point, "exactly dependent" almost never happens: rounding turns zeros into 10⁻¹⁶. So numerical rank counts directions above a tolerance, as `np.linalg.matrix_rank` does (Lesson 5 shows what it measures). Scale matters too: a column 10¹⁰ times smaller than its neighbours looks like rounding noise unless you scale the columns first.
+
+<CodeExercise id="linear-algebra/redundant-columns" />
+
+<Bridge>
+Assemble the stiffness matrix of a truss with no supports and it's singular: rigid-body translations and rotations are in its null space, because they move the structure without deforming it, so they cost no strain energy. Supports remove those modes. A thermal network with no connection to a fixed temperature is singular for the same reason: raise every node by 1 K and no heat flows anywhere. Rank deficiency in a design matrix is the same thing again, a direction in coefficient space that changes nothing you can observe.
+</Bridge>
+
+## Solving Ax = b
+
+When $A$ is square with full rank, $Ax = b$ has exactly one solution. Compute it with `np.linalg.solve(A, b)`, which factors $A = LU$ (with row pivoting) and then solves two triangular systems. Don't compute `np.linalg.inv(A) @ b`:
+
+- **It's slower.** Forming the inverse takes about three times the arithmetic of one factorization.
+- **It's less accurate.** On the 8 × 8 Hilbert matrix (a famously ill-conditioned test case), the relative residual $\|Ax - b\|/\|b\|$ is about 10⁻¹⁶ through `solve` and about 10⁻⁸ through `inv`.
+
+If you need to solve with the same matrix many times, factor once and reuse the factors (`scipy.linalg.lu_factor` and `lu_solve`, or `cho_factor` and `cho_solve` for symmetric positive definite matrices, which you'll meet in Lesson 4).
+
+<CodeExercise id="linear-algebra/cold-plate-network" />
+
+## Condition numbers: how much can errors grow?
+
+Even a perfect algorithm can't beat the problem it's given. The **condition number** $\kappa(A)$ is the ratio of the most a matrix stretches any direction to the least (Lesson 5 makes that precise with singular values). It bounds how much relative errors in the data can grow in the answer:
+
+$$
+\frac{\|\Delta x\|}{\|x\|} \lesssim \kappa(A)\,\frac{\|\Delta b\|}{\|b\|}
+$$
+
+Since float64 stores about 16 significant digits, the rule of thumb is that **you lose about log₁₀ κ of them**. Some numbers from this course's experiments:
+
+| Matrix | κ | What it means |
+|---|---|---|
+| Identity, rotations | 1 | No amplification at all |
+| Dev's two inlet sensors plus an intercept | about 600 | Coefficients wobble; their sum doesn't |
+| Powers of temperature up to $T^5$, $T$ from 15 to 35 °C | 4 × 10¹⁰ | Only 5 or 6 digits survive |
+| Same features after standardizing $T$ | 37 | Essentially no loss |
+| 12 × 12 Hilbert matrix | 2 × 10¹⁶ | `solve` returns an answer 10–20% wrong, with a residual of 10⁻¹⁶ |
+
+The last row is worth pausing on. `solve` is **backward stable**: it returns the exact solution of a problem within rounding error of yours, which is why its residual is tiny. When κ is around 10¹⁶, the exact solution of a nearby problem can be far from the exact solution of yours. That's the problem's fault, not the algorithm's, and no algorithm can fix it. You fix it by reformulating: scale and center the features, remove redundant ones, or regularize (Module 6).
+
+A small determinant doesn't mean ill-conditioned. In 20 dimensions, $0.1\,I$ has determinant 10⁻²⁰, yet κ = 1: it shrinks every direction equally, and solving with it loses nothing. The determinant multiplies the stretches; conditioning compares them.
+
+<Craft title="Matrix habits worth keeping">
+- `np.linalg.solve` for square systems, `np.linalg.lstsq` for rectangular ones (Lesson 3), a Cholesky factorization for symmetric positive definite ones. Never `inv` followed by a product.
+- Check `np.linalg.cond(X)` before interpreting coefficients. With κ in the hundreds, compare combinations that the data pin down (Dev's sum), not individual coefficients.
+- Standardize a feature *before* building powers or interactions from it.
+- Read library warnings about singular or ill-conditioned matrices as information about your features, not noise to suppress.
+- Stable predictions with unstable coefficients is a classic sign of near-collinearity: the model is fine for prediction and useless for explanation.
+</Craft>
+
+<Check items={["lm-column-picture", "lm-compose-order", "lm-rank-nullity", "lm-dummy", "lm-cond-digits", "lm-det-vs-cond", "lm-inv-vs-solve", "lm-collinear"]} />
+
+Next: least squares, the projection you'll use more than any other.

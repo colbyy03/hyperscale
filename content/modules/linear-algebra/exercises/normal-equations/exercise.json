@@ -1,0 +1,56 @@
+{
+  "id": "linear-algebra/normal-equations",
+  "type": "derivation",
+  "language": "none",
+  "title": "The normal equations from a right angle",
+  "prompt": "Derive the least-squares solution from geometry alone. `X` is the (8 × 3) design matrix, `y` the 8 targets and `w` any candidate coefficient vector. Write each step as a NumPy expression; it's checked by evaluating it at random values, so any equivalent form is accepted.",
+  "concepts": ["least-squares", "vector-geometry"],
+  "difficulty": 0.4,
+  "minutes": 10,
+  "critical": true,
+  "hints": [
+    "The fitted vector Xw can be any point in the column space of X. The closest such point to y is where the leftover piece, y − Xw, sticks straight out of that space.",
+    "'Perpendicular to every column of X' means every column's dot product with the residual is zero. Stacking those dot products is one matrix–vector product with Xᵀ.",
+    "Xᵀ(y − Xw) = 0 rearranges to XᵀX w = Xᵀy, so w = (XᵀX)⁻¹Xᵀy. Then ŷ = Xw = X(XᵀX)⁻¹Xᵀ y, which defines H, and the residual is y − Hy = (I − H)y."
+  ],
+  "derivation": {
+    "variables": {
+      "X": { "shape": [8, 3] },
+      "y": { "shape": [8] },
+      "w": { "shape": [3] }
+    },
+    "steps": [
+      {
+        "prompt": "The residual `r`: what's left of `y` after subtracting the fit `Xw`.",
+        "answer": "y - X @ w",
+        "hint": "The residual is the target minus the fit, in that order.",
+        "wrong": ["X @ w - y", "y - w @ X.T @ X"]
+      },
+      {
+        "prompt": "At the best `w`, the residual is perpendicular to every column of `X`. Write the vector of the 3 dot products between the columns of `X` and the residual (it must equal zero at the optimum).",
+        "answer": "X.T @ (y - X @ w)",
+        "hint": "A dot product with every column at once is a product with the transpose: Xᵀ times the residual has one entry per column.",
+        "wrong": ["X.T @ X @ w - X.T @ y", "X.T @ y", "(y - X @ w) @ (y - X @ w)"]
+      },
+      {
+        "prompt": "Setting that vector to zero gives the **normal equations**, XᵀX w = Xᵀy. Solve them for `w`. (On paper, `inv` is fine. In code you'd never form the inverse.)",
+        "answer": "inv(X.T @ X) @ X.T @ y",
+        "hint": "Multiply both sides of XᵀX w = Xᵀy on the left by (XᵀX)⁻¹. X itself is 8 × 3, so it has no inverse.",
+        "wrong": ["X.T @ y", "inv(X.T @ X) @ X @ y", "inv(X @ X.T) @ X @ y"]
+      },
+      {
+        "prompt": "The fitted values are `ŷ = X w` at that solution, which is a matrix times `y`. Write that (8 × 8) matrix `H`, often called the hat matrix.",
+        "answer": "X @ inv(X.T @ X) @ X.T",
+        "hint": "Substitute the solution for w into Xw and drop the trailing y.",
+        "wrong": ["inv(X.T @ X)", "X.T @ inv(X @ X.T) @ X", "X @ X.T"]
+      },
+      {
+        "prompt": "The residual at the solution is `y - H y = M y`. Write the matrix `M`, using `eye(8)` for the identity.",
+        "answer": "eye(8) - X @ inv(X.T @ X) @ X.T",
+        "hint": "y − Hy = (I − H) y.",
+        "wrong": ["X @ inv(X.T @ X) @ X.T - eye(8)", "eye(8) - X @ X.T"]
+      }
+    ]
+  },
+  "sources": ["strang2019-lalfd", "boyd2018-vmls"]
+}

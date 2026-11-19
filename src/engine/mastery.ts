@@ -23,6 +23,7 @@ export const BKT_BY_KIND: Record<string, BktParams> = {
   checkpoint: { pInit: 0.2, pTransit: 0.1, pSlip: 0.08, pGuess: 0.15 },
   code: { pInit: 0.2, pTransit: 0.18, pSlip: 0.1, pGuess: 0.05 },
   parsons: { pInit: 0.2, pTransit: 0.15, pSlip: 0.1, pGuess: 0.1 },
+  derivation: { pInit: 0.2, pTransit: 0.15, pSlip: 0.1, pGuess: 0.05 },
 };
 const DEFAULT_PARAMS = BKT_BY_KIND.check!;
 

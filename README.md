@@ -71,6 +71,8 @@ An exercise folder holds:
 
 **Parsons problems** (`"type": "parsons"`) list the solution's `lines` in order (indentation included) and optional `distractors` in a `parsons` block. With a `tests.py`, the assembled code is graded by pytest, so any correct order passes; without one, the order is compared directly. Learners tap blocks to build the answer, which works on a phone.
 
+**Derivations** (`"type": "derivation"`, `"language": "none"`) need no code files. A `derivation` block declares `variables` (each with a `shape` and a `kind`: `general`, `symmetric`, `spd`, `positive` or `unit`) and `steps`, each with a `prompt`, a reference `answer` written as a NumPy expression, an optional `hint` and `wrong` answers the checker must reject. `hsgrade.derive` evaluates the learner's expression and the reference at random draws of the variables, so any equivalent form passes, and it names common slips (a sign, a transpose, a factor of 2, a shape mismatch). The verifier checks that every reference passes and every `wrong` answer fails.
+
 Any other `.py`, `.csv` or `.json` file in an exercise folder is written next to the learner's code when grading. Questions with `"practice": false` (such as the placement check) stay out of mixed practice.
 
 Embed an exercise in a lesson with `<CodeExercise id="module-id/slug" />` (any type). In the app it runs real pytest inside Pyodide, with hint tiers, a guarded solution reveal and an 8–10 s infinite-loop guard.

@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/cold-plate-network",
+  "type": "code",
+  "language": "python",
+  "title": "Steady state of a cold-plate network",
+  "prompt": "A liquid-cooled server has two GPUs on one cold plate. Model it as a thermal network: nodes (GPU junctions, cases, the plate) joined by thermal conductances, with the plate cooled by coolant held at a fixed temperature.\n\nWrite `steady_state(links, q, t_coolant)`. Each row of `links` is `(i, j, g)`: a conductance of `g` W/K between nodes `i` and `j`, where `j = -1` means the link goes to the coolant. `q[i]` is the heat generated at node `i`, in W. Return the node temperatures `T` in °C.\n\nAt steady state the heat leaving each node through its links equals the heat generated there: Σ g·(Tᵢ − Tⱼ) = qᵢ, summed over node i's links. Assemble the matrix that says this for every node (it's built exactly like a stiffness matrix in structural analysis), then solve it. Raise `ValueError` if the temperatures aren't determined because the matrix is singular. Don't compute an inverse.",
+  "concepts": ["linear-maps", "rank-subspaces", "conditioning"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "Write the balance for one node by hand: a node with links to nodes j and k has (g_ij + g_ik)·Tᵢ − g_ij·Tⱼ − g_ik·Tₖ = qᵢ. Where does each g land in the matrix?",
+    "Each link (i, j, g) adds g to K[i, i] and K[j, j] and subtracts g from K[i, j] and K[j, i]. A link to the coolant adds g to K[i, i] only; its known temperature moves to the right-hand side as g·t_coolant. If some group of nodes has no path to the coolant, adding a constant to all of their temperatures changes nothing, so K is singular: check its rank before solving.",
+    "K = np.zeros((n, n)); rhs = q.astype(float).copy(). For i, j, g in links (cast i and j to int): K[i, i] += g; if j < 0: rhs[i] += g * t_coolant; else: K[j, j] += g; K[i, j] -= g; K[j, i] -= g. Then raise if np.linalg.matrix_rank(K) < n, and return np.linalg.solve(K, rhs)."
+  ],
+  "misconceptions": {
+    "solve-not-inverse": "To solve Ax = b, call np.linalg.solve(A, b). Forming inv(A) costs more and gives residuals that can be orders of magnitude larger.",
+    "singular-floating-network": "A network with no path to a fixed temperature is like a structure with no supports: a rigid-body (uniform) shift is in the null space, so the matrix is singular and the solution isn't determined."
+  },
+  "sources": ["strang2019-lalfd", "trefethen1997-nla"]
+}

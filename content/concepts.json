@@ -187,6 +187,20 @@
     "prereqs": []
   },
   {
+    "id": "vector-geometry",
+    "title": "Vectors, dot products, norms and projections",
+    "module": "linear-algebra",
+    "prereqs": []
+  },
+  {
+    "id": "cosine-similarity",
+    "title": "Cosine similarity and the geometry of embeddings",
+    "module": "linear-algebra",
+    "prereqs": [
+      "vector-geometry"
+    ]
+  },
+  {
     "id": "linear-maps",
     "title": "Matrices as linear maps: products, shapes and inverses",
     "module": "linear-algebra",
@@ -196,7 +210,87 @@
     "id": "least-squares",
     "title": "Least squares, projections and the normal equations",
     "module": "linear-algebra",
-    "prereqs": []
+    "prereqs": [
+      "vector-geometry",
+      "linear-maps"
+    ]
+  },
+  {
+    "id": "rank-subspaces",
+    "title": "Rank, column space and null space",
+    "module": "linear-algebra",
+    "prereqs": [
+      "linear-maps"
+    ]
+  },
+  {
+    "id": "conditioning",
+    "title": "Condition numbers and solving linear systems stably",
+    "module": "linear-algebra",
+    "prereqs": [
+      "linear-maps",
+      "floating-point"
+    ]
+  },
+  {
+    "id": "qr-decomposition",
+    "title": "QR decomposition and Gram-Schmidt orthogonalization",
+    "module": "linear-algebra",
+    "prereqs": [
+      "least-squares",
+      "vector-geometry"
+    ]
+  },
+  {
+    "id": "eigendecomposition",
+    "title": "Eigenvalues, eigenvectors and linear dynamics",
+    "module": "linear-algebra",
+    "prereqs": [
+      "linear-maps"
+    ]
+  },
+  {
+    "id": "quadratic-forms",
+    "title": "Quadratic forms and positive definiteness",
+    "module": "linear-algebra",
+    "prereqs": [
+      "eigendecomposition"
+    ]
+  },
+  {
+    "id": "svd",
+    "title": "The singular value decomposition",
+    "module": "linear-algebra",
+    "prereqs": [
+      "eigendecomposition",
+      "rank-subspaces"
+    ]
+  },
+  {
+    "id": "low-rank-approximation",
+    "title": "Low-rank approximation and the pseudoinverse",
+    "module": "linear-algebra",
+    "prereqs": [
+      "svd"
+    ]
+  },
+  {
+    "id": "pca-pod",
+    "title": "PCA and proper orthogonal decomposition of fields",
+    "module": "linear-algebra",
+    "prereqs": [
+      "svd",
+      "standardization"
+    ]
+  },
+  {
+    "id": "matrix-calculus",
+    "title": "Gradients of linear and quadratic forms",
+    "module": "linear-algebra",
+    "prereqs": [
+      "linear-maps",
+      "quadratic-forms"
+    ]
   },
   {
     "id": "derivatives-chain-rule",

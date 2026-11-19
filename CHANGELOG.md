@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## Phase 5a: derivation exercises and Module 2 lessons 1-3 (2026-11-19)
+
+- **Derivation exercises**: a derivation is a sequence of steps, each answered with a NumPy expression (`X.T @ (y - X @ w)`). `hsgrade.derive` checks each step numerically at random draws of the declared variables (general, symmetric, positive definite, positive or unit), so any algebraically equivalent answer passes, and it names the usual slips: a sign, a transpose, a factor of 2, a shape mismatch, `^` for a power. Per-step feedback and hints, a guarded reveal, and BKT tracking as their own kind.
+- **Two new explainers**: a **projection explorer** (drag two vectors; dot product, angle, projection and the perpendicular residual update live) and a **matrix map** (drag the four entries of a 2 × 2 matrix and watch the grid, the columns, the unit circle's image ellipse and the eigenvector directions, with the determinant, rank, eigenvalues, singular values and condition number).
+- **Module 2, lesson 1, "Vectors, dot products and projections"**: norms as error measures, projection onto a line, cosine similarity and why raw cosine on positive data needs centering, and a preview of embeddings (random directions in 768 dimensions are nearly orthogonal). Exercises: vectorized projection, and a rack-profile similarity search graded on the centering and zero-vector traps.
+- **Lesson 2, "Matrices as maps of space"**: column and row pictures, composition, determinants, rank, column and null spaces, rank-nullity, the dummy-variable trap, numerical rank and scaling, solve vs inverse, and condition numbers with measured examples (collinear sensors, polynomial features before and after standardizing, Hilbert matrices). Exercises: detect redundant feature columns, and assemble and solve a two-GPU cold-plate thermal network (a stiffness-matrix bridge, with the singular floating network as a null space).
+- **Lesson 3, "Least squares as projection"**: the normal equations from orthogonality (a five-step derivation), the hat matrix, why κ(XᵀX) = κ(X)², a measured table of normal equations vs QR, classical vs modified Gram–Schmidt vs Householder, and what the libraries do. Exercises: modified Gram–Schmidt QR (graded on an ill-conditioned matrix that defeats the classical version) and least squares through QR with your own back substitution.
+- Every number quoted in the lessons was measured with NumPy 2.4.6, in CPython and in Pyodide.
+- 11 new concepts, 28 cards, 25 questions; 7 exercises verified with 22 known-wrong variants and 13 rejected derivation answers. New end-to-end test for a derivation in the browser; the overflow check now covers Module 2's lessons.
+
 ## Phase 4c: Module 1 complete (2026-11-19)
 
 - **Lesson 6, "ML code as software"**: functions vs classes, type hints, Protocols, frozen dataclass configs, scikit-learn's estimator contract (why `__init__` must only store arguments, `fit` returns `self`, learned attributes end in `_`), seeded generators and `SeedSequence.spawn`, mutable defaults. Exercises: a `MedianScaler` graded against real scikit-learn 1.8 in the browser (`clone`, `Pipeline`, `NotFittedError`), a bootstrap with a mutable default and global seeding (debug), and a frozen config (Parsons with a mutable-default distractor).

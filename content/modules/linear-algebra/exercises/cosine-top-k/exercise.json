@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/cosine-top-k",
+  "type": "code",
+  "language": "python",
+  "title": "Racks that move together",
+  "prompt": "Last Tuesday, the rack whose breaker tripped had a distinctive daily power profile. Find the racks whose profiles have the same *shape*, whatever their size.\n\nWrite `most_similar(q, P, k)`. `q` has shape (24,), one value per hour; `P` has shape (n, 24), one rack per row. Return the indices of the `k` rows of `P` most similar to `q` by **centered cosine similarity** (subtract each profile's own mean, then take the cosine), most similar first.\n\nA rack with a perfectly flat profile has no shape, so its similarity is undefined: never return it. If fewer than `k` racks qualify, return all of them. No Python loops.",
+  "concepts": ["cosine-similarity", "vector-geometry"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "Two racks with the same shape but different sizes should score 1. Which part of each profile carries its size, and which part its shape?",
+    "Subtract each row's mean (keepdims=True), and the query's mean. The cosine of the centered vectors is the dot product divided by both norms. A flat row centers to all zeros, so its norm is 0: mark it as −inf (or drop it) before sorting rather than dividing by zero.",
+    "Pc = P - P.mean(axis=1, keepdims=True); qc = q - q.mean(); norms = np.linalg.norm(Pc, axis=1); sims = np.full(len(P), -np.inf); ok = norms > 0; sims[ok] = (Pc[ok] @ qc) / (norms[ok] * np.linalg.norm(qc)); order = np.argsort(-sims, kind=\"stable\"); keep only entries of order whose similarity is finite, then the first k."
+  ],
+  "misconceptions": {
+    "cosine-needs-centering": "Raw cosine similarity on positive data is dominated by the shared baseline: two profiles with opposite daily shapes can score above 0.9. Center first; the cosine of centered vectors is the Pearson correlation.",
+    "cosine-zero-vector": "A zero vector has no direction, so its cosine with anything is undefined (0/0 = NaN). Exclude it explicitly."
+  },
+  "sources": ["boyd2018-vmls", "reimers2019-sbert"]
+}

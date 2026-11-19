@@ -1,0 +1,269 @@
+[
+  {
+    "kind": "choice",
+    "id": "vec-dot-sign",
+    "prompt": "Two vectors of sensor deviations have a dot product of −3.2. What does the sign tell you about the angle between them?",
+    "options": ["Less than 90°", "Exactly 90°", "More than 90°"],
+    "answer": 2,
+    "concepts": ["vector-geometry"],
+    "explain": "a · b = ‖a‖‖b‖cos θ, and the lengths are positive, so a negative dot product means cos θ < 0: the angle is more than 90°. The deviations tend to have opposite signs."
+  },
+  {
+    "kind": "numeric",
+    "id": "vec-proj-value",
+    "prompt": "Project b = (4, 2) onto the line through a = (1, 1). What is the first component of the projection?",
+    "answer": 3,
+    "tolerance": 0.01,
+    "concepts": ["vector-geometry"],
+    "explain": "a · b = 6 and a · a = 2, so the multiplier is 3 and p = 3a = (3, 3). The residual (1, −1) is perpendicular to a."
+  },
+  {
+    "kind": "choice",
+    "id": "vec-proj-multiplier",
+    "prompt": "A colleague writes the projection of b onto a as (a · b / ‖a‖) a. When does that give the right answer?",
+    "options": ["Always", "Only when ‖a‖ = 1", "Only when a and b are perpendicular"],
+    "answer": 1,
+    "concepts": ["vector-geometry"],
+    "critical": true,
+    "explain": "The multiplier is (a · b) / (a · a) = (a · b) / ‖a‖². Dividing by ‖a‖ gives the signed length of the projection; the two agree only when ‖a‖ = 1."
+  },
+  {
+    "kind": "numeric",
+    "id": "vec-norms",
+    "prompt": "A model's errors on five racks are (0.5, −0.2, 3.0, 0.1, −0.4) °C. What is the 2-norm of the error vector?",
+    "answer": 3.0757,
+    "tolerance": 0.005,
+    "unit": "°C",
+    "concepts": ["vector-geometry"],
+    "explain": "√(0.25 + 0.04 + 9 + 0.01 + 0.16) = √9.46 ≈ 3.08. The single 3 °C error contributes 9 of the 9.46: squared norms are dominated by the largest errors."
+  },
+  {
+    "kind": "choice",
+    "id": "vec-cos-scale",
+    "prompt": "Rack B's hourly power profile is exactly 3 × rack A's. What are their cosine similarity and Euclidean distance?",
+    "options": ["Cosine 1; the distance is large", "Cosine 1/3; the distance is large", "Cosine 1; the distance is zero"],
+    "answer": 0,
+    "concepts": ["cosine-similarity"],
+    "explain": "Scaling doesn't change direction, so the cosine is exactly 1. The distance ‖3a − a‖ = 2‖a‖ is large: distance measures size and shape together, cosine measures direction alone."
+  },
+  {
+    "kind": "choice",
+    "id": "vec-centered-cos",
+    "prompt": "You compare the daily temperature profiles of 200 inlet sensors that all read between 20 and 24 °C. The raw cosine similarity is above 0.99 for almost every pair. What's going on, and what should you do?",
+    "options": [
+      "The sensors are redundant: keep a handful and drop the rest",
+      "The shared ~22 °C baseline dominates every vector: subtract each profile's mean, which gives the correlation",
+      "Cosine similarity breaks down above 24 dimensions: switch to Euclidean distance"
+    ],
+    "answer": 1,
+    "concepts": ["cosine-similarity"],
+    "transfer": true,
+    "explain": "Every profile is roughly 22·(1, 1, …, 1) plus a small wiggle, so every pair points in nearly the same direction. Centering removes the baseline and leaves the shapes; the cosine of centered vectors is the Pearson correlation."
+  },
+  {
+    "kind": "choice",
+    "id": "vec-highdim",
+    "prompt": "Two random vectors in 768 dimensions (independent normal entries). What cosine similarity should you expect between them?",
+    "options": ["Around 0.5", "Within a few hundredths of 0", "Close to +1 or −1"],
+    "answer": 1,
+    "concepts": ["cosine-similarity", "vector-geometry"],
+    "explain": "The cosine of two random directions in d dimensions has a standard deviation of about 1/√d, which is 0.036 for d = 768. High-dimensional spaces are roomy: random directions are nearly perpendicular."
+  },
+  {
+    "kind": "explain",
+    "id": "vec-explain-projection",
+    "prompt": "Explain, as you would to a colleague, why the projection of b onto a line is the closest point on that line to b, and where the formula (a · b / a · a) a comes from.",
+    "concepts": ["vector-geometry"],
+    "rubric": [
+      "Points on the line are multiples t·a, and the distance to b is the length of b − t·a",
+      "The distance is smallest when b − t·a is perpendicular to the line (Pythagoras: any other point adds a perpendicular leg)",
+      "Perpendicular means a · (b − t·a) = 0, which gives t = (a · b)/(a · a)",
+      "Notes the result depends only on the line, not on the length of a (scaling a cancels)"
+    ],
+    "explain": "Any other point q on the line forms a right triangle with b and the foot p of the perpendicular, so ‖b − q‖² = ‖b − p‖² + ‖p − q‖² > ‖b − p‖². Setting a · (b − t a) = 0 gives the multiplier."
+  },
+  {
+    "kind": "choice",
+    "id": "lm-column-picture",
+    "prompt": "A = [[2, 1], [0, 3]]. Where does A send e₂ = (0, 1)?",
+    "options": ["(2, 0)", "(1, 3)", "(0, 3)"],
+    "answer": 1,
+    "concepts": ["linear-maps"],
+    "critical": true,
+    "explain": "A e₂ picks out the second column of A, (1, 3). Each column of a matrix is where the corresponding basis vector lands, and Ax is the combination of columns weighted by the entries of x."
+  },
+  {
+    "kind": "choice",
+    "id": "lm-compose-order",
+    "prompt": "You rotate a vector with R and then scale the result with S. Which single matrix does both?",
+    "options": ["R S", "S R", "R + S"],
+    "answer": 1,
+    "concepts": ["linear-maps"],
+    "explain": "S(Rx) = (SR)x: the matrix applied first sits on the right, next to x. Matrix products don't commute in general, so RS would scale first and then rotate."
+  },
+  {
+    "kind": "numeric",
+    "id": "lm-rank-nullity",
+    "prompt": "A design matrix has 12 columns and rank 10. What is the dimension of its null space?",
+    "answer": 2,
+    "tolerance": 0.01,
+    "concepts": ["rank-subspaces"],
+    "explain": "Rank + nullity = number of columns, so 12 − 10 = 2. There are two independent combinations of the features that are identically zero, and the coefficients can move freely in those two directions without changing any prediction."
+  },
+  {
+    "kind": "choice",
+    "id": "lm-dummy",
+    "prompt": "A model has an intercept plus an indicator column for each of the four seasons. What happens when you fit it by least squares?",
+    "options": [
+      "Nothing special: extra features never hurt least squares",
+      "X has rank 4, not 5: the coefficients aren't unique, although the predictions are",
+      "Every library raises an error"
+    ],
+    "answer": 1,
+    "concepts": ["rank-subspaces", "linear-maps"],
+    "critical": true,
+    "explain": "The four indicators add up to the intercept column in every row, so (1, −1, −1, −1, −1) is in the null space. Adding any multiple of it to the coefficients changes nothing you can observe. Libraries differ: some warn, some silently return the minimum-norm solution."
+  },
+  {
+    "kind": "numeric",
+    "id": "lm-cond-digits",
+    "prompt": "κ(A) = 10¹⁰, and your data are exact up to float64 rounding (about 16 significant digits). Roughly how many correct significant digits can you expect in the solution of Ax = b?",
+    "answer": 6,
+    "tolerance": 0.2,
+    "concepts": ["conditioning"],
+    "critical": true,
+    "explain": "The relative error can be up to κ times the relative error in the data: 10¹⁰ × 10⁻¹⁶ = 10⁻⁶, so about 6 of the 16 digits survive. The rule of thumb is that you lose about log₁₀ κ digits."
+  },
+  {
+    "kind": "choice",
+    "id": "lm-det-vs-cond",
+    "prompt": "In 20 dimensions, A = 0.1 × I has determinant 10⁻²⁰. Is A ill-conditioned?",
+    "options": ["Yes: its determinant is nearly zero", "No: κ(A) = 1, because it shrinks every direction equally", "You can't tell without knowing b"],
+    "answer": 1,
+    "concepts": ["conditioning"],
+    "explain": "The determinant measures volume change, which compounds across 20 dimensions. Conditioning compares the largest stretch with the smallest, and here they're equal, so κ = 1: solving with this A loses no accuracy."
+  },
+  {
+    "kind": "choice",
+    "id": "lm-inv-vs-solve",
+    "prompt": "Why is np.linalg.solve(A, b) preferred to np.linalg.inv(A) @ b?",
+    "options": [
+      "solve is the only one that works for symmetric matrices",
+      "solve does about a third of the work and leaves residuals that can be orders of magnitude smaller",
+      "inv fails whenever κ(A) is above 100"
+    ],
+    "answer": 1,
+    "concepts": ["conditioning", "linear-maps"],
+    "explain": "solve factors A once (LU with pivoting) and substitutes. Forming the inverse takes about three times the work and is less accurate: on an 8 × 8 Hilbert matrix the relative residual is about 10⁻⁸ through inv and 10⁻¹⁶ through solve."
+  },
+  {
+    "kind": "choice",
+    "id": "lm-collinear",
+    "prompt": "Dev fits fan power on two inlet sensors that always agree to within 0.05 °C. Across weeks, which quantity do the data determine well?",
+    "options": ["Each sensor's coefficient separately", "The sum of the two coefficients", "Neither: the fit is meaningless"],
+    "answer": 1,
+    "concepts": ["conditioning", "rank-subspaces"],
+    "transfer": true,
+    "explain": "Moving weight from one sensor to the other barely changes any prediction, because the sensors nearly always agree; that direction, (0, 1, −1), is almost in the null space. Shifting the total does change predictions, so the sum is pinned down."
+  },
+  {
+    "kind": "explain",
+    "id": "lm-explain-collinear",
+    "prompt": "Dev asks: 'How can my predictions be stable when the coefficients swing every week?' Explain in terms of the null space and the condition number.",
+    "concepts": ["conditioning", "rank-subspaces"],
+    "rubric": [
+      "The two sensor columns are nearly identical, so X has a direction v with Xv ≈ 0 (nearly in the null space)",
+      "Adding any multiple of v to the coefficients barely changes Xw, so the data can't pin down that combination; noise moves it around",
+      "The condition number is large because the smallest stretch (along v) is tiny compared with the largest",
+      "The fix: drop or average one sensor, or regularize, and interpret only well-determined combinations such as the sum"
+    ],
+    "explain": "Predictions live in the column space and are well determined; the individual coefficients move along a nearly-null direction that the data can't see."
+  },
+  {
+    "kind": "choice",
+    "id": "ls-orthogonal",
+    "prompt": "At the least-squares solution, the residual vector y − Xw is…",
+    "options": ["zero", "perpendicular to every column of X", "parallel to y"],
+    "answer": 1,
+    "concepts": ["least-squares"],
+    "critical": true,
+    "explain": "Xw is the projection of y onto the column space of X, so the residual is perpendicular to that space: Xᵀ(y − Xw) = 0. Those are the normal equations."
+  },
+  {
+    "kind": "choice",
+    "id": "ls-residual-mean",
+    "prompt": "Your least-squares model includes an intercept column. What is the mean of its residuals on the training data?",
+    "options": ["Zero, up to rounding", "Positive whenever the model underfits", "It depends on the noise level"],
+    "answer": 0,
+    "concepts": ["least-squares"],
+    "explain": "The residual is perpendicular to every column, including the column of ones, and (1, …, 1) · r = Σ rᵢ. So the residuals sum to zero."
+  },
+  {
+    "kind": "numeric",
+    "id": "ls-trace-hat",
+    "prompt": "X is 500 × 6 with independent columns. What is the trace of the hat matrix H = X(XᵀX)⁻¹Xᵀ?",
+    "answer": 6,
+    "tolerance": 0.01,
+    "concepts": ["least-squares"],
+    "explain": "H projects onto the 6-dimensional column space, so its eigenvalues are six 1s and 494 0s, and the trace is 6. That's why a fit with p parameters uses up p degrees of freedom."
+  },
+  {
+    "kind": "numeric",
+    "id": "ls-kappa-squared",
+    "prompt": "κ(X) = 10⁶. Roughly how many of float64's 16 significant digits can solving the normal equations XᵀXw = Xᵀy lose?",
+    "answer": 12,
+    "tolerance": 0.1,
+    "concepts": ["least-squares", "conditioning"],
+    "critical": true,
+    "explain": "κ(XᵀX) = κ(X)² = 10¹², so the normal equations can lose about 12 digits, leaving 4. QR works with κ(X) itself and loses about 6."
+  },
+  {
+    "kind": "choice",
+    "id": "ls-qr-step",
+    "prompt": "With X = QR (Q with orthonormal columns, R upper triangular), the least-squares coefficients solve…",
+    "options": ["R w = Qᵀy", "Q w = R y", "RᵀR w = y"],
+    "answer": 0,
+    "concepts": ["qr-decomposition", "least-squares"],
+    "explain": "Multiplying by Qᵀ keeps lengths within the column space, so minimizing ‖QRw − y‖ means making Rw equal Qᵀy, an upper-triangular system solved by back substitution."
+  },
+  {
+    "kind": "choice",
+    "id": "ls-gs-classical",
+    "prompt": "How do classical and modified Gram–Schmidt differ?",
+    "options": [
+      "They produce different Q even in exact arithmetic",
+      "They agree in exact arithmetic, but classical Gram–Schmidt can lose orthogonality in floating point",
+      "Only in speed: modified is faster"
+    ],
+    "answer": 1,
+    "concepts": ["qr-decomposition"],
+    "explain": "On paper they're the same algorithm in a different order. On a matrix with κ ≈ 10⁸, classical Gram–Schmidt's ‖QᵀQ − I‖ reached about 2 (orthogonality gone), modified a few times 10⁻⁹, and Householder QR about 10⁻¹⁵."
+  },
+  {
+    "kind": "choice",
+    "id": "ls-noor",
+    "prompt": "Noor's chiller curve uses powers of the condenser lift (in kelvin) up to the 4th. The spreadsheet's normal-equation coefficients jump when one more week of data is added. What's the best fix?",
+    "options": [
+      "Keep the normal equations but compute them in higher precision",
+      "Standardize the features before building the powers, fit with QR or lstsq, and judge the model by its predictions",
+      "Add more polynomial terms so the fit is less sensitive"
+    ],
+    "answer": 1,
+    "concepts": ["least-squares", "conditioning"],
+    "transfer": true,
+    "explain": "Raw powers of a quantity around 20 are nearly collinear (κ in the millions), and the normal equations square that. Standardizing first brings κ down by orders of magnitude, and QR avoids the squaring."
+  },
+  {
+    "kind": "explain",
+    "id": "ls-explain-normal-equations",
+    "prompt": "Explain why solving least squares through XᵀX loses accuracy, and what QR does instead.",
+    "concepts": ["least-squares", "qr-decomposition", "conditioning"],
+    "rubric": [
+      "The accuracy you can expect is governed by the condition number: about log₁₀ κ digits are lost",
+      "κ(XᵀX) = κ(X)², so forming XᵀX doubles the number of digits lost",
+      "QR factors X itself into an orthonormal Q (which doesn't amplify errors) and a triangular R with κ(R) = κ(X)",
+      "Then Rw = Qᵀy is solved by back substitution, never forming XᵀX or an inverse"
+    ],
+    "explain": "Squaring the condition number is the whole problem; QR solves the same least-squares problem working with κ(X)."
+  }
+]

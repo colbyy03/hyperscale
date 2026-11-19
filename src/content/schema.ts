@@ -69,6 +69,29 @@ export const exerciseSchema = z.object({
   hints: z.array(z.string().min(3)).length(3, "exactly three hint tiers (T1 orient, T2 principle, T3 next step)"),
   misconceptions: z.record(z.string(), z.string()).default({}),
   sources: z.array(z.string()).default([]),
+  /** Derivations: variables with shapes and kinds, and steps whose answers are NumPy expressions. */
+  derivation: z
+    .object({
+      variables: z.record(
+        z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/),
+        z.object({
+          shape: z.array(z.number().int().positive()).default([]),
+          kind: z.enum(["general", "symmetric", "spd", "positive", "unit"]).default("general"),
+        }),
+      ),
+      steps: z
+        .array(
+          z.object({
+            prompt: z.string().min(3),
+            answer: z.string().min(1),
+            hint: z.string().optional(),
+            /** Known-wrong answers the checker must reject (verified in CI). */
+            wrong: z.array(z.string()).default([]),
+          }),
+        )
+        .min(1),
+    })
+    .optional(),
   /** Parsons problems: the solution's lines in order (indentation included) and blocks that don't belong. */
   parsons: z
     .object({
