@@ -1,0 +1,27 @@
+{
+  "id": "python-mle/parametrize-order",
+  "type": "parsons",
+  "language": "python",
+  "title": "A table-driven test",
+  "prompt": "Arrange the lines into one parametrized pytest test that checks `pue` against a small table of hand-worked cases. One block compares floats the fragile way and doesn't belong.",
+  "concepts": ["pytest-tolerances"],
+  "difficulty": 0.25,
+  "minutes": 3,
+  "packages": [],
+  "parsons": {
+    "lines": [
+      "import pytest",
+      "from meter import pue",
+      "@pytest.mark.parametrize(\"facility, it, expected\", [(12.0, 10.0, 1.2), (0.3, 0.1, 3.0)])",
+      "def test_pue_examples(facility, it, expected):",
+      "    assert pue(facility, it) == pytest.approx(expected)"
+    ],
+    "distractors": ["    assert pue(facility, it) == expected"]
+  },
+  "hints": [
+    "Imports, then the decorator directly above the test function it parametrizes, then the body.",
+    "pytest runs the test once per tuple in the table, passing the values as arguments. Look at the second case: 0.3 / 0.1 in floating point is 2.9999999999999996.",
+    "The body compares with `pytest.approx(expected)`, not `== expected`."
+  ],
+  "sources": ["pytest-docs-9"]
+}

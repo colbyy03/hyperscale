@@ -1,0 +1,77 @@
+---
+id: python-mle/ml-code
+title: ML code as software
+minutes: 30
+concepts: [typed-ml-code, estimator-api, seeded-rng]
+sources: [sklearn-user-guide-1-9, ramalho2022-fluent-python, numpy-docs-2-5, wilson2014-sci-computing]
+cards: [estimator-init-rule, fit-returns-self, learned-underscore, protocol-structural, frozen-config, default-rng-local, seedsequence-spawn, mutable-default-shared]
+---
+
+<Situation from="Dev, controls engineer">
+Three people have written three scalers for the cooling models, and none of them work with our pipeline tooling: one crashes in grid search, one silently changes its settings, and one gives different results every run. Before your models go anywhere near the plant, I want them written like software we can trust: typed, reproducible, and following the conventions our tools expect.
+</Situation>
+
+## Functions first, classes for learned state
+
+Most ML code should be plain functions: data in, data out, no hidden state. That makes it easy to test and to reuse. Reach for a class when something is *learned* from data and used later. A scaler learns statistics during training and applies them to new data; a model learns weights. Two Python features keep classes honest:
+
+- **Type hints** (`def fit(self, X: NDArray[np.float64]) -> "MedianScaler":`) document intent, and checkers such as mypy or pyright catch mismatches before runtime. A shape or type annotation is unit-checking for code.
+- **Dataclasses** turn a configuration into a small, readable record. With `frozen=True`, a config can't be modified halfway through a run, so the settings you logged are the settings you used.
+
+**Protocols** describe what an object can do rather than what it inherits from. `class Forecaster(Protocol): def fit(self, X, y) -> Self: ...` accepts any object with a matching `fit` method, which is how Python's typing expresses duck typing.
+
+<CodeExercise id="python-mle/frozen-config" />
+
+## The estimator contract
+
+scikit-learn's tools (pipelines, `clone`, cross-validation, grid search) work with any class that follows a short contract. Most of the ML ecosystem copies it.
+
+1. `__init__` **only stores its arguments, unchanged.** No validation, no computation, no data.
+2. `fit(X, y=None)` learns from data, stores the results in attributes **ending in an underscore** (`mean_`, `coef_`), and **returns `self`**.
+3. `transform` and `predict` use only what `fit` learned, and raise `NotFittedError` if `fit` hasn't run.
+
+Rule 1 looks fussy until you see why. To try a new setting, grid search calls `clone`, which rebuilds your estimator from `get_params()`. If `__init__` converted or validated an argument, the rebuilt object wouldn't match the original, so `clone` refuses. Rule 2's underscore lets tools tell settings (chosen by you) from learned state (chosen by the data).
+
+<Predict
+  id="clone-list"
+  question="An estimator's __init__ does self.quantile_range = list(quantile_range). What happens when grid search clones it?"
+  options={["Nothing; a list and a tuple behave the same", "clone raises an error: the parameter was modified in __init__", "Grid search quietly uses the default value"]}
+  answer={1}
+  explain="clone checks that each parameter it passes to __init__ comes back as the very same object. Converting the tuple to a list breaks that, so clone raises a RuntimeError. Validate and convert in fit, not in __init__."
+/>
+
+<CodeExercise id="python-mle/estimator-contract" />
+
+## Reproducible randomness
+
+Random numbers drive train/test splits, initialization, bootstrap estimates and data augmentation. To get the same results tomorrow:
+
+- Create a generator, `rng = np.random.default_rng(seed)`, and **pass it** to whatever needs randomness. Don't call `np.random.seed`: it resets one global generator shared by your whole program and every library in it.
+- For parallel workers, don't reuse one seed or count up by hand. `np.random.SeedSequence(seed).spawn(n)` gives n independent, reproducible child streams.
+- Log the seed with the results, like any other setting.
+
+<Predict
+  id="mutable-default"
+  question="def add_reading(value, log=[]): log.append(value); return log. What does add_reading(2) return if add_reading(1) was called first?"
+  options={["[2]", "[1, 2]", "It raises an error"]}
+  answer={1}
+  explain="A default value is evaluated once, when the def statement runs, so every call shares one list. Use None as the default and create the list inside the function. Dataclasses refuse a list default for the same reason."
+/>
+
+<CodeExercise id="python-mle/seeded-bootstrap" />
+
+<Bridge>
+The estimator contract is the same idea as a component datasheet. A pump's datasheet promises an interface, flow against head, that any engineer can plug into a system model without reading the pump's internals. An estimator that keeps the contract can be dropped into any pipeline, search or evaluation harness the same way.
+</Bridge>
+
+<Craft title="Code review checklist for ML code">
+- Settings are explicit and logged, ideally in a frozen config, with no magic numbers buried in functions.
+- Nothing learned leaks across a train/test boundary: every statistic is computed in `fit` on training data only.
+- Randomness comes from a seeded generator that's passed in; no global seeding.
+- No mutable default arguments, and no class-level lists or dicts shared by every instance.
+- Type hints on public functions, checked in CI.
+</Craft>
+
+<Check items={["mc-clone", "mc-underscore", "mc-default", "mc-spawn", "mc-frozen"]} />
+
+Next: testing ML code and the tools that keep a project reproducible.

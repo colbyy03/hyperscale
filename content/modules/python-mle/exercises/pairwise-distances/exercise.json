@@ -1,0 +1,20 @@
+{
+  "id": "python-mle/pairwise-distances",
+  "type": "code",
+  "language": "python",
+  "title": "Pairwise distances without loops",
+  "prompt": "Write `pairwise_distances(A, B)`: for `A` of shape (n, d) and `B` of shape (m, d), return the (n, m) matrix of Euclidean distances, where entry [i, j] is the distance between row i of A and row j of B. No Python loops.\n\nIt must be exactly zero (never NaN) for identical rows, even when rows are huge numbers that differ only slightly.",
+  "concepts": ["numpy-broadcasting", "numpy-vectorization", "floating-point"],
+  "difficulty": 0.55,
+  "minutes": 12,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": true, "timeoutMs": 10000 },
+  "hints": [
+    "Give A a new axis so it broadcasts against B: shapes (n, 1, d) and (1, m, d) combine to (n, m, d).",
+    "Square the differences, sum over the last axis, then take the square root. The faster identity ‖a‖² + ‖b‖² − 2a·b can go slightly negative from cancellation; if you use it, clip at 0 before the square root.",
+    "diff = A[:, None, :] - B[None, :, :]; return np.sqrt((diff ** 2).sum(axis=-1))"
+  ],
+  "misconceptions": {},
+  "sources": ["harris2020-numpy", "goldberg1991-floating-point"]
+}

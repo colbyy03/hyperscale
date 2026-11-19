@@ -1,0 +1,68 @@
+---
+id: python-mle/ai-workflow
+title: How I'd do this with AI tools
+minutes: 12
+concepts: [pytest-tolerances, typed-ml-code]
+sources: [wilson2014-sci-computing, pytest-docs-9, uv-docs-0-13]
+cards: [ai-spec-and-tests-first, ai-never-edit-tests, ai-pin-library-versions]
+---
+
+<Situation from="Dev, controls engineer">
+You use coding agents every day, and so does everyone here. That's fine. What I care about is that the code they write for you is as trustworthy as code you'd write by hand. Show me how you'd use them on this module's kind of work without letting them quietly hand you a wrong answer.
+</Situation>
+
+## The division of labour
+
+An AI coding agent is a fast, tireless junior engineer who has read every library's documentation and remembers some of it wrong. It's excellent at producing plausible code quickly. It's weakest exactly where this module has been strict: silent broadcasting, floating-point edge cases, time semantics, and the gap between "runs" and "is right". So split the work:
+
+- **You own the specification and the checks**: what the function must do, which cases matter, what tolerance is acceptable, and what failure looks like.
+- **The agent owns the first draft and the busywork**: implementations, boilerplate, refactors, docstrings, and turning your list of cases into parametrized tests.
+- **The tests decide** whether the draft is accepted.
+
+## Module 1's tasks, done with an agent
+
+**Vectorizing or speeding up code.** Ask for a profile *before* any rewrite, and require two artefacts with the result: an equivalence test against the slow version on random inputs (with a stated tolerance) and before-and-after timings. Then read the shapes yourself: an agent will happily write `y - y_hat` with shapes (n,) and (n, 1), which runs, broadcasts to (n, n) and looks plausible. Ask it to state the peak memory of any broadcast intermediate.
+
+**Numerics.** Ask directly: "Where can this overflow, underflow or cancel? Which inputs break it?" Make it add tests for those inputs: logits of 1000, values near zero, data with a large offset, float32 input.
+
+**SQL.** Give it the schema, the time semantics (instants or interval averages, the time zone) and the definition of each metric. Then insist on checks: row counts before and after every join, a hand-computable tiny dataset, and the expected answer. "PUE" in a prompt very often comes back as `AVG(facility / it)`.
+
+**DataFrames.** State versions in the prompt ("Polars 1.33, pandas 3"). Models were trained largely on older code, so they suggest renamed methods, old pandas copy semantics and deprecated arguments. Run the code; don't trust it because it reads well.
+
+**Estimators.** Ask it to follow scikit-learn's contract and to run `sklearn.utils.estimator_checks.check_estimator` on the result. Reject any `__init__` that does more than store arguments.
+
+**Tests.** Have it generate cases from your specification, including the bug-exposing ones and property tests. Then mutate the implementation (swap arguments, drop a guard) and confirm the tests fail.
+
+<KeyIdea title="The one rule">
+When a test fails after an agent's change, the code is wrong until proven otherwise. Never accept a change that edits a test's expectation, loosens a tolerance, or deletes an assertion just to make the run go green, whoever made it.
+</KeyIdea>
+
+## A prompt worth keeping
+
+For this module's build, a first prompt might look like this:
+
+```text
+Context: Python 3.14 project managed with uv (see pyproject.toml and uv.lock).
+Libraries: polars 1.33, numpy 2.4, pytest 9, hypothesis.
+Task: implement telemetry/pue.py::interval_pue(df) per docs/spec.md.
+Rules:
+- Write or extend tests first in tests/test_pue.py, including: unequal interval
+  loads (ratio of sums, not mean of ratios), zero IT energy (ValueError),
+  NaN gaps, and a Hypothesis property (PUE >= 1 when facility >= IT).
+- Run `uv run pytest -q` and `uv run ruff check` and show the output.
+- Do not modify existing tests or tolerances. If one seems wrong, stop and explain why.
+```
+
+It names versions, points at a written spec, demands tests first and the bug-exposing cases by name, requires the agent to *show* that it ran the checks, and forbids the classic shortcut.
+
+<Craft title="Review checklist for AI-written code">
+- Do the tests encode *your* specification, including the nasty cases? Were they run, and did you see the output?
+- Read every array operation for shapes, and every aggregate for the average-of-ratios trap.
+- Check library versions and imports against the lockfile.
+- Look for silent fallbacks: bare `except:`, `fillna(0)`, defaults that hide missing data.
+- Is any randomness seeded and passed in, and do settings live in config rather than literals?
+</Craft>
+
+<Check items={["ai-red-test", "ai-version"]} />
+
+That completes Module 1's lessons. Its checkpoint is next. The build, the telemetry toolkit, is a project for your own machine; its brief is on the module page.

@@ -266,5 +266,157 @@
     "back": "Polars: fast single-machine transformation pipelines (lazy, parallel). DuckDB: when SQL fits or data sits in Parquet or a database. pandas: small data, libraries that expect it, existing codebases.",
     "concepts": ["dataframe-choice"],
     "critical": false
+  },
+  {
+    "id": "estimator-init-rule",
+    "type": "concept",
+    "front": "What may an estimator's `__init__` do, and why so little?",
+    "back": "Only store its arguments, unchanged. clone() rebuilds estimators from get_params() and checks each parameter comes back as the same object, so conversion or validation in __init__ breaks clone and grid search. Do that in fit.",
+    "concepts": ["estimator-api"],
+    "critical": true
+  },
+  {
+    "id": "fit-returns-self",
+    "type": "concept",
+    "front": "What must `fit` return, and why?",
+    "back": "`self`, so calls chain (`est.fit(X).transform(X)`) and pipelines can use the fitted estimator.",
+    "concepts": ["estimator-api"],
+    "critical": false
+  },
+  {
+    "id": "learned-underscore",
+    "type": "concept",
+    "front": "What does a trailing underscore mean on an estimator attribute (`center_`, `coef_`)?",
+    "back": "It was learned from data in fit. Plain names are hyperparameters set in __init__. Tools use the convention to tell settings from learned state (check_is_fitted looks for it).",
+    "concepts": ["estimator-api"],
+    "critical": false
+  },
+  {
+    "id": "protocol-structural",
+    "type": "discrimination",
+    "front": "typing.Protocol vs an abstract base class?",
+    "back": "A Protocol is structural: any object with the right methods satisfies it, without inheriting. An ABC is nominal: classes must subclass it. Protocols type duck-typed code such as \"anything with fit and predict\".",
+    "concepts": ["typed-ml-code"],
+    "critical": false
+  },
+  {
+    "id": "frozen-config",
+    "type": "code",
+    "front": "An immutable config with a list field that each instance owns, as a dataclass?",
+    "back": "`@dataclass(frozen=True)` with `features: list[str] = field(default_factory=lambda: [...])`. A plain list default is refused because it would be shared.",
+    "concepts": ["typed-ml-code"],
+    "critical": false
+  },
+  {
+    "id": "default-rng-local",
+    "type": "concept",
+    "front": "How should a function get random numbers so that runs reproduce and nothing else is disturbed?",
+    "back": "Take a seed or a Generator and use `rng = np.random.default_rng(seed)`. Never `np.random.seed`, which resets the program-wide global generator.",
+    "concepts": ["seeded-rng"],
+    "critical": true
+  },
+  {
+    "id": "seedsequence-spawn",
+    "type": "concept",
+    "front": "Independent, reproducible random streams for 8 parallel workers?",
+    "back": "`children = np.random.SeedSequence(seed).spawn(8)`, then `np.random.default_rng(child)` per worker. Don't reuse one seed or use seed + i.",
+    "concepts": ["seeded-rng"],
+    "critical": false
+  },
+  {
+    "id": "mutable-default-shared",
+    "type": "gotcha",
+    "front": "Why is `def f(x, cache=[])` a bug?",
+    "back": "Default values are evaluated once, when the def runs, so every call shares the same list. Use `cache=None` and create the list inside the function.",
+    "concepts": ["typed-ml-code"],
+    "critical": false
+  },
+  {
+    "id": "rtol-vs-atol",
+    "type": "discrimination",
+    "front": "Relative vs absolute tolerance in `assert_allclose` or `pytest.approx`: when do you need an absolute one?",
+    "back": "A relative tolerance scales with the expected value; an absolute tolerance is a fixed floor. Near zero any relative tolerance shrinks to nothing, so comparisons with 0 need an absolute tolerance.",
+    "concepts": ["pytest-tolerances"],
+    "critical": true
+  },
+  {
+    "id": "pytest-fixture",
+    "type": "concept",
+    "front": "What is a pytest fixture?",
+    "back": "A function that prepares something tests need (data, a temp folder, a seeded generator). A test receives it by naming it as an argument; fixtures can be shared and scoped.",
+    "concepts": ["pytest-tolerances"],
+    "critical": false
+  },
+  {
+    "id": "pytest-parametrize",
+    "type": "concept",
+    "front": "What does `@pytest.mark.parametrize` do?",
+    "back": "Runs one test function over a table of argument tuples, reporting each case separately.",
+    "concepts": ["pytest-tolerances"],
+    "critical": false
+  },
+  {
+    "id": "pytest-raises-check",
+    "type": "code",
+    "front": "Test that `pue(5.0, 0.0)` raises ValueError?",
+    "back": "`with pytest.raises(ValueError):` then `pue(5.0, 0.0)` inside the block. The test fails if nothing (or something else) is raised.",
+    "concepts": ["pytest-tolerances"],
+    "critical": false
+  },
+  {
+    "id": "property-based-test",
+    "type": "concept",
+    "front": "What is a property-based test, and what does Hypothesis add?",
+    "back": "A test that states a property that must hold for all valid inputs (an invariant, a round trip, an equivalence). Hypothesis generates many inputs, then shrinks any failure to a minimal counterexample.",
+    "concepts": ["property-based-testing"],
+    "critical": false
+  },
+  {
+    "id": "mutation-testing-idea",
+    "type": "concept",
+    "front": "Your tests reach 100% coverage. Why might they still be weak, and how do you check?",
+    "back": "Coverage only shows which lines ran, not whether wrong answers are noticed. Introduce plausible bugs (mutants) and confirm a test fails for each: mutation testing.",
+    "concepts": ["pytest-tolerances"],
+    "critical": false
+  },
+  {
+    "id": "uv-lock-purpose",
+    "type": "concept",
+    "front": "pyproject.toml vs uv.lock?",
+    "back": "pyproject.toml declares the version ranges you accept. uv.lock records the exact resolved versions and hashes, so `uv sync` or `uv run` rebuild an identical environment anywhere. Commit both.",
+    "concepts": ["uv-projects"],
+    "critical": false
+  },
+  {
+    "id": "ruff-role",
+    "type": "concept",
+    "front": "What does ruff do in a Python project?",
+    "back": "Lints and formats code very fast (it replaces flake8, isort and black for most projects); run it on save and in CI.",
+    "concepts": ["uv-projects"],
+    "critical": false
+  },
+  {
+    "id": "ai-spec-and-tests-first",
+    "type": "concept",
+    "front": "With a coding agent, what do you keep for yourself and what do you hand over?",
+    "back": "You own the specification, the cases that matter, the tolerances and the tests; the agent drafts implementations and boilerplate; passing tests decide acceptance.",
+    "concepts": ["pytest-tolerances"],
+    "critical": false
+  },
+  {
+    "id": "ai-never-edit-tests",
+    "type": "gotcha",
+    "front": "An agent's change makes a failing test pass by loosening its tolerance. Accept it?",
+    "back": "No. A failing test means the code is wrong until proven otherwise. Never accept edits to expectations, tolerances or assertions made just to go green.",
+    "concepts": ["pytest-tolerances"],
+    "critical": true
+  },
+  {
+    "id": "ai-pin-library-versions",
+    "type": "concept",
+    "front": "Why name library versions (Polars 1.33, pandas 3) when prompting a coding agent?",
+    "back": "Models learned mostly from older code and suggest renamed or deprecated APIs and old semantics (such as pandas' pre-copy-on-write behaviour). Naming versions and running the code catches it.",
+    "concepts": ["typed-ml-code"],
+    "critical": false
   }
 ]

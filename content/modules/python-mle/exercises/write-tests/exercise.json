@@ -1,0 +1,21 @@
+{
+  "id": "python-mle/write-tests",
+  "type": "code",
+  "language": "python",
+  "title": "Tests that catch real bugs",
+  "prompt": "This time you write the tests. `check_pue(pue)` receives an implementation of `pue` and must raise `AssertionError` (or fail a pytest check) if it breaks this specification:\n\n- `pue(facility_kwh, it_kwh)` accepts two numbers, or two equal-length sequences of interval energies;\n- it returns total facility energy divided by total IT energy, as a float;\n- it raises `ValueError` when total IT energy is zero or negative.\n\nThe grader runs your checks against a correct implementation, which they must accept, and five plausible broken ones, which they must reject. Use `pytest.approx` for float comparisons and `pytest.raises` for the error case.",
+  "concepts": ["pytest-tolerances"],
+  "difficulty": 0.45,
+  "minutes": 10,
+  "critical": true,
+  "packages": [],
+  "hints": [
+    "Think like a bug: what would a hurried colleague get wrong? Swapping the arguments, averaging per-interval ratios, forgetting the error case, rounding, or ignoring all but the first interval.",
+    "Write hand-checked cases that each expose one bug: a single pair (12, 10 → 1.2), two intervals at different loads ([1500, 3600] over [1000, 3000] gives 1.275, not 1.35), a value that isn't a round number (1.234 over 1 gives 1.234), and `with pytest.raises(ValueError): pue(5.0, 0.0)`.",
+    "assert pue(12.0, 10.0) == pytest.approx(1.2); assert pue([1500.0, 3600.0], [1000.0, 3000.0]) == pytest.approx(1.275); assert pue(1.234, 1.0) == pytest.approx(1.234); with pytest.raises(ValueError): pue(5.0, 0.0)"
+  ],
+  "misconceptions": {
+    "float-equality": "Comparing floats with == rejects correct code (0.3 / 0.1 is 2.9999999999999996); compare with a tolerance."
+  },
+  "sources": ["pytest-docs-9", "maciver2019-hypothesis"]
+}

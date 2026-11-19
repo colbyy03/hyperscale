@@ -183,3 +183,48 @@ test("a failed gate waits 24 hours before a retake", async ({ page }) => {
   await page.goto("/learn/induction/checkpoint");
   await expect(page.getByTestId("begin-checkpoint")).toHaveText(/Begin retake/);
 });
+
+const pyCheckpoint = JSON.parse(fs.readFileSync("content/modules/python-mle/checkpoint.json", "utf8")) as { items: Item[] };
+const MODULE1 = ["memory-model", "vectorization", "numerics", "sql-duckdb", "dataframes", "ml-code", "testing", "ai-workflow"];
+
+test("Module 1's gate opens after Induction and grades a code exercise in checkpoint mode", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "boots Pyodide; one viewport is enough");
+  await page.clock.setFixedTime(DAY1);
+  await completeLesson(page, "/learn/induction/welcome", "Welcome to Kestrel Ridge");
+  await completeLesson(page, "/learn/induction/data-hall", "The data hall in one picture");
+  await completeLesson(page, "/learn/induction/controls", "Hands on the controls");
+  await completeLesson(page, "/learn/induction/placement", "Placement check");
+  await page.clock.setFixedTime(DAY2);
+  await page.goto("/learn/induction/checkpoint");
+  await answerCheckpoint(page, true);
+  await expect(page.getByTestId("checkpoint-result")).toContainText("Passed");
+
+  for (const slug of MODULE1) {
+    await page.goto(`/learn/python-mle/${slug}`);
+    await page.getByRole("button", { name: /Mark lesson complete/ }).click();
+    await expect(page.getByText(/Lesson complete/)).toBeVisible();
+  }
+  await page.clock.setFixedTime(new Date(DAY2.getTime() + 24 * 3_600_000));
+  await page.goto("/learn/python-mle/checkpoint");
+  await page.getByTestId("begin-checkpoint").click();
+
+  // The code item runs in checkpoint mode: no hints, and it counts once checked.
+  const code = page.getByTestId("exercise-pairwise-distances");
+  await expect(code).toBeVisible();
+  await expect(code.getByRole("button", { name: /Hint/ })).toHaveCount(0);
+  for (const item of pyCheckpoint.items) {
+    const el = page.getByTestId(`cp-item-${item.id}`);
+    if (item.kind === "choice") await el.getByRole("radio").nth(item.answer!).click();
+    else if (item.kind === "numeric") await el.getByRole("textbox").fill(String(item.answer));
+    else if (item.kind === "explain") await el.getByRole("textbox").fill(EXPLANATION);
+  }
+  await expect(page.getByTestId("submit-checkpoint")).toBeDisabled();
+  await expect(code.getByText("Python ready")).toBeVisible({ timeout: 90_000 });
+  await code.getByRole("button", { name: "Check" }).click();
+  await expect(code.getByTestId("grade-output")).toBeVisible({ timeout: 60_000 });
+  await page.getByTestId("submit-checkpoint").click();
+  for (const box of await page.locator('[data-testid^="cp-item-"] input[type=checkbox]').all()) await box.check();
+  await page.getByTestId("finish-checkpoint").click();
+  // 13 of 14 right (the unsolved code item isn't critical) is still a pass.
+  await expect(page.getByTestId("checkpoint-result")).toContainText("Passed · 93%");
+});

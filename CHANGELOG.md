@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## Phase 4c: Module 1 complete (2026-11-19)
+
+- **Lesson 6, "ML code as software"**: functions vs classes, type hints, Protocols, frozen dataclass configs, scikit-learn's estimator contract (why `__init__` must only store arguments, `fit` returns `self`, learned attributes end in `_`), seeded generators and `SeedSequence.spawn`, mutable defaults. Exercises: a `MedianScaler` graded against real scikit-learn 1.8 in the browser (`clone`, `Pipeline`, `NotFittedError`), a bootstrap with a mutable default and global seeding (debug), and a frozen config (Parsons with a mutable-default distractor).
+- **Lesson 7, "Testing and tooling"**: what numerical tests should assert, relative vs absolute tolerance, fixtures and parametrize, mutation testing, property-based testing with Hypothesis (local), uv lockfiles, ruff, type checkers and CI. Exercises: write `check_pue`, graded by mutation testing (it must accept a correct `pue` and reject five plausible broken ones), and a table-driven pytest test (Parsons, graded by running its cases).
+- **Lesson 8, "How I'd do this with AI tools"**: the split between your specification and tests and the agent's drafts, Module 1's tasks done with an agent, a reusable prompt for the module build, and a review checklist for AI-written code.
+- **Module 1 checkpoint**: 14 items with a parallel 14-item delayed form, covering views and copies, broadcasting, energy-weighted PUE, the estimator contract (critical items), numerics, SQL windows, Polars and pandas, seeding, tolerances, a transfer item, a rubric-scored explanation, and a fresh code exercise in each form (pairwise distances; one-hot encoding).
+- **Tests**: 17 exercises verified in Pyodide with 39 known-wrong variants. A new end-to-end test passes the Induction gate, completes Module 1 and takes its checkpoint with a code item in checkpoint mode.
+
 ## Phase 4b: Module 1 lessons 4 and 5 (2026-11-18)
 
 - **Lesson 4, "SQL for telemetry, with DuckDB"**, built on the "PUE dashboard is wrong" incident: ratios of sums vs averages of ratios, clause order and evaluation order, window functions (frames, PARTITION BY, LAG on counters, QUALIFY), and as-of joins for sensors that don't share a clock. Exercises: fix the dashboard's daily PUE query, rolling-average inlet alerts, an ASOF LEFT JOIN onto a one-minute grid (all graded on DuckDB in the browser), and a clause-order Parsons problem with a WHERE-vs-HAVING distractor.

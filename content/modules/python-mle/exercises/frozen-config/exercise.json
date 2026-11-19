@@ -1,0 +1,28 @@
+{
+  "id": "python-mle/frozen-config",
+  "type": "parsons",
+  "language": "python",
+  "title": "A configuration object that can't drift",
+  "prompt": "Arrange the lines into `ForecastConfig`, an immutable configuration with a 24-hour horizon, lags (1, 2, 24) and a feature list, where each instance gets its own list. One block would crash when the class is created.",
+  "concepts": ["typed-ml-code"],
+  "difficulty": 0.3,
+  "minutes": 4,
+  "packages": [],
+  "parsons": {
+    "lines": [
+      "from dataclasses import dataclass, field",
+      "@dataclass(frozen=True)",
+      "class ForecastConfig:",
+      "    horizon_hours: int = 24",
+      "    lags: tuple[int, ...] = (1, 2, 24)",
+      "    features: list[str] = field(default_factory=lambda: [\"inlet_temp\", \"it_kw\"])"
+    ],
+    "distractors": ["    features: list[str] = [\"inlet_temp\", \"it_kw\"]"]
+  },
+  "hints": [
+    "The decorator goes directly above the class. `frozen=True` makes assigning to a field raise an error, so a config can't be changed halfway through a run.",
+    "A dataclass refuses a plain list as a default for exactly the reason a function's mutable default is a bug: it would be shared. `field(default_factory=...)` builds a fresh one per instance.",
+    "import, decorator, class line, then the three fields (the feature list uses default_factory)."
+  ],
+  "sources": ["ramalho2022-fluent-python"]
+}

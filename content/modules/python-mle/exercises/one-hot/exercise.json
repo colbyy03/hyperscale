@@ -1,0 +1,20 @@
+{
+  "id": "python-mle/one-hot",
+  "type": "code",
+  "language": "python",
+  "title": "One-hot encoding by broadcasting",
+  "prompt": "Write `one_hot(labels, k)`: `labels` is a 1-D array of integer class labels in [0, k). Return a float array of shape (len(labels), k) with a 1.0 in each row's label column and 0.0 elsewhere. Raise `ValueError` if any label is outside [0, k). No Python loops.",
+  "concepts": ["numpy-broadcasting", "numpy-vectorization"],
+  "difficulty": 0.35,
+  "minutes": 8,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["sklearn"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "Compare every label with every possible class at once. What shapes broadcast to (n, k)?",
+    "`labels[:, None]` has shape (n, 1) and `np.arange(k)` has shape (k,); comparing them gives an (n, k) boolean matrix. Check the range first with `(labels < 0) | (labels >= k)`.",
+    "if np.any((labels < 0) | (labels >= k)): raise ValueError(...); return (labels[:, None] == np.arange(k)).astype(float)"
+  ],
+  "misconceptions": {},
+  "sources": ["numpy-docs-2-5"]
+}

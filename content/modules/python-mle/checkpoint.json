@@ -1,0 +1,261 @@
+{
+  "passThreshold": 0.85,
+  "delayedThreshold": 0.8,
+  "allowTestOut": false,
+  "items": [
+    {
+      "kind": "numeric",
+      "id": "offset-f64",
+      "prompt": "A float64 array has shape (4, 5) in C order. What is the byte offset of element [1, 2]?",
+      "answer": 56,
+      "tolerance": 0.001,
+      "concepts": ["numpy-memory-model"],
+      "critical": true,
+      "explain": "Strides are (40, 8): 1 × 40 + 2 × 8 = 56 bytes."
+    },
+    {
+      "kind": "choice",
+      "id": "which-copy",
+      "prompt": "Which of these returns a copy of x rather than a view?",
+      "options": ["x[::3]", "x.reshape(2, -1) on contiguous x", "x[x > 0]", "x.T"],
+      "answer": 2,
+      "concepts": ["numpy-memory-model"],
+      "critical": true,
+      "explain": "Boolean masks always copy. Step slices, transposes and reshapes of contiguous data are views."
+    },
+    {
+      "kind": "choice",
+      "id": "mse-broadcast",
+      "prompt": "y_true has shape (500,) and y_pred has shape (500, 1). What does np.mean((y_true - y_pred) ** 2) compute?",
+      "options": ["The correct mean squared error", "A mean over a (500, 500) matrix of every prediction against every target: a wrong number, with no error", "A ValueError"],
+      "answer": 1,
+      "concepts": ["numpy-broadcasting"],
+      "critical": true,
+      "explain": "(500,) and (500, 1) broadcast to (500, 500). Flatten y_pred or keep both 1-D."
+    },
+    {
+      "kind": "numeric",
+      "id": "pue-two-intervals",
+      "prompt": "Two equal intervals: IT 1,200 kWh with facility 1,680 kWh, then IT 2,800 kWh with facility 3,220 kWh. What is the PUE over both?",
+      "answer": 1.225,
+      "tolerance": 0.002,
+      "concepts": ["sql-telemetry", "pue"],
+      "critical": true,
+      "explain": "(1,680 + 3,220) / (1,200 + 2,800) = 4,900 / 4,000 = 1.225. Averaging the two ratios (1.40 and 1.15) would say 1.275."
+    },
+    {
+      "kind": "choice",
+      "id": "safe-softmax",
+      "prompt": "Which computes softmax safely for large logits?",
+      "options": ["np.exp(x) / np.exp(x).sum()", "np.exp(x - x.max()) / np.exp(x - x.max()).sum()", "np.exp(x / x.max()) / np.exp(x / x.max()).sum()"],
+      "answer": 1,
+      "concepts": ["log-sum-exp"],
+      "explain": "Subtracting the maximum changes nothing mathematically and keeps every exponent at most 0. Dividing by the maximum changes the answer."
+    },
+    {
+      "kind": "numeric",
+      "id": "lse-three",
+      "prompt": "What is logsumexp([2000, 2000, 2000])? Give three decimals.",
+      "answer": 2001.099,
+      "tolerance": 1e-06,
+      "concepts": ["log-sum-exp"],
+      "explain": "2000 + log(3 · e⁰) = 2000 + ln 3 ≈ 2001.099."
+    },
+    {
+      "kind": "choice",
+      "id": "rolling-sql",
+      "prompt": "You need each rack's trailing 15-minute average inlet temperature alongside every one-minute reading. Which expression?",
+      "options": ["AVG(temp) with GROUP BY rack", "AVG(temp) OVER (PARTITION BY rack ORDER BY ts ROWS BETWEEN 14 PRECEDING AND CURRENT ROW)", "AVG(temp) OVER (ORDER BY ts ROWS BETWEEN 14 PRECEDING AND CURRENT ROW)"],
+      "answer": 1,
+      "concepts": ["sql-telemetry"],
+      "explain": "A window function keeps every row; PARTITION BY rack stops racks mixing inside each window; the frame covers 15 rows."
+    },
+    {
+      "kind": "choice",
+      "id": "pandas-loc",
+      "prompt": "In pandas 3, which line sets readings above 30 to NaN in df itself?",
+      "options": ["df[df.temp > 30][\"temp\"] = np.nan", "df.loc[df.temp > 30, \"temp\"] = np.nan", "df.temp.where(df.temp <= 30)"],
+      "answer": 1,
+      "concepts": ["dataframe-choice"],
+      "explain": "Only a single .loc assignment modifies df. The first is chained assignment into a copy; the third returns a new Series and leaves df unchanged."
+    },
+    {
+      "kind": "choice",
+      "id": "init-contract",
+      "prompt": "Which estimator __init__ follows scikit-learn's contract?",
+      "options": ["self.alpha = alpha; self.coef_ = None", "self.alpha = alpha", "self.alpha = max(alpha, 0.0)"],
+      "answer": 1,
+      "concepts": ["estimator-api"],
+      "critical": true,
+      "explain": "__init__ only stores arguments, unchanged. Setting coef_ there makes the estimator look fitted; clamping alpha breaks clone."
+    },
+    {
+      "kind": "choice",
+      "id": "parallel-rng",
+      "prompt": "Eight parallel workers need independent, reproducible randomness. The best approach?",
+      "options": ["np.random.seed(0) in each worker", "np.random.SeedSequence(0).spawn(8), then default_rng(child) in each worker", "default_rng() with no seed"],
+      "answer": 1,
+      "concepts": ["seeded-rng"],
+      "explain": "spawn derives independent child streams from one seed you can log. Global seeding is shared state, and no seed isn't reproducible."
+    },
+    {
+      "kind": "choice",
+      "id": "atol-zero",
+      "prompt": "np.testing.assert_allclose(actual, 0.0, rtol=1e-7) fails for actual = 1e-15. Why?",
+      "options": ["actual isn't finite", "A relative tolerance around 0 allows no error at all; add an absolute tolerance (atol)", "assert_allclose can't compare scalars"],
+      "answer": 1,
+      "concepts": ["pytest-tolerances"],
+      "explain": "The allowed error is atol + rtol × |expected|, which is 0 here. Comparisons with zero need an absolute floor."
+    },
+    {
+      "kind": "explain",
+      "id": "explain-dashboard-pue",
+      "prompt": "Ines asks why the dashboard's daily PUE (the average of the 15-minute PUE values) is higher than the bill implies. Write the short reply you'd send her: what's wrong, why it skews the number, and the fix.",
+      "rubric": ["A period's PUE is total facility energy divided by total IT energy: a ratio of sums", "Averaging per-interval ratios gives every interval equal weight, however much energy flowed in it", "Low-load intervals (often nights, with higher PUE) get too much weight, so the average runs high", "The fix is SUM(facility_kw) / SUM(it_kw) per day, energy-weighted, since the intervals are equal"],
+      "concepts": ["sql-telemetry", "pue"],
+      "explain": "The four points: ratio of sums; equal weighting; low-load intervals overweighted; SUM over SUM per day."
+    },
+    {
+      "kind": "choice",
+      "id": "float32-timestamps",
+      "prompt": "A pipeline casts Unix timestamps (about 1.8 × 10⁹ s) to float32 to save memory. Joining one-minute sensor tables afterwards produces duplicate keys. Why?",
+      "options": ["float32 can't store numbers that large", "Near 1.8 × 10⁹, adjacent float32 values are 128 s apart, so different minutes round to the same value", "Joins don't support floating-point keys"],
+      "answer": 1,
+      "transfer": true,
+      "concepts": ["floating-point"],
+      "explain": "float32 keeps about 7 significant digits. Keep timestamps as int64 (or float64)."
+    },
+    {
+      "kind": "exercise",
+      "id": "python-mle/pairwise-distances"
+    }
+  ],
+  "delayedItems": [
+    {
+      "kind": "numeric",
+      "id": "offset-i16",
+      "prompt": "An int16 array has shape (6, 10) in C order. What is the byte offset of element [3, 4]?",
+      "answer": 68,
+      "tolerance": 0.001,
+      "concepts": ["numpy-memory-model"],
+      "critical": true,
+      "explain": "Strides are (20, 2): 3 × 20 + 4 × 2 = 68 bytes."
+    },
+    {
+      "kind": "choice",
+      "id": "which-view",
+      "prompt": "Which result shares memory with a?",
+      "options": ["a[[1, 3]]", "a[a < 0]", "a[1:4]", "np.sort(a)"],
+      "answer": 2,
+      "concepts": ["numpy-memory-model"],
+      "critical": true,
+      "explain": "Basic slicing is a view. Fancy indexing, boolean masks and np.sort return new arrays."
+    },
+    {
+      "kind": "choice",
+      "id": "residual-shape",
+      "prompt": "y has shape (n, 1) and X @ w has shape (n,). What shape is y - X @ w?",
+      "options": ["(n,)", "(n, 1)", "(n, n)"],
+      "answer": 2,
+      "concepts": ["numpy-broadcasting"],
+      "critical": true,
+      "explain": "(n, 1) against (n,) broadcasts to (n, n): every target minus every prediction. Make the shapes match before subtracting."
+    },
+    {
+      "kind": "numeric",
+      "id": "pue-three-intervals",
+      "prompt": "Three equal intervals: IT 1,000, 2,000 and 3,000 kWh; facility 1,400, 2,500 and 3,500 kWh. What is the PUE over all three?",
+      "answer": 1.2333,
+      "tolerance": 0.002,
+      "concepts": ["sql-telemetry", "pue"],
+      "critical": true,
+      "explain": "7,400 / 6,000 ≈ 1.233. The average of the three ratios would say about 1.278."
+    },
+    {
+      "kind": "choice",
+      "id": "log-softmax",
+      "prompt": "Why compute a classifier's loss with a fused log-softmax (or log-sum-exp) rather than np.log(softmax(x))?",
+      "options": ["It's shorter to write", "softmax can underflow to exactly 0 for very negative logits, and log(0) = −inf; log-softmax computes x − logsumexp(x) safely", "np.log is slow"],
+      "answer": 1,
+      "concepts": ["log-sum-exp"],
+      "explain": "x − logsumexp(x) never takes the log of an underflowed probability."
+    },
+    {
+      "kind": "numeric",
+      "id": "lse-negative",
+      "prompt": "What is logsumexp([−1500, −1500])? Give three decimals.",
+      "answer": -1499.307,
+      "tolerance": 1e-06,
+      "concepts": ["log-sum-exp"],
+      "explain": "−1500 + ln 2 ≈ −1499.307. The naive formula gives log(0) = −inf."
+    },
+    {
+      "kind": "choice",
+      "id": "qualify",
+      "prompt": "In DuckDB, how do you keep only the rows whose rolling average (a window function) is above 27?",
+      "options": ["WHERE AVG(temp) OVER (...) > 27", "QUALIFY avg15 > 27", "HAVING avg15 > 27 without a GROUP BY"],
+      "answer": 1,
+      "concepts": ["sql-telemetry"],
+      "explain": "WHERE runs before window functions exist. QUALIFY filters on window results, or you can wrap the query and filter outside."
+    },
+    {
+      "kind": "choice",
+      "id": "lazy-run",
+      "prompt": "lf = pl.scan_parquet(\"x/*.parquet\").filter(...).select(...). What has Polars executed so far?",
+      "options": ["The whole scan", "Nothing: it runs, optimized, on .collect()", "Only the filter"],
+      "answer": 1,
+      "concepts": ["dataframe-choice"],
+      "explain": "A lazy frame only builds a plan. collect() optimizes it, pushing the filter and column selection into the scan, and runs it."
+    },
+    {
+      "kind": "choice",
+      "id": "fit-contract",
+      "prompt": "Which is part of the estimator contract?",
+      "options": ["fit returns self and stores learned values in attributes ending in an underscore", "fit returns the transformed data", "__init__ validates every parameter"],
+      "answer": 0,
+      "concepts": ["estimator-api"],
+      "critical": true,
+      "explain": "fit returns self; learned state ends in _; __init__ only stores parameters."
+    },
+    {
+      "kind": "choice",
+      "id": "global-seed-harm",
+      "prompt": "A helper function calls np.random.seed(0) internally. What's the harm?",
+      "options": ["None: it makes things reproducible", "It resets the global generator, changing the random numbers every other part of the program gets", "It slows NumPy down"],
+      "answer": 1,
+      "concepts": ["seeded-rng"],
+      "explain": "Global seeding is shared mutable state. Pass a seeded Generator instead."
+    },
+    {
+      "kind": "choice",
+      "id": "rtol-large",
+      "prompt": "Two annual energy totals around 4 × 10¹⁰ Wh differ only by float rounding, yet assert_allclose(a, b, rtol=0, atol=1e-9) fails. The fix?",
+      "options": ["Use a relative tolerance (say rtol=1e-12) so the tolerance scales with the values", "Round both to integers", "Compare them as strings"],
+      "answer": 0,
+      "concepts": ["pytest-tolerances"],
+      "explain": "At 4 × 10¹⁰, one unit in the last place is about 8 × 10⁻⁶, far above atol = 10⁻⁹. Large values need a relative tolerance."
+    },
+    {
+      "kind": "explain",
+      "id": "explain-vectorization",
+      "prompt": "Explain to a teammate why a vectorized NumPy expression is much faster than a Python loop over the same numbers, and one way vectorizing can backfire.",
+      "rubric": ["The loop runs inside compiled code instead of the Python interpreter: once per array, not once per element", "It avoids per-element overhead: no boxing into Python objects, no type checks or method dispatch", "It walks contiguous memory efficiently (cache-friendly, often SIMD)", "Backfire: broadcasting can create huge temporaries (such as an n × m × d intermediate), so you may need to chunk or reformulate"],
+      "concepts": ["numpy-vectorization"],
+      "explain": "Compiled loop; no per-element overhead; efficient memory access; watch broadcast temporaries."
+    },
+    {
+      "kind": "choice",
+      "id": "counter-variance",
+      "prompt": "A cumulative energy counter sits near 4.2 × 10¹⁰ Wh. Its variance from mean(x²) − mean(x)² in float64 comes out as 262,144 instead of about 9. The fix?",
+      "options": ["Use float32", "Center first (two passes) or use Welford's update", "Round the counter to whole kWh"],
+      "answer": 1,
+      "transfer": true,
+      "concepts": ["floating-point"],
+      "explain": "The shortcut subtracts two numbers near 1.8 × 10²¹; deviations from the mean stay small and lose nothing."
+    },
+    {
+      "kind": "exercise",
+      "id": "python-mle/one-hot"
+    }
+  ]
+}

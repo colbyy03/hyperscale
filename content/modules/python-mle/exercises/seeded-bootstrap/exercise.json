@@ -1,0 +1,22 @@
+{
+  "id": "python-mle/seeded-bootstrap",
+  "type": "debug",
+  "language": "python",
+  "title": "The bootstrap that changes everyone's random numbers",
+  "prompt": "`bootstrap_means(x, n_boot, seed)` should return the means of `n_boot` bootstrap resamples of `x`: the same numbers every time for the same seed, and different numbers for a different seed. It has two bugs that bite in a shared codebase. The second call returns twice as many values as the first, and calling it silently changes the random numbers every other part of the program gets.\n\nFix both. Keep the signature `bootstrap_means(x, n_boot=200, seed=0)`.",
+  "concepts": ["seeded-rng", "typed-ml-code"],
+  "difficulty": 0.35,
+  "minutes": 8,
+  "critical": true,
+  "packages": [],
+  "hints": [
+    "Call it twice in a row and compare the lengths. Then check `np.random.random()` before and after a call. When is the default list `[]` created, once or on every call?",
+    "A default value is evaluated once, when the `def` runs, so every call shares the same list. `np.random.seed` resets the global generator that all other code draws from. Make a private generator with `np.random.default_rng(seed)` instead.",
+    "rng = np.random.default_rng(seed); idx = rng.integers(0, len(x), size=(n_boot, len(x))); return np.asarray(x)[idx].mean(axis=1)"
+  ],
+  "misconceptions": {
+    "mutable-default": "A default argument is evaluated once, when the function is defined; a mutable default (a list or dict) is shared by every call.",
+    "global-seed": "np.random.seed resets the global generator for the whole program; pass a seeded np.random.default_rng instead."
+  },
+  "sources": ["numpy-docs-2-5", "ramalho2022-fluent-python"]
+}

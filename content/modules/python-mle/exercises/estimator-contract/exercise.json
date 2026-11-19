@@ -1,0 +1,23 @@
+{
+  "id": "python-mle/estimator-contract",
+  "type": "code",
+  "language": "python",
+  "title": "A scaler that honours the estimator contract",
+  "prompt": "Write `MedianScaler`, a transformer that subtracts each column's median and divides by its interquartile range. It's robust to the spikes sensor data is full of. It must follow scikit-learn's estimator contract, so `clone`, `Pipeline` and grid search work with it:\n\n- `__init__(self, with_centering=True, quantile_range=(25.0, 75.0))` stores its arguments **unchanged** and does nothing else;\n- `fit(X, y=None)` learns `center_` (column medians, or zeros if `with_centering` is false) and `scale_` (the spread between the two percentiles in `quantile_range`; a zero spread becomes 1.0), then returns `self`;\n- `transform(X)` returns `(X - center_) / scale_` and raises scikit-learn's `NotFittedError` if called before `fit`.\n\nInherit from `BaseEstimator` and `TransformerMixin` (which supplies `fit_transform`).",
+  "concepts": ["estimator-api", "typed-ml-code"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": true,
+  "packages": ["scikit-learn"],
+  "constraints": { "forbidImports": [], "requireVectorized": false, "timeoutMs": 20000 },
+  "hints": [
+    "Keep `__init__` to plain assignments: `self.with_centering = with_centering` and so on. Why would converting `quantile_range` to a list there break `clone`?",
+    "`clone` rebuilds the estimator from `get_params()` and checks each parameter is the very object it passed in. Learned values go on attributes ending in `_`, set only in `fit`. `np.percentile(X, self.quantile_range, axis=0)` gives both percentiles at once. In `transform`, call `sklearn.utils.validation.check_is_fitted(self)` first.",
+    "fit: X = np.asarray(X, float); lo, hi = np.percentile(X, self.quantile_range, axis=0); self.center_ = np.median(X, axis=0) if self.with_centering else np.zeros(X.shape[1]); spread = hi - lo; self.scale_ = np.where(spread == 0, 1.0, spread); return self"
+  ],
+  "misconceptions": {
+    "init-does-work": "An estimator's __init__ must only store its arguments, unchanged; validation and learning belong in fit, or clone and grid search break.",
+    "fit-returns-self": "fit must return self so calls can be chained (`est.fit(X).transform(X)`) and pipelines can use it."
+  },
+  "sources": ["sklearn-user-guide-1-9"]
+}

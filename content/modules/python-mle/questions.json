@@ -292,5 +292,133 @@
     "answer": 1,
     "concepts": ["dataframe-choice"],
     "explain": "Time-based windows are built by scanning each group in time order, so the input must be sorted within each group."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-clone",
+    "prompt": "Which __init__ keeps an estimator clone-safe?",
+    "options": ["self.alpha = float(alpha)", "self.alpha = alpha", "if alpha < 0: raise ValueError(...); self.alpha = alpha"],
+    "answer": 1,
+    "concepts": ["estimator-api"],
+    "explain": "Only a plain, unchanged assignment. Conversion and validation belong in fit, otherwise clone and grid search fail."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-underscore",
+    "prompt": "In scikit-learn's convention, which attribute was learned from data?",
+    "options": ["n_components", "components_", "random_state"],
+    "answer": 1,
+    "concepts": ["estimator-api"],
+    "explain": "A trailing underscore marks learned state set in fit; the others are hyperparameters."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-default",
+    "prompt": "def add(x, seen=[]): seen.append(x); return len(seen). What do add(1), add(1), add(1) return?",
+    "options": ["1, 1, 1", "1, 2, 3", "An error"],
+    "answer": 1,
+    "concepts": ["typed-ml-code"],
+    "explain": "The default list is created once and shared, so it keeps growing across calls."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-spawn",
+    "prompt": "You run 16 parallel training jobs and need independent, reproducible randomness in each. The best approach?",
+    "options": ["np.random.seed(42) in every job", "np.random.default_rng(42 + i) for job i", "np.random.SeedSequence(42).spawn(16), then default_rng(child) per job"],
+    "answer": 2,
+    "concepts": ["seeded-rng"],
+    "explain": "spawn derives statistically independent child streams from one logged seed. Global seeding is shared state, and seed + i gives no independence guarantee."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-frozen",
+    "prompt": "Why make a training configuration a frozen dataclass?",
+    "options": ["It runs faster", "No code can change a setting mid-run, so the config you logged is the config you used", "It makes the object JSON"],
+    "answer": 1,
+    "concepts": ["typed-ml-code"],
+    "explain": "Immutability removes a class of silent bugs where a helper tweaks a shared config and every later step sees the change."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-leak",
+    "prompt": "A colleague computes the scaler's median on the full dataset, then splits into train and test. What's wrong?",
+    "options": ["Nothing: medians are robust", "Test-set information leaks into training through the learned statistics, so test scores are optimistic", "Medians can't be used for scaling"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["estimator-api"],
+    "explain": "Everything learned, including preprocessing statistics, must come from training data only: fit on the train split, then transform both splits."
+  },
+  {
+    "kind": "choice",
+    "id": "tt-atol",
+    "prompt": "A test asserts a computed covariance of 3 × 10⁻¹⁸ is close to 0 using rtol = 1e-6 and atol = 0. Does it pass?",
+    "options": ["Yes: 3 × 10⁻¹⁸ is tiny", "No: a relative tolerance around 0 is 0, so you need an absolute tolerance", "Only on some CPUs"],
+    "answer": 1,
+    "concepts": ["pytest-tolerances"],
+    "explain": "The allowed error is rtol × |expected| = 0 when expected is 0. Add an absolute floor, such as atol=1e-12."
+  },
+  {
+    "kind": "choice",
+    "id": "tt-coverage",
+    "prompt": "Your test suite reaches 100% line coverage. What does that guarantee?",
+    "options": ["The code has no bugs", "Every line ran at least once during the tests; not that a wrong result would be noticed", "Every branch condition was tested both ways"],
+    "answer": 1,
+    "concepts": ["pytest-tolerances"],
+    "explain": "Coverage measures execution, not checking. Mutation testing (do the tests fail when the code is wrong?) measures strength."
+  },
+  {
+    "kind": "numeric",
+    "id": "tt-parametrize-count",
+    "prompt": "A test has two stacked parametrize decorators: one gives 3 values for x, the other 2 values for y. How many test cases run?",
+    "answer": 6,
+    "tolerance": 0.001,
+    "concepts": ["pytest-tolerances"],
+    "explain": "Stacked parametrize decorators take the cross product: 3 × 2 = 6 cases."
+  },
+  {
+    "kind": "choice",
+    "id": "tt-lockfile",
+    "prompt": "Why commit uv.lock as well as pyproject.toml?",
+    "options": ["uv refuses to run without it", "It pins the exact resolved versions, so everyone and CI get an identical environment", "It speeds up imports"],
+    "answer": 1,
+    "concepts": ["uv-projects"],
+    "explain": "pyproject.toml allows ranges; the lockfile records what was actually resolved, so a dependency's new release can't silently change your results."
+  },
+  {
+    "kind": "choice",
+    "id": "tt-property",
+    "prompt": "Which is a property-based test for standardize(X)?",
+    "options": ["standardize([[1, 10], [3, 30]]) == [[-1, -1], [1, 1]]", "For any X with non-constant columns, standardize(X) has column means ≈ 0 and standard deviations ≈ 1", "standardize runs in under 1 ms"],
+    "answer": 1,
+    "concepts": ["property-based-testing"],
+    "explain": "A property holds for all valid inputs, and a tool such as Hypothesis generates the inputs. The first option is an example-based test."
+  },
+  {
+    "kind": "choice",
+    "id": "tt-flaky",
+    "prompt": "A test passes on your laptop and fails in CI with 1.2000000000000002 != 1.2. The right fix?",
+    "options": ["Round both sides to 1 decimal", "Compare with pytest.approx (or assert_allclose) using a stated tolerance", "Skip the test in CI"],
+    "answer": 1,
+    "transfer": true,
+    "concepts": ["pytest-tolerances"],
+    "explain": "Different CPUs, libraries or summation orders change the last bits of a float. Rounding to one decimal would also hide real errors."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-red-test",
+    "prompt": "After an agent's refactor, test_daily_pue fails by 0.4%. The agent proposes raising the test's rtol from 1e-9 to 1e-2. What do you do?",
+    "options": ["Accept: 0.4% is small", "Reject it and find out why the result changed; the refactor probably changed the computation", "Delete the test, since it's flaky"],
+    "answer": 1,
+    "concepts": ["pytest-tolerances"],
+    "explain": "The test caught a behaviour change, which is its job. Loosening it hides the bug. A deterministic computation that moves by 0.4% has changed."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-version",
+    "prompt": "An agent's Polars code calls df.groupby(...) and fails with an AttributeError. The most likely reason?",
+    "options": ["Polars is broken", "The model learned an older API; current Polars spells it group_by", "groupby needs a pandas import"],
+    "answer": 1,
+    "concepts": ["typed-ml-code"],
+    "explain": "APIs get renamed between versions, and models trained on older code suggest the old names. Name the versions you use and run the code."
   }
 ]

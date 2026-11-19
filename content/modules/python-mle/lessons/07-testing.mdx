@@ -1,0 +1,72 @@
+---
+id: python-mle/testing
+title: Testing and tooling
+minutes: 30
+concepts: [pytest-tolerances, property-based-testing, uv-projects]
+sources: [pytest-docs-9, maciver2019-hypothesis, uv-docs-0-13, wilson2014-sci-computing]
+cards: [rtol-vs-atol, pytest-fixture, pytest-parametrize, pytest-raises-check, property-based-test, mutation-testing-idea, uv-lock-purpose, ruff-role]
+---
+
+<Situation from="Ines, reliability lead">
+Last month someone refactored our PUE function for speed. It got faster and quietly started reporting 2% low, and nobody noticed for three weeks because the only test checked that it "returns a number". I want tests that would have caught that, and an environment where your code runs the same on my machine as on yours.
+</Situation>
+
+## What a good numerical test checks
+
+pytest finds functions named `test_*`, runs them, and reports any `assert` that fails, with the values involved. Most of the craft is choosing *what* to assert:
+
+- **Hand-worked examples.** Small cases you computed yourself: one interval of 12 kWh against 10 kWh is 1.2.
+- **Cases that expose specific bugs.** Two intervals at different loads separate a ratio of totals from an average of ratios. A value that isn't round exposes rounding. Zero IT energy exposes a missing error check.
+- **Tolerances, never `==`.** Floats carry rounding error, so compare with `pytest.approx(expected)` or `np.testing.assert_allclose(actual, expected, rtol=..., atol=...)`. A **relative** tolerance scales with the size of the values; an **absolute** tolerance is a fixed floor, and you need one when the expected value is at or near zero, where any relative tolerance shrinks to nothing.
+- **Errors.** `with pytest.raises(ValueError): pue(5.0, 0.0)` checks that bad input fails loudly.
+
+Two pytest features keep test files short. A **fixture** is a function that prepares something a test needs (a DataFrame, a temporary folder, a seeded generator); tests receive it by naming it as an argument. **`@pytest.mark.parametrize`** runs one test over a table of cases and reports each case separately.
+
+<CodeExercise id="python-mle/parametrize-order" />
+
+## Are your tests strong enough?
+
+Code coverage tells you which lines your tests *executed*, not whether they would *notice* a wrong answer. A sharper question: if a colleague introduced a plausible bug, would a test fail? Deliberately breaking the code and checking that the tests object is called **mutation testing**, and it's exactly how the next exercise grades you.
+
+<CodeExercise id="python-mle/write-tests" />
+
+## Properties: tests for inputs you didn't think of
+
+Examples test the cases you thought of. **Property-based tests** state something that must hold for *every* valid input, and a library generates hundreds of inputs looking for a counterexample. When it finds one, it shrinks it to the smallest failing case. Useful properties for ML code:
+
+- invariants: softmax outputs sum to 1; PUE is at least 1 whenever facility energy is at least IT energy;
+- round trips: scaling then inverse-scaling returns the input, within tolerance;
+- equivalences: the vectorized version equals the slow, obviously correct loop on random small inputs.
+
+In Python the standard tool is **Hypothesis**. It isn't available in the browser, so you'll use it in this module's build, on your own machine:
+
+```python
+from hypothesis import given, strategies as st
+
+@given(st.lists(st.floats(1.0, 1e4), min_size=1), st.floats(1.0, 2.0))
+def test_pue_never_below_one(it_kwh, ratio):
+    facility = [x * ratio for x in it_kwh]
+    assert pue(facility, it_kwh) >= 1.0 - 1e-12
+```
+
+## Tooling that makes it reproducible
+
+- **uv** manages Python versions, virtual environments and dependencies. `pyproject.toml` lists the version ranges you accept. `uv.lock` records the exact versions (and file hashes) that were resolved, so `uv sync` or `uv run pytest` rebuilds the same environment on any machine. Commit the lockfile.
+- **ruff** lints and formats Python in milliseconds. Run it on save and in CI.
+- **A type checker** (mypy or pyright) catches whole classes of mistakes before any test runs.
+- **CI** runs all of it on every push. This course's own repository does exactly that.
+
+<Bridge>
+A test suite is commissioning for software. A new chilled-water plant isn't accepted because it "runs": it's put through functional tests at defined conditions with pass criteria and tolerances, including what happens when a pump fails. Tests with tolerances and failure cases are the same discipline, rerun automatically every time the code changes.
+</Bridge>
+
+<Craft title="Testing habits for ML code">
+- Test the pure functions (features, metrics, losses) exhaustively; they're cheap to test and expensive to get wrong.
+- Pin randomness in tests with a seeded generator, and assert on statistics with sensible tolerances, not on exact random draws.
+- When a test fails after a change, assume the code is wrong before you loosen the tolerance. And never let an AI assistant "fix" a red test by editing the test.
+- Keep a few tiny real-data samples as fixtures: they catch unit, time-zone and dtype bugs that synthetic data misses.
+</Craft>
+
+<Check items={["tt-atol", "tt-coverage", "tt-parametrize-count", "tt-lockfile", "tt-property"]} />
+
+Next: how to do all of this well with AI coding tools, then Module 1's checkpoint.
