@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/pca-svd",
+  "type": "code",
+  "language": "python",
+  "title": "PCA from the SVD",
+  "prompt": "Write `pca(X, k)` for a snapshot matrix `X`: one row per hourly snapshot, one column per sensor. Return `(mean, components, explained, scores)`:\n\n- `mean`: each sensor's average, shape (p,);\n- `components`: the first `k` principal directions as unit-length rows, shape (k, p): the right singular vectors of the centered data, each flipped so that its entry with the largest magnitude is positive;\n- `explained`: the fraction of the total variance each component captures, shape (k,);\n- `scores`: each centered snapshot's coordinates along the components, shape (n, k).\n\nUse `np.linalg.svd` on the centered data, and no loops. The support file `field.py` has `make_field()`, the pod's inlet field, if you want to try your function on it with Run.",
+  "concepts": ["pca-pod", "svd"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["sklearn", "scipy"], "requireVectorized": true, "timeoutMs": 10000 },
+  "hints": [
+    "PCA looks for the directions along which the snapshots vary most. What has to be removed first, so that \"vary\" means variation and not just distance from zero?",
+    "Center: Xc = X − X.mean(axis=0). Then Xc = U S Vt: the rows of Vt are the principal directions, the variance along each is proportional to S², and the scores are Xc @ Vt[:k].T (equivalently U[:, :k] * S[:k]). To fix the signs, find each row's index of largest |value| with argmax and multiply the row by the sign of that entry.",
+    "mean = X.mean(axis=0); Xc = X - mean; U, S, Vt = np.linalg.svd(Xc, full_matrices=False); C = Vt[:k]; big = np.abs(C).argmax(axis=1); C = C * np.sign(C[np.arange(k), big])[:, None]; explained = (S**2 / np.sum(S**2))[:k]; scores = Xc @ C.T."
+  ],
+  "misconceptions": {
+    "pca-needs-centering": "Without centering, the first singular direction points at the mean field and 'explains' 99.9% of the energy, which says nothing about how the field varies. Subtract each sensor's mean first.",
+    "energy-uses-squares": "Variance fractions use squared singular values (σᵢ² / Σσⱼ²)."
+  },
+  "sources": ["jolliffe2016-pca", "brunton-kutz-2022", "strang2019-lalfd"]
+}

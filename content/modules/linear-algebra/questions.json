@@ -50,11 +50,7 @@
     "kind": "choice",
     "id": "vec-centered-cos",
     "prompt": "You compare the daily temperature profiles of 200 inlet sensors that all read between 20 and 24 °C. The raw cosine similarity is above 0.99 for almost every pair. What's going on, and what should you do?",
-    "options": [
-      "The sensors are redundant: keep a handful and drop the rest",
-      "The shared ~22 °C baseline dominates every vector: subtract each profile's mean, which gives the correlation",
-      "Cosine similarity breaks down above 24 dimensions: switch to Euclidean distance"
-    ],
+    "options": ["The sensors are redundant: keep a handful and drop the rest", "The shared ~22 °C baseline dominates every vector: subtract each profile's mean, which gives the correlation", "Cosine similarity breaks down above 24 dimensions: switch to Euclidean distance"],
     "answer": 1,
     "concepts": ["cosine-similarity"],
     "transfer": true,
@@ -74,12 +70,7 @@
     "id": "vec-explain-projection",
     "prompt": "Explain, as you would to a colleague, why the projection of b onto a line is the closest point on that line to b, and where the formula (a · b / a · a) a comes from.",
     "concepts": ["vector-geometry"],
-    "rubric": [
-      "Points on the line are multiples t·a, and the distance to b is the length of b − t·a",
-      "The distance is smallest when b − t·a is perpendicular to the line (Pythagoras: any other point adds a perpendicular leg)",
-      "Perpendicular means a · (b − t·a) = 0, which gives t = (a · b)/(a · a)",
-      "Notes the result depends only on the line, not on the length of a (scaling a cancels)"
-    ],
+    "rubric": ["Points on the line are multiples t·a, and the distance to b is the length of b − t·a", "The distance is smallest when b − t·a is perpendicular to the line (Pythagoras: any other point adds a perpendicular leg)", "Perpendicular means a · (b − t·a) = 0, which gives t = (a · b)/(a · a)", "Notes the result depends only on the line, not on the length of a (scaling a cancels)"],
     "explain": "Any other point q on the line forms a right triangle with b and the foot p of the perpendicular, so ‖b − q‖² = ‖b − p‖² + ‖p − q‖² > ‖b − p‖². Setting a · (b − t a) = 0 gives the multiplier."
   },
   {
@@ -114,11 +105,7 @@
     "kind": "choice",
     "id": "lm-dummy",
     "prompt": "A model has an intercept plus an indicator column for each of the four seasons. What happens when you fit it by least squares?",
-    "options": [
-      "Nothing special: extra features never hurt least squares",
-      "X has rank 4, not 5: the coefficients aren't unique, although the predictions are",
-      "Every library raises an error"
-    ],
+    "options": ["Nothing special: extra features never hurt least squares", "X has rank 4, not 5: the coefficients aren't unique, although the predictions are", "Every library raises an error"],
     "answer": 1,
     "concepts": ["rank-subspaces", "linear-maps"],
     "critical": true,
@@ -147,11 +134,7 @@
     "kind": "choice",
     "id": "lm-inv-vs-solve",
     "prompt": "Why is np.linalg.solve(A, b) preferred to np.linalg.inv(A) @ b?",
-    "options": [
-      "solve is the only one that works for symmetric matrices",
-      "solve does about a third of the work and leaves residuals that can be orders of magnitude smaller",
-      "inv fails whenever κ(A) is above 100"
-    ],
+    "options": ["solve is the only one that works for symmetric matrices", "solve does about a third of the work and leaves residuals that can be orders of magnitude smaller", "inv fails whenever κ(A) is above 100"],
     "answer": 1,
     "concepts": ["conditioning", "linear-maps"],
     "explain": "solve factors A once (LU with pivoting) and substitutes. Forming the inverse takes about three times the work and is less accurate: on an 8 × 8 Hilbert matrix the relative residual is about 10⁻⁸ through inv and 10⁻¹⁶ through solve."
@@ -171,12 +154,7 @@
     "id": "lm-explain-collinear",
     "prompt": "Dev asks: 'How can my predictions be stable when the coefficients swing every week?' Explain in terms of the null space and the condition number.",
     "concepts": ["conditioning", "rank-subspaces"],
-    "rubric": [
-      "The two sensor columns are nearly identical, so X has a direction v with Xv ≈ 0 (nearly in the null space)",
-      "Adding any multiple of v to the coefficients barely changes Xw, so the data can't pin down that combination; noise moves it around",
-      "The condition number is large because the smallest stretch (along v) is tiny compared with the largest",
-      "The fix: drop or average one sensor, or regularize, and interpret only well-determined combinations such as the sum"
-    ],
+    "rubric": ["The two sensor columns are nearly identical, so X has a direction v with Xv ≈ 0 (nearly in the null space)", "Adding any multiple of v to the coefficients barely changes Xw, so the data can't pin down that combination; noise moves it around", "The condition number is large because the smallest stretch (along v) is tiny compared with the largest", "The fix: drop or average one sensor, or regularize, and interpret only well-determined combinations such as the sum"],
     "explain": "Predictions live in the column space and are well determined; the individual coefficients move along a nearly-null direction that the data can't see."
   },
   {
@@ -230,11 +208,7 @@
     "kind": "choice",
     "id": "ls-gs-classical",
     "prompt": "How do classical and modified Gram–Schmidt differ?",
-    "options": [
-      "They produce different Q even in exact arithmetic",
-      "They agree in exact arithmetic, but classical Gram–Schmidt can lose orthogonality in floating point",
-      "Only in speed: modified is faster"
-    ],
+    "options": ["They produce different Q even in exact arithmetic", "They agree in exact arithmetic, but classical Gram–Schmidt can lose orthogonality in floating point", "Only in speed: modified is faster"],
     "answer": 1,
     "concepts": ["qr-decomposition"],
     "explain": "On paper they're the same algorithm in a different order. On a matrix with κ ≈ 10⁸, classical Gram–Schmidt's ‖QᵀQ − I‖ reached about 2 (orthogonality gone), modified a few times 10⁻⁹, and Householder QR about 10⁻¹⁵."
@@ -243,11 +217,7 @@
     "kind": "choice",
     "id": "ls-noor",
     "prompt": "Noor's chiller curve uses powers of the condenser lift (in kelvin) up to the 4th. The spreadsheet's normal-equation coefficients jump when one more week of data is added. What's the best fix?",
-    "options": [
-      "Keep the normal equations but compute them in higher precision",
-      "Standardize the features before building the powers, fit with QR or lstsq, and judge the model by its predictions",
-      "Add more polynomial terms so the fit is less sensitive"
-    ],
+    "options": ["Keep the normal equations but compute them in higher precision", "Standardize the features before building the powers, fit with QR or lstsq, and judge the model by its predictions", "Add more polynomial terms so the fit is less sensitive"],
     "answer": 1,
     "concepts": ["least-squares", "conditioning"],
     "transfer": true,
@@ -258,12 +228,342 @@
     "id": "ls-explain-normal-equations",
     "prompt": "Explain why solving least squares through XᵀX loses accuracy, and what QR does instead.",
     "concepts": ["least-squares", "qr-decomposition", "conditioning"],
-    "rubric": [
-      "The accuracy you can expect is governed by the condition number: about log₁₀ κ digits are lost",
-      "κ(XᵀX) = κ(X)², so forming XᵀX doubles the number of digits lost",
-      "QR factors X itself into an orthonormal Q (which doesn't amplify errors) and a triangular R with κ(R) = κ(X)",
-      "Then Rw = Qᵀy is solved by back substitution, never forming XᵀX or an inverse"
-    ],
+    "rubric": ["The accuracy you can expect is governed by the condition number: about log₁₀ κ digits are lost", "κ(XᵀX) = κ(X)², so forming XᵀX doubles the number of digits lost", "QR factors X itself into an orthonormal Q (which doesn't amplify errors) and a triangular R with κ(R) = κ(X)", "Then Rw = Qᵀy is solved by back substitution, never forming XᵀX or an inverse"],
     "explain": "Squaring the condition number is the whole problem; QR solves the same least-squares problem working with κ(X)."
+  },
+  {
+    "kind": "numeric",
+    "id": "eig-trace-det",
+    "prompt": "A 3 × 3 matrix has eigenvalues 2, 0.5 and −1. What is its determinant?",
+    "answer": -1,
+    "tolerance": 0.01,
+    "concepts": ["eigendecomposition"],
+    "explain": "The determinant is the product of the eigenvalues: 2 × 0.5 × (−1) = −1. (The trace is their sum, 1.5.)"
+  },
+  {
+    "kind": "choice",
+    "id": "eig-powers",
+    "prompt": "A = VΛV⁻¹ with Λ diagonal. Which expression equals A¹⁰?",
+    "options": ["V Λ¹⁰ V⁻¹", "V¹⁰ Λ¹⁰ V⁻¹⁰", "10 V Λ V⁻¹"],
+    "answer": 0,
+    "concepts": ["eigendecomposition"],
+    "explain": "A² = VΛV⁻¹VΛV⁻¹ = VΛ²V⁻¹, because the inner V⁻¹V cancels. Repeating gives VΛ¹⁰V⁻¹, and powers of a diagonal matrix are powers of its entries."
+  },
+  {
+    "kind": "choice",
+    "id": "eig-stability",
+    "prompt": "A discrete-time model x₍ₖ₊₁₎ = A x₍ₖ₎ has eigenvalues 0.98, 0.6 and −1.02. Does it settle?",
+    "options": ["Yes: most of its eigenvalues are inside the unit circle", "No: |−1.02| > 1, so that mode grows, flipping sign every step", "Yes: the negative eigenvalue cancels the positive ones"],
+    "answer": 1,
+    "concepts": ["eigendecomposition"],
+    "critical": true,
+    "explain": "Each mode is multiplied by its eigenvalue every step. One mode with |λ| > 1 is enough: it grows by 2% per step and alternates in sign, eventually swamping everything else."
+  },
+  {
+    "kind": "choice",
+    "id": "eig-oscillation",
+    "prompt": "A controller model's eigenvalues are 0.925 ± 0.139i. What does a disturbance do?",
+    "options": ["Grows without bound", "Decays smoothly, without oscillating", "Oscillates while decaying, shrinking by about 6.5% per step"],
+    "answer": 2,
+    "concepts": ["eigendecomposition"],
+    "explain": "|λ| = √(0.925² + 0.139²) ≈ 0.935 < 1, so it decays by about 6.5% per step. The complex pair rotates the state by 0.149 rad per step, an oscillation with a period of about 42 steps."
+  },
+  {
+    "kind": "numeric",
+    "id": "eig-time-constant",
+    "prompt": "A single thermal node has a heat capacity of 1,200 J/K and a 40 W/K conductance to the coolant. What is its time constant, in seconds?",
+    "answer": 30,
+    "tolerance": 0.01,
+    "unit": "s",
+    "concepts": ["eigendecomposition"],
+    "explain": "C dT/dt = −G T gives T ∝ e^(−Gt/C), so τ = C/G = 1200/40 = 30 s. With several nodes, each eigenvalue of C⁻¹K plays the role of G/C for one mode."
+  },
+  {
+    "kind": "numeric",
+    "id": "eig-euler",
+    "prompt": "A thermal model's rates (eigenvalues of C⁻¹K) are 0.08, 0.38 and 1.26 per second. What is the largest forward-Euler step that doesn't blow up, in seconds?",
+    "answer": 1.587,
+    "tolerance": 0.01,
+    "unit": "s",
+    "concepts": ["eigendecomposition"],
+    "explain": "Forward Euler multiplies each mode by 1 − Δt·λ, which stays within [−1, 1] only while Δt ≤ 2/λ. The fastest rate sets the limit: 2/1.26 ≈ 1.59 s."
+  },
+  {
+    "kind": "choice",
+    "id": "eig-pd",
+    "prompt": "You estimate a 50 × 50 covariance matrix of sensor readings from 30 snapshots, and np.linalg.cholesky fails on it. Why?",
+    "options": ["Covariance matrices are never positive definite", "After centering, 30 snapshots give a covariance of rank at most 29: it's only semidefinite, with zero eigenvalues", "Cholesky only works on matrices smaller than 32 × 32"],
+    "answer": 1,
+    "concepts": ["quadratic-forms", "rank-subspaces"],
+    "transfer": true,
+    "explain": "The sample covariance is (1/(n−1)) XᵀX for the centered data, and centering 30 rows leaves at most 29 independent directions. The other 21 eigenvalues are zero, so the matrix is positive semidefinite but not definite, and Cholesky needs definite. Regularize (add a little to the diagonal) or work with the SVD."
+  },
+  {
+    "kind": "choice",
+    "id": "eig-ellipse",
+    "prompt": "A is positive definite with eigenvalues 4 and 1. What are the semi-axes of the ellipse xᵀAx = 1?",
+    "options": ["4 and 1", "1/2 and 1", "2 and 1"],
+    "answer": 1,
+    "concepts": ["quadratic-forms"],
+    "explain": "Along an eigenvector with eigenvalue λ, xᵀAx = λt² = 1 at t = 1/√λ: 1/√4 = 1/2 and 1/√1 = 1. Bigger eigenvalues mean a steeper bowl and a shorter axis."
+  },
+  {
+    "kind": "explain",
+    "id": "eig-explain-two-speeds",
+    "prompt": "Explain to Dev why the junction temperature after the pump trip rose in a fast jump and then a slow creep.",
+    "concepts": ["eigendecomposition"],
+    "rubric": ["Deviations from steady state split into modes (eigenvectors of C⁻¹K), each decaying or growing independently like e^(−t/τ)", "The time constants are 1/eigenvalues and depend on both the heat capacities and the conductances", "The junction has a small heat capacity and tight coupling, so its mode is fast (about a second); the plate's large capacity gives the slow mode (about 12 s)", "After a few fast time constants only the slowest mode is left, so the late response is the slow creep"],
+    "explain": "The response is a sum of exponentials with very different time constants; you see the fast ones first and the slowest one last."
+  },
+  {
+    "kind": "choice",
+    "id": "svd-exists",
+    "prompt": "Which of these matrices has a singular value decomposition: (a) a 500 × 3 design matrix, (b) a singular 4 × 4 matrix, (c) a rotation?",
+    "options": ["Only (a)", "(a) and (c)", "All three"],
+    "answer": 2,
+    "concepts": ["svd"],
+    "explain": "Every real matrix has an SVD, whatever its shape or rank. A singular matrix just has some zero singular values, and a rotation has all of its singular values equal to 1."
+  },
+  {
+    "kind": "choice",
+    "id": "svd-sigma-eig",
+    "prompt": "How are the singular values of A related to the eigenvalues of AᵀA?",
+    "options": ["They're the eigenvalues of AᵀA", "They're the square roots of the eigenvalues of AᵀA", "They're unrelated"],
+    "answer": 1,
+    "concepts": ["svd", "eigendecomposition"],
+    "critical": true,
+    "explain": "AᵀA = VΣᵀUᵀUΣVᵀ = VΣ²Vᵀ, so its eigenvalues are σᵢ². Computing σ that way squares the condition number, though, so libraries work on A directly."
+  },
+  {
+    "kind": "numeric",
+    "id": "svd-rank-cond",
+    "prompt": "A square matrix has singular values 40, 8 and 0.2. What is its condition number?",
+    "answer": 200,
+    "tolerance": 0.01,
+    "concepts": ["svd", "conditioning"],
+    "explain": "κ = σ_max / σ_min = 40 / 0.2 = 200: the largest stretch over the smallest. Expect to lose about log₁₀ 200 ≈ 2.3 digits solving with it."
+  },
+  {
+    "kind": "numeric",
+    "id": "svd-eckart-young",
+    "prompt": "A matrix has singular values 6, 3, 2 and 1. What is the Frobenius-norm error of its best rank-2 approximation?",
+    "answer": 2.236,
+    "tolerance": 0.01,
+    "concepts": ["low-rank-approximation"],
+    "critical": true,
+    "explain": "Eckart–Young: the error is the root of the sum of the discarded squared singular values, √(2² + 1²) = √5 ≈ 2.24. In the 2-norm it would be σ₃ = 2."
+  },
+  {
+    "kind": "numeric",
+    "id": "svd-energy",
+    "prompt": "Singular values 6, 3, 2 and 1. What fraction of the energy (squared Frobenius norm) does the first mode capture?",
+    "answer": 0.72,
+    "tolerance": 0.01,
+    "concepts": ["low-rank-approximation"],
+    "explain": "36 / (36 + 9 + 4 + 1) = 36/50 = 0.72. Energy uses squared singular values; using σ itself would give 6/12 = 0.5."
+  },
+  {
+    "kind": "choice",
+    "id": "svd-min-norm",
+    "prompt": "A design matrix has one column that's the sum of two others. What does np.linalg.lstsq return?",
+    "options": ["An error, because XᵀX is singular", "The least-squares solution with the smallest norm, out of infinitely many", "One of the infinitely many solutions, chosen at random"],
+    "answer": 1,
+    "concepts": ["low-rank-approximation", "least-squares"],
+    "explain": "lstsq uses the SVD, drops the singular value that's zero up to rounding, and applies the pseudoinverse, which gives the minimum-norm solution. It also reports the rank (one less than the number of columns), which is your cue to look at the features."
+  },
+  {
+    "kind": "choice",
+    "id": "svd-cutoff",
+    "prompt": "A colleague's pseudoinverse drops singular values below an absolute 10⁻¹². They switch the data from watts to terawatts. What happens?",
+    "options": ["Nothing: the pseudoinverse adapts automatically", "Every singular value is now below 10⁻¹², so the pseudoinverse comes back all zeros", "It becomes more accurate, because the numbers are smaller"],
+    "answer": 1,
+    "concepts": ["low-rank-approximation"],
+    "transfer": true,
+    "explain": "Scaling the matrix by 10⁻¹² scales every singular value by 10⁻¹². An absolute cutoff then discards all of them. Tolerances must be relative to σ₁, as matrix_rank and pinv do."
+  },
+  {
+    "kind": "choice",
+    "id": "svd-signs",
+    "prompt": "Two runs of the same PCA pipeline, on the same data with different library versions, give mode 2 with opposite signs. What's going on?",
+    "options": ["A bug: the data must differ between runs", "Singular vectors are only defined up to sign: flipping uᵢ and vᵢ together gives the same matrix", "Numerical instability: switch to higher precision"],
+    "answer": 1,
+    "concepts": ["svd"],
+    "transfer": true,
+    "explain": "σᵢuᵢvᵢᵀ = σᵢ(−uᵢ)(−vᵢ)ᵀ, so both are correct. Fix a sign convention (for example, make each mode's largest entry positive) before comparing modes across runs."
+  },
+  {
+    "kind": "explain",
+    "id": "svd-explain-three-numbers",
+    "prompt": "Explain to Ines how 72 sensors can be described by three numbers, and how you'd check whether that's true for her data.",
+    "concepts": ["svd", "low-rank-approximation"],
+    "rubric": ["Subtract the mean field, then take the SVD of the snapshot matrix: each snapshot becomes the mean plus a combination of a few fixed spatial patterns (modes)", "The three numbers are the coefficients of the first three modes at each time", "Check the singular values: a gap after the third, followed by a flat noise floor, and the energy captured by three modes", "Check that the leftover error is about the sensor noise, preferably on held-out snapshots, not just the data used to find the modes"],
+    "explain": "Low rank is a claim about the spectrum and the residual, and it should be tested on data the modes haven't seen."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-centering",
+    "prompt": "Without centering, the first singular vector of a matrix of inlet-temperature snapshots captures 99.9% of the energy. What is that vector?",
+    "options": ["The most important pattern of variation", "Essentially the mean field: it says the hall is warm, not how its temperatures move", "Sensor noise"],
+    "answer": 1,
+    "concepts": ["pca-pod"],
+    "critical": true,
+    "explain": "Every snapshot is roughly the same ~20 °C field plus small changes, so the dominant direction is that average. Center each sensor first; then the first mode describes the largest pattern of variation."
+  },
+  {
+    "kind": "numeric",
+    "id": "pca-energy",
+    "prompt": "After centering, a field's singular values are 240, 80 and 40, and the remaining 69 are about 2 each. What fraction of the variance do the first three modes capture?",
+    "answer": 0.9958,
+    "tolerance": 0.002,
+    "concepts": ["pca-pod", "low-rank-approximation"],
+    "explain": "Variance shares use squares: 240² + 80² + 40² = 65,600, and the 69 small values add about 69 × 2² = 276, so the share is 65,600 / 65,876 ≈ 0.996. Adding the singular values themselves would give a misleading 0.72."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-standardize",
+    "prompt": "Your PCA input mixes inlet temperatures (°C), IT power (kW) and valve positions (%). What should you do before the SVD?",
+    "options": ["Nothing: PCA is unit-free", "Center and standardize each column, so no column dominates just because of its units", "Only standardize; centering is optional"],
+    "answer": 1,
+    "concepts": ["pca-pod", "standardization"],
+    "explain": "PCA finds directions of large variance, and variance depends on units: kW values would swamp °C ones. Standardizing (PCA on the correlation matrix) puts the columns on an equal footing. With all columns in the same units, center but don't scale."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-modes-mix",
+    "prompt": "Three effects drive a temperature field, and its first three PCA modes capture 99.7% of the variance. Must each mode correspond to one effect?",
+    "options": ["Yes: PCA separates independent causes", "No: the three modes span the same subspace as the three effects, but each mode can mix several of them", "Only if the data are standardized"],
+    "answer": 1,
+    "concepts": ["pca-pod"],
+    "transfer": true,
+    "explain": "PCA guarantees orthogonal directions sorted by variance. The physical patterns needn't be orthogonal, so the modes are typically blends of them. The subspace is meaningful; one-cause-per-mode needs extra assumptions (ICA, sparsity)."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-choose-k",
+    "prompt": "What's the most trustworthy way to choose how many POD modes to keep for reconstructing failed sensors?",
+    "options": ["Keep enough for 99% of the energy", "Keep all of them: more modes can't hurt", "Hide some working sensors on held-out snapshots and choose the k that estimates them best"],
+    "answer": 2,
+    "concepts": ["pca-pod"],
+    "explain": "Energy thresholds are arbitrary, and extra modes fit noise. The held-out error for the actual task is the honest measure: on pod 3's field it falls to the 0.09 °C noise level at three modes and creeps back up with more."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-gappy-ls",
+    "prompt": "Some sensors are dead. Why fit the mode coefficients by least squares on the working sensors instead of taking dot products of the modes with the snapshot?",
+    "options": ["Dot products are slower", "With rows removed, the modes are no longer orthonormal on the remaining sensors, so dot products give biased coefficients", "Least squares ignores the mean"],
+    "answer": 1,
+    "concepts": ["pca-pod", "least-squares"],
+    "critical": true,
+    "explain": "Projection works only because the full modes are orthonormal. On a subset of sensors they aren't, and treating the missing entries as zeros biases every coefficient. On pod 3's test, projecting gave errors around 1 °C; least squares gave 0.09 °C."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-gappy-limit",
+    "prompt": "All the sensors that respond to top-of-rack recirculation have died. What happens to a gappy-POD estimate of them?",
+    "options": ["Nothing: the other sensors fill the gap", "The recirculation mode's coefficient becomes nearly undetermined (the least-squares problem is ill-conditioned), so the estimate can't be trusted", "The estimate becomes exact"],
+    "answer": 1,
+    "concepts": ["pca-pod", "conditioning"],
+    "transfer": true,
+    "explain": "If no working sensor 'sees' a mode, the corresponding column of the working-sensor matrix is nearly zero and the coefficient is barely constrained. That's why sensor placement matters, and why QR with column pivoting is used to choose informative locations."
+  },
+  {
+    "kind": "choice",
+    "id": "pca-snapshots",
+    "prompt": "A CFD study gives 300 snapshots of a field with 2 million cells. Which matrix should you decompose to get the POD modes?",
+    "options": ["The 2,000,000 × 2,000,000 covariance", "The 300 × 300 matrix of inner products between snapshots (or, equivalently, a thin SVD)", "Neither: POD needs more snapshots than cells"],
+    "answer": 1,
+    "concepts": ["pca-pod", "svd"],
+    "explain": "The method of snapshots uses the small n × n matrix XcXcᵀ; its eigenvectors give the time coefficients, and the modes follow from them. A thin SVD of the 300 × 2,000,000 matrix does the same work."
+  },
+  {
+    "kind": "explain",
+    "id": "pca-explain-gappy",
+    "prompt": "Explain to Mara how you'd estimate the three dead sensors, and how you'd know whether to trust the estimate.",
+    "concepts": ["pca-pod", "least-squares"],
+    "rubric": ["Learn the mean field and the dominant modes from historical data when all sensors worked (centered SVD)", "For each new snapshot, fit the mode coefficients to the working sensors by least squares, then evaluate mean + modes at the dead sensors", "Validate by hiding working sensors on held-out data and measuring the error, and choose the number of modes that way", "Keep monitoring: check the fit on working sensors, and note the limits (enough sensors that see each mode; modes may drift with season or layout changes)"],
+    "explain": "Gappy POD is least squares on the working rows of the modal expansion; held-out tests and ongoing residual checks tell you when to trust it."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-shape",
+    "prompt": "w has shape (3,) and X has shape (8, 3). Which expression could be the gradient of a scalar loss with respect to w?",
+    "options": ["X @ w - y, with shape (8,)", "X.T @ (X @ w - y), with shape (3,)", "(X @ w - y) @ (X @ w - y), a scalar"],
+    "answer": 1,
+    "concepts": ["matrix-calculus"],
+    "explain": "A gradient has the same shape as the parameter it's taken with respect to, so it must have shape (3,). Shapes are a free check on every derivation."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-quadratic",
+    "prompt": "What is ∇(wᵀAw) for a general, non-symmetric square matrix A?",
+    "options": ["2Aw", "(A + Aᵀ)w", "Aᵀw"],
+    "answer": 1,
+    "concepts": ["matrix-calculus", "quadratic-forms"],
+    "critical": true,
+    "explain": "Expanding (w + d)ᵀA(w + d) gives the linear terms dᵀAw + wᵀAd = dᵀ(A + Aᵀ)w. Only for symmetric A does that become 2Aw."
+  },
+  {
+    "kind": "numeric",
+    "id": "mc-symmetric",
+    "prompt": "S = [[2, 1], [1, 3]] and w = (1, 1). What is the first component of ∇(wᵀSw)?",
+    "answer": 6,
+    "tolerance": 0.01,
+    "concepts": ["matrix-calculus", "quadratic-forms"],
+    "explain": "S is symmetric, so the gradient is 2Sw = 2 × (2 + 1, 1 + 3) = (6, 8)."
+  },
+  {
+    "kind": "numeric",
+    "id": "mc-lstsq",
+    "prompt": "X = [[1, 0], [0, 2], [1, 1]], y = (1, 2, 0) and w = (1, 1). What is the first component of the gradient of ½‖Xw − y‖²?",
+    "answer": 2,
+    "tolerance": 0.01,
+    "concepts": ["matrix-calculus", "least-squares"],
+    "explain": "The residual is Xw − y = (1, 2, 2) − (1, 2, 0) = (0, 0, 2), and the gradient is Xᵀr = (1·0 + 0·0 + 1·2, 0·0 + 2·0 + 1·2) = (2, 2)."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-ridge",
+    "prompt": "Which w minimizes ½‖Xw − y‖² + (λ/2)‖w‖² for λ > 0?",
+    "options": ["(XᵀX)⁻¹Xᵀy + λ", "(XᵀX + λI)⁻¹Xᵀy", "(XᵀX − λI)⁻¹Xᵀy"],
+    "answer": 1,
+    "concepts": ["matrix-calculus", "least-squares"],
+    "critical": true,
+    "explain": "The gradient Xᵀ(Xw − y) + λw vanishes when (XᵀX + λI)w = Xᵀy. Adding λI lifts every eigenvalue of XᵀX by λ, so the system is always solvable and better conditioned."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-central",
+    "prompt": "Why use central differences rather than one-sided differences to check gradients?",
+    "options": ["They need half as many function evaluations", "Their truncation error shrinks like h² instead of h: about 10⁻¹¹ against 10⁻⁵ at h = 10⁻⁵", "They're immune to rounding error"],
+    "answer": 1,
+    "concepts": ["matrix-calculus"],
+    "explain": "The second-order Taylor terms cancel in (f(w + h) − f(w − h))/2h. Both kinds suffer from rounding as h shrinks, and central differences cost twice the evaluations, but their accuracy at a sensible h is far better."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-relative",
+    "prompt": "A gradient check on a loss of order 10⁹ reports an absolute difference of 0.03 between the analytic and numerical gradients, whose norms are about 10⁸. Is the analytic gradient wrong?",
+    "options": ["Yes: 0.03 is far above 10⁻⁶", "No: the relative error is about 3 × 10⁻¹⁰, which is excellent", "You can't tell without knowing h"],
+    "answer": 1,
+    "concepts": ["matrix-calculus", "floating-point"],
+    "transfer": true,
+    "explain": "0.03 / 10⁸ = 3 × 10⁻¹⁰. Absolute tolerances mean nothing without a scale; compare relative errors, where correct gradients land near 10⁻¹¹–10⁻¹⁰ and real bugs near 0.1–2."
+  },
+  {
+    "kind": "choice",
+    "id": "mc-scaled-bug",
+    "prompt": "Your hand-coded gradient is exactly twice the true one. What does plain gradient descent do?",
+    "options": ["Climbs uphill", "Still heads for the right minimum, but behaves as if the step size were doubled", "Converges to a different point"],
+    "answer": 1,
+    "concepts": ["matrix-calculus"],
+    "explain": "A positive multiple of the gradient points the same way and vanishes at the same place. The danger is a step size that was stable becoming unstable, and the bug hiding because the loss still falls."
+  },
+  {
+    "kind": "explain",
+    "id": "mc-explain-lstsq",
+    "prompt": "Explain how you'd derive the gradient of ½‖Xw − y‖² and how you'd confirm it before using it.",
+    "concepts": ["matrix-calculus", "least-squares"],
+    "rubric": ["Uses the definition f(w + d) ≈ f(w) + g·d, or the chain rule through the residual r = Xw − y", "A step d moves the residual by Xd, so the change is r·Xd = (Xᵀr)·d, giving g = Xᵀ(Xw − y)", "Checks shapes: the gradient has w's shape", "Confirms with central differences at a random point and a relative-error threshold (around 10⁻⁶ in float64)"],
+    "explain": "Derive from the definition, check shapes, then check numerically: three independent guards against sign, transpose and factor-of-2 slips."
   }
 ]

@@ -10,4 +10,5 @@ export const vizRegistry: Record<string, LazyExoticComponent<ComponentType<AnyPr
   StrideExplorer: lazy(() => import("./StrideExplorer")),
   MatrixMap: lazy(() => import("./MatrixMap")),
   ProjectionViz: lazy(() => import("./ProjectionViz")),
+  FieldModes: lazy(() => import("./FieldModes")),
 };

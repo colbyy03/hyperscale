@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/gappy-fill",
+  "type": "code",
+  "language": "python",
+  "title": "Fill in the dead sensors",
+  "prompt": "Some of pod 3's inlet sensors have died, but you have a POD of the healthy field from last month: its `mean` (p,) and its first k `modes` as unit-length rows (k, p).\n\nWrite `fill_missing(X, observed, mean, modes)`. `X` has shape (n, p), one snapshot per row, with NaN in the columns of the dead sensors; `observed` is a boolean array (p,), True where the sensor works. For each snapshot, find the mode coefficients that best fit the **working** sensors in the least-squares sense (Lesson 3 again), then estimate the dead sensors as mean + coefficients · modes. Return a copy of `X` with the dead columns filled and the working sensors' readings unchanged.\n\nRaise `ValueError` if fewer sensors work than there are modes. Solve every snapshot at once with one call to `np.linalg.lstsq` (it accepts many right-hand sides as columns), with no loops.",
+  "concepts": ["pca-pod", "least-squares"],
+  "difficulty": 0.55,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["sklearn", "scipy"], "requireVectorized": true, "timeoutMs": 10000 },
+  "hints": [
+    "Each snapshot is approximately mean + a₁φ₁ + … + a_kφ_k. You can't compute the aᵢ by projecting the full snapshot, because some entries are missing. What can you do with only the working rows of that equation?",
+    "Keep only the working sensors: A = modes[:, observed].T has shape (n_working, k), and B = (X[:, observed] − mean[observed]).T holds one snapshot per column. Solving A a = B in the least-squares sense gives every snapshot's coefficients at once. The modes are no longer orthonormal once rows are removed, so projecting with modes @ x gives biased coefficients; least squares doesn't care.",
+    "if observed.sum() < len(modes): raise ValueError(...). coef = np.linalg.lstsq(modes[:, observed].T, (X[:, observed] - mean[observed]).T, rcond=None)[0]; est = mean + coef.T @ modes; out = X.copy(); out[:, ~observed] = est[:, ~observed]; return out."
+  ],
+  "misconceptions": {
+    "gappy-projection": "With rows missing, the modes aren't orthonormal on the remaining sensors, so dot products don't give the coefficients. Fit them by least squares on the working sensors.",
+    "pca-needs-centering": "The modes describe deviations from the mean field: subtract the mean before fitting and add it back afterwards."
+  },
+  "sources": ["brunton-kutz-2022", "berkooz1993-pod", "taira2017-modal"]
+}

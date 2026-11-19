@@ -1,0 +1,57 @@
+{
+  "id": "linear-algebra/ridge-gradient",
+  "type": "derivation",
+  "language": "none",
+  "title": "Least squares and ridge, by gradient",
+  "prompt": "Derive the gradient of the ridge-regression loss f(w) = ½‖Xw − y‖² + (λ/2)‖w‖², and from it the solution and the curvature. `X` is (8 × 3), `y` has length 8, `w` length 3, and `lam` is λ > 0. Write each step as a NumPy expression.",
+  "concepts": ["matrix-calculus", "least-squares"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": true,
+  "hints": [
+    "Treat the loss as a function of the residual r = Xw − y. If w moves by d, the residual moves by Xd.",
+    "½‖r‖² changes by r · (Xd) = (Xᵀr) · d, so its gradient with respect to w is Xᵀr. The penalty (λ/2)wᵀw is a quadratic form with matrix (λ/2)I. The Hessian is the matrix that multiplies w in the gradient.",
+    "∇f = Xᵀ(Xw − y) + λw. Setting it to zero gives (XᵀX + λI)w = Xᵀy, so w = (XᵀX + λI)⁻¹Xᵀy, and the Hessian is XᵀX + λI."
+  ],
+  "derivation": {
+    "variables": {
+      "X": { "shape": [8, 3] },
+      "y": { "shape": [8] },
+      "w": { "shape": [3] },
+      "lam": { "shape": [], "kind": "positive" }
+    },
+    "steps": [
+      {
+        "prompt": "The residual `r` (the fit minus the target).",
+        "answer": "X @ w - y",
+        "hint": "Prediction minus target, in that order.",
+        "wrong": ["y - X @ w", "X.T @ y - w"]
+      },
+      {
+        "prompt": "The gradient of ½‖r‖² with respect to `w` (a vector of length 3).",
+        "answer": "X.T @ (X @ w - y)",
+        "hint": "Chain rule: the gradient of ½‖r‖² with respect to r is r, and r moves by X d when w moves by d, so you need Xᵀ times r.",
+        "wrong": ["X.T @ (y - X @ w)", "X @ w - y", "2 * X.T @ (X @ w - y)"]
+      },
+      {
+        "prompt": "The gradient of the penalty (λ/2)‖w‖².",
+        "answer": "lam * w",
+        "hint": "(λ/2)wᵀw is a quadratic form; the ½ cancels the 2.",
+        "wrong": ["2 * lam * w", "lam * w @ w"]
+      },
+      {
+        "prompt": "Set the total gradient to zero and solve for `w`: the ridge solution. Use `eye(3)` for the identity.",
+        "answer": "inv(X.T @ X + lam * eye(3)) @ X.T @ y",
+        "hint": "Xᵀ(Xw − y) + λw = 0 rearranges to (XᵀX + λI)w = Xᵀy.",
+        "wrong": ["inv(X.T @ X) @ X.T @ y", "inv(X.T @ X + lam) @ X.T @ y", "inv(X.T @ X - lam * eye(3)) @ X.T @ y"]
+      },
+      {
+        "prompt": "The Hessian: the (3 × 3) matrix of second derivatives, which is the matrix multiplying `w` in the gradient. It's positive definite for every λ > 0, so the minimum is unique.",
+        "answer": "X.T @ X + lam * eye(3)",
+        "hint": "The gradient is (XᵀX + λI)w − Xᵀy. Differentiate once more.",
+        "wrong": ["X.T @ X", "X @ X.T + lam * eye(8)", "lam * eye(3)"]
+      }
+    ]
+  },
+  "sources": ["deisenroth2020-mml", "boyd2018-vmls"]
+}

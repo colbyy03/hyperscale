@@ -1,0 +1,22 @@
+{
+  "id": "linear-algebra/power-iteration",
+  "type": "code",
+  "language": "python",
+  "title": "Power iteration from scratch",
+  "prompt": "Simulating x ← A x over and over is how a linear system's slowest-decaying (or fastest-growing) mode takes over. Turn that into an algorithm.\n\nWrite `power_iteration(A, tol=1e-10, max_iter=1000, seed=0)` for a symmetric matrix `A`. Start from a random unit vector drawn with `np.random.default_rng(seed)`, then repeatedly multiply by `A` and normalize. Stop when the new vector differs from the previous one by less than `tol`, allowing for a sign flip, since a negative dominant eigenvalue flips the vector every step.\n\nReturn `(lam, v, iterations)`: the dominant eigenvalue (largest in absolute value, with its sign), a unit eigenvector and the number of multiplications used. Raise `RuntimeError` if it hasn't converged after `max_iter`. Don't use `np.linalg.eig`, `eigh`, `eigvalsh` or `svd`.",
+  "concepts": ["eigendecomposition"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "Write the start vector in eigenvector coordinates: x = c₁v₁ + c₂v₂ + …. What does Aᵏx look like when |λ₁| is bigger than every other |λᵢ|?",
+    "Aᵏx = c₁λ₁ᵏv₁ + c₂λ₂ᵏv₂ + …, so after normalizing, everything except v₁ shrinks like (λ₂/λ₁)ᵏ. The norm ‖Av‖ loses the sign of λ₁; the Rayleigh quotient vᵀAv keeps it. Converged means ‖w − v‖ < tol or ‖w + v‖ < tol.",
+    "rng = np.random.default_rng(seed); v = rng.normal(size=n); v /= norm(v). For k in range(1, max_iter + 1): w = A @ v; w /= norm(w); if min(norm(w - v), norm(w + v)) < tol: return w @ A @ w, w, k; v = w. After the loop: raise RuntimeError(...)."
+  ],
+  "misconceptions": {
+    "norm-loses-sign": "‖Av‖ is always positive, so it can't report a negative dominant eigenvalue. The Rayleigh quotient vᵀAv keeps the sign."
+  },
+  "sources": ["trefethen1997-nla", "strang2019-lalfd"]
+}

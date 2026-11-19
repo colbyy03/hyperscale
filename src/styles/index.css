@@ -26,6 +26,12 @@
   --violet: #a78bfa;
   --violet-soft: rgb(167 139 250 / 0.12);
   --focus: #5eead4;
+  /* Data-viz ramps: sequential (temperature) low→high, diverging negative / neutral / positive. */
+  --seq-lo: oklch(0.27 0.045 50);
+  --seq-hi: oklch(0.9 0.13 75);
+  --div-neg: #3987e5;
+  --div-mid: #383835;
+  --div-pos: #e66767;
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.25);
 }
 
@@ -53,6 +59,11 @@
   --violet: #7c3aed;
   --violet-soft: rgb(124 58 237 / 0.08);
   --focus: #0d9488;
+  --seq-lo: oklch(0.97 0.025 70);
+  --seq-hi: oklch(0.45 0.16 35);
+  --div-neg: #2a78d6;
+  --div-mid: #f0efec;
+  --div-pos: #e34948;
   --shadow: 0 1px 2px rgb(15 24 34 / 0.06), 0 8px 24px rgb(15 24 34 / 0.06);
 }
 

@@ -1,0 +1,101 @@
+---
+id: linear-algebra/pca-pod
+title: PCA and POD of a temperature field
+minutes: 40
+concepts: [pca-pod, svd, low-rank-approximation]
+sources: [jolliffe2016-pca, berkooz1993-pod, taira2017-modal, brunton-kutz-2022, manohar2018-sensor-placement, strang2019-lalfd]
+cards: [pca-via-svd, pca-needs-centering, pca-scaling-choice, pod-is-pca, modes-not-causes, choose-k-held-out, gappy-pod, gappy-projection, method-of-snapshots, reconstruction-residual-fdd]
+---
+
+<Situation from="Mara, site lead">
+Last night's firmware update killed three inlet sensors in pod 3, all at the top of end racks, and replacements take two weeks. Those are exactly the sensors that see recirculated hot air first. Can we estimate them from the other 69 well enough to keep the high-temperature alarms meaningful? And how would we know if the estimate were lying to us?
+</Situation>
+
+<Predict
+  id="uncentered-svd"
+  question="You take the SVD of 480 hourly snapshots of pod 3's 72 inlet temperatures, exactly as recorded (all between 15 and 28 °C). What share of the energy does the first singular vector capture?"
+  options={["About 50%", "About 87%", "Over 99.9%"]}
+  answer={2}
+  explain="Every snapshot is roughly the same 20 °C field plus small variations, so the first singular direction simply points at that average field and claims 99.9% of the energy. It tells you the hall is warm, not how its temperatures move. Subtract each sensor's mean first, and the first mode captures about 87% of the variance: that's the number that describes the field's behaviour."
+/>
+
+## Snapshots as a matrix
+
+Stack the snapshots as rows of a matrix $X$: $n$ hours by $p$ sensors (480 × 72 for pod 3). Subtract each sensor's mean to get the centered matrix $X_c$, and take its SVD:
+
+$$
+X_c = U \Sigma V^\top
+$$
+
+Everything **principal component analysis** needs is in there:
+
+- the rows of $V^\top$ are the **modes**, or principal directions: fixed spatial patterns across the 72 sensors;
+- the columns of $U\Sigma$ are the **scores**: how strongly each mode is present at each hour;
+- $\sigma_i^2 / (n - 1)$ is the variance along mode $i$, so $\sigma_i^2 / \sum_j \sigma_j^2$ is its share.
+
+Equivalently, the modes are the eigenvectors of the covariance matrix $X_c^\top X_c / (n - 1)$. Compute them with the SVD of $X_c$ anyway: forming the covariance squares the condition number, the same trap as the normal equations in Lesson 3.
+
+**Centering is not optional.** Without it, the first direction points at the mean field, as the prediction showed, and the remaining modes are distorted because each must be orthogonal to that mean direction. **Scaling is a choice.** When every column is in the same units, as here, leave them alone: standardizing would give a quiet sensor with noisy readings the same weight as one that swings by 5 °C. When the columns mix units (°C, kW, valve %), standardize first, which amounts to PCA on the correlation matrix.
+
+<Viz name="FieldModes" />
+
+## Reading the modes
+
+In the explorer, three modes capture about 87%, 10% and 2% of the variance, and then the spectrum drops off a cliff: everything from mode 4 on is at the noise floor (the singular values go 239, 81, 37, then 2.4). Look at what they are:
+
+- **Mode 1** is almost uniform: every sensor moves together. That's the supply-air temperature, which the operators raised by 2 °C for three days and lowered by 1 °C for two.
+- **Modes 2 and 3** are concentrated at the tops of the racks and at the far end of each row. They're blends of two physical effects: hot air recirculating over the end racks when the IT load is high, and airflow starvation at the far end from the CRAH when its fans slow down at night.
+
+That second point deserves care. PCA promises orthogonal directions sorted by variance. It doesn't promise one physical cause per mode. Here, the three modes together span exactly the three effects that drive the field (each effect lies entirely within the first three modes), but modes 2 and 3 each mix two of them. If you need components that match causes, that takes extra assumptions, such as independence or sparsity, which is what ICA and sparse PCA add. The subspace, though, is trustworthy.
+
+<CodeExercise id="linear-algebra/pca-svd" />
+
+## POD is PCA, from fluid mechanics
+
+Fluid dynamicists found the same decomposition independently and call it **proper orthogonal decomposition**. The snapshots are velocity or temperature fields from an experiment or a CFD run, and the modes are the dominant flow structures: vortex shedding behind a cylinder, say, or the recirculation patterns in a data hall. Climate science calls the same modes empirical orthogonal functions, and probability theory calls the underlying expansion Karhunen–Loève.
+
+One practical trick comes from there. A CFD field can have millions of cells but only hundreds of snapshots, so $p \gg n$. The **method of snapshots** finds the modes from the small $n \times n$ matrix $X_c X_c^\top$ instead of the enormous $p \times p$ covariance; a thin SVD does the same thing automatically.
+
+## Choosing k
+
+Three ways to choose how many modes to keep, from weakest to strongest:
+
+1. **An energy threshold**, such as 99%. Easy, but the number is arbitrary.
+2. **A gap in the spectrum**, followed by a flat noise floor. Pod 3's field has an unmistakable one after mode 3.
+3. **Error on held-out data, for the task you care about.** Fit the modes on some days, then test on others.
+
+For Mara's problem, the third test looks like this: fit the modes on the first 15 days, then hide six top-of-rack sensors at the row ends over the last 5 days and estimate them from the rest. The error at the hidden sensors:
+
+| Modes kept | 0 (mean only) | 1 | 2 | 3 | 10 | 20 | 40 |
+|---|---|---|---|---|---|---|---|
+| RMS error | 1.98 °C | 1.19 °C | 0.40 °C | 0.09 °C | 0.10 °C | 0.11 °C | 0.14 °C |
+
+Three modes bring the error down to the sensors' own noise. Past that, extra modes start fitting noise in the working sensors, and the error creeps back up.
+
+## Filling in dead sensors
+
+That table used **gappy POD**. Each snapshot is approximately $x \approx \mu + \Phi^\top a$: the mean plus a combination of the $k$ modes (the rows of $\Phi$). When some sensors are dead, keep only the rows of that equation for the working sensors and solve for the coefficients $a$ by least squares. Then evaluate the full expression at the dead sensors.
+
+It's Lesson 3 again, and the details matter:
+
+- **Fit, don't project.** With rows removed, the modes are no longer orthonormal on the remaining sensors, so dot products give biased coefficients. Projecting instead of fitting gives errors around 1 °C on the table's test; least squares gives 0.09 °C.
+- **You need at least $k$ working sensors**, and they must "see" every mode. If every sensor that responds to recirculation were dead, the coefficient of the recirculation mode couldn't be determined, and the least-squares problem would be ill-conditioned. Sensor placement is itself a linear-algebra problem: QR with column pivoting picks the most informative locations.
+- **The answer is only as good as the modes.** Modes learned in summer may not describe winter operation, or a containment change. Keep checking the fit on the working sensors.
+
+<CodeExercise id="linear-algebra/gappy-fill" />
+
+<Bridge>
+Structural dynamicists do this with accelerometers. A modal test measures vibration at a few dozen points; fitting the known mode shapes to those measurements by least squares estimates the motion everywhere, including points you couldn't instrument. That's called modal expansion, and it's the same equation as gappy POD. A "virtual sensor" in a data hall is the thermal version.
+</Bridge>
+
+<Craft title="PCA habits worth keeping">
+- Center every column. Scale only when the units differ, and say which you did.
+- Choose k by held-out error on the actual task, and report the energy fraction alongside it.
+- Interpret the subspace with confidence and individual modes with caution: orthogonal isn't the same as causal.
+- `sklearn.decomposition.PCA` centers for you but doesn't scale, and fixes the signs of its components deterministically.
+- Monitor the reconstruction residual of the *working* sensors over time. A sensor that suddenly disagrees with its own POD reconstruction has drifted or failed, and that's the core of the fault detection you'll build in Module 18.
+</Craft>
+
+<Check items={["pca-centering", "pca-energy", "pca-standardize", "pca-modes-mix", "pca-choose-k", "pca-gappy-ls", "pca-gappy-limit", "pca-snapshots"]} />
+
+Next: matrix calculus, the bridge to optimization.

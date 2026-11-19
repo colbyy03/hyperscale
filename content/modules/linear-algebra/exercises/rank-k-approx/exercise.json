@@ -1,0 +1,22 @@
+{
+  "id": "linear-algebra/rank-k-approx",
+  "type": "code",
+  "language": "python",
+  "title": "The best rank-k approximation",
+  "prompt": "Write two functions on top of `np.linalg.svd`:\n\n1. `truncate(A, k)` returns the best rank-`k` approximation of `A`: keep the `k` largest singular values and their singular vectors. `k = 0` gives a matrix of zeros, and `k` at or beyond the rank gives `A` back.\n2. `rank_for_energy(A, fraction)` returns the smallest `k` whose singular values capture at least `fraction` of the total energy, where energy means the sum of squared singular values (the squared Frobenius norm).\n\nNo Python loops: use slicing and `np.cumsum`.",
+  "concepts": ["low-rank-approximation", "svd"],
+  "difficulty": 0.4,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "A = Σᵢ σᵢ uᵢ vᵢᵀ, a sum of rank-1 pieces sorted from most to least important. Which pieces does a rank-k approximation keep?",
+    "With U, s, Vt = np.linalg.svd(A, full_matrices=False), the first k pieces are U[:, :k] * s[:k] @ Vt[:k]. Energy is measured with squared singular values: the error ‖A − A_k‖_F² is the sum of the discarded σᵢ².",
+    "truncate: return (U[:, :k] * s[:k]) @ Vt[:k]. rank_for_energy: e = np.cumsum(s**2) / np.sum(s**2), then the first index where e reaches the fraction (allowing 1e-12 for rounding), plus one: int(np.argmax(e >= fraction - 1e-12)) + 1."
+  ],
+  "misconceptions": {
+    "energy-uses-squares": "Energy fractions use squared singular values (σᵢ² / Σσⱼ²), because the Frobenius error of a truncation is the root of the sum of the discarded σᵢ²."
+  },
+  "sources": ["strang2019-lalfd", "trefethen1997-nla", "brunton-kutz-2022"]
+}

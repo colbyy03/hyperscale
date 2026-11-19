@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/gradient-check",
+  "type": "code",
+  "language": "python",
+  "title": "Check a gradient before you trust it",
+  "prompt": "Write two functions:\n\n1. `numerical_gradient(f, w, h=1e-5)` estimates the gradient of a scalar function `f` at `w` with **central** differences: for each coordinate i, (f(w + h eᵢ) − f(w − h eᵢ)) / (2h). A loop over the coordinates is fine. Don't modify `w`.\n2. `check_gradient(f, grad, w, tol=1e-6)` compares `grad(w)` with your numerical estimate and returns `(ok, rel_error)`, where rel_error = ‖g − g_num‖ / max(‖g‖, ‖g_num‖, 1e-12) and `ok` is `rel_error < tol`.\n\nA relative error is used because gradients can be huge or tiny; an absolute tolerance would pass broken gradients of small functions and fail correct gradients of large ones.",
+  "concepts": ["matrix-calculus", "floating-point"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "torch", "jax"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "A derivative is a slope. Nudge one coordinate up and down by h, and the change in f over the change in w approximates that partial derivative.",
+    "Central differences cancel the second-order term of the Taylor expansion, so their error shrinks like h², against h for a one-sided difference; h = 10⁻⁵ balances that against rounding error, which grows like ε/h. Work on a float copy of w and restore each coordinate after nudging it.",
+    "numerical_gradient: w = np.asarray(w, dtype=float).copy(); g = np.zeros_like(w); for i in range(w.size): keep old = w[i]; w[i] = old + h; fp = f(w); w[i] = old - h; fm = f(w); w[i] = old; g[i] = (fp - fm) / (2 * h). check_gradient: rel = norm(g - gn) / max(norm(g), norm(gn), 1e-12); return rel < tol, rel."
+  ],
+  "misconceptions": {
+    "forward-difference-error": "A one-sided difference has error proportional to h (about 10⁻⁵ at h = 10⁻⁵); a central difference's error is proportional to h² (about 10⁻¹¹). Use central differences for gradient checks.",
+    "absolute-gradient-tolerance": "Compare gradients by relative error. An absolute tolerance rejects correct gradients of large functions and accepts wrong gradients of small ones."
+  },
+  "sources": ["deisenroth2020-mml", "goldberg1991-floating-point"]
+}

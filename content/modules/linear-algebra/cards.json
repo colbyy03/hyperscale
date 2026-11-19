@@ -207,5 +207,314 @@
     "front": "What does `np.linalg.lstsq` return when X is rank deficient?",
     "back": "The minimum-norm solution among all least-squares solutions (it uses the SVD), along with the numerical rank and the singular values.",
     "concepts": ["least-squares", "rank-subspaces"]
+  },
+  {
+    "id": "eigen-definition",
+    "type": "concept",
+    "front": "Define an eigenvector and its eigenvalue.",
+    "back": "$Av = \\lambda v$ with $v \\neq 0$: a direction the matrix only stretches, by the factor $\\lambda$.",
+    "concepts": ["eigendecomposition"],
+    "critical": true
+  },
+  {
+    "id": "trace-det-eigen",
+    "type": "equation",
+    "front": "How are a matrix's eigenvalues related to its trace and determinant?",
+    "back": "They add up to $\\operatorname{tr}(A)$ and multiply to $\\det A$.",
+    "concepts": ["eigendecomposition"]
+  },
+  {
+    "id": "diagonalization-powers",
+    "type": "equation",
+    "front": "$A = V\\Lambda V^{-1}$. What is $A^k$, and what does $x_{k+1} = Ax_k$ do to $x_0 = \\sum c_i v_i$?",
+    "back": "$A^k = V\\Lambda^k V^{-1}$, and $x_k = \\sum_i c_i \\lambda_i^k v_i$: each mode is scaled by its eigenvalue every step.",
+    "concepts": ["eigendecomposition"],
+    "critical": true
+  },
+  {
+    "id": "spectral-theorem",
+    "type": "concept",
+    "front": "What does the spectral theorem promise for a real symmetric matrix?",
+    "back": "Real eigenvalues and orthonormal eigenvectors: $A = Q\\Lambda Q^\\top$. Compute with `np.linalg.eigh`.",
+    "concepts": ["eigendecomposition"],
+    "critical": true
+  },
+  {
+    "id": "discrete-stability",
+    "type": "concept",
+    "front": "When does $x_{k+1} = Ax_k$ settle, run away or oscillate?",
+    "back": "Settles if every $|\\lambda| < 1$; runs away if any $|\\lambda| > 1$; complex pairs $re^{\\pm i\\theta}$ rotate by θ each step (oscillation) while scaling by r.",
+    "concepts": ["eigendecomposition"],
+    "critical": true
+  },
+  {
+    "id": "thermal-time-constants",
+    "type": "bridge",
+    "front": "Time constants of a thermal network $C\\dot T = -KT$?",
+    "back": "$\\tau_i = 1/\\lambda_i$, with $\\lambda_i$ the eigenvalues of $C^{-1}K$ (the same as those of the symmetric $C^{-1/2}KC^{-1/2}$). The first-order cousin of modal analysis.",
+    "concepts": ["eigendecomposition"]
+  },
+  {
+    "id": "stiff-euler-step",
+    "type": "gotcha",
+    "front": "Largest stable forward-Euler step for a linear system with decay rates $\\lambda_i$?",
+    "back": "$\\Delta t \\le 2/\\lambda_{\\max}$. The fastest mode sets the limit even if you only care about the slowest: that's stiffness.",
+    "concepts": ["eigendecomposition"]
+  },
+  {
+    "id": "eigenvalues-ignore-capacity",
+    "type": "gotcha",
+    "front": "Why aren't a thermal network's time constants just the eigenvalues of its conductance matrix K?",
+    "back": "Conductances (W/K) alone carry no time scale; heat capacities (J/K) do. The rates are eigenvalues of $C^{-1}K$.",
+    "concepts": ["eigendecomposition"]
+  },
+  {
+    "id": "norm-loses-sign",
+    "type": "gotcha",
+    "front": "Power iteration: why estimate λ with $v^\\top A v$ rather than $\\|Av\\|$?",
+    "back": "$\\|Av\\|$ is always positive; the Rayleigh quotient keeps the sign of a negative dominant eigenvalue.",
+    "concepts": ["eigendecomposition"]
+  },
+  {
+    "id": "positive-definite-tests",
+    "type": "concept",
+    "front": "Three equivalent tests that a symmetric A is positive definite.",
+    "back": "$x^\\top A x > 0$ for all $x \\neq 0$; every eigenvalue is positive; `np.linalg.cholesky(A)` succeeds.",
+    "concepts": ["quadratic-forms"],
+    "critical": true
+  },
+  {
+    "id": "positive-entries-not-pd",
+    "type": "gotcha",
+    "front": "Is [[1, 2], [2, 1]] positive definite?",
+    "back": "No: its eigenvalues are 3 and −1, and $x^\\top A x = -2$ at x = (1, −1). Positive entries don't make a matrix positive definite.",
+    "concepts": ["quadratic-forms"]
+  },
+  {
+    "id": "quadratic-form-ellipse",
+    "type": "concept",
+    "front": "Shape of the level set $x^\\top A x = 1$ for positive definite A?",
+    "back": "An ellipse (ellipsoid) with axes along the eigenvectors and semi-axes $1/\\sqrt{\\lambda_i}$. $\\lambda_{\\max}/\\lambda_{\\min}$ measures how elongated it is.",
+    "concepts": ["quadratic-forms"]
+  },
+  {
+    "id": "svd-geometry",
+    "type": "concept",
+    "front": "The SVD $A = U\\Sigma V^\\top$, geometrically.",
+    "back": "Rotate with $V^\\top$, stretch the axes by $\\sigma_i$, rotate with $U$. The unit sphere becomes an ellipsoid with semi-axes $\\sigma_i u_i$, and $Av_i = \\sigma_i u_i$.",
+    "concepts": ["svd"],
+    "critical": true
+  },
+  {
+    "id": "svd-vs-eigen",
+    "type": "discrimination",
+    "front": "SVD vs eigendecomposition: when does each exist, and how are they related?",
+    "back": "The SVD exists for every matrix, with orthogonal U, V and $\\sigma \\ge 0$. Eigendecomposition needs a square matrix and can be complex or incomplete. $\\sigma_i^2$ are the eigenvalues of $A^\\top A$; for symmetric PSD matrices the two coincide.",
+    "concepts": ["svd", "eigendecomposition"]
+  },
+  {
+    "id": "singular-values-tell",
+    "type": "concept",
+    "front": "Read the rank, the 2-norm, the Frobenius norm and κ from the singular values.",
+    "back": "Rank = number of $\\sigma$ above a tolerance; $\\|A\\|_2 = \\sigma_1$; $\\|A\\|_F = \\sqrt{\\sum \\sigma_i^2}$; $\\kappa = \\sigma_1/\\sigma_n$.",
+    "concepts": ["svd", "conditioning"],
+    "critical": true
+  },
+  {
+    "id": "eckart-young",
+    "type": "equation",
+    "front": "Best rank-k approximation of A and its error (Eckart–Young).",
+    "back": "$A_k = \\sum_{i \\le k} \\sigma_i u_i v_i^\\top$, with $\\|A - A_k\\|_2 = \\sigma_{k+1}$ and $\\|A - A_k\\|_F = \\sqrt{\\sum_{i>k} \\sigma_i^2}$.",
+    "concepts": ["low-rank-approximation"],
+    "critical": true
+  },
+  {
+    "id": "energy-uses-squares",
+    "type": "gotcha",
+    "front": "Fraction of energy captured by the first k singular values?",
+    "back": "$\\sum_{i \\le k} \\sigma_i^2 / \\sum_i \\sigma_i^2$: squared, because the Frobenius error of a truncation adds up in squares.",
+    "concepts": ["low-rank-approximation"]
+  },
+  {
+    "id": "pseudoinverse-svd",
+    "type": "equation",
+    "front": "The pseudoinverse from the SVD, and what $A^+y$ gives you.",
+    "back": "$A^+ = V\\Sigma^+U^\\top$ (invert the nonzero σ). $A^+y$ is the least-squares solution: the minimum-norm one when the columns are dependent.",
+    "concepts": ["low-rank-approximation", "least-squares"]
+  },
+  {
+    "id": "pinv-cutoff",
+    "type": "gotcha",
+    "front": "Why does a pseudoinverse need a cutoff for small singular values?",
+    "back": "Rounding turns zero singular values into about 10⁻¹⁶, and inverting them gives 10¹⁶. Treat $\\sigma \\le \\text{tol} \\cdot \\sigma_1$ as exactly zero.",
+    "concepts": ["low-rank-approximation"]
+  },
+  {
+    "id": "relative-tolerance",
+    "type": "gotcha",
+    "front": "Rank and pseudoinverse tolerances: absolute or relative?",
+    "back": "Relative to $\\sigma_1$. A matrix in small units has small singular values without being rank deficient; an absolute cutoff would wipe it out.",
+    "concepts": ["low-rank-approximation", "rank-subspaces"]
+  },
+  {
+    "id": "svd-sign-ambiguity",
+    "type": "gotcha",
+    "front": "Why can two correct SVDs of the same matrix differ in sign?",
+    "back": "$(u_i, v_i)$ and $(-u_i, -v_i)$ give the same $\\sigma_i u_i v_i^\\top$. Fix a sign convention before comparing modes across runs.",
+    "concepts": ["svd"]
+  },
+  {
+    "id": "randomized-svd",
+    "type": "concept",
+    "front": "How does a randomized SVD find the top k singular vectors of a big matrix?",
+    "back": "Multiply A by a random matrix with k + p columns, orthonormalize with QR, project A onto that basis, and take the SVD of the small result. A few power iterations help when σ decays slowly.",
+    "concepts": ["svd"]
+  },
+  {
+    "id": "pca-via-svd",
+    "type": "concept",
+    "front": "PCA from the SVD of the centered data $X_c = U\\Sigma V^\\top$: where are the modes, the scores and the variances?",
+    "back": "Modes: rows of $V^\\top$. Scores: columns of $U\\Sigma$. Variance along mode i: $\\sigma_i^2/(n-1)$; share $\\sigma_i^2/\\sum\\sigma_j^2$.",
+    "concepts": ["pca-pod", "svd"],
+    "critical": true
+  },
+  {
+    "id": "pca-needs-centering",
+    "type": "gotcha",
+    "front": "What goes wrong if you skip centering before PCA?",
+    "back": "The first direction points at the mean field and claims ~99.9% of the energy, and the other modes are distorted by having to be orthogonal to it.",
+    "concepts": ["pca-pod"],
+    "critical": true
+  },
+  {
+    "id": "pca-scaling-choice",
+    "type": "discrimination",
+    "front": "Standardize columns before PCA: when yes, when no?",
+    "back": "Yes when columns have different units (°C, kW, %). No when they share units: standardizing would give quiet, noisy sensors the same weight as big movers.",
+    "concepts": ["pca-pod", "standardization"]
+  },
+  {
+    "id": "pod-is-pca",
+    "type": "bridge",
+    "front": "What is proper orthogonal decomposition (POD)?",
+    "back": "PCA as fluid mechanics knows it: the SVD of centered field snapshots, whose modes are the dominant flow or temperature structures. Also called EOFs and Karhunen–Loève.",
+    "concepts": ["pca-pod"]
+  },
+  {
+    "id": "modes-not-causes",
+    "type": "gotcha",
+    "front": "Does each PCA mode correspond to one physical cause?",
+    "back": "Not necessarily. Modes are orthogonal and sorted by variance; physical patterns needn't be orthogonal, so modes often blend them. The span is meaningful; individual modes need care.",
+    "concepts": ["pca-pod"]
+  },
+  {
+    "id": "choose-k-held-out",
+    "type": "concept",
+    "front": "How should you choose the number of modes k?",
+    "back": "By held-out error on the real task (for example, hide working sensors and reconstruct them), not just by an energy threshold. Extra modes eventually fit noise.",
+    "concepts": ["pca-pod"]
+  },
+  {
+    "id": "gappy-pod",
+    "type": "equation",
+    "front": "Gappy POD: estimating dead sensors from modes $\\Phi$ and mean $\\mu$.",
+    "back": "Solve $\\min_a \\|\\Phi_{\\text{obs}}^\\top a - (x_{\\text{obs}} - \\mu_{\\text{obs}})\\|$ by least squares, then fill $\\hat x_{\\text{dead}} = \\mu_{\\text{dead}} + \\Phi_{\\text{dead}}^\\top a$.",
+    "concepts": ["pca-pod", "least-squares"],
+    "critical": true
+  },
+  {
+    "id": "gappy-projection",
+    "type": "gotcha",
+    "front": "Why not get gappy-POD coefficients from dot products with the modes?",
+    "back": "Restricted to the working sensors, the modes aren't orthonormal, so dot products give biased coefficients (about 1 °C error vs 0.09 °C by least squares on pod 3).",
+    "concepts": ["pca-pod"]
+  },
+  {
+    "id": "method-of-snapshots",
+    "type": "concept",
+    "front": "POD with far more grid cells than snapshots ($p \\gg n$): what do you decompose?",
+    "back": "The small $n \\times n$ matrix $X_cX_c^\\top$ (the method of snapshots), or equivalently take a thin SVD.",
+    "concepts": ["pca-pod", "svd"]
+  },
+  {
+    "id": "reconstruction-residual-fdd",
+    "type": "concept",
+    "front": "How can POD flag a failing sensor?",
+    "back": "Reconstruct each working sensor from the modes fitted to the others; a sensor that persistently disagrees with its reconstruction has drifted or failed.",
+    "concepts": ["pca-pod"]
+  },
+  {
+    "id": "gradient-definition",
+    "type": "concept",
+    "front": "Define the gradient of $f: \\mathbb{R}^n \\to \\mathbb{R}$ by what it does.",
+    "back": "$f(w + d) \\approx f(w) + \\nabla f(w) \\cdot d$ for small d. It has w's shape and points in the direction of steepest ascent.",
+    "concepts": ["matrix-calculus"],
+    "critical": true
+  },
+  {
+    "id": "gradient-linear",
+    "type": "equation",
+    "front": "$\\nabla_w (a^\\top w)$",
+    "back": "$a$",
+    "concepts": ["matrix-calculus"]
+  },
+  {
+    "id": "gradient-quadratic",
+    "type": "equation",
+    "front": "$\\nabla_w (w^\\top A w)$",
+    "back": "$(A + A^\\top)w$, which is $2Aw$ when A is symmetric.",
+    "concepts": ["matrix-calculus", "quadratic-forms"],
+    "critical": true
+  },
+  {
+    "id": "gradient-least-squares",
+    "type": "equation",
+    "front": "$\\nabla_w \\tfrac{1}{2}\\|Xw - y\\|^2$",
+    "back": "$X^\\top(Xw - y)$: the residual carried back through X by its transpose (the chain rule).",
+    "concepts": ["matrix-calculus", "least-squares"],
+    "critical": true
+  },
+  {
+    "id": "ridge-solution",
+    "type": "derivation",
+    "front": "Minimizer of $\\tfrac{1}{2}\\|Xw - y\\|^2 + \\tfrac{\\lambda}{2}\\|w\\|^2$.",
+    "back": "$(X^\\top X + \\lambda I)w = X^\\top y$. Unique for λ > 0, because the Hessian $X^\\top X + \\lambda I$ is positive definite.",
+    "concepts": ["matrix-calculus", "least-squares"],
+    "critical": true
+  },
+  {
+    "id": "hessian-curvature",
+    "type": "concept",
+    "front": "The Hessian of least squares, and what its eigenvalues tell you.",
+    "back": "$X^\\top X$ (plus $\\lambda I$ for ridge): the curvature of the bowl. $\\lambda_{\\max}/\\lambda_{\\min}$ is how elongated it is, which sets how fast gradient descent converges.",
+    "concepts": ["matrix-calculus", "quadratic-forms"]
+  },
+  {
+    "id": "central-differences",
+    "type": "equation",
+    "front": "Central-difference estimate of $\\partial f / \\partial w_i$, and a good step size in float64.",
+    "back": "$\\dfrac{f(w + he_i) - f(w - he_i)}{2h}$, with error ∝ $h^2$; h ≈ 10⁻⁵.",
+    "concepts": ["matrix-calculus"]
+  },
+  {
+    "id": "forward-difference-error",
+    "type": "gotcha",
+    "front": "How accurate is a one-sided difference at h = 10⁻⁵, and what happens at h = 10⁻¹²?",
+    "back": "About 10⁻⁵ (error ∝ h), against about 10⁻¹¹ for central differences. At h = 10⁻¹² rounding dominates (∝ ε/h) and both are off by ~10⁻⁴.",
+    "concepts": ["matrix-calculus", "floating-point"]
+  },
+  {
+    "id": "absolute-gradient-tolerance",
+    "type": "gotcha",
+    "front": "How should you compare an analytic gradient with a numerical one?",
+    "back": "By relative error, $\\|g - g_{num}\\| / \\max(\\|g\\|, \\|g_{num}\\|)$: correct ≈ 10⁻¹¹, bugs ≈ 0.1–2. Absolute tolerances fail big correct gradients and pass small wrong ones.",
+    "concepts": ["matrix-calculus"]
+  },
+  {
+    "id": "gradient-shape-check",
+    "type": "concept",
+    "front": "Two cheap checks on a hand-derived gradient, before any numerics.",
+    "back": "Its shape must equal the parameter's shape, and the test inputs should be random and non-square (8 × 3, not 3 × 3), at a random point, so missing transposes can't hide.",
+    "concepts": ["matrix-calculus"]
   }
 ]

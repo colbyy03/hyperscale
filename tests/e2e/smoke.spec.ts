@@ -39,8 +39,13 @@ test("no horizontal overflow on any screen", async ({ page }) => {
   await page.addInitScript(() => {
     for (const m of ["python-mle", "linear-algebra"]) sessionStorage.setItem(`hs-peek:${m}`, "1");
   });
-  const explainer: Record<string, string> = { "/learn/linear-algebra/vectors": "viz-projection", "/learn/linear-algebra/linear-maps": "viz-matrixmap" };
-  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", "/learn/linear-algebra/vectors", "/learn/linear-algebra/linear-maps", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
+  const explainer: Record<string, string> = {
+    "/learn/linear-algebra/vectors": "viz-projection",
+    "/learn/linear-algebra/linear-maps": "viz-matrixmap",
+    "/learn/linear-algebra/svd": "svd-steps",
+    "/learn/linear-algebra/pca-pod": "viz-fieldmodes",
+  };
+  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", ...Object.keys(explainer), "/learn/linear-algebra/matrix-calculus", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
     await page.goto(path);
     await page.locator("main h1").first().waitFor();
     if (explainer[path]) await page.getByTestId(explainer[path]).waitFor();
@@ -48,4 +53,17 @@ test("no horizontal overflow on any screen", async ({ page }) => {
     const overflow = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - document.documentElement.clientWidth);
     expect(overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(1);
   }
+});
+
+test("the POD explorer shows modes, a fit near the noise, and the centering pitfall", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("hs-peek:linear-algebra", "1"));
+  await page.goto("/learn/linear-algebra/pca-pod");
+  const viz = page.getByTestId("viz-fieldmodes");
+  await expect(viz.getByTestId("field-summary")).toContainText("3 modes capture 99.");
+  await viz.getByRole("button", { name: "Mode 2" }).click();
+  await expect(viz.getByTestId("field-caption")).toHaveText(/^Mode 2: 1\d\.\d% of the energy/);
+  await viz.getByLabel("Subtract the mean field first").uncheck();
+  await viz.getByRole("button", { name: "Mode 1" }).click();
+  await expect(viz.getByTestId("field-caption")).toHaveText(/^Mode 1: 99\.9\d% of the energy/);
+  await expect(viz.getByRole("button", { name: "Mean field" })).toBeDisabled();
 });

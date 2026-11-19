@@ -1,0 +1,120 @@
+---
+id: linear-algebra/eigen
+title: Eigenvalues and systems that evolve
+minutes: 40
+concepts: [eigendecomposition, quadratic-forms]
+sources: [strang2019-lalfd, trefethen1997-nla, sanderson-3b1b-linear-algebra, boyd2018-vmls, deisenroth2020-mml]
+cards: [eigen-definition, trace-det-eigen, diagonalization-powers, spectral-theorem, discrete-stability, thermal-time-constants, stiff-euler-step, eigenvalues-ignore-capacity, norm-loses-sign, positive-definite-tests, positive-entries-not-pd, quadratic-form-ellipse]
+---
+
+<Situation from="Dev, controls engineer">
+Two questions from the same incident review. When a coolant pump tripped last month, the GPU junction temperatures rose in a fast jump and then a slow creep: why two speeds, and how fast is each? And the vendor's new CRAH controller ships with a discrete-time model, x₍ₖ₊₁₎ = A x₍ₖ₎. Before anyone touches a live hall, I want to know from A alone whether it settles, oscillates or runs away.
+</Situation>
+
+<Predict
+  id="stiff-euler"
+  question="A cold-plate model's fastest time constant is 0.79 s and its slowest is 12.4 s. To save time you simulate it with forward Euler at a 2-second step. What happens?"
+  options={["A little inaccurate, but fine: the slow mode dominates anyway", "It blows up: the fast mode limits the step to 2 × 0.79 = 1.58 s", "It runs twice as fast with the same results"]}
+  answer={1}
+  explain="Forward Euler multiplies each mode by (1 − Δt/τ) per step. For the fast mode at Δt = 2 s that's 1 − 2/0.79 ≈ −1.53, so the numerical mode grows by 53% every step while the physical one decays. This is stiffness: the fastest mode limits an explicit step even when you only care about the slowest. This course's simulator sidesteps it by updating each node with an exponential decay towards its equilibrium, which stays stable at any step."
+/>
+
+## Directions a matrix only stretches
+
+Most vectors change direction when a matrix acts on them. A few special ones don't: they only get stretched. Those are the **eigenvectors**, and the stretch factors are the **eigenvalues**:
+
+$$
+A v = \lambda v, \qquad v \neq 0
+$$
+
+Open the matrix map from Lesson 2 below and choose "symmetric": the purple dashed lines are the eigenvector directions, lines that map onto themselves. "Rotate 30°" has none (its eigenvalues are complex), and "shear" has only one.
+
+<Viz name="MatrixMap" />
+
+For a 2 × 2 matrix the eigenvalues solve $\lambda^2 - \operatorname{tr}(A)\,\lambda + \det A = 0$. Two facts hold in any size: the eigenvalues add up to the **trace** (the sum of the diagonal) and multiply to the **determinant**. In code, never go through that polynomial for anything bigger than a toy: root-finding on a characteristic polynomial is numerically fragile. Library eigensolvers use orthogonal transformations instead.
+
+## Change to the matrix's own coordinates
+
+If $A$ has a full set of eigenvectors, put them in the columns of $V$ and the eigenvalues on the diagonal of $\Lambda$. Then $AV = V\Lambda$, so
+
+$$
+A = V \Lambda V^{-1}, \qquad A^k = V \Lambda^k V^{-1}
+$$
+
+In eigenvector coordinates the matrix is just a set of independent stretches, and powers of it are powers of numbers. Write any starting vector as $x_0 = c_1 v_1 + \dots + c_n v_n$, and after $k$ steps of $x_{k+1} = A x_k$:
+
+$$
+x_k = c_1 \lambda_1^k v_1 + c_2 \lambda_2^k v_2 + \dots + c_n \lambda_n^k v_n
+$$
+
+**Symmetric matrices are the best case**, and they're everywhere: covariance matrices, conductance and stiffness matrices, $X^\top X$, Hessians. The **spectral theorem** says a real symmetric matrix has real eigenvalues and orthonormal eigenvectors, so $A = Q \Lambda Q^\top$ with $Q^\top Q = I$. Use `np.linalg.eigh` (or `eigvalsh`) for them: it's faster than `eig`, more accurate, and returns real results sorted in ascending order.
+
+## Stability is about eigenvalues
+
+That expansion answers Dev's controller question directly. Each mode is multiplied by $\lambda_i$ every step, so:
+
+- **It settles** if every $|\lambda_i| < 1$ (the spectral radius is below 1), at a rate set by the largest $|\lambda_i|$. After 20 steps, a mode with $\lambda = 0.9$ has shrunk to 0.12 of its size, while one with $\lambda = 0.5$ is down to 10⁻⁶: the slowest mode is what you see.
+- **It runs away** if any $|\lambda_i| > 1$.
+- **It oscillates** when eigenvalues come in complex pairs $r e^{\pm i\theta}$: the mode rotates by $\theta$ per step while its size scales by $r$. For example, $A = \begin{bmatrix} 0.95 & 0.10 \\ -0.20 & 0.90 \end{bmatrix}$ has eigenvalues $0.925 \pm 0.139i$, magnitude 0.935: a damped oscillation with a period of about 42 steps.
+
+Continuous time works the same way with exponentials: $\dot x = A x$ has modes $e^{\lambda_i t}$, stable when every eigenvalue has a negative real part.
+
+Dev's pump trip is the continuous case. Give every node of the cold-plate stack a heat capacity, collected in a diagonal matrix $C$; with Lesson 2's conductance matrix $K$, deviations from steady state obey
+
+$$
+C\,\dot T = -K\,T
+$$
+
+Its modes decay like $e^{-\lambda t}$, where $\lambda$ are the eigenvalues of $C^{-1}K$, and the **time constants** are $\tau = 1/\lambda$. For the junction–case–plate stack, they're about 0.79 s, 2.65 s and 12.4 s: a fast jump at the junction and a slow creep set by the plate's heat capacity. That's the two-speed rise Dev saw.
+
+<CodeExercise id="linear-algebra/thermal-time-constants" />
+
+Simulating $x \leftarrow Ax$ also gives you an algorithm. Normalize after every multiplication and the dominant eigenvector takes over, with the error shrinking like $|\lambda_2/\lambda_1|^k$. That's **power iteration**, the simplest eigensolver, and the idea behind PageRank and behind the randomized SVD you'll meet in the next lesson.
+
+<CodeExercise id="linear-algebra/power-iteration" />
+
+<Bridge>
+This is modal analysis. For a vibrating structure, $M\ddot x + Kx = 0$ leads to the generalized eigenproblem $Kv = \omega^2 Mv$: natural frequencies and mode shapes. The thermal network is the first-order cousin, $Kv = \lambda Cv$, with time constants instead of frequencies and nothing that oscillates, because heat capacity has no inertia to overshoot with. `scipy.linalg.eigh(K, C)` solves the generalized form directly, which is what the symmetric scaling in the exercise does by hand.
+</Bridge>
+
+## Quadratic forms and positive definiteness
+
+A symmetric matrix also defines a **quadratic form**, a number for every vector:
+
+$$
+f(x) = x^\top A x
+$$
+
+These measure energy and spread throughout engineering and ML: strain energy $\tfrac{1}{2}u^\top K u$, the variance $w^\top \Sigma w$ of a weighted combination of variables, the curvature of a loss near its minimum. In eigenvector coordinates $y = Q^\top x$ it splits into independent squares:
+
+$$
+x^\top A x = \lambda_1 y_1^2 + \lambda_2 y_2^2 + \dots + \lambda_n y_n^2
+$$
+
+So the eigenvalues decide its shape:
+
+- all $\lambda_i > 0$: **positive definite**, a bowl with a single lowest point, and $x^\top A x > 0$ for every $x \neq 0$;
+- all $\lambda_i \ge 0$: **positive semidefinite**, a bowl with flat directions (every covariance matrix, and $X^\top X$);
+- mixed signs: **indefinite**, a saddle.
+
+The level sets $x^\top A x = 1$ of a positive definite matrix are ellipses with axes along the eigenvectors and semi-axes $1/\sqrt{\lambda_i}$. The ratio $\lambda_{\max}/\lambda_{\min}$ is the condition number, and it measures how elongated the bowl is. Module 3 shows why that ratio decides how slowly gradient descent crawls along a long, narrow valley.
+
+<Predict
+  id="positive-entries-pd"
+  question="Every entry of [[1, 2], [2, 1]] is positive. Is it positive definite?"
+  options={["Yes: positive entries make a positive definite matrix", "No: one eigenvalue is −1, so xᵀAx is negative along (1, −1)", "Only if it's invertible, which it is"]}
+  answer={1}
+  explain="The eigenvalues are 3 and −1. Along x = (1, −1), xᵀAx = 1 − 2 − 2 + 1 = −2. Positive entries are neither necessary nor sufficient. To test a symmetric matrix in code, try a Cholesky factorization: np.linalg.cholesky succeeds exactly when the matrix is positive definite."
+/>
+
+<Craft title="Eigen habits worth keeping">
+- `np.linalg.eigh` or `eigvalsh` for symmetric matrices; `eig` only when you must, and expect complex output and eigenvectors that aren't orthogonal.
+- Test positive definiteness with `np.linalg.cholesky` (it raises `LinAlgError` if the matrix isn't), or with `eigvalsh` and a tolerance for semidefinite cases.
+- Eigenvalues tell you where a system ends up, not everything on the way there. A non-symmetric matrix can amplify a state before it decays: `[[0.5, 4], [0, 0.5]]` has both eigenvalues at 0.5, yet it stretches (0, 1) to a vector about 4 times as long in one step. Check transient growth in controllers, not just the spectral radius.
+- Simulating a stiff system? Use an implicit or exponential integrator, or keep explicit steps below 2/λ_max.
+- For a generalized problem $Kv = \lambda Cv$ with symmetric $K$ and positive definite $C$, use `scipy.linalg.eigh(K, C)`.
+</Craft>
+
+<Check items={["eig-trace-det", "eig-powers", "eig-stability", "eig-oscillation", "eig-time-constant", "eig-euler", "eig-pd", "eig-ellipse"]} />
+
+Next: the SVD, which works for every matrix, square or not.

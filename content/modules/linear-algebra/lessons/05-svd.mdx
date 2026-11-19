@@ -1,0 +1,97 @@
+---
+id: linear-algebra/svd
+title: "The SVD: rotate, stretch, rotate"
+minutes: 40
+concepts: [svd, low-rank-approximation]
+sources: [strang2019-lalfd, trefethen1997-nla, brunton-kutz-2022, halko2011-randomized, strang-mit18065-2018]
+cards: [svd-geometry, svd-vs-eigen, singular-values-tell, eckart-young, energy-uses-squares, pseudoinverse-svd, pinv-cutoff, relative-tolerance, svd-sign-ambiguity, randomized-svd]
+---
+
+<Situation from="Ines, reliability lead">
+We log 72 inlet temperature sensors in pod 3, every hour. A vendor pitched us a "thermal digital twin" and claimed the whole field is "really only three numbers". If that's true, I want to know which three, and how much we'd lose by storing and alarming on three numbers instead of 72. If it isn't true, I want to be able to say why.
+</Situation>
+
+<Predict
+  id="svd-every-matrix"
+  question="Which matrices can be written as a rotation, then a stretch along the coordinate axes, then another rotation?"
+  options={["Only symmetric matrices", "Only square, invertible matrices", "Every matrix, including rectangular and singular ones"]}
+  answer={2}
+  explain="That factorization, A = UΣVᵀ, is the singular value decomposition, and it exists for every real matrix of any shape. Eigendecomposition needs a square matrix and, to be well behaved, a symmetric one; the SVD needs nothing. (When the rotation would need a mirror image, U or V includes a reflection.)"
+/>
+
+## Every matrix is rotate, stretch, rotate
+
+The **singular value decomposition** writes any $m \times n$ matrix as
+
+$$
+A = U \Sigma V^\top
+$$
+
+where $V$ ($n \times n$) and $U$ ($m \times m$) are orthogonal (rotations, possibly with a reflection) and $\Sigma$ is diagonal with the **singular values** $\sigma_1 \ge \sigma_2 \ge \dots \ge 0$. Read right to left, the matrix rotates the input space with $V^\top$, stretches each axis by its $\sigma_i$, and rotates the result into place with $U$.
+
+Geometrically, $A$ maps the unit sphere to an ellipsoid. Its semi-axes are $\sigma_i u_i$, and the right singular vectors $v_i$ are the input directions that land on them: $A v_i = \sigma_i u_i$. Press "Show the SVD steps" to watch the three stages for any 2 × 2 matrix, even the shear and the rank-1 preset.
+
+<Viz name="MatrixMap" svd />
+
+The connection to eigenvalues is direct: $A^\top A = V \Sigma^2 V^\top$ and $AA^\top = U\Sigma^2 U^\top$, so the $\sigma_i^2$ are the eigenvalues of $A^\top A$. For a symmetric positive semidefinite matrix the two decompositions coincide. Don't compute an SVD through $A^\top A$ in code, though: that squares the condition number, exactly as the normal equations did in Lesson 3. `np.linalg.svd` works on $A$ itself.
+
+## What the singular values tell you
+
+Almost everything you'd want to know about a matrix's size and shape is in its singular values:
+
+- **Rank** is the number of nonzero singular values. In floating point, it's the number above a tolerance: `np.linalg.matrix_rank` counts those above $\sigma_1 \cdot \max(m, n) \cdot \varepsilon$.
+- **Size**: $\|A\|_2 = \sigma_1$, the largest stretch, and $\|A\|_F = \sqrt{\sum_i \sigma_i^2}$.
+- **Conditioning**: $\kappa(A) = \sigma_1 / \sigma_n$, the ratio of the largest stretch to the smallest. That's the condition number Lesson 2 promised to define.
+- **Structure versus noise.** For Ines's field (480 hourly snapshots of 72 sensors, with each sensor's average removed), the singular values are 239, 81 and 37, then a flat floor: 2.37, 2.32, 2.30, and so on. Three directions carry the structure; everything after them looks like independent sensor noise.
+
+## Low-rank approximation
+
+The SVD also writes $A$ as a sum of rank-1 pieces, sorted from most to least important:
+
+$$
+A = \sigma_1 u_1 v_1^\top + \sigma_2 u_2 v_2^\top + \dots + \sigma_r u_r v_r^\top
+$$
+
+Keep the first $k$ terms and you get $A_k$. The **Eckart–Young theorem** says no rank-$k$ matrix is closer to $A$, whether you measure with the 2-norm or the Frobenius norm, and the errors are exactly what you threw away:
+
+$$
+\|A - A_k\|_2 = \sigma_{k+1}, \qquad \|A - A_k\|_F = \sqrt{\textstyle\sum_{i > k} \sigma_i^2}
+$$
+
+That's why "energy captured" is measured with squared singular values: $\sum_{i \le k} \sigma_i^2 / \sum_i \sigma_i^2$. For Ines's field, three terms capture 99.7% of the energy. The leftover error works out to 0.078 °C per reading, just under the 0.08 °C noise of the sensors themselves. The vendor's claim survives, with a caveat you'll meet in the next lesson. In storage terms, three modes, their time series and the mean field are 1,731 numbers instead of 34,560.
+
+<CodeExercise id="linear-algebra/rank-k-approx" />
+
+<Bridge>
+Continuum mechanics uses the SVD under another name. The deformation gradient $F$ maps material fibres from the undeformed to the deformed body; its polar decomposition $F = RU$ splits it into a pure stretch and a rotation. The singular values of $F$ are the **principal stretches**, the right singular vectors are the fibre directions that end up most and least stretched, and the left singular vectors are where those fibres point afterwards. Mohr's circle finds the principal stresses of a symmetric stress tensor, the eigenvalue special case.
+</Bridge>
+
+## The pseudoinverse
+
+Undo each stretch and you get the **pseudoinverse**:
+
+$$
+A^+ = V \Sigma^+ U^\top
+$$
+
+where $\Sigma^+$ inverts the nonzero singular values and leaves the zeros at zero. For a tall matrix with independent columns, $A^+ = (A^\top A)^{-1}A^\top$, so $A^+ y$ is the least-squares solution from Lesson 3. When the columns are dependent, as in the dummy-variable trap, there are infinitely many least-squares solutions, and $A^+ y$ picks the one with the smallest norm. That's what `np.linalg.lstsq` returns.
+
+The hard part is deciding which singular values count as zero. Rounding turns an exact zero into something like 10⁻¹⁶, and inverting that gives 10¹⁶. So the pseudoinverse drops singular values below a tolerance, and the tolerance has to be **relative** to $\sigma_1$: a matrix in small units (say, terawatts) has small singular values without being rank deficient. Dropping small singular values on purpose is also a form of regularization: it refuses to amplify the directions the data barely determine. Ridge regression (Module 6) shrinks those directions smoothly instead of cutting them off.
+
+<CodeExercise id="linear-algebra/pinv-from-svd" />
+
+## When the matrix is big
+
+A full SVD of an $m \times n$ matrix costs on the order of $mn \min(m, n)$ operations. For a year of one-minute data from 240 sensors (about 500,000 × 240) that's still fine, but for millions of columns, or when you only need the top few singular vectors, use a **randomized SVD**: multiply $A$ by a random matrix with $k + 10$ or so columns, orthonormalize the result with QR, and take the SVD of the small projected matrix. A few rounds of power iteration (last lesson) sharpen it when the singular values decay slowly. scikit-learn's `randomized_svd` and `TruncatedSVD` implement it; `scipy.sparse.linalg.svds` handles sparse matrices.
+
+<Craft title="SVD habits worth keeping">
+- `np.linalg.svd(A, full_matrices=False)` for the thin SVD; `compute_uv=False` when you only need the values.
+- It returns `Vt`, not `V`: the right singular vectors are the *rows*.
+- Signs are arbitrary: flipping $u_i$ and $v_i$ together gives an equally valid SVD. Fix a sign convention before comparing results across runs or library versions.
+- Plot the singular values on a log scale before choosing $k$. Look for a gap, and for where the curve flattens into noise.
+- Choose truncation tolerances relative to $\sigma_1$, never absolute.
+</Craft>
+
+<Check items={["svd-exists", "svd-sigma-eig", "svd-rank-cond", "svd-eckart-young", "svd-energy", "svd-min-norm", "svd-cutoff", "svd-signs"]} />
+
+Next: PCA and POD, the SVD applied to Ines's temperature field.

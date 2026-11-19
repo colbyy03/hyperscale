@@ -1,0 +1,23 @@
+{
+  "id": "linear-algebra/pinv-from-svd",
+  "type": "code",
+  "language": "python",
+  "title": "A pseudoinverse that knows when to stop",
+  "prompt": "Write `pinv(A, rtol=1e-12)`: the Moore–Penrose pseudoinverse A⁺ = V Σ⁺ Uᵀ from `np.linalg.svd`. Σ⁺ inverts each singular value σᵢ, except that singular values at or below `rtol` × σ_max are treated as exactly zero (their reciprocal is replaced by 0), since inverting rounding noise produces garbage.\n\n`A` can be any shape; the result has the transposed shape. Then `pinv(X) @ y` is the least-squares solution when X has independent columns, and the minimum-norm least-squares solution when it doesn't. Don't call `np.linalg.pinv` or `lstsq`.",
+  "concepts": ["low-rank-approximation", "svd", "least-squares"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "A = UΣVᵀ maps along vᵢ to σᵢ uᵢ. The pseudoinverse undoes each of those stretches: uᵢ goes back to vᵢ / σᵢ. What should happen to a direction that A squashes to zero?",
+    "With U, s, Vt = np.linalg.svd(A, full_matrices=False): A⁺ = Vt.T @ diag(s_inv) @ U.T, where s_inv = 1/s for s > rtol·s.max() and 0 otherwise. The cutoff must be relative, so that scaling A by 10⁻¹³ scales A⁺ by 10¹³ instead of wiping it out.",
+    "U, s, Vt = np.linalg.svd(A, full_matrices=False); keep = s > rtol * s.max(); s_inv = np.zeros_like(s); s_inv[keep] = 1 / s[keep]; return (Vt.T * s_inv) @ U.T."
+  ],
+  "misconceptions": {
+    "pinv-cutoff": "Inverting singular values at the rounding-noise level turns 10⁻¹⁶ into 10¹⁶. Treat singular values below a relative tolerance as zero.",
+    "relative-tolerance": "A cutoff must be relative to the largest singular value; an absolute one wipes out a matrix that's merely in small units."
+  },
+  "sources": ["strang2019-lalfd", "trefethen1997-nla", "numpy-docs-2-5"]
+}

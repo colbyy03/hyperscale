@@ -1,0 +1,58 @@
+{
+  "id": "linear-algebra/quadratic-gradient",
+  "type": "derivation",
+  "language": "none",
+  "title": "The gradient of a quadratic form",
+  "prompt": "Derive ∇(wᵀAw) from the definition of the gradient: f(w + d) ≈ f(w) + g · d for a small step `d`, and the vector `g` is the gradient. `A` is a general (4 × 4) matrix, `S` is symmetric positive definite, and `w`, `d` and `b` are vectors of length 4. Write each step as a NumPy expression.",
+  "concepts": ["matrix-calculus", "quadratic-forms"],
+  "difficulty": 0.45,
+  "minutes": 10,
+  "critical": true,
+  "hints": [
+    "Expand (w + d)ᵀA(w + d) term by term, as you would (a + b)² with numbers, but without assuming that dᵀAw equals wᵀAd.",
+    "The terms linear in d are dᵀAw and wᵀAd. A scalar equals its own transpose, so wᵀAd = dᵀAᵀw, and both terms are d dotted with something.",
+    "g = (A + Aᵀ)w, which is 2Sw for symmetric S. For f = ½wᵀSw − bᵀw + c the gradient is Sw − b, and setting it to zero gives w* = S⁻¹b."
+  ],
+  "derivation": {
+    "variables": {
+      "A": { "shape": [4, 4] },
+      "S": { "shape": [4, 4], "kind": "spd" },
+      "w": { "shape": [4] },
+      "d": { "shape": [4] },
+      "b": { "shape": [4] }
+    },
+    "steps": [
+      {
+        "prompt": "For f(w) = wᵀAw, expand f(w + d) − f(w) and keep only the terms that are linear in `d` (a scalar).",
+        "answer": "d @ A @ w + w @ A @ d",
+        "hint": "(w + d)ᵀA(w + d) = wᵀAw + dᵀAw + wᵀAd + dᵀAd. Drop wᵀAw (it cancels) and dᵀAd (it's quadratic in d).",
+        "wrong": ["2 * d @ A @ w", "d @ A @ w", "d @ A @ d"]
+      },
+      {
+        "prompt": "Write that linear term as `d · g`. What is the gradient `g`?",
+        "answer": "(A + A.T) @ w",
+        "hint": "wᵀAd = dᵀAᵀw, since a scalar equals its transpose. Collect both terms as d · (something).",
+        "wrong": ["2 * A @ w", "A @ w", "A.T @ w"]
+      },
+      {
+        "prompt": "For a symmetric matrix `S`, simplify the gradient of wᵀSw.",
+        "answer": "2 * S @ w",
+        "hint": "With S = Sᵀ, (S + Sᵀ)w is twice something.",
+        "wrong": ["S @ w", "S @ S @ w"]
+      },
+      {
+        "prompt": "Now f(w) = ½ wᵀSw − bᵀw + 7. What is its gradient?",
+        "answer": "S @ w - b",
+        "hint": "The ½ cancels the 2, the gradient of bᵀw is b, and a constant has zero gradient.",
+        "wrong": ["2 * S @ w - b", "S @ w + b", "S @ w - b + 7"]
+      },
+      {
+        "prompt": "Set that gradient to zero. Where is the minimum of f? (S is positive definite, so f is a bowl with one lowest point.)",
+        "answer": "inv(S) @ b",
+        "hint": "Solve Sw − b = 0 for w.",
+        "wrong": ["-inv(S) @ b", "b", "inv(S) @ b - b"]
+      }
+    ]
+  },
+  "sources": ["deisenroth2020-mml", "boyd2018-vmls"]
+}

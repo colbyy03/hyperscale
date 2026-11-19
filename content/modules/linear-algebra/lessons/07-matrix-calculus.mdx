@@ -1,0 +1,84 @@
+---
+id: linear-algebra/matrix-calculus
+title: Matrix calculus essentials
+minutes: 35
+concepts: [matrix-calculus, quadratic-forms, least-squares]
+sources: [deisenroth2020-mml, boyd2018-vmls, goldberg1991-floating-point, strang2019-lalfd]
+cards: [gradient-definition, gradient-linear, gradient-quadratic, gradient-least-squares, ridge-solution, hessian-curvature, central-differences, forward-difference-error, absolute-gradient-tolerance, gradient-shape-check]
+---
+
+<Situation from="Dev, controls engineer">
+Module 3 starts next week, and I already know what will break. Somebody will hand-derive a gradient for a model, get a sign or a transpose wrong, and the optimizer will crawl along without ever complaining. I want everyone to be able to derive the gradients of the common forms, and to check them numerically before trusting them.
+</Situation>
+
+<Predict
+  id="buggy-gradient-descent"
+  question="You fit least squares by gradient descent, but your hand-coded gradient is missing the ½ that cancels the 2 (it returns 2Xᵀ(Xw − y) for the loss ½‖Xw − y‖²). What happens?"
+  options={["It diverges immediately", "It still converges to the right answer, as long as the step size is small enough: the direction is right, the length is doubled", "It converges to the wrong answer"]}
+  answer={1}
+  explain="A scaled gradient points the same way and is zero at the same place, so descent still finds the minimum; it just behaves as though the step size were doubled, which can push a tuned step past the stability limit. A sign error, by contrast, climbs uphill, and a transposed term usually fails on shapes. Bugs that only rescale are the sneaky ones: the loss goes down and nothing looks wrong. A numerical gradient check catches all three."
+/>
+
+## The gradient, defined by what it does
+
+For a scalar function of a vector, $f: \mathbb{R}^n \to \mathbb{R}$, the gradient $\nabla f(w)$ is the vector that predicts how $f$ changes under any small step $d$:
+
+$$
+f(w + d) \approx f(w) + \nabla f(w) \cdot d
+$$
+
+Two consequences follow from Lesson 1. The gradient has the **same shape as $w$**, which makes shapes a free check on every derivation. And among all steps of a given length, the change is largest when $d$ points along the gradient, because a dot product is largest for parallel vectors: the gradient is the direction of steepest ascent.
+
+This definition is also the most reliable way to derive a gradient: expand $f(w + d)$, keep the terms linear in $d$, and read off what multiplies $d$.
+
+## Four rules that cover most of ML
+
+| Function | Gradient | Where it shows up |
+|---|---|---|
+| $a^\top w$ | $a$ | every linear model |
+| $w^\top A w$ | $(A + A^\top)\,w$, which is $2Aw$ for symmetric $A$ | variances, energies, penalties |
+| $\tfrac{1}{2}\|Xw - y\|^2$ | $X^\top(Xw - y)$ | least squares |
+| $\tfrac{\lambda}{2}\|w\|^2$ | $\lambda w$ | ridge regularization, weight decay |
+
+The third rule is the **chain rule** in matrix form. The loss depends on $w$ only through the residual $r = Xw - y$. A step $d$ in $w$ moves the residual by $Xd$, and ½‖r‖² changes by $r \cdot Xd = (X^\top r) \cdot d$. The transpose appears because you're carrying a change *backwards* through $X$, from the residual to the weights. That's the whole idea of backpropagation, which Module 11 builds into an engine.
+
+<CodeExercise id="linear-algebra/quadratic-gradient" />
+
+<CodeExercise id="linear-algebra/ridge-gradient" />
+
+The **Hessian**, the matrix of second derivatives, describes the curvature. For least squares it's $X^\top X$ (plus $\lambda I$ with ridge): a quadratic form, exactly as in Lesson 4. Positive definite means a bowl with one minimum, and the ratio of its largest to smallest eigenvalue is how elongated the bowl is. Module 3 picks up from here: that ratio decides how slowly gradient descent zigzags to the bottom, and ridge's $\lambda I$ lifts every eigenvalue, which makes the bowl rounder as well as the solution unique.
+
+<Bridge>
+You've used this rule in structures. The strain energy of a linear elastic structure is the quadratic form $U = \tfrac{1}{2}u^\top K u$, with a symmetric stiffness matrix. Its gradient with respect to the displacements is $Ku$, the internal force vector, which is the second row of the table with the ½ cancelling the 2. Setting the gradient of the total potential energy $\tfrac{1}{2}u^\top Ku - f^\top u$ to zero gives $Ku = f$: the minimum-energy principle is a matrix-calculus statement.
+</Bridge>
+
+## Check your gradients numerically
+
+Derivations go wrong in small ways: a sign, a transpose, a missing ½. So before trusting a hand-coded gradient, compare it with a finite-difference estimate. For each coordinate:
+
+$$
+\frac{\partial f}{\partial w_i} \approx \frac{f(w + h e_i) - f(w - h e_i)}{2h}
+$$
+
+This **central difference** cancels the second-order term of the Taylor expansion, so its error shrinks like $h^2$. A one-sided difference, $(f(w + he_i) - f(w))/h$, has error proportional to $h$. Rounding pushes the other way: subtracting two nearly equal function values loses digits, and that error grows like $\varepsilon/h$. The measured trade-off, on $f(w) = \sum_i e^{w_i}$ (the rounding-dominated entries vary from run to run):
+
+| Step $h$ | 10⁻³ | 10⁻⁵ | 10⁻⁸ | 10⁻¹² |
+|---|---|---|---|---|
+| Central difference, relative error | 2 × 10⁻⁷ | about 10⁻¹¹ | about 10⁻⁸ | about 10⁻⁴ |
+| One-sided difference, relative error | 5 × 10⁻⁴ | 5 × 10⁻⁶ | about 10⁻⁸ | about 10⁻⁴ |
+
+So use central differences with $h$ around 10⁻⁵ in float64, and compare with a **relative** error, $\|g - g_{\text{num}}\| / \max(\|g\|, \|g_{\text{num}}\|)$. A correct gradient comes in around 10⁻¹¹; the classic bugs come in near 1 (a flipped sign gives exactly 2, a doubled gradient 0.5). Anything below 10⁻⁶ passes.
+
+<CodeExercise id="linear-algebra/gradient-check" />
+
+<Craft title="Gradient habits worth keeping">
+- Write the shape next to every term of a derivation. The gradient must have the parameter's shape.
+- Test with non-square, random inputs (an 8 × 3 matrix, not 3 × 3), so a missing transpose can't hide behind matching shapes.
+- Check in float64, at a random point rather than a special one such as zero, where many wrong gradients happen to agree.
+- For a model with millions of parameters, check a few random directions: compare $\nabla f \cdot d$ with $(f(w + hd) - f(w - hd))/2h$.
+- Autograd (Modules 11 and 13) computes gradients for you, but custom operations and fused kernels still need exactly this check.
+</Craft>
+
+<Check items={["mc-shape", "mc-quadratic", "mc-symmetric", "mc-lstsq", "mc-ridge", "mc-central", "mc-relative", "mc-scaled-bug"]} />
+
+Next: how to do this module's work with AI tools, without letting them hand you a wrong answer.

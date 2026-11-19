@@ -42,3 +42,21 @@ describe("ProjectionViz maths", () => {
     expect(Number.isNaN(project([0, 0], [1, 1]).cos)).toBe(true);
   });
 });
+
+describe("svd2", () => {
+  it("rebuilds A from U Σ Vᵀ with orthonormal U and V", async () => {
+    const { svd2 } = await import("./MatrixMap");
+    for (const m of [[1.5, 0.6, 0.6, 0.8], [1, 1, 0, 1], [0.87, -0.5, 0.5, 0.87], [1, 2, 0.5, 1], [-1, 0.3, 0.2, 1.4]] as Array<[number, number, number, number]>) {
+      const { U, S, V } = svd2(m);
+      // A = Σ_i s_i u_i v_iᵀ
+      const rebuilt = ([0, 1] as const).map((r) => ([0, 1] as const).map((c) => S[0] * U[0][r] * V[0][c] + S[1] * U[1][r] * V[1][c]));
+      expect(rebuilt[0]![0]).toBeCloseTo(m[0], 9);
+      expect(rebuilt[0]![1]).toBeCloseTo(m[1], 9);
+      expect(rebuilt[1]![0]).toBeCloseTo(m[2], 9);
+      expect(rebuilt[1]![1]).toBeCloseTo(m[3], 9);
+      expect(U[0][0] * U[1][0] + U[0][1] * U[1][1]).toBeCloseTo(0, 9);
+      expect(Math.hypot(...U[1])).toBeCloseTo(1, 9);
+      expect(V[0][0] * V[1][0] + V[0][1] * V[1][1]).toBeCloseTo(0, 12);
+    }
+  });
+});

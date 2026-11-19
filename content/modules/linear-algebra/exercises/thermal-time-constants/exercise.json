@@ -1,0 +1,19 @@
+{
+  "id": "linear-algebra/thermal-time-constants",
+  "type": "code",
+  "language": "python",
+  "title": "Time constants of a cold-plate stack",
+  "prompt": "After a pump trip, how quickly does each part of a GPU's cooling stack respond? Give every node `i` a heat capacity `C[i]` in J/K, and join the nodes with the conductance matrix `K` from Lesson 2 (coolant links on its diagonal). Deviations from steady state then obey C dT/dt = −K T, so they decay in modes like e^(−λt), where λ are the eigenvalues of C⁻¹K.\n\nWrite `time_constants(C, K)`, which returns the time constants τ = 1/λ in seconds as a real array, slowest first, and `max_euler_step(C, K)`, which returns the largest forward-Euler time step, 2/λ_max, that doesn't blow up.\n\nC⁻¹K isn't symmetric, but S = C^(−1/2) K C^(−1/2) is, and it has the same eigenvalues. Use `np.linalg.eigvalsh` on S: it's faster, it's more accurate, and it returns real eigenvalues in ascending order.",
+  "concepts": ["eigendecomposition", "linear-maps"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": ["One node with capacity C and conductance G to the coolant: C dT/dt = −G T, so T decays like e^(−Gt/C) and τ = C/G. With several nodes, each eigenvalue of C⁻¹K plays the role of G/C for one mode.", "Scale by the capacities on both sides: with d = 1/√C, S = d[:, None] * K * d[None, :] is symmetric and similar to C⁻¹K, so its eigenvalues are the same. The largest eigenvalue is the fastest mode, and forward Euler multiplies that mode by (1 − Δt·λ) each step: it stays bounded only while Δt ≤ 2/λ_max.", "d = 1 / np.sqrt(C); lam = np.linalg.eigvalsh(d[:, None] * K * d[None, :]). eigvalsh sorts ascending, so 1 / lam is already slowest first. max_euler_step: return 2 / lam.max()."],
+  "misconceptions": {
+    "stiff-euler-step": "The fastest mode limits an explicit time step, even when you only care about the slowest one: forward Euler is stable only for Δt ≤ 2/λ_max.",
+    "eigenvalues-ignore-capacity": "The time constants are eigenvalues of C⁻¹K, not of K: conductances alone don't set a time scale without heat capacities."
+  },
+  "sources": ["strang2019-lalfd", "trefethen1997-nla"]
+}

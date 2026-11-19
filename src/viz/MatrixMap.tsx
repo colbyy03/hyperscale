@@ -38,6 +38,20 @@ export function analyze([a, b, c, d]: M) {
   return { det, eig, s1, s2, v1, rank, kappa: s2 > 1e-12 ? s1 / s2 : Infinity };
 }
 
+/** A = U Σ Vᵀ for a 2×2 matrix: V and U as column pairs, Σ = diag(s1, s2). */
+export function svd2(m: M) {
+  const [a, b, c, d] = m;
+  const { s1, s2, v1 } = analyze(m);
+  const v2: [number, number] = [-v1[1], v1[0]];
+  const apply = (v: [number, number]): [number, number] => [a * v[0] + b * v[1], c * v[0] + d * v[1]];
+  const Av1 = apply(v1);
+  const u1: [number, number] = s1 > 1e-12 ? [Av1[0] / s1, Av1[1] / s1] : [1, 0];
+  const Av2 = apply(v2);
+  // When s2 is zero, any unit vector perpendicular to u1 completes U.
+  const u2: [number, number] = s2 > 1e-12 ? [Av2[0] / s2, Av2[1] / s2] : [-u1[1], u1[0]];
+  return { U: [u1, u2] as const, S: [s1, s2] as const, V: [v1, v2] as const };
+}
+
 function eigvec(m: M, l: number): [number, number] {
   const [a, b, c, d] = m;
   const v: [number, number] = Math.abs(b) > 1e-9 ? [b, l - a] : Math.abs(c) > 1e-9 ? [l - d, c] : l === a ? [1, 0] : [0, 1];
@@ -47,8 +61,61 @@ function eigvec(m: M, l: number): [number, number] {
 
 const fmt = (x: number) => (Math.abs(x) < 5e-3 ? "0" : x.toFixed(2));
 
-export default function MatrixMap() {
+type V2 = [number, number];
+type Mat2 = [V2, V2]; // rows
+
+const mul = (A: Mat2, B: Mat2): Mat2 => [
+  [A[0][0] * B[0][0] + A[0][1] * B[1][0], A[0][0] * B[0][1] + A[0][1] * B[1][1]],
+  [A[1][0] * B[0][0] + A[1][1] * B[1][0], A[1][0] * B[0][1] + A[1][1] * B[1][1]],
+];
+
+/** The three stages of A = U Σ Vᵀ applied to the unit circle and the basis vectors. */
+function SvdSteps({ m }: { m: M }) {
+  const { U, S, V } = svd2(m);
+  const Vt: Mat2 = [V[0], V[1]]; // rows of Vᵀ are the columns of V
+  const Sg: Mat2 = [[S[0], 0], [0, S[1]]];
+  const Um: Mat2 = [[U[0][0], U[1][0]], [U[0][1], U[1][1]]];
+  const I: Mat2 = [[1, 0], [0, 1]];
+  const stages: Array<{ label: string; sub: string; T: Mat2 }> = [
+    { label: "start", sub: "unit circle", T: I },
+    { label: "Vᵀ", sub: "rotate", T: Vt },
+    { label: "Σ", sub: `stretch ${S[0].toFixed(2)}, ${S[1].toFixed(2)}`, T: mul(Sg, Vt) },
+    { label: "U", sub: Um[0][0] * Um[1][1] - Um[0][1] * Um[1][0] < 0 ? "reflect + rotate" : "rotate", T: mul(Um, mul(Sg, Vt)) },
+  ];
+  const R = 46;
+  const sc = 18;
+  const pt = (T: Mat2, x: number, y: number) => [R + sc * (T[0][0] * x + T[0][1] * y), R - sc * (T[1][0] * x + T[1][1] * y)];
+  return (
+    <div className="mt-3 grid grid-cols-4 gap-1.5" data-testid="svd-steps">
+      {stages.map((st, i) => {
+        const circle = Array.from({ length: 49 }, (_, k) => {
+          const t = (k / 48) * 2 * Math.PI;
+          return pt(st.T, Math.cos(t), Math.sin(t));
+        });
+        const e1 = pt(st.T, 1, 0);
+        const e2 = pt(st.T, 0, 1);
+        return (
+          <figure key={i} className="flex min-w-0 flex-col items-center gap-0.5">
+            <svg viewBox={`0 0 ${2 * R} ${2 * R}`} className="w-full max-w-24 rounded-lg border border-line bg-surface-2" aria-hidden="true">
+              <line x1={0} y1={R} x2={2 * R} y2={R} stroke="var(--border)" />
+              <line x1={R} y1={0} x2={R} y2={2 * R} stroke="var(--border)" />
+              <path d={circle.map((p, k) => `${k ? "L" : "M"}${p[0]!.toFixed(1)},${p[1]!.toFixed(1)}`).join("")} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.2} />
+              <line x1={R} y1={R} x2={e1[0]} y2={e1[1]} stroke="var(--accent)" strokeWidth={2} />
+              <line x1={R} y1={R} x2={e2[0]} y2={e2[1]} stroke="var(--heat)" strokeWidth={2} />
+            </svg>
+            <figcaption className="text-center text-[11px] leading-tight">
+              <span className="font-mono text-ink">{st.label}</span> <span className="text-faint">{st.sub}</span>
+            </figcaption>
+          </figure>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function MatrixMap({ svd = false }: { svd?: boolean }) {
   const [m, setM] = useState<M>([1.5, 0.6, 0.6, 0.8]);
+  const [showSvd, setShowSvd] = useState(svd);
   const info = useMemo(() => analyze(m), [m]);
   const [a, b, c, d] = m;
   const S = 46; // pixels per unit
@@ -129,12 +196,16 @@ export default function MatrixMap() {
                 {pr.name}
               </button>
             ))}
+            <button onClick={() => setShowSvd((v) => !v)} aria-pressed={showSvd} className={clsx("rounded-lg border px-2 py-1 text-xs", showSvd ? "border-accent/50 text-accent" : "border-line text-muted hover:text-ink")}>
+              {showSvd ? "Hide" : "Show"} the SVD steps
+            </button>
           </div>
           <p className="text-xs text-faint">
             <span className="text-accent">Green</span> and <span className="text-heat">orange</span> arrows are where e₁ and e₂ land, the matrix's columns. The dashed circle becomes the shaded ellipse; <span className="text-violet">purple dashes</span> are eigenvector directions, lines that map onto themselves.
           </p>
         </div>
       </div>
+      {showSvd && <SvdSteps m={m} />}
     </div>
   );
 }
