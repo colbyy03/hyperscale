@@ -17,7 +17,7 @@ test("the Control Room runs a simulated day in the browser and saves a baseline"
   await expect(summary).toBeVisible({ timeout: 120_000 });
   await expect(page.getByTestId("sim-clock")).toHaveText("24:00");
   await expect(summary).toContainText("valid run");
-  await expect(summary).toContainText("same"); // default settings match the reference run exactly
+  await expect(summary).toContainText("same", { timeout: 60_000 }); // default settings match the reference run exactly
 
   await page.getByTestId("save-baseline").click();
   await expect(page.getByTestId("leaderboard")).toContainText("MWh");

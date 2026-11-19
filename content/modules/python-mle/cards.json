@@ -162,5 +162,109 @@
     "back": "First, profile (cProfile for where, timeit for how long) and fix the biggest hotspot. Last, test that results still match the original within a stated tolerance.",
     "concepts": ["profiling"],
     "critical": false
+  },
+  {
+    "id": "average-of-ratios",
+    "type": "gotcha",
+    "front": "A dashboard computes PUE as `AVG(facility_kw / it_kw)` over 15-minute rows. What's wrong, and what's right?",
+    "back": "It averages ratios, so low-load intervals get the same weight as high-load ones. A period's PUE is total facility energy ÷ total IT energy: `SUM(facility_kw) / SUM(it_kw)` for equal intervals.",
+    "concepts": ["sql-telemetry", "pue"],
+    "critical": true
+  },
+  {
+    "id": "where-having-qualify",
+    "type": "discrimination",
+    "front": "WHERE vs HAVING vs QUALIFY?",
+    "back": "WHERE filters rows before grouping (no aggregates allowed). HAVING filters groups after GROUP BY. QUALIFY (DuckDB) filters on window-function results.",
+    "concepts": ["sql-telemetry"],
+    "critical": false
+  },
+  {
+    "id": "window-frame-rows",
+    "type": "concept",
+    "front": "How many rows does `ROWS BETWEEN 14 PRECEDING AND CURRENT ROW` cover, and what happens at the start of a partition?",
+    "back": "15: the current row and the 14 before it. Near the start it simply holds fewer rows (partial windows).",
+    "concepts": ["sql-telemetry"],
+    "critical": false
+  },
+  {
+    "id": "partition-by-keeps-rows",
+    "type": "discrimination",
+    "front": "`GROUP BY rack` vs `AVG(temp) OVER (PARTITION BY rack)`: how many rows does each return?",
+    "back": "GROUP BY returns one row per rack. The window function returns every input row, each carrying its rack's average. PARTITION BY also keeps racks from mixing inside a window.",
+    "concepts": ["sql-telemetry"],
+    "critical": false
+  },
+  {
+    "id": "asof-join",
+    "type": "concept",
+    "front": "What does an as-of join do, and what's the difference between ASOF JOIN and ASOF LEFT JOIN?",
+    "back": "For each left row it takes the right row with the latest time at or before it, which aligns irregular sensors to a grid. ASOF JOIN drops left rows with no earlier match; ASOF LEFT JOIN keeps them with NULLs.",
+    "concepts": ["sql-telemetry"],
+    "critical": false
+  },
+  {
+    "id": "lag-counter-delta",
+    "type": "code",
+    "front": "Per-interval energy from a cumulative kWh counter, in SQL?",
+    "back": "`kwh - LAG(kwh) OVER (PARTITION BY meter ORDER BY ts)`, with a guard for counter resets (negative deltas).",
+    "concepts": ["sql-telemetry"],
+    "critical": false
+  },
+  {
+    "id": "duckdb-in-one-line",
+    "type": "concept",
+    "front": "What is DuckDB, in one sentence?",
+    "back": "An in-process, columnar, analytical SQL database: no server, and it queries Parquet, CSV and DataFrames directly.",
+    "concepts": ["sql-telemetry", "dataframe-choice"],
+    "critical": false
+  },
+  {
+    "id": "lazy-collect",
+    "type": "concept",
+    "front": "In Polars, what has happened after `lf = pl.scan_parquet(\"inlet/*.parquet\").filter(...)`?",
+    "back": "Nothing has been read: a lazy query only records a plan. `.collect()` optimizes it and runs it.",
+    "concepts": ["dataframe-choice"],
+    "critical": false
+  },
+  {
+    "id": "pushdown",
+    "type": "concept",
+    "front": "What are predicate and projection pushdown, and why do they matter?",
+    "back": "The optimizer moves filters (predicates) and column selections (projections) into the file scan, so rows and columns you'd discard are never read. It's the main payoff of lazy queries over columnar files.",
+    "concepts": ["dataframe-choice"],
+    "critical": false
+  },
+  {
+    "id": "group-by-dynamic",
+    "type": "code",
+    "front": "Resample one-minute readings to 15-minute windows per sensor in Polars?",
+    "back": "`df.sort(\"sensor\", \"ts\").group_by_dynamic(\"ts\", every=\"15m\", group_by=\"sensor\").agg(...)`. It needs rows sorted by time within each sensor.",
+    "concepts": ["dataframe-choice"],
+    "critical": false
+  },
+  {
+    "id": "pandas3-chained-assignment",
+    "type": "gotcha",
+    "front": "pandas 3: what does `df[df.temp > 30][\"temp\"] = np.nan` do, and what should you write?",
+    "back": "Nothing to df: it assigns into a temporary copy (copy-on-write) and warns with ChainedAssignmentError. Write `df.loc[df.temp > 30, \"temp\"] = np.nan`.",
+    "concepts": ["dataframe-choice"],
+    "critical": true
+  },
+  {
+    "id": "stuck-sensor-signature",
+    "type": "concept",
+    "front": "How do you tell a frozen sensor from a gap or a stable room in resampled data?",
+    "back": "A gap has few or no readings. A frozen sensor has plenty of readings with zero variance. A stable room has small but nonzero variance. Require enough readings before calling zero variance \"stuck\".",
+    "concepts": ["dataframe-choice"],
+    "critical": false
+  },
+  {
+    "id": "tool-choice",
+    "type": "discrimination",
+    "front": "Polars vs DuckDB vs pandas: when do you reach for each?",
+    "back": "Polars: fast single-machine transformation pipelines (lazy, parallel). DuckDB: when SQL fits or data sits in Parquet or a database. pandas: small data, libraries that expect it, existing codebases.",
+    "concepts": ["dataframe-choice"],
+    "critical": false
   }
 ]

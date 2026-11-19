@@ -1,0 +1,21 @@
+{
+  "id": "python-mle/sql-rolling-inlet",
+  "type": "sql",
+  "language": "sql",
+  "title": "Rolling-average inlet alerts",
+  "prompt": "The table `inlet(ts TIMESTAMP, rack VARCHAR, temp DOUBLE)` has one reading per rack per minute. Single readings are noisy, so the alert rule uses a **trailing 15-minute average**: for each rack and minute, the mean of that minute's reading and the 14 before it. At the start of the data, average whatever readings the window holds.\n\nReturn only the alerting rows, where that average is above 27.0 °C, with columns `rack`, `ts`, `avg15`, ordered by rack, then ts.",
+  "concepts": ["sql-telemetry"],
+  "difficulty": 0.45,
+  "minutes": 10,
+  "critical": false,
+  "packages": ["duckdb"],
+  "hints": [
+    "You need a value per row that depends on neighbouring rows of the same rack: a window function, `AVG(temp) OVER (...)`. What goes inside the OVER?",
+    "Partition by rack so racks don't mix, order by ts, and frame it as `ROWS BETWEEN 14 PRECEDING AND CURRENT ROW` (15 rows). You can't filter on a window result in WHERE; use DuckDB's QUALIFY, or wrap the query and filter outside.",
+    "SELECT rack, ts, AVG(temp) OVER (PARTITION BY rack ORDER BY ts ROWS BETWEEN 14 PRECEDING AND CURRENT ROW) AS avg15 FROM inlet QUALIFY avg15 > 27.0 ORDER BY rack, ts"
+  ],
+  "misconceptions": {
+    "window-partition": "Without PARTITION BY, a window runs across every rack's rows as one sequence, mixing racks inside each average."
+  },
+  "sources": ["duckdb-docs-2-0"]
+}

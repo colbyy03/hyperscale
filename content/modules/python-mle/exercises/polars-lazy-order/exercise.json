@@ -1,0 +1,30 @@
+{
+  "id": "python-mle/polars-lazy-order",
+  "type": "parsons",
+  "language": "python",
+  "title": "A lazy Polars query, in order",
+  "prompt": "Arrange the lines into a lazy query that reads a folder of Parquet files, keeps readings since `start`, averages temperature per sensor, sorts by sensor, and only then runs. One block would read everything eagerly and doesn't belong.",
+  "concepts": ["dataframe-choice"],
+  "difficulty": 0.25,
+  "minutes": 3,
+  "packages": [],
+  "parsons": {
+    "lines": [
+      "result = (",
+      "    pl.scan_parquet(\"inlet/*.parquet\")",
+      "    .filter(pl.col(\"ts\") >= start)",
+      "    .group_by(\"sensor\")",
+      "    .agg(pl.col(\"temp\").mean().alias(\"mean_temp\"))",
+      "    .sort(\"sensor\")",
+      "    .collect()",
+      ")"
+    ],
+    "distractors": ["    pl.read_parquet(\"inlet/*.parquet\")"]
+  },
+  "hints": [
+    "A lazy query starts from a scan, chains the transformations, and ends with the call that executes it.",
+    "`scan_parquet` builds a plan without reading anything; `read_parquet` loads every row and column immediately. Filter before you group, so less data reaches the aggregation.",
+    "scan → filter → group_by → agg → sort → collect, inside the parentheses."
+  ],
+  "sources": ["polars-docs-2-1"]
+}

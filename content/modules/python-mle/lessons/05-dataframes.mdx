@@ -1,0 +1,66 @@
+---
+id: python-mle/dataframes
+title: DataFrames for telemetry
+minutes: 30
+concepts: [dataframe-choice]
+sources: [polars-docs-2-1, duckdb-docs-2-0, mckinney2022-pda3, raasveldt2019-duckdb]
+cards: [lazy-collect, pushdown, group-by-dynamic, pandas3-chained-assignment, stuck-sensor-signature, tool-choice]
+---
+
+<Situation from="Ines, reliability lead">
+The historian dumps one-minute readings out of order, with gaps wherever a sensor dropped out. Every model we build wants 15-minute features per sensor, and I still don't trust T-114: it reads exactly 21.5 °C hour after hour. Build the resampling step properly, and make it flag frozen sensors instead of feeding them to a model.
+</Situation>
+
+## Polars: expressions and a query planner
+
+A DataFrame library lets you do in Python what SQL does in a database. **Polars** is the modern default for single-machine work. It's written in Rust, runs operations in parallel, and is built around *expressions*: small descriptions of a computation, such as `pl.col("temp").mean()`, that you combine inside `select`, `with_columns`, `filter` and `group_by(...).agg(...)`. Because each expression describes *what* to compute rather than looping over rows, Polars can run it as one fast vectorized kernel.
+
+Polars has two modes. **Eager** mode (`pl.read_parquet`, `pl.DataFrame`) runs each step immediately. **Lazy** mode (`pl.scan_parquet`, `df.lazy()`) only records the steps as a query plan; nothing runs until `.collect()`. The wait pays off: the optimizer rewrites the plan before running it, pushing your filters and column choices down into the file scan, so it never reads rows or columns you'd throw away. `.explain()` shows the rewritten plan. For a filter on `temp` that keeps two columns, it reports `FILTER [(col("temp")) > (22.0)]` beneath a scan that reads `2/3 COLUMNS`.
+
+<CodeExercise id="python-mle/polars-lazy-order" />
+
+## Resampling time series
+
+To turn one-minute readings into 15-minute features, bucket by time *within each sensor*. Polars calls this `group_by_dynamic`, and it insists on one thing: rows sorted by time within each group. Unsorted input is a real hazard with historian exports, and Polars refuses rather than quietly producing wrong windows.
+
+<CodeExercise id="python-mle/polars-resample" />
+
+<KeyIdea title="Missing, frozen and quiet are different">
+A gap (no rows), a frozen sensor (identical values) and a stable room (small, varying values) all look "flat" on a chart, but they mean different things. Count readings per window and treat zero variance as suspicious only when the window holds enough readings to be sure. A model fed a frozen sensor learns that inlet temperature never changes, and then misses the one afternoon it does.
+</KeyIdea>
+
+## pandas, and what changed in pandas 3
+
+pandas is still the most widely used DataFrame library. Most tutorials, Stack Overflow answers and older codebases use it, and statsmodels and plotting tools expect it. pandas 3 made **copy-on-write** the only behaviour: any object you get from indexing acts as an independent copy unless you modify the original through `.loc`.
+
+<Predict
+  id="chained-assignment"
+  question="In pandas 3: df = pd.DataFrame({'temp': [20.0, 35.0, 25.0]}); then df[df['temp'] > 30]['temp'] = np.nan. What is df['temp'] afterwards?"
+  options={["[20.0, nan, 25.0]", "[20.0, 35.0, 25.0], unchanged, with a ChainedAssignmentError warning", "It raises an exception"]}
+  answer={1}
+  explain="df[mask] produces a new object, and assigning into its 'temp' column changes that temporary, not df. Under copy-on-write this chained assignment never works, and pandas warns about it. Write df.loc[df['temp'] > 30, 'temp'] = np.nan, a single indexing call on the original."
+/>
+
+## DuckDB on DataFrames
+
+DuckDB can query a DataFrame in memory by its variable name: `duckdb.sql("SELECT sensor, avg(temp) FROM df GROUP BY sensor")`. Data passes through Apache Arrow, the shared columnar memory format that lets DuckDB, Polars and pandas exchange tables with little or no copying. Use whichever language expresses the step most clearly; the engines interoperate.
+
+## Choosing a tool
+
+| Situation | Reach for |
+|---|---|
+| A transformation pipeline on one machine, from MBs to tens of GBs | Polars (lazy) |
+| The logic is naturally SQL, or the data already sits in Parquet or a database | DuckDB |
+| Small data, a library that expects pandas, or an existing pandas codebase | pandas |
+| Data far bigger than one machine | A distributed engine (Spark, BigQuery and similar), with the same ideas: lazy plans, pushdown, columnar files |
+
+<Craft title="Telemetry DataFrame habits">
+- Sort, de-duplicate and check the time zone first. Exports often repeat rows at file boundaries, and local time repeats an hour every autumn.
+- Check units on load: one site logs °F, another °C, and a 70-degree "temperature" in a °C column is a unit bug, not a heat wave.
+- Never fill gaps with zeros. Leave them null, count them, and decide per feature whether to interpolate, carry forward or drop.
+- Keep raw data immutable and derive features in a function you can test (the next two lessons).
+</Craft>
+
+<Check items={["df-lazy-reads", "df-chained", "df-few-readings", "df-tool", "df-not-sorted"]} />
+
+Next: structuring ML code as software, with types, dataclasses and the estimator contract.

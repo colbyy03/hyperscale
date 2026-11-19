@@ -18,6 +18,13 @@ jobs:
           node-version: 26
           cache: npm
       - run: npm ci
+      # After npm ci (which wipes node_modules): Pyodide wheels such as Polars and DuckDB are large, so keep them between runs.
+      - name: Cache Pyodide packages for exercise verification
+        uses: actions/cache@v6
+        with:
+          path: node_modules/.cache/pyodide
+          key: pyodide-314.0.7-${{ hashFiles('content/modules/*/exercises/*/exercise.json') }}
+          restore-keys: pyodide-314.0.7-
       - name: Type-check
         run: npm run typecheck
       - name: Unit tests

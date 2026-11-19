@@ -1,0 +1,28 @@
+{
+  "id": "python-mle/sql-clause-order",
+  "type": "parsons",
+  "language": "none",
+  "title": "Clauses in the right order",
+  "prompt": "Arrange the clauses into a query that returns each rack's average inlet temperature since noon, keeps only racks averaging above 26 °C, hottest first. One block doesn't belong in a valid query.",
+  "concepts": ["sql-telemetry"],
+  "difficulty": 0.2,
+  "minutes": 3,
+  "packages": [],
+  "parsons": {
+    "lines": [
+      "SELECT rack, AVG(temp) AS avg_temp",
+      "FROM inlet",
+      "WHERE ts >= TIMESTAMP '2026-07-14 12:00:00'",
+      "GROUP BY rack",
+      "HAVING AVG(temp) > 26",
+      "ORDER BY avg_temp DESC;"
+    ],
+    "distractors": ["WHERE AVG(temp) > 26"]
+  },
+  "hints": [
+    "SQL's written order is SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY, even though the engine evaluates FROM first.",
+    "WHERE filters individual rows before grouping, so it can't use an aggregate like AVG. A condition on a group's aggregate belongs in HAVING.",
+    "The time condition is a WHERE (on rows); the average condition is a HAVING (on groups)."
+  ],
+  "sources": ["duckdb-docs-2-0"]
+}

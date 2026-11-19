@@ -54,6 +54,14 @@ export function CodeExercise(props: ExerciseProps) {
   return <EditorExercise {...props} />;
 }
 
+/** Run-button prelude for Python exercises with support files: write them so `from data import ...` works. */
+function pythonRunScript(code: string, support: Record<string, string>): string {
+  const names = Object.keys(support).filter((n) => n.endsWith(".py") || n.endsWith(".csv") || n.endsWith(".json"));
+  if (!names.length) return code;
+  const writes = names.map((n) => `_hs_f = open(${JSON.stringify(`/hs/run/${n}`)}, "w"); _hs_f.write(${JSON.stringify(support[n])}); _hs_f.close()`).join("\n");
+  return `import os as _hs_os, sys as _hs_sys, importlib as _hs_il\n_hs_os.makedirs("/hs/run", exist_ok=True)\n${writes}\nif "/hs/run" not in _hs_sys.path: _hs_sys.path.insert(0, "/hs/run")\nfor _m in ${JSON.stringify(names.filter((n) => n.endsWith(".py")).map((n) => n.slice(0, -3)))}: _hs_sys.modules.pop(_m, None)\n_hs_il.invalidate_caches()\n_hs_os.chdir("/hs/run")\n\n${code}`;
+}
+
 /** Python script for the SQL Run button: build the exercise's tables, run the query, print a table. */
 function sqlRunScript(sql: string, support: Record<string, string>): string {
   return `${support["data.py"] ?? ""}\n\nfrom hsgrade.sql import run as _hs_run, preview as _hs_preview\nprint(_hs_preview(_hs_run(make_db(), ${JSON.stringify(sql)})))\n`;
@@ -104,7 +112,7 @@ function EditorExercise({ id, mode = "lesson", onResult }: ExerciseProps) {
     if (!ex || busy) return;
     setBusy("run");
     try {
-      const script = ex.language === "sql" ? sqlRunScript(code, support) : code;
+      const script = ex.language === "sql" ? sqlRunScript(code, support) : pythonRunScript(code, support);
       setOutput({ kind: "run", result: await python.run(script, ex.packages, ex.constraints.timeoutMs) });
     } catch (e) {
       setOutput({ kind: "error", message: (e as Error).message });

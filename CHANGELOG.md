@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## Phase 4b: Module 1 lessons 4 and 5 (2026-11-18)
+
+- **Lesson 4, "SQL for telemetry, with DuckDB"**, built on the "PUE dashboard is wrong" incident: ratios of sums vs averages of ratios, clause order and evaluation order, window functions (frames, PARTITION BY, LAG on counters, QUALIFY), and as-of joins for sensors that don't share a clock. Exercises: fix the dashboard's daily PUE query, rolling-average inlet alerts, an ASOF LEFT JOIN onto a one-minute grid (all graded on DuckDB in the browser), and a clause-order Parsons problem with a WHERE-vs-HAVING distractor.
+- **Lesson 5, "DataFrames for telemetry"**: Polars expressions, lazy plans with predicate and projection pushdown, `group_by_dynamic` resampling, pandas 3 copy-on-write (chained assignment), DuckDB on DataFrames via Arrow, and when to use which tool. Exercises: resample shuffled, gappy sensor data to 15-minute windows and flag frozen sensors (Polars 1.33 in the browser), and a lazy-query Parsons problem with an eager-read distractor.
+- Python exercises with a `data.py` can import it from the Run button too.
+- CI caches Pyodide's downloaded packages (Polars and DuckDB are large); local Playwright runs use three workers, since several tests boot Pyodide.
+- 13 new cards and 11 new questions. 10 exercises now verify in Pyodide, with 26 known-wrong variants.
+
 ## Phase 4a: new exercise types, placement check, Module 1 lessons 1 and 3 (2026-11-18)
 
 - **SQL exercises** graded on DuckDB 1.5.1 inside Pyodide (the version Pyodide ships), so the browser, CI verification and local tests use one engine. `hsgrade.sql` adds `run_learner`, `assert_columns`, `assert_rows` (order-insensitive, float tolerance, row-level messages) and `preview`. The grader now takes the solution file name and support files (`data.py`, CSVs). Run prints the result table.

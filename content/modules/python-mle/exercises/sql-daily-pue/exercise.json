@@ -1,0 +1,21 @@
+{
+  "id": "python-mle/sql-daily-pue",
+  "type": "sql",
+  "language": "sql",
+  "title": "Fix the daily PUE query",
+  "prompt": "The table `meter(ts TIMESTAMP, it_kw DOUBLE, facility_kw DOUBLE)` holds Hall A's main meters: average power over each 15-minute interval for three days.\n\nWrite a query returning one row per day, with columns `day` (a DATE) and `pue` (that day's PUE, computed correctly from energy), ordered by day. Run shows your result; Check grades it.",
+  "concepts": ["sql-telemetry", "pue"],
+  "difficulty": 0.3,
+  "minutes": 8,
+  "critical": true,
+  "packages": ["duckdb"],
+  "hints": [
+    "Start with `SELECT CAST(ts AS DATE) AS day, ... FROM meter GROUP BY day ORDER BY day`. What should `pue` be for a whole day?",
+    "PUE over a period is total facility energy divided by total IT energy. Every interval is 15 minutes long, so energy is proportional to power: sum each column over the day, then divide.",
+    "SELECT CAST(ts AS DATE) AS day, SUM(facility_kw) / SUM(it_kw) AS pue FROM meter GROUP BY day ORDER BY day"
+  ],
+  "misconceptions": {
+    "average-of-ratios": "The average of per-interval ratios weights a quiet night interval as much as a busy afternoon one; a period's PUE is a ratio of sums."
+  },
+  "sources": ["iso-iec-30134-2-pue", "duckdb-docs-2-0"]
+}

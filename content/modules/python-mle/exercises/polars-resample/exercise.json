@@ -1,0 +1,22 @@
+{
+  "id": "python-mle/polars-resample",
+  "type": "code",
+  "language": "python",
+  "title": "Resample sensors to 15 minutes and flag frozen ones",
+  "prompt": "Write `resample_15min(df)`. `df` is a Polars DataFrame of one-minute readings with columns `ts` (datetime), `sensor` (str) and `temp` (float), in no particular order and with gaps.\n\nReturn one row per sensor per 15-minute window (windows start at :00, :15, :30 and :45) with columns `sensor`, `window` (the window's start), `mean_temp`, `n` (readings in the window) and `stuck`. `stuck` is true when a window has **at least 10 readings that are all identical**: a frozen sensor, not merely a quiet one. Sort by sensor, then window. Use Polars expressions, not Python loops.\n\n`from data import readings` gives you the test data to try in Run.",
+  "concepts": ["dataframe-choice"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": true,
+  "packages": ["polars"],
+  "constraints": { "forbidImports": ["pandas"], "requireVectorized": true, "timeoutMs": 15000 },
+  "hints": [
+    "Polars has a time-based group-by: `group_by_dynamic(\"ts\", every=\"15m\", group_by=\"sensor\")`, followed by `.agg(...)`. What does it need from the row order?",
+    "It needs rows sorted by time within each sensor: sort by sensor and ts first. In `.agg`, take `pl.col(\"temp\").mean()`, `pl.len()` and `pl.col(\"temp\").std()`; a frozen sensor has a standard deviation of exactly 0. Then build `stuck` with `with_columns`, rename `ts` to `window`, and select the five columns.",
+    "df.sort(\"sensor\", \"ts\").group_by_dynamic(\"ts\", every=\"15m\", group_by=\"sensor\").agg(mean_temp=pl.col(\"temp\").mean(), n=pl.len(), sd=pl.col(\"temp\").std()).with_columns(stuck=(pl.col(\"sd\") == 0) & (pl.col(\"n\") >= 10)).rename({\"ts\": \"window\"}).select(\"sensor\", \"window\", \"mean_temp\", \"n\", \"stuck\").sort(\"sensor\", \"window\")"
+  ],
+  "misconceptions": {
+    "stuck-needs-evidence": "Zero variance over a handful of readings isn't evidence of a frozen sensor; require enough readings in the window."
+  },
+  "sources": ["polars-docs-2-1"]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "python-mle/sql-asof",
+  "type": "sql",
+  "language": "sql",
+  "title": "Line up an irregular meter with an as-of join",
+  "prompt": "`grid(ts)` is a one-minute timeline from 12:00 to 12:30. `power(ts, kw)` is a meter that reports whenever it likes, never exactly on the minute.\n\nFor every minute in `grid`, attach the most recent power reading taken **at or before** that minute. Keep the minutes before the first reading too; their `kw` is NULL. Columns `ts`, `kw`, ordered by ts.",
+  "concepts": ["sql-telemetry"],
+  "difficulty": 0.4,
+  "minutes": 7,
+  "critical": false,
+  "packages": ["duckdb"],
+  "hints": [
+    "An equality join on ts matches nothing, because the meter never reports exactly on the minute. You need \"the latest row whose time is ≤ mine\".",
+    "DuckDB's `ASOF JOIN ... ON grid.ts >= power.ts` picks, for each grid row, the power row with the largest ts that satisfies the condition. Plain ASOF JOIN drops grid rows with no match; ASOF LEFT JOIN keeps them with NULLs.",
+    "SELECT g.ts, p.kw FROM grid g ASOF LEFT JOIN power p ON g.ts >= p.ts ORDER BY g.ts"
+  ],
+  "misconceptions": {},
+  "sources": ["duckdb-docs-2-0"]
+}

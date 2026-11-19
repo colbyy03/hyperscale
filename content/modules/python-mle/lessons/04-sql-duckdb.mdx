@@ -1,0 +1,72 @@
+---
+id: python-mle/sql-duckdb
+title: SQL for telemetry, with DuckDB
+minutes: 35
+concepts: [sql-telemetry]
+sources: [duckdb-docs-2-0, raasveldt2019-duckdb, iso-iec-30134-2-pue, mckinney2022-pda3]
+cards: [average-of-ratios, where-having-qualify, window-frame-rows, partition-by-keeps-rows, asof-join, lag-counter-delta, duckdb-in-one-line]
+---
+
+<Situation from="Mara, site lead">
+Finance flagged something: the ops dashboard shows Hall A's PUE at about 1.38 for last week, but the utility bill works out to 1.35. That gap is the difference between a good quarter and an awkward board meeting. The dashboard runs a SQL query over our meter table. Can you find out which number is right?
+</Situation>
+
+## Why an ML engineer needs SQL
+
+Most of the data you'll train on lives in tables: warehouse exports, sensor historians, event logs, Parquet files in object storage. SQL is how every data platform lets you filter, join and aggregate those tables, and an interviewer will expect you to write it fluently.
+
+**DuckDB** is the tool for doing that on one machine. It's an analytical SQL database that runs *inside* your Python process: no server, and nothing to install beyond a package. It stores data by column, which suits scans and aggregations over millions of rows, and it can query Parquet and CSV files, or DataFrames, directly. This course runs DuckDB in your browser, so every query below executes for real.
+
+## Aggregates and the average-of-ratios trap
+
+The dashboard computes `AVG(facility_kw / it_kw)`: a PUE for every 15-minute interval, then the average of those. It looks reasonable and it's wrong.
+
+<Predict
+  id="avg-ratio"
+  question="Two equal-length intervals: one at night with IT 1,000 kW and facility 1,500 kW (PUE 1.5), one in the afternoon with IT 3,000 kW and facility 3,600 kW (PUE 1.2). What is the PUE over both intervals?"
+  options={["1.35, the average of 1.5 and 1.2", "1.275", "1.2"]}
+  answer={1}
+  explain="PUE over a period is total facility energy over total IT energy: (1,500 + 3,600) / (1,000 + 3,000) = 1.275. The average of the two ratios gives the quiet night interval as much weight as the busy afternoon, where most of the energy actually flowed. Ratios of sums, not averages of ratios, is a rule that covers PUE, cost per unit, error rates and many other metrics."
+/>
+
+<CodeExercise id="python-mle/sql-daily-pue" />
+
+A query's clauses are written in a fixed order: `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `HAVING`, `ORDER BY`. The engine evaluates them in a different order: `FROM`, then `WHERE` (filters rows), then `GROUP BY`, then `HAVING` (filters groups), then `SELECT`, then `ORDER BY`. That's why you can't put an aggregate in `WHERE`: rows are filtered before any group exists.
+
+<CodeExercise id="python-mle/sql-clause-order" />
+
+## Window functions: per-row values that look at neighbours
+
+`GROUP BY` collapses each group to one row. A **window function** computes something over a group of related rows but keeps every row. That's what you need for rolling averages, ranks, and differences from the previous reading.
+
+```sql
+AVG(temp) OVER (
+  PARTITION BY rack          -- a separate window for each rack
+  ORDER BY ts                -- in time order
+  ROWS BETWEEN 14 PRECEDING AND CURRENT ROW  -- this row and the 14 before it
+)
+```
+
+Two other patterns come up constantly with telemetry:
+
+- **Deltas from counters.** Energy meters report a cumulative total. Per-interval energy is `kwh - LAG(kwh) OVER (PARTITION BY meter ORDER BY ts)`, plus a guard for the day the counter resets.
+- **Filtering on a window result.** `WHERE` runs before windows are computed, so filter in a wrapping query or with DuckDB's `QUALIFY` clause, which plays the role of `HAVING` for windows.
+
+<CodeExercise id="python-mle/sql-rolling-inlet" />
+
+## Joining sensors that don't share a clock
+
+Real sensors don't report in sync. The inlet sensors log on the minute; the power meter reports when it feels like it. An equality join on timestamps matches almost nothing. You want, for each minute, *the most recent reading at or before it*: an **as-of join**. In pandas that's `merge_asof`; in DuckDB it's `ASOF JOIN`.
+
+<CodeExercise id="python-mle/sql-asof" />
+
+<Craft title="Telemetry SQL habits">
+- Decide the time semantics first. Is a reading an instant, or an average over the interval before it? Are timestamps in UTC? Daylight-saving shifts duplicate or skip an hour of local time, a classic source of double-counted energy.
+- Prefer ratios of sums for any "per" metric over a period, and say so in the column name (`pue_energy_weighted`).
+- Count rows before and after every join. A join that silently multiplies or drops rows is the most common bug in feature pipelines.
+- DuckDB reads Parquet in place (`SELECT … FROM 'meters/*.parquet'`) and only loads the columns and row groups a query needs. Columnar files and filters on partition columns keep big scans cheap.
+</Craft>
+
+<Check items={["sql-two-intervals", "sql-frame-minutes", "sql-where-having", "sql-asof-first-rows", "sql-window-row-count"]} />
+
+Next: the same work in DataFrames, and choosing between Polars, pandas and DuckDB.
