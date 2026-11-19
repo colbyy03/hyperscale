@@ -49,6 +49,7 @@ content/modules/<module-id>/exercises/<slug>/{exercise.json,starter.py,solution.
 content/modules/<module-id>/questions.json  # question pool: lesson checks and mixed practice
 content/modules/<module-id>/cards.json      # spaced-repetition cards
 content/modules/<module-id>/checkpoint.json # the mastery gate
+content/modules/<module-id>/build.mdx       # the module build's brief (frontmatter: title, hours, sources)
 ```
 
 A lesson is MDX with frontmatter (`id: <module-id>/<slug>`, `title`, `minutes`, `concepts`, `sources`, `cards`). It can use these components:

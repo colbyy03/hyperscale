@@ -1,0 +1,108 @@
+---
+title: Telemetry toolkit
+hours: 8
+sources: [uv-docs-0-13, pytest-docs-9, maciver2019-hypothesis, polars-docs-2-1, wilson2014-sci-computing]
+---
+
+<Situation from="Ines, reliability lead">
+Every model we've talked about starts with the same chore: load the historian export, find the gaps, the frozen sensors and the logger someone set to Fahrenheit, and compute PUE correctly. Right now each of us does it differently in a notebook. I'd like one small, typed, tested package that does it properly, so we can all stop re-inventing it.
+</Situation>
+
+## What you'll build
+
+A Python package, `telemetry-toolkit`, that:
+
+1. **loads** one-minute telemetry from Parquet files lazily (long format: `ts`, `sensor`, `value`);
+2. **cleans** it: reports gaps per sensor, flags frozen sensors (enough readings, zero variance), and detects and converts a Fahrenheit logger;
+3. **computes PUE** per hour, day or week as a ratio of sums, with clear errors for missing IT data;
+4. ships a **command-line tool**: `ttk pue telemetry.parquet --by day` prints a table, and `ttk health telemetry.parquet` lists sensor problems.
+
+Everything in this module goes into it: vectorized and memory-aware code, numerical care, Polars (or DuckDB) for the heavy lifting, the estimator-style separation of settings from learned state, seeded randomness in tests, and a test suite that would catch the 2% refactoring bug from Lesson 7.
+
+## Get the data
+
+Generate a month of telemetry from this course's simulator, with problems planted in it. Install the simulator straight from the course repository:
+
+```bash
+uv add "hyperscale-sim @ git+https://github.com/colbyy03/hyperscale#subdirectory=python/sim" polars
+```
+
+```python
+import datetime as dt
+import random
+
+import polars as pl
+from hyperscale_sim import Hall
+
+hall = Hall("summer-day", dt=10.0)
+hall.set_sensor_fault("pod3.inlet", stuck=True)  # frozen from the start
+rng = random.Random(7)
+start = dt.datetime(2026, 7, 1)
+rows = []
+for minute in range(30 * 24 * 60):
+    hall.run(60)
+    r = hall.read()  # what the instruments report, faults included
+    ts = start + dt.timedelta(minutes=minute + 1)
+    for pod in (1, 2, 3, 4):
+        inlet = r[f"pod{pod}.inlet"]
+        if pod == 2 and ts.day == 12:  # a logger set to Fahrenheit for a day
+            inlet = inlet * 9 / 5 + 32
+        if rng.random() > 0.002:  # occasional dropped readings
+            rows.append({"ts": ts, "sensor": f"pod{pod}.inlet", "value": inlet})
+    rows.append({"ts": ts, "sensor": "power.it_kw", "value": r["power.it_kw"]})
+    rows.append({"ts": ts, "sensor": "power.facility_kw", "value": r["power.facility_kw"]})
+pl.DataFrame(rows).write_parquet("telemetry.parquet")
+```
+
+That's about 260,000 rows. Keep the export script in the repository: regenerating the data is part of reproducing your results.
+
+## Requirements
+
+- A **uv project** (`pyproject.toml` and a committed `uv.lock`) with a `src/telemetry_toolkit/` layout and a pinned Python version.
+- **Type hints** on every public function, with mypy or pyright passing.
+- **ruff** clean, for lint and format.
+- **Tests with pytest**: hand-worked examples for PUE (including unequal loads), each cleaning rule tested on tiny synthetic frames, at least two **Hypothesis** property tests (for example, PUE ≥ 1 whenever facility ≥ IT; resampled counts add up to the input rows), and line coverage of at least 90%.
+- **No Python loops over rows.** The month of data should load, clean and summarize in under two seconds on a laptop. Measure it and put the number in the README.
+- A **README** with installation, usage examples, the definitions you chose (window boundaries, the frozen-sensor rule, how gaps count), and the timing.
+
+## Suggested structure
+
+```text
+telemetry-toolkit/
+  pyproject.toml  uv.lock  README.md
+  scripts/export_telemetry.py
+  src/telemetry_toolkit/
+    __init__.py
+    load.py      # scan, validate the schema, sort
+    clean.py     # gaps, frozen sensors, unit detection
+    pue.py       # ratio-of-sums PUE at any resolution
+    cli.py       # `ttk pue` and `ttk health`
+  tests/
+    test_pue.py  test_clean.py  test_properties.py  test_cli.py
+```
+
+## Milestones
+
+1. **Skeleton.** `uv init --package`, add dependencies, ruff, mypy and pytest. One test that imports the package. Commit.
+2. **PUE first.** Write `tests/test_pue.py` from Lesson 7's cases *before* the implementation, then make it pass. Add the property test.
+3. **Cleaning rules.** One rule at a time, each with a tiny frame that shows the problem and a test that catches it. Decide, and document, how a Fahrenheit day is detected (hint: a 21 °C room doesn't read 70).
+4. **CLI and README.** Run the tool on the month of data, time it, and write down what it found: the frozen sensor, the Fahrenheit day and the gaps.
+5. **Review pass.** Read your own diff as a reviewer would, using Lesson 6's checklist.
+
+## Rubric
+
+| Area | Meets | Strong |
+|---|---|---|
+| Correctness | Finds all three planted problems; PUE is a ratio of sums | Also handles daylight-saving shifts and duplicate rows, with tests |
+| Tests | ≥ 90% coverage, hand-worked and property tests | Survives deliberate mutations: swap arguments, average ratios, drop a guard |
+| Reproducibility | Lockfile, export script, seeded randomness | CI runs lint, types and tests on every push |
+| Code quality | Typed, small functions, ruff and type-checker clean | Clean public API with docstrings; settings in a frozen config |
+| Performance | A month in under 2 s, measured | A profile in the README showing where the time goes |
+
+## Using AI tools
+
+Use them, the way Lesson 8 describes: write the specification and the tests yourself, let the agent draft implementations, and never accept a change that edits a test to make it pass. Keep a short note in the README of what you delegated and what you had to fix. That note is honest, and it's interesting to read later.
+
+## When you're done
+
+Push it to a GitHub repository named `telemetry-toolkit`. It's a good first portfolio piece and a short post for your Quarto site: *what goes wrong in data-center telemetry, and a small tool that catches it*.

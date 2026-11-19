@@ -52,6 +52,14 @@ export function lessonById(id: string): LessonIndexEntry | undefined {
 /** Lesson bodies are code-split: each MDX file becomes its own chunk. */
 const lessonLoaders = import.meta.glob<{ default: MDXContent }>("/content/modules/*/lessons/*.mdx");
 
+const buildLoaders = import.meta.glob<{ default: MDXContent }>("/content/modules/*/build.mdx");
+
+export function loadBuild(file: string): Promise<{ default: MDXContent }> {
+  const loader = buildLoaders[file];
+  if (!loader) return Promise.reject(new Error(`No build brief ${file}`));
+  return loader();
+}
+
 export function loadLesson(file: string): Promise<{ default: MDXContent }> {
   const loader = lessonLoaders[file];
   if (!loader) return Promise.reject(new Error(`No lesson file ${file}`));

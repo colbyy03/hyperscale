@@ -146,6 +146,19 @@ export const checkpointSchema = z.object({
 });
 export type CheckpointContent = z.infer<typeof checkpointSchema>;
 
+/** content/modules/<id>/build.mdx: the module build's brief (a project done on your own machine). */
+export const buildFrontmatterSchema = z.object({
+  title: z.string().min(3),
+  hours: z.number().positive().max(40),
+  sources: z.array(z.string()).default([]),
+});
+export interface BuildIndexEntry {
+  title: string;
+  hours: number;
+  sources: string[];
+  file: string;
+}
+
 /** One lesson as listed in the content index (the MDX body itself is loaded lazily). */
 export interface LessonIndexEntry extends LessonFrontmatter {
   moduleId: string;
@@ -173,4 +186,6 @@ export interface ContentIndex {
   questions: Record<string, PoolQuestion>;
   /** content/concepts.json: titles for display. */
   concepts: Record<string, { title: string; module?: string }>;
+  /** Module build briefs, by module id. */
+  builds: Record<string, BuildIndexEntry>;
 }

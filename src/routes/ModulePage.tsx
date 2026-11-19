@@ -174,6 +174,11 @@ export function ModulePage() {
                 </SectionTitle>
                 <div className="font-medium">{meta.build.title}</div>
                 <p className="mt-1 text-sm text-muted">{meta.build.summary}</p>
+                {content.builds[moduleId] && (
+                  <ButtonLink className="mt-3" to={`/learn/${moduleId}/build`}>
+                    Read the brief · about {content.builds[moduleId]!.hours} h
+                  </ButtonLink>
+                )}
               </Card>
             )}
           </aside>

@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
 import {
+  buildFrontmatterSchema,
   cardSchema,
   checkpointSchema,
   curriculumSchema,
@@ -18,6 +19,7 @@ import {
   type CheckpointContent,
   type ExerciseIndexEntry,
   type LessonIndexEntry,
+  type BuildIndexEntry,
   type ModuleContent,
   type PoolQuestion,
 } from "../src/content/schema.ts";
@@ -70,11 +72,12 @@ export function buildContentIndex(root: string): BuildResult {
   const checkpoints: Record<string, CheckpointContent> = {};
   const questions: Record<string, PoolQuestion> = {};
   const concepts: Record<string, { title: string; module?: string }> = {};
+  const builds: Record<string, BuildIndexEntry> = {};
 
   const curriculum = curriculumSchema.safeParse(readJson(path.join(root, "planning", "curriculum.json")));
   if (!curriculum.success) {
     errors.push(`planning/curriculum.json: ${curriculum.error.message}`);
-    return { index: { modules, lessons, exercises, cards, checkpoints, questions, concepts }, errors, warnings };
+    return { index: { modules, lessons, exercises, cards, checkpoints, questions, concepts, builds }, errors, warnings };
   }
   const known = new Set(curriculum.data.modules.map((m) => m.id));
   const sourceIds = loadSourceIds(root);
@@ -225,6 +228,17 @@ export function buildContentIndex(root: string): BuildResult {
       exercises.push({ ...e.data, moduleId: dirName, dir: `/${erel}`, files });
     }
     if (lessonFiles.length === 0) warnings.push(`${rel}: module has no lessons yet`);
+
+    // build brief
+    const buildFile = path.join(modulesDir, dirName, "build.mdx");
+    if (fs.existsSync(buildFile)) {
+      const fm = buildFrontmatterSchema.safeParse(frontmatterOf(fs.readFileSync(buildFile, "utf8")));
+      if (!fm.success) errors.push(`${rel}/build.mdx: frontmatter ${fm.error.issues.map((x) => `${x.path.join(".")}: ${x.message}`).join("; ")}`);
+      else {
+        checkSources(`${rel}/build.mdx`, fm.data.sources);
+        builds[dirName] = { ...fm.data, file: `/${rel}/build.mdx` };
+      }
+    }
   }
 
   // cross-references: lesson cards and checkpoint exercises
@@ -249,5 +263,5 @@ export function buildContentIndex(root: string): BuildResult {
   for (const id of known) {
     if (!modules[id]) warnings.push(`module "${id}" has no content folder yet`);
   }
-  return { index: { modules, lessons, exercises, cards, checkpoints, questions, concepts }, errors, warnings };
+  return { index: { modules, lessons, exercises, cards, checkpoints, questions, concepts, builds }, errors, warnings };
 }

@@ -11,6 +11,7 @@ import { Today } from "@/routes/Today";
 // Heavier screens are code-split: the lesson player (MDX + KaTeX), reviews (KaTeX), practice and
 // checkpoints (question views, code runner) and the bibliography (large JSON).
 const LessonPage = lazy(() => import("@/routes/LessonPage").then((m) => ({ default: m.LessonPage })));
+const BuildPage = lazy(() => import("@/routes/BuildPage").then((m) => ({ default: m.BuildPage })));
 const Checkpoint = lazy(() => import("@/routes/Checkpoint").then((m) => ({ default: m.Checkpoint })));
 const Review = lazy(() => import("@/routes/Review").then((m) => ({ default: m.Review })));
 const ExitRecall = lazy(() => import("@/routes/Review").then((m) => ({ default: m.ExitRecall })));
@@ -39,6 +40,7 @@ const router = createBrowserRouter(
         { path: "learn", element: <Learn /> },
         { path: "learn/:moduleId", element: <ModulePage /> },
         { path: "learn/:moduleId/checkpoint", element: suspended(<Checkpoint />) },
+        { path: "learn/:moduleId/build", element: suspended(<BuildPage />) },
         { path: "learn/:moduleId/:lessonSlug", element: suspended(<LessonPage />) },
         { path: "practice", element: suspended(<Practice />) },
         { path: "practice/session", element: suspended(<PracticeSession />) },
