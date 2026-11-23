@@ -220,5 +220,255 @@
     "concepts": ["step-size-conditioning", "conditioning"],
     "rubric": ["Gradient descent's iteration count grows with κ, the ratio of the largest to smallest Hessian eigenvalue (XᵀX/n for least squares)", "A temperature that varies little around 22 °C makes its column nearly parallel to the intercept column, so κ is enormous (about 10⁶ for ±0.5 °C)", "The step size is capped by the stiff direction (η < 2/L), so the flat direction needs a huge number of steps", "Center and scale the features (or use a direct solver), then convert the coefficients back; κ drops to about 1"],
     "explain": "It's the collinearity from Module 2, seen through the optimizer: the fix is to change the geometry, not the learning rate."
+  },
+  {
+    "kind": "choice",
+    "id": "mo-sgd-floor",
+    "prompt": "SGD with a constant learning rate on a least-squares problem stops improving and jitters around the optimum. You halve the learning rate. What happens to the size of that jitter?",
+    "options": ["Nothing: it's set by the data", "It shrinks by about √2", "It doubles"],
+    "answer": 1,
+    "concepts": ["stochastic-gradients"],
+    "explain": "The stationary spread grows with the learning rate (its variance roughly in proportion), so halving the rate shrinks the typical distance by about √2: measured 0.074 → 0.052 → 0.040."
+  },
+  {
+    "kind": "choice",
+    "id": "mo-schedule",
+    "prompt": "Why do training recipes decay the learning rate over time?",
+    "options": ["Gradients get larger as training proceeds", "A large rate makes fast early progress, and a small one later shrinks the noise cloud SGD settles into", "It prevents overfitting directly"],
+    "answer": 1,
+    "concepts": ["stochastic-gradients"],
+    "explain": "Early on, the gradient signal dominates the noise and big steps pay; near the optimum the noise dominates, and only a smaller step shrinks the jitter."
+  },
+  {
+    "kind": "numeric",
+    "id": "mo-heavy-ball",
+    "prompt": "Heavy-ball momentum with η = 0.1 and β = 0.5 starts at w = 1 with v = 0. The gradient is 2 at the first step and 1 at the second. What is w after two steps?",
+    "answer": 0.6,
+    "tolerance": 0.01,
+    "concepts": ["momentum-adaptive"],
+    "explain": "v₁ = −0.1 × 2 = −0.2, so w₁ = 1 − 0.2 = 0.8. Then v₂ = 0.5 × (−0.2) − 0.1 × 1 = −0.2, so w₂ = 0.8 − 0.2 = 0.6."
+  },
+  {
+    "kind": "choice",
+    "id": "mo-sqrt-kappa",
+    "prompt": "At κ = 100, the best fixed-step gradient descent needs about 690 iterations to shrink the error a million-fold. Roughly how many does tuned heavy-ball momentum need?",
+    "options": ["About 690: momentum only smooths the path", "About 85: the rate depends on √κ instead of κ", "About 7"],
+    "answer": 1,
+    "concepts": ["momentum-adaptive", "step-size-conditioning"],
+    "critical": true,
+    "explain": "Tuned momentum converges at (√κ − 1)/(√κ + 1) per step, so its iteration count grows like √κ: about 10 times fewer at κ = 100 (measured 84 against 691)."
+  },
+  {
+    "kind": "choice",
+    "id": "mo-ringing",
+    "prompt": "Your loss curve with momentum β = 0.99 oscillates up and down while slowly trending lower. What's the likely problem?",
+    "options": ["The learning rate is too small", "Too little damping: the iteration matrix has complex eigenvalues of magnitude about √β ≈ 0.995, so the iterates ring; lower β", "The gradient is wrong"],
+    "answer": 1,
+    "concepts": ["momentum-adaptive", "eigendecomposition"],
+    "explain": "β near 1 is a nearly frictionless ball: the modes become lightly damped oscillations that decay at about √β per step. Reduce β (or tune it with the step size)."
+  },
+  {
+    "kind": "numeric",
+    "id": "mo-adam-first",
+    "prompt": "Adam with learning rate 0.01 and the default betas takes its first step on a gradient of (−40, 0.002). By how much does the second coordinate move?",
+    "answer": 0.01,
+    "tolerance": 0.02,
+    "concepts": ["momentum-adaptive"],
+    "explain": "After bias correction the first step is −lr · g/|g| in each coordinate (ignoring ε), so every coordinate moves by the learning rate, 0.01, whatever its gradient's size."
+  },
+  {
+    "kind": "choice",
+    "id": "mo-adamw",
+    "prompt": "Why is AdamW preferred to Adam with an L2 penalty added to the loss?",
+    "options": ["It's faster per step", "With L2 in the gradient, Adam's per-coordinate scaling weakens the penalty on weights with large gradients; AdamW decays every weight directly at the same rate", "Adam can't handle L2 penalties at all"],
+    "answer": 1,
+    "concepts": ["momentum-adaptive"],
+    "critical": true,
+    "explain": "λw added to the gradient gets divided by the running RMS of that coordinate's gradient, so the effective decay varies wildly. Decoupled decay, w ← w − ηλw, is applied outside the adaptive scaling."
+  },
+  {
+    "kind": "choice",
+    "id": "mo-axis",
+    "prompt": "Adam races through an ill-conditioned valley aligned with the coordinate axes, but struggles once the same valley is rotated 35°. Why?",
+    "options": ["Rotation makes the problem non-convex", "Adam's scaling is per coordinate, a diagonal preconditioner, which can undo axis-aligned ill-conditioning but not a tilted one", "Adam's bias correction fails after rotation"],
+    "answer": 1,
+    "concepts": ["momentum-adaptive", "step-size-conditioning"],
+    "transfer": true,
+    "explain": "Dividing each coordinate by its own gradient scale rounds out an axis-aligned bowl. A tilted bowl mixes the coordinates, and no diagonal scaling can make it round."
+  },
+  {
+    "kind": "explain",
+    "id": "mo-explain-choice",
+    "prompt": "Explain to Noor what momentum and Adam each do differently from plain gradient descent, and how you'd decide between them for the load forecaster.",
+    "concepts": ["momentum-adaptive", "stochastic-gradients"],
+    "rubric": ["Momentum keeps a velocity that damps the zigzag across a valley and accelerates along it; tuned, its rate depends on √κ instead of κ", "Adam scales each coordinate by a running RMS of its gradients (a diagonal preconditioner) and adds momentum and bias correction", "Both still need a learning-rate schedule (SGD and Adam settle into a noise cloud at a constant rate); use AdamW for weight decay", "Decide empirically: give each optimizer the same tuning budget (at least a learning-rate sweep) and compare on validation data"],
+    "explain": "The optimizers attack ill-conditioning differently; only a fair, tuned comparison on validation data settles the argument."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-step",
+    "prompt": "Which equation does one Newton step solve, given the gradient g and Hessian H at the current point?",
+    "options": ["H d = −g", "d = −g", "g d = −H"],
+    "answer": 0,
+    "concepts": ["newton-methods"],
+    "critical": true,
+    "explain": "Newton minimizes the quadratic model f + gᵀd + ½dᵀHd; setting its gradient g + Hd to zero gives H d = −g. Solve it; don't invert H."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-quadratic",
+    "prompt": "Near a minimum, Newton's gradient norms run 10⁻², 10⁻⁴, … What comes next?",
+    "options": ["10⁻⁶", "About 10⁻⁸", "10⁻⁵"],
+    "answer": 1,
+    "concepts": ["newton-methods"],
+    "explain": "Quadratic convergence roughly squares the error each step, doubling the correct digits: 10⁻², 10⁻⁴, 10⁻⁸, 10⁻¹⁶. Linear convergence would shrink it by a constant factor."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-affine",
+    "prompt": "You refit Ines's model with operating hours measured in thousands instead of hours. What happens to Newton's method?",
+    "options": ["It needs many more iterations", "Nothing changes except the hours coefficient, which is 1,000 times larger: Newton is affine invariant", "It fails, because the Hessian becomes singular"],
+    "answer": 1,
+    "concepts": ["newton-methods"],
+    "transfer": true,
+    "explain": "Newton's step H⁻¹g transforms exactly along with a linear change of variables, so the iterates (and their count) are the same in the new units. Gradient descent's steps are not, which is why its speed depends on scaling."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-uphill",
+    "prompt": "At the current point the Hessian has eigenvalues 3 and −2. What can go wrong with a pure Newton step?",
+    "options": ["Nothing: Newton always descends", "The step can point uphill, toward a saddle, because the quadratic model isn't a bowl", "The step is always too short"],
+    "answer": 1,
+    "concepts": ["newton-methods", "jacobians-hessians"],
+    "explain": "With an indefinite Hessian the model has a saddle, and Newton heads for its critical point; gᵀH⁻¹g can be negative, making d an ascent direction. Check gᵀd < 0, and fall back to −g or add a multiple of I."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-armijo",
+    "prompt": "What does the Armijo condition f(w + αd) ≤ f(w) + c α gᵀd require of a step?",
+    "options": ["That the gradient vanishes", "That the actual decrease is at least a fraction c of what the slope gᵀd predicts", "That α equals 1"],
+    "answer": 1,
+    "concepts": ["newton-methods"],
+    "critical": true,
+    "explain": "gᵀd < 0 is the predicted rate of decrease at α = 0. Armijo accepts α only if f falls by at least c times the linear prediction, which rules out steps that overshoot or barely move."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-gauss-newton",
+    "prompt": "What does Levenberg–Marquardt change in the Gauss–Newton step (JᵀJ) d = −Jᵀr?",
+    "options": ["It replaces J with the exact Hessian", "It adds λI to JᵀJ, blending between gradient descent (large λ) and Gauss–Newton (small λ)", "It removes the residuals from the step"],
+    "answer": 1,
+    "concepts": ["newton-methods"],
+    "explain": "(JᵀJ + λI) d = −Jᵀr is a ridge-regularized step: robust when JᵀJ is ill-conditioned or the model is poor, and Gauss–Newton fast when the fit is good. λ adapts as the fit improves."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-secant",
+    "prompt": "What information does BFGS use to approximate the curvature?",
+    "options": ["The exact Hessian, every few steps", "Changes in position s and in gradient y between steps, via the secant condition B s = y", "Random finite differences"],
+    "answer": 1,
+    "concepts": ["newton-methods"],
+    "explain": "Each step reveals how the gradient changes along s. BFGS updates its inverse-Hessian approximation to satisfy that secant condition; L-BFGS keeps only the last few (s, y) pairs."
+  },
+  {
+    "kind": "choice",
+    "id": "nw-when",
+    "prompt": "Which problem is the best fit for a second-order or quasi-Newton method?",
+    "options": ["Training a 100-million-parameter network on mini-batches", "Calibrating a 6-parameter chiller model to a year of meter data", "Fitting a model whose loss changes with every new data batch"],
+    "answer": 1,
+    "concepts": ["newton-methods"],
+    "transfer": true,
+    "explain": "Small, smooth, deterministic problems are where Newton, Gauss–Newton and L-BFGS shine. Huge noisy mini-batch training makes curvature estimates expensive and unreliable."
+  },
+  {
+    "kind": "explain",
+    "id": "nw-explain-lbfgs",
+    "prompt": "Explain to Ines why her gradient descent stalled while lbfgs converged quickly, and what she'd gain from Newton's method.",
+    "concepts": ["newton-methods", "step-size-conditioning"],
+    "rubric": ["Her raw features make the Hessian badly conditioned (κ ≈ 7 × 10⁸), and gradient descent's iteration count grows with κ", "Newton solves H d = −g, rescaling each direction by its curvature; it's affine invariant and converges quadratically (5 iterations here)", "L-BFGS approximates that curvature from gradient changes (secant condition) at low cost, which is why it needed under 100 iterations", "Practical steps: standardize anyway, use a library solver with correct gradients, and add a small ridge if the data might be separable"],
+    "explain": "Curvature information is what gradient descent lacks; Newton uses it exactly and L-BFGS cheaply."
+  },
+  {
+    "kind": "choice",
+    "id": "co-lagrange",
+    "prompt": "At the minimum of f subject to one smooth equality constraint h(x) = 0, how are ∇f and ∇h related?",
+    "options": ["∇f = 0", "∇f is parallel to ∇h: ∇f + ν∇h = 0 for some multiplier ν", "∇f is perpendicular to ∇h"],
+    "answer": 1,
+    "concepts": ["constrained-optimization"],
+    "critical": true,
+    "explain": "You can't improve f by sliding along the constraint surface, so ∇f has no component along it: it's perpendicular to the surface, which makes it parallel to ∇h."
+  },
+  {
+    "kind": "numeric",
+    "id": "co-shadow",
+    "prompt": "At the optimal chiller dispatch the multiplier on the total-load constraint is λ = 0.162 kW of electricity per kW of cooling. About how much more chiller power will 250 kW of extra IT heat need?",
+    "answer": 40.5,
+    "tolerance": 0.05,
+    "unit": "kW",
+    "concepts": ["constrained-optimization"],
+    "explain": "The multiplier is the sensitivity of the optimal value to the constraint: 250 × 0.162 ≈ 40 kW, for small changes (the dispatch re-optimizes, but λ shifts only slightly)."
+  },
+  {
+    "kind": "choice",
+    "id": "co-equal-marginal",
+    "prompt": "Why does the optimal dispatch give every running chiller the same marginal power?",
+    "options": ["Because the chillers are identical", "If two marginal powers differed, moving a little load from the higher one to the lower one would cut the total", "To keep the chillers equally worn"],
+    "answer": 1,
+    "concepts": ["constrained-optimization"],
+    "explain": "That's the Lagrange condition P′ᵢ(Qᵢ) = λ. It equalizes marginal costs, not loads, so efficient machines take more."
+  },
+  {
+    "kind": "choice",
+    "id": "co-slackness",
+    "prompt": "A chiller's capacity limit isn't reached at the optimum. What does complementary slackness say about that constraint's multiplier?",
+    "options": ["It's zero: a limit you aren't touching can't be costing anything", "It's positive", "It equals λ"],
+    "answer": 0,
+    "concepts": ["constrained-optimization"],
+    "explain": "μᵢgᵢ(x) = 0: either the constraint binds (gᵢ = 0) or its multiplier is zero. A slack constraint has no shadow price."
+  },
+  {
+    "kind": "numeric",
+    "id": "co-at-limit",
+    "prompt": "At 7,000 kW of cooling, chiller 3 sits at its capacity with marginal power 0.172, while the plant's λ is 0.204. What is the multiplier on chiller 3's capacity limit, in kW of electricity per kW of capacity?",
+    "answer": 0.032,
+    "tolerance": 0.05,
+    "concepts": ["constrained-optimization"],
+    "transfer": true,
+    "explain": "Stationarity for chiller 3 is P′₃ − λ + μ₃ = 0, so μ₃ = 0.204 − 0.172 = 0.032: each extra kW of capacity on that chiller would save about 0.032 kW at the margin."
+  },
+  {
+    "kind": "choice",
+    "id": "co-duality",
+    "prompt": "What does weak duality guarantee?",
+    "options": ["The dual problem is always easier", "Every value of the dual function is a lower bound on the constrained minimum", "The primal and dual optima are always equal"],
+    "answer": 1,
+    "concepts": ["constrained-optimization"],
+    "explain": "For any multipliers (with inequality multipliers ≥ 0), minimizing the Lagrangian can't exceed the constrained optimum. For convex problems under mild conditions the best bound is tight (strong duality)."
+  },
+  {
+    "kind": "choice",
+    "id": "co-projection",
+    "prompt": "Projected gradient for 0 ≤ w ≤ 1 (a box of bounds): what is the projection step?",
+    "options": ["Clip each coordinate to [0, 1]", "Rescale w so its largest entry is 1", "Drop the coordinates that leave the box"],
+    "answer": 0,
+    "concepts": ["constrained-optimization"],
+    "explain": "The closest point in a box is found coordinate by coordinate: clip each entry to its bounds. Simplexes need a sort; balls need a rescale."
+  },
+  {
+    "kind": "choice",
+    "id": "co-clip",
+    "prompt": "To project v = (1.0, 0.4, 0.0) onto the probability simplex, a colleague clips negatives and rescales to sum 1, getting (0.714, 0.286, 0). What's wrong?",
+    "options": ["Nothing: that's the projection", "It's feasible but not the closest point; the projection subtracts a common threshold, giving (0.8, 0.2, 0)", "The projection of v is v itself"],
+    "answer": 1,
+    "concepts": ["constrained-optimization"],
+    "explain": "Rescaling changes the ratios between coordinates. The Euclidean projection shifts every coordinate by the same θ (here 0.2) and clips at zero, which is closer to v."
+  },
+  {
+    "kind": "explain",
+    "id": "co-explain-dispatch",
+    "prompt": "Explain to Noor why equal loading isn't optimal for her chillers, and how λ answers finance's question.",
+    "concepts": ["constrained-optimization"],
+    "rubric": ["Minimize total power subject to the loads summing to the demand and staying within each chiller's limits", "At the optimum every chiller not at a limit has the same marginal power P′ᵢ(Qᵢ) = λ (Lagrange/KKT), so the efficient chiller takes more load (saving about 25 kW here)", "A chiller at a limit has marginal power on the right side of λ, with complementary slackness for limits that aren't reached", "λ is the shadow price: the extra plant power per extra kW of cooling, so 100 kW more IT load costs about 16 kW of chiller power"],
+    "explain": "Equalize marginal costs, not loads, and read the multiplier as the price of the constraint."
   }
 ]

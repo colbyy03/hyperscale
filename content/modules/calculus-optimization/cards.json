@@ -217,5 +217,237 @@
     "front": "What does a log-scale loss curve tell you about the optimizer?",
     "back": "A straight line is linear convergence, with a slope set by κ. Oscillation or growth: the step is too big. A slow straight line: precondition or add momentum.",
     "concepts": ["step-size-conditioning"]
+  },
+  {
+    "id": "sgd-noise-floor",
+    "type": "concept",
+    "front": "What does SGD with a constant learning rate converge to?",
+    "back": "A noise cloud around the minimum whose size grows with the learning rate (halving the rate shrinks the typical distance by about √2).",
+    "concepts": ["stochastic-gradients"]
+  },
+  {
+    "id": "lr-schedules",
+    "type": "concept",
+    "front": "Why decay the learning rate, and why warm it up?",
+    "back": "Decay shrinks SGD's noise cloud once progress slows. Warmup ramps the rate up over the first steps, while adaptive statistics are unreliable.",
+    "concepts": ["stochastic-gradients"]
+  },
+  {
+    "id": "heavy-ball-update",
+    "type": "equation",
+    "front": "The heavy-ball momentum update.",
+    "back": "$v \\leftarrow \\beta v - \\eta \\nabla f(w)$, then $w \\leftarrow w + v$.",
+    "concepts": ["momentum-adaptive"],
+    "critical": true
+  },
+  {
+    "id": "heavy-ball-oscillator",
+    "type": "bridge",
+    "front": "What physical system is heavy-ball momentum?",
+    "back": "A damped mass–spring, $m\\ddot x + c\\dot x + \\nabla f(x) = 0$, discretized: each Hessian eigenvalue is a spring, and β sets the damping.",
+    "concepts": ["momentum-adaptive"]
+  },
+  {
+    "id": "momentum-sqrt-kappa",
+    "type": "equation",
+    "front": "Convergence rate of tuned heavy-ball momentum on a quadratic.",
+    "back": "$(\\sqrt{\\kappa} - 1)/(\\sqrt{\\kappa} + 1)$ per step, with $\\eta = 4/(\\sqrt L + \\sqrt \\mu)^2$ and $\\beta = ((\\sqrt L - \\sqrt \\mu)/(\\sqrt L + \\sqrt \\mu))^2$: iterations grow like √κ.",
+    "concepts": ["momentum-adaptive", "step-size-conditioning"],
+    "critical": true
+  },
+  {
+    "id": "too-much-momentum",
+    "type": "gotcha",
+    "front": "Is more momentum always faster?",
+    "back": "No. With β near 1 the modes ring and decay at only about √β per step (β = 0.99 needed 2,305 iterations where tuned momentum needed 84).",
+    "concepts": ["momentum-adaptive"]
+  },
+  {
+    "id": "spectral-radius-complex",
+    "type": "gotcha",
+    "front": "How fast does a mode with complex eigenvalues decay per step?",
+    "back": "By their magnitude |λ| (the spectral radius), not their real part.",
+    "concepts": ["eigendecomposition", "momentum-adaptive"]
+  },
+  {
+    "id": "nesterov-lookahead",
+    "type": "concept",
+    "front": "How does Nesterov momentum differ from heavy ball?",
+    "back": "It evaluates the gradient at the look-ahead point w + βv. Similar on quadratics, but guaranteed to converge fast on every smooth convex function.",
+    "concepts": ["momentum-adaptive"]
+  },
+  {
+    "id": "adam-update",
+    "type": "equation",
+    "front": "The Adam update.",
+    "back": "$m \\leftarrow \\beta_1 m + (1-\\beta_1)g$, $s \\leftarrow \\beta_2 s + (1-\\beta_2)g^2$, $\\hat m = m/(1-\\beta_1^t)$, $\\hat s = s/(1-\\beta_2^t)$, $w \\leftarrow w - \\eta\\,\\hat m/(\\sqrt{\\hat s} + \\varepsilon)$.",
+    "concepts": ["momentum-adaptive"],
+    "critical": true
+  },
+  {
+    "id": "adam-bias-correction",
+    "type": "gotcha",
+    "front": "What does Adam's bias correction fix?",
+    "back": "Both running averages start at zero. Corrected, the first step moves each coordinate by about the learning rate; uncorrected, by about 3.2 times it.",
+    "concepts": ["momentum-adaptive"]
+  },
+  {
+    "id": "decoupled-weight-decay",
+    "type": "gotcha",
+    "front": "Adam with an L2 penalty vs AdamW.",
+    "back": "L2 in the gradient gets divided by each coordinate's RMS, weakening the penalty where gradients are large. AdamW applies $w \\leftarrow w - \\eta\\lambda w$ directly.",
+    "concepts": ["momentum-adaptive"]
+  },
+  {
+    "id": "adaptive-axis-aligned",
+    "type": "concept",
+    "front": "When does Adam's per-coordinate scaling help most?",
+    "back": "When the ill-conditioning lines up with the coordinates: it's a diagonal preconditioner, which can't round out a tilted valley.",
+    "concepts": ["momentum-adaptive"]
+  },
+  {
+    "id": "newton-step",
+    "type": "equation",
+    "front": "The Newton step, and why.",
+    "back": "Solve $H d = -g$: the minimum of the quadratic model $f + g^\\top d + \\tfrac{1}{2} d^\\top H d$. Never invert H.",
+    "concepts": ["newton-methods"],
+    "critical": true
+  },
+  {
+    "id": "newton-quadratic-convergence",
+    "type": "concept",
+    "front": "How fast does Newton's method converge near a minimum?",
+    "back": "Quadratically: the error is roughly squared each step, so the correct digits double (9 × 10⁻⁵ → 7 × 10⁻¹¹ in Ines's run).",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "newton-affine-invariant",
+    "type": "concept",
+    "front": "Why don't feature units affect Newton's method?",
+    "back": "It's affine invariant: rescaling a feature rescales the iterates along with it, so the path and the iteration count are unchanged. Gradient descent's steps depend on the units.",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "separable-needs-ridge",
+    "type": "gotcha",
+    "front": "Logistic regression on perfectly separable data: what happens, and the fix?",
+    "back": "The loss has no minimizer (the weights grow without bound). A small ridge term makes the minimizer unique and keeps the Hessian invertible.",
+    "concepts": ["newton-methods", "convexity"]
+  },
+  {
+    "id": "newton-not-monotone",
+    "type": "gotcha",
+    "front": "Can a full Newton step increase the loss?",
+    "back": "Yes, far from the minimum, where the quadratic model is wrong (it happens on Rosenbrock). A line search fixes it.",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "newton-uphill-at-saddle",
+    "type": "gotcha",
+    "front": "When can the Newton direction point uphill?",
+    "back": "When the Hessian is indefinite: gᵀH⁻¹g < 0, and the step heads for a saddle. Check gᵀd < 0; fall back to −g or add λI.",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "armijo-condition",
+    "type": "equation",
+    "front": "The Armijo (sufficient decrease) condition.",
+    "back": "$f(w + \\alpha d) \\le f(w) + c\\,\\alpha\\,g^\\top d$, with c ≈ 10⁻⁴; backtracking halves α until it holds.",
+    "concepts": ["newton-methods"],
+    "critical": true
+  },
+  {
+    "id": "gauss-newton-lm",
+    "type": "equation",
+    "front": "Gauss–Newton and Levenberg–Marquardt steps for least squares.",
+    "back": "Gauss–Newton: $(J^\\top J)d = -J^\\top r$. Levenberg–Marquardt: $(J^\\top J + \\lambda I)d = -J^\\top r$, with λ adapting between gradient-descent-like and Gauss–Newton steps.",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "bfgs-secant",
+    "type": "concept",
+    "front": "How do BFGS and L-BFGS get curvature without a Hessian?",
+    "back": "From the secant condition $B s = y$, with $s = \\Delta w$ and $y = \\Delta g$. L-BFGS keeps only the last few (s, y) pairs: linear memory and cost.",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "when-second-order-pays",
+    "type": "discrimination",
+    "front": "Newton, L-BFGS, Levenberg–Marquardt or Adam?",
+    "back": "Small smooth problems: Newton. Smooth deterministic, up to millions of parameters: L-BFGS. Nonlinear least squares: LM. Large noisy mini-batch training: SGD or AdamW.",
+    "concepts": ["newton-methods"]
+  },
+  {
+    "id": "lagrange-condition",
+    "type": "equation",
+    "front": "The Lagrange condition for minimizing f subject to h(x) = 0.",
+    "back": "$\\nabla f(x^*) + \\nu \\nabla h(x^*) = 0$: the gradient is parallel to the constraint's normal, because moving along the constraint can't improve f.",
+    "concepts": ["constrained-optimization"],
+    "critical": true
+  },
+  {
+    "id": "multiplier-shadow-price",
+    "type": "concept",
+    "front": "What does a Lagrange multiplier mean?",
+    "back": "The sensitivity of the optimal value to the constraint: loosen it slightly and the optimum moves by the multiplier times that amount (a shadow price).",
+    "concepts": ["constrained-optimization"],
+    "critical": true
+  },
+  {
+    "id": "equal-marginal-cost",
+    "type": "concept",
+    "front": "The optimal way to share a load among units with convex cost curves.",
+    "back": "Every unit not at a limit runs at the same marginal cost: $P_i'(Q_i) = \\lambda$ (economic dispatch).",
+    "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "kkt-conditions",
+    "type": "equation",
+    "front": "The four KKT conditions.",
+    "back": "Stationarity of the Lagrangian; primal feasibility; dual feasibility (inequality multipliers ≥ 0); complementary slackness ($\\mu_i g_i = 0$).",
+    "concepts": ["constrained-optimization"],
+    "critical": true
+  },
+  {
+    "id": "complementary-slackness",
+    "type": "concept",
+    "front": "Complementary slackness, in words.",
+    "back": "Each inequality either binds or has a zero multiplier: a limit you aren't touching costs nothing.",
+    "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "weak-duality",
+    "type": "concept",
+    "front": "Weak and strong duality.",
+    "back": "Every value of the dual function is a lower bound on the constrained optimum (weak). For convex problems under mild conditions the best bound is tight (strong).",
+    "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "projected-gradient",
+    "type": "equation",
+    "front": "The projected gradient step, and when it's practical.",
+    "back": "$x \\leftarrow \\Pi_C(x - \\eta\\nabla f(x))$: practical when the projection is cheap (clip for a box, a sort for the simplex, a rescale for a ball).",
+    "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "clip-and-renormalize",
+    "type": "gotcha",
+    "front": "Is \"clip negatives, then rescale to sum 1\" the projection onto the simplex?",
+    "back": "No. It's feasible but not closest. The projection subtracts a common threshold θ and clips: (1.0, 0.4, 0) → (0.8, 0.2, 0), not (0.714, 0.286, 0).",
+    "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "equal-loading",
+    "type": "gotcha",
+    "front": "When is equal loading of chillers (or pumps, or servers) optimal?",
+    "back": "Only when the units are identical. In general, equalize marginal power instead (it saved 25 kW, about 3%, for this course's three chillers).",
+    "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "marginal-power-derivative",
+    "type": "gotcha",
+    "front": "Marginal power of $P(Q) = a + bQ + cQ^2$?",
+    "back": "$P'(Q) = b + 2cQ$ (not b + cQ).",
+    "concepts": ["constrained-optimization"]
   }
 ]

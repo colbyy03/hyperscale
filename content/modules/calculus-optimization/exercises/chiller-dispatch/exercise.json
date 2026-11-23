@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/chiller-dispatch",
+  "type": "code",
+  "language": "python",
+  "title": "Share the load between chillers",
+  "prompt": "Three chillers serve the plant. Chiller i draws Pᵢ(Q) = aᵢ + bᵢQ + cᵢQ² kW of electricity to deliver Q kW of cooling (cᵢ > 0), between its limits qminᵢ and qmaxᵢ. Split a total cooling load among them to minimize total power.\n\nThe KKT conditions say every chiller strictly between its limits runs at the same **marginal power** P′ᵢ(Qᵢ) = bᵢ + 2cᵢQᵢ = λ; a chiller at its upper limit has P′ᵢ ≤ λ, one at its lower limit P′ᵢ ≥ λ. So for a given λ each load is Qᵢ(λ) = clip((λ − bᵢ)/(2cᵢ), qminᵢ, qmaxᵢ), and the total load increases with λ.\n\nWrite `dispatch(a, b, c, qmin, qmax, total)`, which returns `(loads, lam)` by bisecting on λ until the loads add up to `total` (within 10⁻⁶ kW). Raise `ValueError` if `total` is outside [Σ qmin, Σ qmax]. The multiplier λ is the plant's marginal power per kW of extra cooling: a shadow price.",
+  "concepts": ["constrained-optimization"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "If one chiller's marginal power were higher than another's, what would moving a little load from the first to the second do to the total?",
+    "At the optimum no such move helps, so every chiller that can still move (not at a limit) has the same marginal power λ. For a guessed λ, each chiller's load follows from bᵢ + 2cᵢQ = λ, clipped to its limits; the sum is non-decreasing in λ, so bisect between a λ below every marginal power and one above them all.",
+    "lo = min(b + 2*c*qmin) - 1; hi = max(b + 2*c*qmax) + 1; repeat 200 times: lam = (lo + hi) / 2; q = np.clip((lam - b) / (2 * c), qmin, qmax); if q.sum() < total: lo = lam, else hi = lam. Return q, lam."
+  ],
+  "misconceptions": {
+    "equal-loading": "Equal loading is optimal only for identical chillers. The optimum equalizes marginal power, P′ᵢ(Qᵢ) = λ, so efficient machines take more of the load.",
+    "marginal-power-derivative": "The marginal power of P(Q) = a + bQ + cQ² is its derivative, b + 2cQ, not b + cQ."
+  },
+  "sources": ["boyd2004-convex-optimization", "energyplus96-eng-ref-chillers"]
+}

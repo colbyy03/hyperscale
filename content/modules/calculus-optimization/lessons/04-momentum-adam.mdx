@@ -1,0 +1,93 @@
+---
+id: calculus-optimization/momentum-adam
+title: Gradient descent and its family
+minutes: 40
+concepts: [momentum-adaptive, stochastic-gradients, gradient-descent]
+sources: [bottou2018-optimization, polyak1964-heavy-ball, kingma2014-adam, loshchilov2017-adamw, loshchilov2016-sgdr, goodfellow2016-deep-learning]
+cards: [sgd-noise-floor, lr-schedules, heavy-ball-update, heavy-ball-oscillator, momentum-sqrt-kappa, too-much-momentum, spectral-radius-complex, nesterov-lookahead, adam-update, adam-bias-correction, decoupled-weight-decay, adaptive-axis-aligned]
+---
+
+<Situation from="Noor, energy analyst">
+We're training a small neural network to forecast tomorrow's IT load, hour by hour. The notebook uses Adam with a learning rate of 0.001 "because everyone does". A colleague swapped in SGD with momentum and got a better validation score; someone else insists on AdamW. Before we argue about it, I'd like to know what these optimizers actually do differently.
+</Situation>
+
+<Predict
+  id="too-much-momentum"
+  question="You add momentum β = 0.99 to gradient descent in a narrow valley (κ = 100), keeping the step at 1/L. Compared with plain gradient descent, is it faster or slower?"
+  options={["Much faster: more momentum, more speed", "Slower: the iterates swing back and forth, and the slowest direction decays by only about 0.995 per step", "About the same"]}
+  answer={1}
+  explain="Momentum with β near 1 is a ball with almost no friction: it overshoots and rings. In this course's test it needed 2,305 iterations to shrink the error a million-fold, against 691 for gradient descent with its best fixed step. Momentum tuned to the valley (β = 0.67 and a matched step) needed 84. Momentum is powerful, but β has to fit the problem."
+/>
+
+## Stochastic gradients
+
+ML losses are averages over data, $f(w) = \frac{1}{n}\sum_i \ell_i(w)$, and computing the full gradient every step is wasteful. **Stochastic gradient descent** uses the average over a small random **mini-batch** instead: an unbiased but noisy estimate of the gradient, at a fraction of the cost.
+
+The noise has a price. With a constant learning rate, SGD doesn't settle at the minimum; it jitters in a cloud around it whose size grows with the learning rate. In this course's test on a least-squares problem with batches of 8, the typical distance from the optimum after settling was 0.074, 0.052 and 0.040 for learning rates of 0.02, 0.01 and 0.005: halving the rate shrinks the cloud by about √2. Hence **learning-rate schedules**: start large to make progress, then decay (step decay, or a cosine curve) to shrink the cloud. Large models also start with a short **warmup**, ramping the rate up over the first steps while the optimizer's statistics settle.
+
+## Momentum: a heavy ball in the valley
+
+Lesson 3 showed gradient descent's dilemma in a narrow valley: the stiff direction caps the step size, and the flat direction then takes forever. **Heavy-ball momentum** keeps a running velocity:
+
+$$
+v \leftarrow \beta v - \eta \nabla f(w), \qquad w \leftarrow w + v
+$$
+
+It's a ball rolling in the loss landscape with friction. Across the valley the gradient keeps flipping sign, so the velocity cancels out and the zigzag is damped. Along the valley floor the gradient keeps pointing the same way, so the velocity builds up and the ball accelerates. The momentum coefficient β sets the friction: β near 1 is nearly frictionless.
+
+Along each eigenvector of the Hessian, the error now depends on the last *two* iterates, a two-state linear system exactly like Module 2's dynamics. Its 2 × 2 iteration matrix has eigenvalues that decide everything: real ones mean overdamped, sluggish decay; complex ones mean a ringing oscillation that decays at their magnitude. Tuning η and β so that every direction decays at the same rate gives
+
+$$
+\text{rate} = \frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1}
+$$
+
+per step: the square root of the condition number instead of κ itself. The measured counts to shrink the error a million-fold:
+
+| κ | Gradient descent, best fixed step | Momentum, tuned |
+|---|---|---|
+| 100 | 691 | 84 |
+| 1,000 | 6,908 | 264 |
+
+<CodeExercise id="calculus-optimization/heavy-ball-rate" />
+
+**Nesterov momentum** evaluates the gradient at the look-ahead point $w + \beta v$ instead of at $w$. On quadratics it behaves much like heavy ball; its advantage is a convergence guarantee for every smooth convex function, which heavy ball lacks.
+
+<Viz name="OptimizerRace" surface="tilted" optimizers={["gd", "momentum", "adam"]} kappa={50} step={1} beta={0.8} adamLr={0.2} steps={200} />
+
+<Bridge>
+The heavy ball is a damped mass–spring system: $m\ddot x + c\dot x + \nabla f(x) = 0$, discretized. Each Hessian eigenvalue is a spring of a different stiffness, and β plays the role of damping. Too little damping and the stiff modes ring; too much and the soft modes creep. The tuned β is the damping that best balances every mode at once, the same trade-off as choosing the damping of a suspension that has to behave well over a range of loads.
+</Bridge>
+
+## Adaptive methods: RMSProp and Adam
+
+Momentum fixes the zigzag with one global step size. **Adaptive methods** give every coordinate its own step size instead. RMSProp divides each coordinate's step by a running root-mean-square of that coordinate's recent gradients, so steep, noisy coordinates take small steps and gentle ones take larger steps. That's a diagonal preconditioner, learned on the fly.
+
+**Adam** combines both ideas: a running mean of the gradients (momentum) and a running mean of their squares (RMSProp), with a **bias correction** for the fact that both averages start at zero. With the usual defaults, β₁ = 0.9, β₂ = 0.999 and ε = 10⁻⁸, the first step moves every coordinate by almost exactly the learning rate, whatever the gradient's size. Without the correction it would be 3.2 times larger.
+
+Two caveats are visible in the explorer above. A diagonal preconditioner helps most when the ill-conditioning lines up with the coordinates: compare the aligned and tilted valleys. And with a constant learning rate Adam hovers near the minimum at a distance set by the learning rate, rather than converging, so it too needs a decaying schedule.
+
+Weight decay needs care with Adam. Adding an L2 penalty to the loss puts λw into the gradient, which Adam then divides by the gradient's RMS, so heavily-updated weights end up barely regularized. **AdamW** decouples the two: it applies $w \leftarrow w - \eta\lambda w$ directly, so every weight decays at the same rate. Use AdamW whenever you want weight decay.
+
+<CodeExercise id="calculus-optimization/optimizers-from-scratch" />
+
+## So which one, Noor?
+
+There's no universal winner, which is why the argument never ends:
+
+- **AdamW** is a robust default for neural networks: it's forgiving of poor scaling and needs little tuning beyond the learning rate.
+- **SGD with momentum** and a good schedule often matches it, and in some domains generalizes slightly better, but it needs its learning rate and schedule tuned.
+- For a small, smooth, deterministic problem (a calibration or a modest regression), skip both: the quasi-Newton methods of the next lesson converge in far fewer iterations.
+
+The honest comparison is to give each optimizer the same small tuning budget (a learning-rate sweep at least) and compare them on validation data, never at default settings alone.
+
+<Craft title="Optimizer habits worth keeping">
+- The learning rate matters more than the choice of optimizer: sweep it on a log scale before anything else.
+- Decay the learning rate (step, cosine) to shrink SGD's noise cloud; warm up for large models.
+- Use AdamW, not Adam with an L2 term, when you want weight decay.
+- Match momentum to the problem: larger β for worse conditioning, and watch for ringing in the loss curve.
+- Standardize inputs anyway: preconditioning by hand helps every optimizer, adaptive ones included.
+</Craft>
+
+<Check items={["mo-sgd-floor", "mo-schedule", "mo-heavy-ball", "mo-sqrt-kappa", "mo-ringing", "mo-adam-first", "mo-adamw", "mo-axis"]} />
+
+Next: Newton's method and its descendants, which use curvature directly.

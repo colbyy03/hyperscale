@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/damped-newton",
+  "type": "code",
+  "language": "python",
+  "title": "Newton's method that never goes uphill",
+  "prompt": "Pure Newton steps can increase the loss far from the minimum, and near a saddle the Newton direction can point uphill. Fix both.\n\n1. `backtracking(f, x, d, g, alpha=1.0, c=1e-4, rho=0.5)` returns a step α along direction `d` that satisfies the **Armijo condition** f(x + αd) ≤ f(x) + c·α·gᵀd, halving α (multiplying by `rho`) until it does. Give up after 60 halvings and return the last α.\n2. `damped_newton(f, grad, hess, x0, tol=1e-8, max_iter=200)` computes the Newton direction d from H d = −g; if it isn't a descent direction (gᵀd ≥ 0), it uses d = −g instead; then it steps by the backtracking α. Stop when ‖g‖ < tol. Return `(x, history)` with the loss at every iterate, starting with f(x0).",
+  "concepts": ["newton-methods"],
+  "difficulty": 0.55,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "The Newton direction is a good guess at the size and direction of the step, not a promise. What simple test tells you a step actually made enough progress?",
+    "gᵀd is the slope of f along d at α = 0, negative for a descent direction. Armijo accepts α when the actual decrease is at least a fraction c of what that slope predicts. With an indefinite Hessian (near a saddle) gᵀH⁻¹g can be negative, so the Newton direction points uphill: switch to −g there.",
+    "backtracking: fx = f(x); slope = g @ d; for _ in range(60): if f(x + alpha * d) <= fx + c * alpha * slope: return alpha; alpha *= rho. damped_newton: d = np.linalg.solve(hess(x), -g); if g @ d >= 0: d = -g; x = x + backtracking(f, x, d, g) * d."
+  ],
+  "misconceptions": {
+    "newton-not-monotone": "Pure Newton minimizes a local quadratic model; far from the minimum that model can be wrong, and a full step can increase the loss. A line search guarantees progress.",
+    "newton-uphill-at-saddle": "With an indefinite Hessian the Newton direction can be an ascent direction (gᵀH⁻¹g < 0); it heads for the saddle. Check gᵀd before stepping."
+  },
+  "sources": ["nocedal2006-numerical-optimization"]
+}

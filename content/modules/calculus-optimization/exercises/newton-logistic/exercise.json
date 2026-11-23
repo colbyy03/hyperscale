@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/newton-logistic",
+  "type": "code",
+  "language": "python",
+  "title": "Newton's method for logistic regression",
+  "prompt": "Ines's bearing-failure model has raw features in wildly different units (vibration in mm/s, operating hours in thousands), and gradient descent doesn't converge in a million iterations. Newton's method doesn't care about units.\n\nWrite `fit_logistic_newton(X, y, ridge=0.0, tol=1e-10, max_iter=50)` for the mean loss (1/n) Σᵢ [log(1 + e^{zᵢ}) − yᵢzᵢ] + (ridge/2)‖w‖², with z = Xw (X includes any intercept column). Start from w = 0 and take full Newton steps, solving H d = −g with `np.linalg.solve`, until ‖g‖ < tol. Return `(w, grad_norms)`: the coefficients and the list of gradient norms, one per iteration including the first.\n\nCompute σ(z) stably: with logits in the hundreds, `np.exp(-z)` overflows.",
+  "concepts": ["newton-methods", "convexity"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["sklearn", "scipy", "statsmodels"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "Newton's method minimizes the quadratic model f + gᵀd + ½dᵀHd at every step. What do the gradient and Hessian of this loss look like?",
+    "For the mean loss, g = Xᵀ(p − y)/n + ridge·w and H = Xᵀ diag(p(1 − p)) X/n + ridge·I. Build H as (X.T * (p * (1 - p))) @ X / n so you never form an n × n diagonal matrix. A stable sigmoid is 0.5 * (1 + np.tanh(z / 2)), or np.exp(-np.logaddexp(0, -z)).",
+    "w = np.zeros(d); norms = []; loop: p = 0.5 * (1 + np.tanh(X @ w / 2)); g = X.T @ (p - y) / n + ridge * w; norms.append(np.linalg.norm(g)); stop if norms[-1] < tol; H = (X.T * (p * (1 - p))) @ X / n + ridge * np.eye(d); w = w - np.linalg.solve(H, g)."
+  ],
+  "misconceptions": {
+    "newton-affine-invariant": "Newton's method is invariant to rescaling the features: multiply a column by 1,000 and its coefficient divides by 1,000 while the iterations stay the same. Gradient descent is not.",
+    "separable-needs-ridge": "On perfectly separable data the logistic loss has no minimum (the weights run off to infinity); a small ridge term restores a unique minimizer."
+  },
+  "sources": ["nocedal2006-numerical-optimization", "boyd2004-convex-optimization"]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/simplex-projection",
+  "type": "code",
+  "language": "python",
+  "title": "Projected gradient onto the simplex",
+  "prompt": "A rack's inlet air is a blend of the supply air from three CRAHs. Estimate the blend: fractions f ≥ 0 that sum to 1, with T_rack ≈ f₁T₁ + f₂T₂ + f₃T₃.\n\n1. `project_simplex(v)` returns the closest point to `v` (Euclidean distance) with non-negative entries summing to 1. Use the sort-based rule: sort v in decreasing order as u, find the largest j with uⱼ − (u₁ + … + uⱼ − 1)/j > 0, set θ = (u₁ + … + uⱼ − 1)/j, and return max(v − θ, 0). No loops.\n2. `mixing_fractions(S, t, iters=2000)` minimizes ½‖S f − t‖²/n over the simplex by **projected gradient**: a gradient step with step size 1/L, where L is the largest eigenvalue of SᵀS/n, then a projection, repeated. `S` is (n, k), one column of supply temperatures per CRAH, and `t` holds the n rack inlet readings. Start from equal fractions.",
+  "concepts": ["constrained-optimization"],
+  "difficulty": 0.55,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "The closest point on the simplex shifts every coordinate down by the same amount θ and clips at zero. Why can't you just clip negatives and rescale to sum 1?",
+    "Clip-and-rescale changes the ratios between the surviving coordinates, so it isn't the closest point. Shifting by a common θ keeps the projection's residual v − w the same for every positive coordinate, which is the KKT condition for the projection. The sort finds how many coordinates stay positive.",
+    "u = np.sort(v)[::-1]; css = np.cumsum(u) - 1; j = np.arange(1, len(v) + 1); rho = np.nonzero(u - css / j > 0)[0][-1]; theta = css[rho] / (rho + 1); return np.maximum(v - theta, 0). Projected gradient: f = project_simplex(f - (S.T @ (S @ f - t) / n) / L)."
+  ],
+  "misconceptions": {
+    "clip-and-renormalize": "Clipping negatives and rescaling to sum 1 gives a feasible point, but not the closest one: the Euclidean projection subtracts a common threshold from every coordinate.",
+    "projection-needed": "A plain gradient step leaves the feasible set; projected gradient maps each step back onto it, and still converges at gradient descent's rate for convex problems."
+  },
+  "sources": ["boyd2004-convex-optimization", "nocedal2006-numerical-optimization"]
+}

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## Phase 6c: Module 3 lessons 4-6 (2026-11-22)
+
+- **Lesson 4, "Gradient descent and its family"**: SGD's noise cloud (halving the learning rate shrinks it by about √2, measured) and why schedules decay, heavy-ball momentum as a damped mass–spring with a 2 × 2 iteration matrix per mode, the √κ rate when tuned (84 iterations against gradient descent's 691 at κ = 100, 264 against 6,908 at κ = 1,000) and the cost of too much momentum (β = 0.99: 2,305), Nesterov, RMSProp and Adam as diagonal preconditioning with bias correction, AdamW's decoupled decay, and how to choose. Exercises: momentum and AdamW from scratch, and the heavy-ball convergence rate from the iteration matrix's eigenvalues.
+- **Lesson 5, "Newton, quasi-Newton and line search"**: the Newton step, quadratic convergence and affine invariance (a bearing-failure logistic model with raw features and κ ≈ 7 × 10⁸ converges in 5 Newton iterations, 87 with L-BFGS, and not within a million with gradient descent), where the quadratic model lies (overshooting on Rosenbrock, saddles), Armijo backtracking, Gauss–Newton and Levenberg–Marquardt, BFGS and the secant condition, and when second-order methods pay. Exercises: the logistic Newton step (a six-step derivation), Newton's method for logistic regression (graded on iteration counts, quadratic convergence, unit invariance and a separable case), and damped Newton with a descent fallback.
+- **Lesson 6, "Optimization with constraints"**: Lagrange multipliers and their meaning as shadow prices, the equal-marginal-cost rule for sharing load between chillers (25 kW saved over equal loading at 5,000 kW; λ = 0.162 predicts the cost of 100 kW more cooling), the KKT conditions with a chiller at its capacity limit, duality in a paragraph, and projected gradient. Exercises: the least-norm solution by Lagrange multipliers, optimal chiller dispatch by bisection on λ, and projection onto the simplex for estimating CRAH mixing fractions.
+- 27 questions, 32 cards; 9 exercises verified with 30 known-wrong variants and 34 rejected derivation answers.
+
 ## Phase 6b: Module 3 lesson 3 and the optimizer race (2026-11-22)
 
 - **Optimizer race**, a new explainer: gradient descent, heavy-ball momentum, Adam and pure Newton on a narrow valley (aligned or tilted, κ from 1 to 100), a banana-shaped valley and a saddle, with marching-squares contours, click-to-set start points, step sizes as multiples of 1/L, direct labels and a results table. Colours come from a fixed categorical palette (new `--cat-1`…`--cat-4` tokens) validated for colour-vision deficiency in both themes.

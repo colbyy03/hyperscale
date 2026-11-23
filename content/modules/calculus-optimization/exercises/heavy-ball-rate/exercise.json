@@ -1,0 +1,22 @@
+{
+  "id": "calculus-optimization/heavy-ball-rate",
+  "type": "code",
+  "language": "python",
+  "title": "How fast can momentum go?",
+  "prompt": "Along an eigenvector of a quadratic's Hessian with curvature λ, heavy-ball momentum updates the error e as e₍ₖ₊₁₎ = (1 + β − η·λ)·eₖ − β·e₍ₖ₋₁₎: two numbers carried from step to step, like a damped mass on a spring.\n\n1. `heavy_ball_matrix(lam, lr, beta)` returns the 2 × 2 matrix M with (e₍ₖ₊₁₎, eₖ) = M·(eₖ, e₍ₖ₋₁₎).\n2. `worst_rate(mu, L, lr, beta, n=401)` returns the largest spectral radius of M over n curvatures evenly spaced from μ to L: the per-step convergence factor of the slowest direction.\n3. `tuned(mu, L)` returns `(lr, beta)` = (4/(√L + √μ)², ((√L − √μ)/(√L + √μ))²), the classic optimal choice.\n\nNo loops over the curvatures: build all the matrices at once (np.linalg.eigvals accepts a stack).",
+  "concepts": ["momentum-adaptive", "step-size-conditioning", "eigendecomposition"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "A recurrence that looks back two steps becomes a one-step linear map if the state is the pair (eₖ, e₍ₖ₋₁₎). What are the two rows of that map?",
+    "Row 1 is the update itself: [1 + β − ηλ, −β]. Row 2 just shifts eₖ into the second slot: [1, 0]. The error shrinks per step by the spectral radius, the largest |eigenvalue|; the eigenvalues can be complex, so take np.abs, not the real part.",
+    "lams = np.linspace(mu, L, n); M = np.zeros((n, 2, 2)); M[:, 0, 0] = 1 + beta - lr * lams; M[:, 0, 1] = -beta; M[:, 1, 0] = 1.0; return np.abs(np.linalg.eigvals(M)).max()."
+  ],
+  "misconceptions": {
+    "spectral-radius-complex": "A damped oscillation has complex eigenvalues; its decay per step is their magnitude |λ|, not their real part."
+  },
+  "sources": ["polyak1964-heavy-ball", "nocedal2006-numerical-optimization"]
+}

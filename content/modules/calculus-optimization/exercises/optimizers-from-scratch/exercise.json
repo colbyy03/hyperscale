@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/optimizers-from-scratch",
+  "type": "code",
+  "language": "python",
+  "title": "Momentum and AdamW from scratch",
+  "prompt": "Write the two optimizers you'll use most, as small classes whose `step(w, g)` takes the current parameters and gradient (NumPy arrays) and returns the new parameters, keeping any state inside the object.\n\n1. `Momentum(lr, beta=0.9)`, heavy-ball momentum: v ← βv − lr·g, then w ← w + v (v starts at zero).\n2. `AdamW(lr, beta1=0.9, beta2=0.999, eps=1e-8, weight_decay=0.0)`: with t counting steps from 1, m ← β₁m + (1 − β₁)g and s ← β₂s + (1 − β₂)g²; the bias-corrected m̂ = m/(1 − β₁ᵗ) and ŝ = s/(1 − β₂ᵗ); then w ← w − lr·(m̂/(√ŝ + eps) + weight_decay·w). The decay is applied directly to w (decoupled), not added to the gradient.\n\nNo loops over parameters: work on whole arrays.",
+  "concepts": ["momentum-adaptive", "gradient-descent"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["torch", "jax", "optax"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "Both optimizers need memory between calls: a velocity for momentum, two running averages and a step counter for Adam. Where should that state live, and what should it start as?",
+    "Store state on self, initialized lazily on the first call to zeros_like(w). At step 1, m = (1 − β₁)g is far smaller than g, which is what the bias correction m/(1 − β₁ᵗ) repairs: after correction Adam's first step moves every coordinate by about lr. Weight decay goes outside the adaptive scaling, so every weight shrinks by the same fraction.",
+    "Momentum.step: if self.v is None: self.v = np.zeros_like(w); self.v = self.beta * self.v - self.lr * g; return w + self.v. AdamW.step: self.t += 1; update m and s; mh = m / (1 - b1**t); sh = s / (1 - b2**t); return w - lr * (mh / (np.sqrt(sh) + eps) + wd * w)."
+  ],
+  "misconceptions": {
+    "adam-bias-correction": "Without bias correction, Adam's first steps are distorted because the running averages start at zero: the very first step is about 3.2 times the learning rate with the default betas.",
+    "decoupled-weight-decay": "In Adam, adding λw to the gradient lets the adaptive scaling shrink the penalty for weights with large gradients. AdamW applies decay directly to the weights instead."
+  },
+  "sources": ["polyak1964-heavy-ball", "kingma2014-adam", "loshchilov2017-adamw"]
+}

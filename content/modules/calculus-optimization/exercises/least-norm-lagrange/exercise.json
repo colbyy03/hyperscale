@@ -1,0 +1,32 @@
+{
+  "id": "calculus-optimization/least-norm-lagrange",
+  "type": "derivation",
+  "language": "none",
+  "title": "The smallest solution, by Lagrange multipliers",
+  "prompt": "Find the smallest vector `w` (length 4) that satisfies two linear constraints Aw = b, where `A` is (2 × 4) and `b` has length 2: minimize ½‖w‖² subject to Aw = b. `nu` is the vector of 2 Lagrange multipliers. A step marked → name can be used by that name later.",
+  "concepts": ["constrained-optimization", "matrix-calculus"],
+  "difficulty": 0.5,
+  "minutes": 10,
+  "critical": true,
+  "hints": [
+    "Form the Lagrangian L(w, ν) = ½‖w‖² + νᵀ(Aw − b). At the constrained optimum its gradient with respect to w vanishes and the constraint holds.",
+    "∇_w L = w + Aᵀν = 0 gives w = −Aᵀν. Substituting into Aw = b gives −AAᵀν = b, a 2 × 2 system for ν.",
+    "ν* = −(AAᵀ)⁻¹b and w* = Aᵀ(AAᵀ)⁻¹b (the pseudoinverse solution). The optimal value is ½ bᵀ(AAᵀ)⁻¹b, whose gradient with respect to b is (AAᵀ)⁻¹b = −ν*: the multiplier is a sensitivity."
+  ],
+  "derivation": {
+    "variables": {
+      "A": { "shape": [2, 4] },
+      "b": { "shape": [2] },
+      "w": { "shape": [4] },
+      "nu": { "shape": [2] }
+    },
+    "steps": [
+      { "prompt": "The gradient with respect to `w` of the Lagrangian L(w, ν) = ½‖w‖² + νᵀ(Aw − b).", "answer": "w + A.T @ nu", "hint": "The gradient of νᵀAw with respect to w is Aᵀν.", "wrong": ["w + A @ nu", "w - A.T @ nu", "A.T @ nu"] },
+      { "prompt": "Set that gradient to zero: `w` in terms of `nu`.", "answer": "-A.T @ nu", "hint": "w + Aᵀν = 0.", "wrong": ["A.T @ nu", "-A @ nu"] },
+      { "prompt": "Substitute into the constraint Aw = b and solve for the optimal multipliers ν*.", "answer": "-inv(A @ A.T) @ b", "name": "nu_star", "hint": "A(−Aᵀν) = b, so (AAᵀ)ν = −b.", "wrong": ["inv(A @ A.T) @ b", "-inv(A.T @ A) @ b", "-b"] },
+      { "prompt": "The minimum-norm solution w*.", "answer": "A.T @ inv(A @ A.T) @ b", "name": "w_star", "hint": "w* = −Aᵀν*.", "wrong": ["inv(A.T @ A) @ A.T @ b", "A.T @ b", "-A.T @ inv(A @ A.T) @ b"] },
+      { "prompt": "The optimal value is ½‖w*‖² = ½ bᵀ(AAᵀ)⁻¹b. Write its gradient with respect to `b`: how much the minimum norm grows per unit change in each constraint. (Compare it with ν*.)", "answer": "inv(A @ A.T) @ b", "hint": "The gradient of ½ bᵀMb is Mb for symmetric M; here M = (AAᵀ)⁻¹. It equals −ν*.", "wrong": ["nu_star", "A.T @ inv(A @ A.T) @ b", "2 * inv(A @ A.T) @ b"] }
+    ]
+  },
+  "sources": ["boyd2004-convex-optimization", "nocedal2006-numerical-optimization"]
+}

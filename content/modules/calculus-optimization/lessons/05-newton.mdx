@@ -1,0 +1,98 @@
+---
+id: calculus-optimization/newton
+title: Newton, quasi-Newton and line search
+minutes: 40
+concepts: [newton-methods, jacobians-hessians, convexity]
+sources: [nocedal2006-numerical-optimization, boyd2004-convex-optimization, bottou2018-optimization]
+cards: [newton-step, newton-quadratic-convergence, newton-affine-invariant, separable-needs-ridge, newton-not-monotone, newton-uphill-at-saddle, armijo-condition, gauss-newton-lm, bfgs-secant, when-second-order-pays]
+---
+
+<Situation from="Ines, reliability lead">
+I'm predicting which CRAH fan bearings will fail within 30 days, by logistic regression on vibration level, kurtosis, bearing temperature and hours since service. My own gradient descent ran for a million iterations and still hadn't converged. scikit-learn's default solver, "lbfgs", finished in under a hundred. What does it know that my code doesn't?
+</Situation>
+
+<Predict
+  id="newton-iterations"
+  question="Ines's features are in raw units (mm/s next to thousands of hours), so the Hessian's condition number is about 7 × 10⁸. Starting from zero, how many iterations does Newton's method need to drive the gradient below 10⁻¹⁰?"
+  options={["About 5", "About 500", "More than a million, like gradient descent"]}
+  answer={0}
+  explain="Newton's method rescales every direction by its curvature, so the condition number that cripples gradient descent doesn't slow it at all. In this course's test the gradient norm went 140, 27, 3.7, 0.10, 9 × 10⁻⁵, 7 × 10⁻¹¹: five steps, with the correct digits roughly doubling at the end."
+/>
+
+## Newton's method: jump to the bottom of the model
+
+Lesson 1's second-order Taylor model, $f(w + d) \approx f + g^\top d + \tfrac{1}{2} d^\top H d$, is a quadratic in $d$, and its minimum is where its gradient vanishes, $g + Hd = 0$. **Newton's method** solves for that step and takes it:
+
+$$
+H\,d = -g, \qquad w \leftarrow w + d
+$$
+
+(solved with `np.linalg.solve`, never by inverting $H$). Three properties make it remarkable:
+
+- **One step on a quadratic.** The model is exact, so Newton lands on the minimum immediately.
+- **Quadratic convergence.** Near a minimum the error is roughly squared at each step: the number of correct digits doubles. That's the 9 × 10⁻⁵ → 7 × 10⁻¹¹ step in Ines's run.
+- **Affine invariance.** Rescale a feature by 1,000 and Newton's iterates rescale with it: the path and the iteration count don't change. Gradient descent's step depends on the units; Newton's doesn't. That's why Ines's raw features don't bother it.
+
+<CodeExercise id="calculus-optimization/logistic-newton" />
+
+<CodeExercise id="calculus-optimization/newton-logistic" />
+
+## When the quadratic model lies
+
+Newton trusts its local model completely, and far from a minimum the model can be badly wrong. Two failures matter in practice:
+
+- **Overshooting.** On the banana-shaped Rosenbrock function, pure Newton from the standard start converges in 7 iterations, but one of its full steps *raises* the loss on the way.
+- **Saddles and negative curvature.** If $H$ isn't positive definite, the Newton step heads for the nearest point where the gradient vanishes, which may be a saddle or even a maximum. Lesson 3's explorer showed pure Newton walking straight onto the saddle.
+
+The standard fixes are a **line search** and a guard on the direction. Take the Newton direction $d$, check that it points downhill ($g^\top d < 0$, otherwise fall back to $-g$, or add a multiple of $I$ to $H$), then shrink the step until it makes real progress. The **Armijo condition** accepts a step size α when
+
+$$
+f(w + \alpha d) \le f(w) + c\,\alpha\, g^\top d
+$$
+
+with a small $c$ such as 10⁻⁴: the decrease must be at least a fraction of what the slope promised. Backtracking halves α until that holds. Damped Newton with Armijo backtracking solves Rosenbrock in 22 iterations without ever going uphill; gradient descent with the same line search needs 13,756.
+
+<Viz name="OptimizerRace" surface="banana" optimizers={["gd", "newton"]} steps={100} />
+
+<CodeExercise id="calculus-optimization/damped-newton" />
+
+## Least squares: Gauss–Newton and Levenberg–Marquardt
+
+For nonlinear least squares, such as Noor's chiller model from Lesson 1, the Hessian of $\tfrac{1}{2}\|r(\theta)\|^2$ is approximately $J^\top J$. Using that approximation in Newton's step gives **Gauss–Newton**, which needs only the Jacobian of the residuals:
+
+$$
+(J^\top J)\, d = -J^\top r
+$$
+
+**Levenberg–Marquardt** adds a damping term, $(J^\top J + \lambda I)\, d = -J^\top r$: with large λ it takes short gradient-descent-like steps, with small λ it's Gauss–Newton, and λ adapts as the fit improves. It's ridge regression applied to the step. `scipy.optimize.least_squares` implements it (`method="lm"`) alongside a trust-region method (`"trf"`) that handles bounds.
+
+## Quasi-Newton: curvature from gradients
+
+Newton's method needs the Hessian ($n^2$ numbers) and a linear solve ($\sim n^3$ operations) at every step. **Quasi-Newton** methods build an approximation from information they already have. Each step produces a change in position $s = w_{k+1} - w_k$ and a change in gradient $y = g_{k+1} - g_k$, and a curvature matrix $B$ consistent with them must satisfy the **secant condition** $B s = y$. **BFGS** updates its approximation (of $H^{-1}$, so no solve is needed) to satisfy it at every step, and converges superlinearly near the minimum. **L-BFGS** keeps only the last few (s, y) pairs, typically 5 to 20, so its memory and cost per step grow linearly in $n$: it handles millions of parameters.
+
+That's what Ines's "lbfgs" was doing: 87 iterations on her raw features, against more than a million for gradient descent. L-BFGS isn't fully affine invariant, though: on standardized features it needed 9, so scale anyway.
+
+<Bridge>
+Nonlinear finite-element solvers are Newton's method at scale: the tangent stiffness matrix from Lesson 1 is the Hessian of the potential energy, and each Newton–Raphson iteration solves with it. The failures are the same too. Near a limit point, where a structure is about to snap through or buckle, the tangent stiffness loses positive definiteness and plain Newton fails, which is why FE codes use line searches and arc-length methods. Quasi-Newton updates of the stiffness (BFGS among them) are a standard option for saving the cost of reassembling it every iteration.
+</Bridge>
+
+## When second-order methods pay
+
+| Situation | Good choice |
+|---|---|
+| Small or medium smooth problem (up to a few thousand parameters): logistic regression, model calibration | Newton or damped Newton; quadratic convergence in a handful of steps |
+| Smooth deterministic problem with up to millions of parameters | L-BFGS (`scipy.optimize.minimize(method="L-BFGS-B")`) |
+| Nonlinear least squares | Gauss–Newton or Levenberg–Marquardt (`scipy.optimize.least_squares`) |
+| Large neural network trained on mini-batches | SGD with momentum or AdamW (Lesson 4): noisy gradients make curvature estimates unreliable and expensive |
+
+<Craft title="Second-order habits worth keeping">
+- Solve with the Hessian (`np.linalg.solve`, or a Cholesky factorization when it's positive definite); never invert it.
+- Guard every Newton step: check the direction is downhill, and use a line search or a trust region.
+- Add a small ridge term when a problem might be separable or rank deficient, so the minimizer exists and the Hessian stays invertible.
+- Reach for library solvers first (`least_squares`, `minimize` with L-BFGS-B, scikit-learn's `lbfgs`), and pass them correct derivatives (Lesson 1's checker).
+- Standardize features even for L-BFGS: it isn't fully scale invariant, and well-scaled problems converge in fewer iterations.
+</Craft>
+
+<Check items={["nw-step", "nw-quadratic", "nw-affine", "nw-uphill", "nw-armijo", "nw-gauss-newton", "nw-secant", "nw-when"]} />
+
+Next: optimization with constraints, and what the multipliers mean.

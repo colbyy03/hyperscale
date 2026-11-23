@@ -46,7 +46,7 @@ test("no horizontal overflow on any screen", async ({ page }) => {
     "/learn/linear-algebra/pca-pod": "viz-fieldmodes",
     "/learn/calculus-optimization/convexity-conditioning": "viz-optimizer-race",
   };
-  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", ...Object.keys(explainer), "/learn/linear-algebra/matrix-calculus", "/learn/calculus-optimization/jacobians-hessians", "/learn/calculus-optimization/autodiff", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
+  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", ...Object.keys(explainer), "/learn/linear-algebra/matrix-calculus", "/learn/calculus-optimization/jacobians-hessians", "/learn/calculus-optimization/autodiff", "/learn/calculus-optimization/momentum-adam", "/learn/calculus-optimization/newton", "/learn/calculus-optimization/constrained", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
     await page.goto(path);
     await page.locator("main h1").first().waitFor();
     if (explainer[path]) await page.getByTestId(explainer[path]).waitFor();

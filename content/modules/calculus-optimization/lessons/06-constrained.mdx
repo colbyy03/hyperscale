@@ -1,0 +1,98 @@
+---
+id: calculus-optimization/constrained
+title: Optimization with constraints
+minutes: 40
+concepts: [constrained-optimization]
+sources: [boyd2004-convex-optimization, nocedal2006-numerical-optimization, energyplus96-eng-ref-chillers]
+cards: [lagrange-condition, multiplier-shadow-price, equal-marginal-cost, kkt-conditions, complementary-slackness, weak-duality, projected-gradient, clip-and-renormalize, equal-loading, marginal-power-derivative]
+---
+
+<Situation from="Noor, energy analyst">
+Three chillers share the plant load, and the operators keep them equally loaded. But they aren't identical: chiller 3 is newer and much more efficient at part load. Is equal loading actually the cheapest way to run them? And finance has a question I can't answer: if IT load grows by 100 kW, how much more power does the chiller plant draw?
+</Situation>
+
+<Predict
+  id="equal-loading"
+  question="Three chillers with different efficiency curves share 5,000 kW of cooling. Which split minimizes their total electrical power?"
+  options={["Equal loading: 1,667 kW each", "The split that gives every running chiller the same marginal power (extra kW of electricity per extra kW of cooling)", "Run only the most efficient chiller as hard as possible"]}
+  answer={1}
+  explain="If one chiller's marginal power were higher than another's, shifting a little load from the first to the second would cut the total, so at the optimum the marginal powers match. For this course's three chillers that puts 2,561 kW on the efficient one and saves 25 kW (3%) over equal loading. The common marginal power, 0.162 kW per kW, also answers finance: 100 kW more cooling costs about 16 kW more chiller power."
+/>
+
+## What changes when there are constraints
+
+Without constraints, a smooth minimum is where the gradient vanishes. With them, the best feasible point usually sits on the boundary, where the gradient is still pushing outwards and something has to push back. The chillers can't just run at whatever load minimizes their own power: their loads must add up to the plant's demand, and each must stay between its minimum stable load and its capacity.
+
+## Equality constraints and Lagrange multipliers
+
+Take one equality constraint, $h(x) = 0$. At a constrained minimum you can't improve $f$ by moving along the constraint surface, so $\nabla f$ must be perpendicular to that surface, which makes it parallel to $\nabla h$:
+
+$$
+\nabla f(x^*) + \nu\, \nabla h(x^*) = 0
+$$
+
+The number ν is the **Lagrange multiplier**. Packaging $f$ and the constraint into the **Lagrangian** $L(x, \nu) = f(x) + \nu\, h(x)$ turns the condition into "the gradient of L is zero", and it extends to many constraints with one multiplier each.
+
+The multiplier has a meaning that's often worth more than the solution: it's the **sensitivity of the optimal value to the constraint**. Loosen the constraint by a little, and the optimum changes by the multiplier times that amount. Economists call it a **shadow price**.
+
+<CodeExercise id="calculus-optimization/least-norm-lagrange" />
+
+For Noor's chillers, the Lagrangian is $\sum_i P_i(Q_i) - \lambda(\sum_i Q_i - Q_{\text{total}})$, and setting its derivative with respect to each $Q_i$ to zero gives the **equal marginal cost** rule, the same principle power systems use to dispatch generators:
+
+$$
+P_i'(Q_i) = \lambda \quad \text{for every chiller that's free to move}
+$$
+
+| 5,000 kW of cooling | Chiller 1 | Chiller 2 | Chiller 3 (new) | Total power |
+|---|---|---|---|---|
+| Equal loading | 1,667 kW | 1,667 kW | 1,667 kW | 781.1 kW |
+| Equal marginal power | 1,248 kW | 1,191 kW | 2,561 kW | 755.8 kW |
+
+The multiplier is λ = 0.162 kW of electricity per kW of cooling. Re-solving with 100 kW more load raises the total by 16.3 kW, against the 16.2 kW that λ predicts. That's finance's answer (for the chillers alone; fans and pumps add a little more).
+
+## Inequality constraints: the KKT conditions
+
+Capacity limits are inequalities. For a problem with constraints $g_i(x) \le 0$ and $h_j(x) = 0$, the **Karush–Kuhn–Tucker (KKT) conditions** at a solution are:
+
+1. **Stationarity**: $\nabla f + \sum_i \mu_i \nabla g_i + \sum_j \nu_j \nabla h_j = 0$;
+2. **Primal feasibility**: every constraint holds;
+3. **Dual feasibility**: every inequality multiplier is non-negative, $\mu_i \ge 0$;
+4. **Complementary slackness**: $\mu_i\, g_i(x) = 0$, so each inequality either binds or has a zero multiplier.
+
+The last one is the intuitive one: a limit you aren't touching can't be costing you anything. At 7,000 kW of cooling, chiller 3 hits its 2,800 kW capacity. Its marginal power there is 0.172, below the plant's λ = 0.204: it would happily take more load if it could, and the gap, 0.032 kW per kW, is the multiplier of its capacity limit, the value of a slightly bigger chiller. For convex problems like this one, the KKT conditions are sufficient as well as necessary, so they make a complete certificate of optimality you can check.
+
+<CodeExercise id="calculus-optimization/chiller-dispatch" />
+
+<Bridge>
+Mechanics has been using multipliers for centuries. In Lagrangian mechanics the multiplier of a constraint is the **constraint force**: the tension in a pendulum's rod is the multiplier of its length constraint. Contact in finite-element analysis is complementary slackness exactly: at each point either the gap is open and the contact pressure is zero, or the gap is closed and the pressure is positive, never both. Contact solvers are KKT solvers.
+</Bridge>
+
+## Duality, in one paragraph
+
+Minimizing the Lagrangian over $x$ for fixed multipliers gives the **dual function**, and every value of it is a lower bound on the constrained optimum (**weak duality**). For convex problems that satisfy a mild condition, the best such bound equals the optimum (**strong duality**), so solving the dual, a problem in the multipliers alone, solves the original. That's what the bisection on λ in the exercise is: a search over the single dual variable. Linear-programming duality returns in Module 15, where the shadow prices of a plant's constraints drive scheduling decisions.
+
+## Projected gradient
+
+When the feasible set is simple, there's a direct approach: take a gradient step, then map the result back to the nearest feasible point.
+
+$$
+x \leftarrow \Pi_C\big(x - \eta \nabla f(x)\big)
+$$
+
+For convex problems this converges at the same rate as gradient descent, and it's cheap whenever the projection $\Pi_C$ is: clipping for a box of bounds, rescaling for a ball, and a sort for the probability simplex. A classic example is estimating mixing fractions, quantities that must be non-negative and sum to one. Note that the projection is the *closest* point: clipping negatives and rescaling the rest gives a feasible point, but generally not the closest one.
+
+<CodeExercise id="calculus-optimization/simplex-projection" />
+
+For anything less tidy, use a library: `scipy.optimize.minimize` takes bounds (with L-BFGS-B) and general constraints (with SLSQP or trust-constr), and `cvxpy` (Module 15) lets you state convex problems almost as you'd write them on paper.
+
+<Craft title="Constraint habits worth keeping">
+- Write every constraint down explicitly, with its units, before choosing a method.
+- Check the KKT conditions at whatever a solver returns: feasibility, signs of the multipliers, complementary slackness.
+- Report the multipliers along with the solution: they answer the "what if" questions people actually ask.
+- Use projected gradient when the feasible set has a cheap projection; otherwise use a constrained solver.
+- Equal treatment (equal loading, equal splits) is optimal only when the units are identical; equalize marginal costs instead.
+</Craft>
+
+<Check items={["co-lagrange", "co-shadow", "co-equal-marginal", "co-slackness", "co-at-limit", "co-duality", "co-projection", "co-clip"]} />
+
+Next: feedback control, where an iteration runs a real machine.

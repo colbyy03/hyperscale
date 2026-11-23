@@ -1,0 +1,33 @@
+{
+  "id": "calculus-optimization/logistic-newton",
+  "type": "derivation",
+  "language": "none",
+  "title": "Newton's step for logistic regression",
+  "prompt": "Derive one Newton step for logistic regression with loss L(w) = Σᵢ [log(1 + e^{zᵢ}) − yᵢzᵢ], where z = Xw. `X` is (6 × 3), `w` has length 3 and `y` holds 6 labels (any real numbers work for the algebra). A step marked → name can be used by that name later.",
+  "concepts": ["newton-methods", "jacobians-hessians", "convexity"],
+  "difficulty": 0.5,
+  "minutes": 10,
+  "critical": true,
+  "hints": [
+    "Do the scalar case first: the derivative of log(1 + eᶻ) with respect to z is the sigmoid σ(z), and the derivative of σ(z) is σ(z)(1 − σ(z)).",
+    "By the chain rule through z = Xw, the gradient is Xᵀ(p − y). Differentiating again, each pᵢ contributes pᵢ(1 − pᵢ) xᵢxᵢᵀ, so the Hessian is Xᵀ diag(p(1 − p)) X. Newton's step solves H d = −g.",
+    "Gradient: X.T @ (p - y). Hessian: X.T @ diag(p * (1 - p)) @ X. Newton step: w - inv(H) @ g. Curvature along d: sum(p * (1 - p) * (X @ d) ** 2), never negative."
+  ],
+  "derivation": {
+    "variables": {
+      "X": { "shape": [6, 3] },
+      "w": { "shape": [3] },
+      "y": { "shape": [6] },
+      "d": { "shape": [3] }
+    },
+    "steps": [
+      { "prompt": "The logits z = Xw.", "answer": "X @ w", "name": "z", "hint": "One logit per row of X.", "wrong": ["w @ X.T @ X", "X.T @ w"] },
+      { "prompt": "The probabilities p = σ(z), applied elementwise.", "answer": "1 / (1 + exp(-z))", "name": "p", "hint": "σ(z) = 1/(1 + e^(−z)).", "wrong": ["exp(-z) / (1 + exp(-z))", "1 / (1 + exp(z))"] },
+      { "prompt": "The gradient of L with respect to `w`.", "answer": "X.T @ (p - y)", "name": "g", "hint": "dL/dzᵢ = pᵢ − yᵢ; then carry it back through z = Xw with Xᵀ.", "wrong": ["X.T @ (y - p)", "p - y", "X @ (p - y)"] },
+      { "prompt": "The Hessian of L (a 3 × 3 matrix).", "answer": "X.T @ diag(p * (1 - p)) @ X", "name": "H", "hint": "Each sample contributes pᵢ(1 − pᵢ) xᵢxᵢᵀ.", "wrong": ["X.T @ X", "X.T @ diag(p) @ X", "X @ diag(p * (1 - p)) @ X.T"] },
+      { "prompt": "The point reached by one Newton step from `w`.", "answer": "w - inv(H) @ g", "hint": "Minimize the quadratic model: solve H d = −g and add d to w.", "wrong": ["w - g", "w + inv(H) @ g", "w - H @ g"] },
+      { "prompt": "The curvature dᵀHd along a direction `d`, written as a sum over samples. (Each term is ≥ 0, which is why the loss is convex.)", "answer": "sum(p * (1 - p) * (X @ d) ** 2)", "hint": "dᵀXᵀ diag(·) X d = Σᵢ pᵢ(1 − pᵢ)(xᵢ · d)².", "wrong": ["sum((X @ d) ** 2)", "sum(p * (X @ d) ** 2)"] }
+    ]
+  },
+  "sources": ["nocedal2006-numerical-optimization", "boyd2004-convex-optimization"]
+}
