@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/gd-standardize",
+  "type": "code",
+  "language": "python",
+  "title": "Make gradient descent fast by standardizing",
+  "prompt": "Fit least squares by gradient descent, the way the nightly rack-model job does, but fast.\n\n1. `gradient_descent(grad, w0, lr, tol=1e-9, max_iter=100_000)` repeats w ← w − lr·∇f(w) until ‖∇f(w)‖ < tol. Return `(w, iterations, converged)`.\n2. `fit_linear_gd(X, y)` fits y ≈ intercept + X·coef (X has one column per feature, no column of ones). Standardize each feature to mean 0 and standard deviation 1, run your gradient descent on the loss ½‖Zβ − y‖²/n (with a column of ones in Z for the intercept) using lr = 1/L, where L is the largest eigenvalue of ZᵀZ/n, and convert the coefficients back to the original units. Return `(intercept, coef, iterations)`.\n\nLoops over iterations are fine; avoid loops over data rows.",
+  "concepts": ["step-size-conditioning", "gradient-descent", "standardization"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["sklearn", "scipy"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "Gradient descent's speed is set by κ = L/μ of the loss's Hessian. For least squares the Hessian is ZᵀZ/n. What does it look like when every column has mean 0 and variance 1?",
+    "After standardizing, the intercept column is orthogonal to the others and every feature has variance 1, so ZᵀZ/n is close to the identity (exactly the identity for one feature): κ near 1, and gradient descent converges in a handful of steps. Then, from y ≈ β₀ + Σ βⱼ (xⱼ − mⱼ)/sⱼ, read off coefⱼ = βⱼ/sⱼ and intercept = β₀ − Σ βⱼ mⱼ/sⱼ.",
+    "m = X.mean(axis=0); s = X.std(axis=0); Z = np.column_stack([np.ones(n), (X - m) / s]); H = Z.T @ Z / n; L = np.linalg.eigvalsh(H).max(); beta, its, ok = gradient_descent(lambda b: H @ b - Z.T @ y / n, np.zeros(Z.shape[1]), 1 / L); coef = beta[1:] / s; intercept = beta[0] - coef @ m."
+  ],
+  "misconceptions": {
+    "center-and-scale": "Scaling alone isn't enough: an uncentered feature with a large mean makes its column nearly parallel to the intercept column, and κ stays huge. Center as well.",
+    "back-transform-intercept": "Coefficients fitted on standardized features must be converted back: coefⱼ = βⱼ/sⱼ, and the intercept loses Σ βⱼ mⱼ/sⱼ."
+  },
+  "sources": ["nocedal2006-numerical-optimization", "bottou2018-optimization"]
+}

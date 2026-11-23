@@ -137,5 +137,88 @@
     "answer": 1,
     "concepts": ["automatic-differentiation"],
     "explain": "d‖x‖ = x/‖x‖ is 0/0 at the origin. Guard it (for example, sqrt(sum(x²) + ε)) or use a squared norm."
+  },
+  {
+    "kind": "choice",
+    "id": "cc-convex-local",
+    "prompt": "Gradient descent stops where the gradient is zero. For which loss is that point guaranteed to be the global minimum?",
+    "options": ["A neural network's loss", "Least squares or logistic regression, which are convex", "Any loss whose Hessian is positive at that point"],
+    "answer": 1,
+    "concepts": ["convexity"],
+    "explain": "For a convex function every local minimum is global. A positive definite Hessian at one point only makes it a local minimum; neural-network losses aren't convex."
+  },
+  {
+    "kind": "choice",
+    "id": "cc-logistic-convex",
+    "prompt": "Why is the logistic-regression loss convex?",
+    "options": ["Its gradient is linear in w", "Its Hessian Xᵀdiag(pᵢ(1 − pᵢ))X is positive semidefinite, because every weight pᵢ(1 − pᵢ) is non-negative", "Because probabilities lie between 0 and 1"],
+    "answer": 1,
+    "concepts": ["convexity", "jacobians-hessians"],
+    "explain": "dᵀHd = Σ pᵢ(1 − pᵢ)(xᵢ·d)² ≥ 0 for every direction d, so the Hessian is positive semidefinite everywhere."
+  },
+  {
+    "kind": "numeric",
+    "id": "cc-step-limit",
+    "prompt": "A quadratic loss's Hessian has eigenvalues between 0.5 and 40. What is the largest step size for which gradient descent converges?",
+    "answer": 0.05,
+    "tolerance": 0.01,
+    "concepts": ["step-size-conditioning"],
+    "critical": true,
+    "explain": "The error is multiplied by 1 − ηλ along each eigenvector; |1 − 40η| < 1 needs η < 2/40 = 0.05. The smallest eigenvalue only sets how slowly it converges."
+  },
+  {
+    "kind": "choice",
+    "id": "cc-euler",
+    "prompt": "Why does gradient descent's step limit match the forward-Euler limit you met for the thermal network?",
+    "options": ["It's a coincidence of the numbers", "Gradient descent is forward Euler applied to the gradient flow ẇ = −∇f, so the same stability condition, η < 2/λ_max, applies", "Both conventions happen to use the same matrix"],
+    "answer": 1,
+    "concepts": ["step-size-conditioning", "eigendecomposition"],
+    "explain": "w ← w − η∇f(w) is exactly a forward-Euler step of size η on ẇ = −∇f(w). Near a minimum that ODE is linear with matrix −H, so the Euler stability limit is 2/λ_max(H)."
+  },
+  {
+    "kind": "numeric",
+    "id": "cc-rate",
+    "prompt": "With step 1/L, gradient descent needs about 1,375 iterations to shrink the error a million-fold at κ = 100. Roughly how many does it need at κ = 1,000?",
+    "answer": 13809,
+    "tolerance": 0.1,
+    "concepts": ["step-size-conditioning"],
+    "explain": "The error shrinks by 1 − 1/κ per step, so the iteration count grows in proportion to κ: about 13,800 (measured: 13,809)."
+  },
+  {
+    "kind": "choice",
+    "id": "cc-center",
+    "prompt": "You scale an inlet-temperature feature to unit standard deviation but don't center it. What happens to gradient descent?",
+    "options": ["The conditioning is fixed", "It stays slow: the temperature column is still nearly parallel to the intercept column, so κ stays huge", "The loss becomes non-convex"],
+    "answer": 1,
+    "concepts": ["step-size-conditioning", "standardization"],
+    "critical": true,
+    "explain": "Scaling changes the length of the column, not its direction. A column whose values are all near 22/σ is almost a multiple of the column of ones; centering is what makes them orthogonal."
+  },
+  {
+    "kind": "choice",
+    "id": "cc-precondition",
+    "prompt": "A colleague's gradient-descent fit of chiller power on load fraction (0–1) and condenser-water temperature (about 25 °C) crawls along. What's the best first fix?",
+    "options": ["Halve the learning rate", "Standardize both features, which acts as a diagonal preconditioner, then refit", "Run 100 times more iterations"],
+    "answer": 1,
+    "concepts": ["step-size-conditioning"],
+    "transfer": true,
+    "explain": "The features differ in scale and the temperature has a large mean, so κ is huge. Standardizing reduces κ by orders of magnitude; a smaller learning rate would only make it slower."
+  },
+  {
+    "kind": "choice",
+    "id": "cc-loss-curve",
+    "prompt": "Your training loss, plotted on a log scale, falls in a straight line, but very slowly. What does that suggest?",
+    "options": ["The learning rate is too high", "Linear convergence with a large condition number: precondition or add momentum rather than raising the learning rate", "A bug in the gradient"],
+    "answer": 1,
+    "concepts": ["step-size-conditioning"],
+    "explain": "A straight line on a log plot is linear convergence; a shallow slope means a rate close to 1, that is a large κ. The stiff directions cap the learning rate, so the fix is to change the geometry."
+  },
+  {
+    "kind": "explain",
+    "id": "cc-explain-steady-racks",
+    "prompt": "Explain to Ines why the racks with the steadiest inlet temperatures are the hardest to fit by gradient descent, and what to change.",
+    "concepts": ["step-size-conditioning", "conditioning"],
+    "rubric": ["Gradient descent's iteration count grows with κ, the ratio of the largest to smallest Hessian eigenvalue (XᵀX/n for least squares)", "A temperature that varies little around 22 °C makes its column nearly parallel to the intercept column, so κ is enormous (about 10⁶ for ±0.5 °C)", "The step size is capped by the stiff direction (η < 2/L), so the flat direction needs a huge number of steps", "Center and scale the features (or use a direct solver), then convert the coefficients back; κ drops to about 1"],
+    "explain": "It's the collinearity from Module 2, seen through the optimizer: the fix is to change the geometry, not the learning rate."
   }
 ]

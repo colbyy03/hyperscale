@@ -144,5 +144,78 @@
     "front": "Four ways autodiff gives a gradient you didn't want.",
     "back": "Kinks (relu, abs at 0), unstable compositions (log(softmax), sqrt or norm at 0 → NaN), flat pieces (argmax, rounding: zero gradient), and in-place mutation.",
     "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "convex-definition",
+    "type": "concept",
+    "front": "What makes a function convex, and what does convexity guarantee?",
+    "back": "Chords lie on or above the graph; for twice-differentiable f, the Hessian is positive semidefinite everywhere. Every local minimum is then global.",
+    "concepts": ["convexity"]
+  },
+  {
+    "id": "convex-hessian",
+    "type": "concept",
+    "front": "The Hessians of least squares and logistic regression, and why both losses are convex.",
+    "back": "$X^\\top X$ and $X^\\top \\operatorname{diag}(p_i(1-p_i))X$: both positive semidefinite.",
+    "concepts": ["convexity", "jacobians-hessians"],
+    "critical": true
+  },
+  {
+    "id": "smoothness-strong-convexity",
+    "type": "concept",
+    "front": "L-smooth and μ-strongly convex, in terms of the Hessian.",
+    "back": "Every Hessian eigenvalue lies between μ and L; κ = L/μ. For a quadratic they're its extreme eigenvalues.",
+    "concepts": ["convexity", "step-size-conditioning"]
+  },
+  {
+    "id": "gd-step-limit",
+    "type": "equation",
+    "front": "The step-size limit of gradient descent on a quadratic, and why.",
+    "back": "The error is multiplied by $I - \\eta A$ each step, so every $|1 - \\eta\\lambda_i| < 1$: $0 < \\eta < 2/L$.",
+    "concepts": ["step-size-conditioning"],
+    "critical": true
+  },
+  {
+    "id": "gd-is-forward-euler",
+    "type": "bridge",
+    "front": "How is gradient descent related to forward Euler?",
+    "back": "It is forward Euler on the gradient flow $\\dot w = -\\nabla f(w)$, so it inherits the stability limit $2/\\lambda_{\\max}$.",
+    "concepts": ["step-size-conditioning", "eigendecomposition"]
+  },
+  {
+    "id": "gd-rate-kappa",
+    "type": "equation",
+    "front": "Gradient descent's convergence rate on a quadratic.",
+    "back": "With η = 1/L the error shrinks by $1 - 1/\\kappa$ per step; with the best fixed η = 2/(L + μ), by $(\\kappa - 1)/(\\kappa + 1)$. Iterations grow in proportion to κ.",
+    "concepts": ["step-size-conditioning"],
+    "critical": true
+  },
+  {
+    "id": "center-and-scale",
+    "type": "gotcha",
+    "front": "Why center, and not only scale, features before gradient descent?",
+    "back": "An uncentered feature with a large mean is nearly parallel to the intercept column, so κ stays huge (about 10⁶ for an inlet held to ±0.5 °C).",
+    "concepts": ["step-size-conditioning", "standardization"]
+  },
+  {
+    "id": "back-transform-intercept",
+    "type": "gotcha",
+    "front": "Coefficients fitted on standardized features, back in original units.",
+    "back": "$\\text{coef}_j = \\beta_j / s_j$ and $\\text{intercept} = \\beta_0 - \\sum_j \\beta_j m_j / s_j$.",
+    "concepts": ["standardization"]
+  },
+  {
+    "id": "preconditioning",
+    "type": "concept",
+    "front": "What is preconditioning?",
+    "back": "Changing variables or scaling so the curvature is more uniform, which lowers κ: feature standardization, Jacobi scaling, Adam's per-coordinate scaling.",
+    "concepts": ["step-size-conditioning"]
+  },
+  {
+    "id": "loss-curve-diagnosis",
+    "type": "concept",
+    "front": "What does a log-scale loss curve tell you about the optimizer?",
+    "back": "A straight line is linear convergence, with a slope set by κ. Oscillation or growth: the step is too big. A slow straight line: precondition or add momentum.",
+    "concepts": ["step-size-conditioning"]
   }
 ]

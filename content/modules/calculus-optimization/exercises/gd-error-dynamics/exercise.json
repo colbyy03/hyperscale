@@ -1,0 +1,59 @@
+{
+  "id": "calculus-optimization/gd-error-dynamics",
+  "type": "derivation",
+  "language": "none",
+  "title": "Why gradient descent has a speed limit",
+  "prompt": "Gradient descent on the quadratic f(w) = ½ wᵀAw − bᵀw, where `A` is a (3 × 3) positive definite matrix, `b` a vector of length 3, `w` the current point and `eta` the step size η > 0. Derive how the error evolves from one step to the next.",
+  "concepts": ["step-size-conditioning", "gradient-descent", "eigendecomposition"],
+  "difficulty": 0.45,
+  "minutes": 10,
+  "critical": true,
+  "hints": [
+    "Measure everything relative to the minimizer: what happens to the distance from it after one step?",
+    "Aw* = b at the minimizer, so the gradient Aw − b equals A(w − w*). Substitute into the update, subtract w* from both sides, and the error e = w − w* is multiplied by one fixed matrix every step.",
+    "e_next = (I − ηA) e. Its eigenvalues are 1 − ηλᵢ, and the error shrinks only if every |1 − ηλᵢ| < 1, which means 0 < η < 2/λ_max."
+  ],
+  "derivation": {
+    "variables": {
+      "A": { "shape": [3, 3], "kind": "spd" },
+      "b": { "shape": [3] },
+      "w": { "shape": [3] },
+      "eta": { "shape": [], "kind": "positive" }
+    },
+    "steps": [
+      {
+        "prompt": "The minimizer w* of f (where the gradient vanishes).",
+        "answer": "inv(A) @ b",
+        "name": "ws",
+        "hint": "∇f = Aw − b; set it to zero.",
+        "wrong": ["A @ b", "-inv(A) @ b", "b"]
+      },
+      {
+        "prompt": "The gradient of f at the current point `w`.",
+        "answer": "A @ w - b",
+        "hint": "Module 2's rules: the gradient of ½wᵀAw is Aw for symmetric A, and of bᵀw it's b.",
+        "wrong": ["A @ w + b", "2 * A @ w - b", "w - b"]
+      },
+      {
+        "prompt": "The next iterate after one gradient-descent step with step size `eta`.",
+        "answer": "w - eta * (A @ w - b)",
+        "name": "w_next",
+        "hint": "Move against the gradient by η times its length.",
+        "wrong": ["w + eta * (A @ w - b)", "w - (A @ w - b)", "w - eta * A @ w"]
+      },
+      {
+        "prompt": "The error after the step, w_next − w*, written as a matrix times the error before it, w − w*.",
+        "answer": "(eye(3) - eta * A) @ (w - ws)",
+        "hint": "Replace b with Aw* in the update, then subtract w*.",
+        "wrong": ["(eye(3) - A) @ (w - ws)", "(eye(3) + eta * A) @ (w - ws)", "(eye(3) - eta * A) @ w"]
+      },
+      {
+        "prompt": "The iteration matrix that multiplies the error at every step. Its eigenvalues, 1 − ηλᵢ, decide whether gradient descent converges.",
+        "answer": "eye(3) - eta * A",
+        "hint": "It's the matrix in front of (w − w*) in the previous step.",
+        "wrong": ["eta * A", "eye(3) - A", "inv(A)"]
+      }
+    ]
+  },
+  "sources": ["nocedal2006-numerical-optimization", "boyd2004-convex-optimization"]
+}

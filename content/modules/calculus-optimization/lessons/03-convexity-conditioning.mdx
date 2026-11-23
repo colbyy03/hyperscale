@@ -1,0 +1,84 @@
+---
+id: calculus-optimization/convexity-conditioning
+title: Convexity, smoothness and step sizes
+minutes: 40
+concepts: [convexity, step-size-conditioning, gradient-descent]
+sources: [boyd2004-convex-optimization, nocedal2006-numerical-optimization, bottou2018-optimization, goodfellow2016-deep-learning]
+cards: [convex-definition, convex-hessian, smoothness-strong-convexity, gd-step-limit, gd-is-forward-euler, gd-rate-kappa, center-and-scale, back-transform-intercept, preconditioning, loss-curve-diagnosis]
+---
+
+<Situation from="Ines, reliability lead">
+Our nightly job fits a small linear model per rack, fan power from inlet temperature, by gradient descent: same code, same learning rate, all 400 racks. Racks whose inlet temperature moves around converge, eventually. The racks our controls hold steadiest never converge at all. The best-behaved racks are the ones the job can't fit, which makes no sense to me.
+</Situation>
+
+<Predict
+  id="steady-rack-slow"
+  question="Fitting fan power ≈ a + b·(inlet temperature) by plain gradient descent on raw temperatures: which rack's fit takes more iterations?"
+  options={["The rack whose inlet varies by ±3 °C", "The rack whose inlet varies by ±0.5 °C", "Both the same: it's the same model"]}
+  answer={1}
+  explain="With temperatures near 22 °C, the temperature column is nearly parallel to the column of ones that carries the intercept, and the less it varies, the more parallel it gets. In this course's test the ±0.5 °C rack has a condition number near 10⁶ and didn't converge in 3 million iterations; the ±3 °C rack (κ ≈ 3 × 10⁴) took 387,000. Standardizing the temperature brings κ to 1, and both converge in a single step."
+/>
+
+## Convex functions
+
+A function is **convex** if the chord between any two points on its graph lies on or above the graph. For a twice-differentiable function that's the same as saying its Hessian is positive semidefinite everywhere: it curves up, or at worst stays flat, in every direction. Convexity buys one huge guarantee: **every local minimum is a global minimum**, so a method that goes downhill can't get trapped.
+
+Least squares is convex, because its Hessian is $X^\top X$. Logistic regression's loss is convex too: its Hessian $X^\top \operatorname{diag}(p_i(1 - p_i)) X$ is a weighted version of the same thing. Neural-network losses aren't, which is why the rest of this module also has to deal with saddles and multiple minima.
+
+Two numbers describe how a convex function curves. It's **L-smooth** if no direction curves up faster than $L$ (every Hessian eigenvalue is at most $L$), and **μ-strongly convex** if every direction curves up at least as fast as $\mu > 0$. For a quadratic, $L$ and $\mu$ are just the largest and smallest eigenvalues of its Hessian, and their ratio is a familiar number: the condition number $\kappa = L/\mu$.
+
+## Gradient descent on a bowl
+
+The quadratic $f(w) = \tfrac{1}{2} w^\top A w - b^\top w$ is the model case, because near a minimum every smooth function looks like one (Lesson 1's Taylor model). Derive what one step does to the error:
+
+<CodeExercise id="calculus-optimization/gd-error-dynamics" />
+
+The error is multiplied by $I - \eta A$ at every step, so along each eigenvector of $A$ it's multiplied by $1 - \eta\lambda_i$. That gives two results:
+
+- **The step-size limit.** Every $|1 - \eta\lambda_i| < 1$ requires $0 < \eta < 2/L$. Above that, the stiffest direction overshoots further each step and the iterates blow up. It's the forward-Euler limit from Module 2's thermal network again, and not by coincidence: gradient descent *is* forward Euler applied to the gradient flow $\dot w = -\nabla f(w)$.
+- **The speed limit.** The flattest direction shrinks by only $1 - \eta\mu$ per step. With $\eta = 1/L$ that's $1 - 1/\kappa$; the best fixed step, $\eta = 2/(L + \mu)$, gives $(\kappa - 1)/(\kappa + 1)$. Either way, the number of iterations grows in proportion to $\kappa$.
+
+The measured iteration counts to shrink the error a million-fold match the theory exactly:
+
+| κ | 10 | 100 | 1,000 |
+|---|---|---|---|
+| Iterations with η = 1/L | 131 | 1,375 | 13,809 |
+| Iterations with the best fixed η | 69 | 691 | 6,908 |
+
+<Viz name="OptimizerRace" surface="tilted" optimizers={["gd"]} kappa={20} step={1.6} />
+
+At s = 1.6 the path zigzags across the valley, overshooting the stiff direction each step while it creeps along the floor. Push s past 2 and the zigzag grows instead of shrinking. Raise κ and the creep gets slower: no step size fixes that, because the stiff direction caps η while the flat direction needs many steps.
+
+## Conditioning comes from your features
+
+For least squares the Hessian is $X^\top X/n$, so κ is set by the features. Ines's model has two columns, a column of ones (for the intercept) and the inlet temperature. When temperatures sit near 22 °C and barely move, the second column is almost 22 times the first: nearly collinear, the Module 2 story again.
+
+| Inlet variation | κ of XᵀX/n | Gradient-descent iterations |
+|---|---|---|
+| ±0.5 °C, raw | 9.4 × 10⁵ | not converged after 3 million |
+| ±3 °C, raw | 2.8 × 10⁴ | 386,797 |
+| Either, standardized | 1 | 1 |
+
+The fix is to **center and scale** each feature before fitting, then convert the coefficients back to the original units. Centering matters as much as scaling: it's what makes the temperature column orthogonal to the column of ones. (For a linear model you'd normally use `lstsq` and skip gradient descent altogether. But the same conditioning governs every model trained by gradient descent, including the neural networks for which there's no alternative.)
+
+<CodeExercise id="calculus-optimization/gd-standardize" />
+
+<Bridge>
+Your numerical-methods course met this problem as solving $Ax = b$ for a symmetric positive definite $A$, which is the same as minimizing $\tfrac{1}{2}x^\top Ax - b^\top x$. Jacobi iteration is gradient descent with each coordinate scaled by the matching diagonal entry of $A$, a simple **preconditioner**; Gauss–Seidel uses the lower triangle of $A$ instead. Conjugate gradients converge in about $\sqrt{\kappa}$ iterations instead of $\kappa$, and a good preconditioner reduces κ itself. Standardizing features is a diagonal preconditioner, and the next lesson's momentum and Adam are two more answers to the same problem.
+</Bridge>
+
+## When the bowl isn't a bowl
+
+On a non-convex loss, gradient descent with a small enough step still goes downhill and stops where the gradient vanishes, but that might be a saddle or a poor local minimum. Near a saddle the gradient is tiny, so progress stalls before the iterates find their way off it. Pick the saddle surface in the explorer and start just off the ridge to see the crawl. In high dimensions this plateau behaviour is more common than getting stuck in a genuinely bad minimum.
+
+<Craft title="Step-size habits worth keeping">
+- Standardize (center *and* scale) features before any gradient-based fit, and convert the coefficients back afterwards.
+- Estimate L instead of guessing a learning rate: a few power iterations on Hessian-vector products give λ_max, and η = 1/L is a safe start.
+- Plot the loss on a log scale. A straight line means steady linear convergence, and its slope tells you κ; oscillation or growth means the step is too big.
+- If progress is steady but painfully slow, raising the learning rate won't help (the stiff direction caps it): precondition, or use momentum.
+- For linear least squares, a direct solver beats gradient descent outright. Use gradient descent when the model leaves you no choice.
+</Craft>
+
+<Check items={["cc-convex-local", "cc-logistic-convex", "cc-step-limit", "cc-euler", "cc-rate", "cc-center", "cc-precondition", "cc-loss-curve"]} />
+
+Next: momentum, Nesterov and Adam, three ways to move faster than plain gradient descent allows.

@@ -44,6 +44,7 @@ test("no horizontal overflow on any screen", async ({ page }) => {
     "/learn/linear-algebra/linear-maps": "viz-matrixmap",
     "/learn/linear-algebra/svd": "svd-steps",
     "/learn/linear-algebra/pca-pod": "viz-fieldmodes",
+    "/learn/calculus-optimization/convexity-conditioning": "viz-optimizer-race",
   };
   for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", ...Object.keys(explainer), "/learn/linear-algebra/matrix-calculus", "/learn/calculus-optimization/jacobians-hessians", "/learn/calculus-optimization/autodiff", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
     await page.goto(path);
@@ -66,4 +67,15 @@ test("the POD explorer shows modes, a fit near the noise, and the centering pitf
   await viz.getByRole("button", { name: "Mode 1" }).click();
   await expect(viz.getByTestId("field-caption")).toHaveText(/^Mode 1: 99\.9\d% of the energy/);
   await expect(viz.getByRole("button", { name: "Mean field" })).toBeDisabled();
+});
+
+test("the optimizer race converges, and pure Newton gets trapped on the saddle", async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem("hs-peek:calculus-optimization", "1"));
+  await page.goto("/learn/calculus-optimization/convexity-conditioning");
+  const race = page.getByTestId("viz-optimizer-race");
+  await expect(race.getByTestId("race-result-gd")).toContainText(/step \d+/);
+  await race.getByRole("button", { name: "Saddle" }).click();
+  await race.getByRole("checkbox", { name: "Newton" }).check();
+  await expect(race.getByText("Newton jumps to the nearest point where the gradient vanishes")).toBeVisible();
+  await expect(race.getByTestId("race-result-newton")).toContainText("not yet");
 });

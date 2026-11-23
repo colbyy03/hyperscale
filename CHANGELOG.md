@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## Phase 6b: Module 3 lesson 3 and the optimizer race (2026-11-22)
+
+- **Optimizer race**, a new explainer: gradient descent, heavy-ball momentum, Adam and pure Newton on a narrow valley (aligned or tilted, κ from 1 to 100), a banana-shaped valley and a saddle, with marching-squares contours, click-to-set start points, step sizes as multiples of 1/L, direct labels and a results table. Colours come from a fixed categorical palette (new `--cat-1`…`--cat-4` tokens) validated for colour-vision deficiency in both themes.
+- **Lesson 3, "Convexity, smoothness and step sizes"**: convexity and why least squares and logistic regression qualify, L-smoothness and strong convexity, the error iteration I − ηA with its 2/L limit (gradient descent as forward Euler on the gradient flow), iteration counts proportional to κ (measured: 131, 1,375 and 13,809 at κ = 10, 100 and 1,000), and conditioning that comes from features: a fan-power fit on inlet temperatures held to ±0.5 °C has κ ≈ 10⁶ and never converges, while standardizing brings κ to 1. Exercises: the error-dynamics derivation and a gradient-descent fit with standardization and back-transformed coefficients.
+- 9 questions, 10 cards; 2 exercises verified. New end-to-end test: the race converges, and pure Newton is trapped by the saddle.
+
 ## Phase 6a: Module 3 lessons 1 and 2 (2026-11-22)
 
 - **Derivations can name their steps**: a step marked `"name": "p"` lets later steps write `p` (or `J`) instead of repeating its expression, evaluated at its reference value, so a wrong earlier answer doesn't spoil later steps. A new `simplex` variable kind (positive entries summing to 1) covers probabilities and soft labels; `diag`, `tanh`, `sin` and `cos` join the helpers.
