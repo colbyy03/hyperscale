@@ -3,7 +3,12 @@
     "id": "manohar2018-sensor-placement",
     "type": "paper",
     "title": "Data-Driven Sparse Sensor Placement for Reconstruction: Demonstrating the Benefits of Exploiting Known Patterns",
-    "authors": ["Manohar, Krithika", "Brunton, Bingni W.", "Kutz, J. Nathan", "Brunton, Steven L."],
+    "authors": [
+      "Manohar, Krithika",
+      "Brunton, Bingni W.",
+      "Kutz, J. Nathan",
+      "Brunton, Steven L."
+    ],
     "year": 2018,
     "venue": "IEEE Control Systems Magazine 38(3), 63-86",
     "doi": "10.1109/MCS.2018.2810460",
@@ -13,7 +18,53 @@
     "accessed": "2026-11-19",
     "verified": true,
     "access": "partial",
-    "modules": [2],
+    "modules": [
+      2
+    ],
     "notes": "Added while authoring Module 2 (lesson 6 and the build brief): QR with column pivoting to choose sensor locations for reconstruction from POD modes. Crossref (checked 2026-11-19) confirms the title, venue, year, volume and pages; its record lists no authors, so the authors come from the arXiv record."
+  },
+  {
+    "id": "skogestad2003-simc",
+    "type": "paper",
+    "title": "Simple analytic rules for model reduction and PID controller tuning",
+    "authors": [
+      "Skogestad, Sigurd"
+    ],
+    "year": 2003,
+    "venue": "Journal of Process Control 13(4), 291-309",
+    "doi": "10.1016/S0959-1524(02)00062-8",
+    "url": "https://doi.org/10.1016/S0959-1524(02)00062-8",
+    "open_url": null,
+    "license": null,
+    "accessed": "2026-11-22",
+    "verified": true,
+    "access": "paywalled",
+    "modules": [
+      3
+    ],
+    "notes": "Added while authoring Module 3 (lesson 7 and the controller build): the SIMC tuning rules for PI controllers on first-order-plus-dead-time processes. Crossref (checked 2026-11-22) confirms the title, author, venue, year, volume and pages."
+  },
+  {
+    "id": "astrom-murray2021-feedback-systems",
+    "type": "book",
+    "title": "Feedback Systems: An Introduction for Scientists and Engineers (2nd ed.)",
+    "authors": [
+      "Åström, Karl Johan",
+      "Murray, Richard M."
+    ],
+    "year": 2021,
+    "venue": "Princeton University Press",
+    "doi": null,
+    "url": "https://fbswiki.org/",
+    "open_url": "https://fbswiki.org/",
+    "license": null,
+    "accessed": "2026-11-22",
+    "verified": true,
+    "access": "open",
+    "modules": [
+      3,
+      28
+    ],
+    "notes": "Added while authoring Module 3 (lesson 7): PI control, stability of feedback loops, integrator windup and anti-windup. The authors' companion site (checked 2026-11-22) hosts the second edition."
   }
 ]

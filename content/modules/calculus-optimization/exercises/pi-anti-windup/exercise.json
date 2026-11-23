@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/pi-anti-windup",
+  "type": "code",
+  "language": "python",
+  "title": "A PI controller that survives saturation",
+  "prompt": "Write the supply-air PI controller for a CRAH's chilled-water valve. Opening the valve cools the air, so the error is eₖ = measurement − setpoint (too warm means open further).\n\n`PI(kp, ki, ts, u_min=0.0, u_max=1.0, u0=0.5)` keeps an integral s (starting at 0), and `step(setpoint, measurement)` returns the valve position:\n\n- compute e, a candidate integral s + ts·e, and the unsaturated output u0 + kp·e + ki·(candidate);\n- **anti-windup by conditional integration**: if that output is above `u_max` while e > 0, or below `u_min` while e < 0, the valve is already saturated in the direction the error pushes, so keep the old integral instead of the candidate (and recompute the output with it);\n- return the output clipped to [u_min, u_max].",
+  "concepts": ["feedback-control"],
+  "difficulty": 0.5,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["simple_pid", "control"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "While the valve is pinned at 100%, the integral keeps growing for as long as the air is too warm. What happens when the load finally drops?",
+    "That stored-up integral has to unwind before the valve can close again, so the loop overshoots the other way for a long time: windup. Stop integrating whenever the output is saturated and the error would push it further into saturation; integrating back out of saturation is still allowed.",
+    "e = measurement - setpoint; cand = self.s + self.ts * e; u = self.u0 + self.kp * e + self.ki * cand; if (u > self.u_max and e > 0) or (u < self.u_min and e < 0): u = self.u0 + self.kp * e + self.ki * self.s; else: self.s = cand. Return min(max(u, self.u_min), self.u_max)."
+  ],
+  "misconceptions": {
+    "integrator-windup": "If the integral keeps accumulating while the actuator is saturated, it must unwind afterwards, causing a long overshoot. Stop integrating in the saturated direction (or use back-calculation).",
+    "controller-action": "A cooling valve opens when the temperature is above setpoint: the error is measurement − setpoint. The opposite sign drives the loop away from setpoint."
+  },
+  "sources": ["brunton-kutz-2022"]
+}

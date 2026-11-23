@@ -93,6 +93,37 @@
     ]
   },
   {
+    "id": "astrom-murray2021-feedback-systems",
+    "type": "book",
+    "title": "Feedback Systems: An Introduction for Scientists and Engineers (2nd ed.)",
+    "authors": [
+      "Åström, Karl Johan",
+      "Murray, Richard M."
+    ],
+    "year": 2021,
+    "venue": "Princeton University Press",
+    "doi": null,
+    "url": "https://fbswiki.org/",
+    "open_url": "https://fbswiki.org/",
+    "license": null,
+    "accessed": "2026-11-22",
+    "verified": true,
+    "access": "open",
+    "modules": [
+      3,
+      28
+    ],
+    "notes": "Added while authoring Module 3 (lesson 7): PI control, stability of feedback loops, integrator windup and anti-windup. The authors' companion site (checked 2026-11-22) hosts the second edition.",
+    "aliases": [],
+    "origins": [
+      "course-authoring"
+    ],
+    "moduleIds": [
+      "calculus-optimization",
+      "mlops"
+    ]
+  },
+  {
     "id": "barocas-hardt-narayanan-2023",
     "type": "book",
     "title": "Fairness and Machine Learning: Limitations and Opportunities",
@@ -12561,6 +12592,34 @@
       "pedagogy-foundations"
     ],
     "moduleIds": []
+  },
+  {
+    "id": "skogestad2003-simc",
+    "type": "paper",
+    "title": "Simple analytic rules for model reduction and PID controller tuning",
+    "authors": [
+      "Skogestad, Sigurd"
+    ],
+    "year": 2003,
+    "venue": "Journal of Process Control 13(4), 291-309",
+    "doi": "10.1016/S0959-1524(02)00062-8",
+    "url": "https://doi.org/10.1016/S0959-1524(02)00062-8",
+    "open_url": null,
+    "license": null,
+    "accessed": "2026-11-22",
+    "verified": true,
+    "access": "paywalled",
+    "modules": [
+      3
+    ],
+    "notes": "Added while authoring Module 3 (lesson 7 and the controller build): the SIMC tuning rules for PI controllers on first-order-plus-dead-time processes. Crossref (checked 2026-11-22) confirms the title, author, venue, year, volume and pages.",
+    "aliases": [],
+    "origins": [
+      "course-authoring"
+    ],
+    "moduleIds": [
+      "calculus-optimization"
+    ]
   },
   {
     "id": "song2020-ddim",

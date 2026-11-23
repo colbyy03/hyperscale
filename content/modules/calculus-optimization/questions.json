@@ -470,5 +470,127 @@
     "concepts": ["constrained-optimization"],
     "rubric": ["Minimize total power subject to the loads summing to the demand and staying within each chiller's limits", "At the optimum every chiller not at a limit has the same marginal power P′ᵢ(Qᵢ) = λ (Lagrange/KKT), so the efficient chiller takes more load (saving about 25 kW here)", "A chiller at a limit has marginal power on the right side of λ, with complementary slackness for limits that aren't reached", "λ is the shadow price: the extra plant power per extra kW of cooling, so 100 kW more IT load costs about 16 kW of chiller power"],
     "explain": "Equalize marginal costs, not loads, and read the multiplier as the price of the constraint."
+  },
+  {
+    "kind": "choice",
+    "id": "fb-offset",
+    "prompt": "Why does a proportional-only controller leave a steady-state error?",
+    "options": ["Because its gain is always too low", "It needs a nonzero error to hold the valve anywhere other than its bias position, so it settles off setpoint", "Because sensors are noisy"],
+    "answer": 1,
+    "concepts": ["feedback-control"],
+    "explain": "With u = u₀ + Kp·e, holding the valve at the position the load requires takes a persistent error. The integral term can hold any position with zero error, which is why it removes the offset."
+  },
+  {
+    "kind": "choice",
+    "id": "fb-action",
+    "prompt": "Opening a chilled-water valve cools the supply air. Which error should the PI controller use?",
+    "options": ["e = setpoint − measurement", "e = measurement − setpoint, so the valve opens when the air is too warm", "Either works: the integral term fixes the sign"],
+    "answer": 1,
+    "concepts": ["feedback-control"],
+    "critical": true,
+    "explain": "The plant's gain from valve to temperature is negative, so the controller must act in reverse compared with a heating loop. With the wrong sign the loop drives the valve to a limit and stays there."
+  },
+  {
+    "kind": "choice",
+    "id": "fb-stability",
+    "prompt": "A sampled control loop's closed-loop matrix has eigenvalues of magnitude 0.95, 0.6 and 1.02. Is the loop stable?",
+    "options": ["Yes: two of the three are inside the unit circle", "No: one eigenvalue outside the unit circle is enough for that mode to grow", "Yes, if the average magnitude is below 1"],
+    "answer": 1,
+    "concepts": ["feedback-control", "eigendecomposition"],
+    "critical": true,
+    "explain": "Each mode is multiplied by its eigenvalue every sample. A mode with |λ| = 1.02 grows by 2% per sample until something nonlinear, such as valve saturation, limits it."
+  },
+  {
+    "kind": "choice",
+    "id": "fb-deadtime",
+    "prompt": "Why does 30 s of dead time add three states to a loop sampled every 10 s?",
+    "options": ["Dead time adds noise to every state", "The three valve signals still in transit are part of the loop's memory: they'll affect the temperature later regardless of what the controller does now", "It doesn't: dead time only changes the gain"],
+    "answer": 1,
+    "concepts": ["feedback-control"],
+    "explain": "The plant responds to u from three samples ago, so the state must carry u₍ₖ₋₁₎, u₍ₖ₋₂₎ and u₍ₖ₋₃₎. Those extra states are what make aggressive gains unstable."
+  },
+  {
+    "kind": "numeric",
+    "id": "fb-period",
+    "prompt": "A loop sampled every 10 s has dominant closed-loop eigenvalues 0.9·e^(±0.26i). What is the period of its oscillation, in seconds?",
+    "answer": 241.7,
+    "tolerance": 0.02,
+    "unit": "s",
+    "concepts": ["feedback-control", "eigendecomposition"],
+    "explain": "The pair rotates by 0.26 rad per sample, so a full cycle takes 2π/0.26 ≈ 24.2 samples, or about 242 s. The magnitude 0.9 says it decays by 10% per sample."
+  },
+  {
+    "kind": "numeric",
+    "id": "fb-simc",
+    "prompt": "A step test gives K = 4 °C per unit of valve, τ = 120 s and θ = 20 s. With the SIMC rule and τc = θ, what is Kp?",
+    "answer": 0.75,
+    "tolerance": 0.01,
+    "concepts": ["feedback-control"],
+    "explain": "Kp = τ/(K(τc + θ)) = 120/(4 × 40) = 0.75. The integral time is min(τ, 4(τc + θ)) = min(120, 160) = 120 s."
+  },
+  {
+    "kind": "choice",
+    "id": "fb-windup",
+    "prompt": "After a 20-minute load surge that held a CRAH valve at 100%, the supply air plunged 4 °C below setpoint and took ten minutes to recover. What happened, and what's the fix?",
+    "options": ["The valve stuck; replace the actuator", "Integrator windup: the integral grew while the valve was saturated and had to unwind; add anti-windup (conditional integration or back-calculation)", "The proportional gain is too low"],
+    "answer": 1,
+    "concepts": ["feedback-control"],
+    "transfer": true,
+    "explain": "During saturation the error persisted and the integral kept accumulating. When the surge ended, that stored integral held the valve open until it unwound, overcooling the air. Anti-windup stops integrating into saturation."
+  },
+  {
+    "kind": "choice",
+    "id": "fb-zplane",
+    "prompt": "Under the sampling map z = e^(sT), where do stable continuous-time poles (Re s < 0) end up?",
+    "options": ["Inside the unit circle", "In the left half of the z-plane", "Outside the unit circle"],
+    "answer": 0,
+    "concepts": ["feedback-control"],
+    "explain": "|e^(sT)| = e^(Re(s)·T) < 1 exactly when Re s < 0. The pole's angle in the z-plane is the oscillation frequency times the sample time."
+  },
+  {
+    "kind": "explain",
+    "id": "fb-explain-hunting",
+    "prompt": "Explain to Dev, with the numbers from this lesson, why the upgrade's PI settings made the valve hunt, and what to do.",
+    "concepts": ["feedback-control", "eigendecomposition"],
+    "rubric": ["The sampled loop (coil model with 30 s dead time plus PI) is a linear iteration whose stability is set by the eigenvalues of its closed-loop matrix", "Commissioning tuning (Ti = 90 s) gives a spectral radius of 0.883; the upgrade's Ti = 22.5 s gives 1.016, unstable, with a period of about 236 s", "Saturation of the valve caps the growing oscillation, producing the sustained four-minute hunt", "Restore a model-based tuning (SIMC: Kp ≈ 0.19, Ti = 90 s, or anything with integral gain well below the 3.45× limit), keep anti-windup, and test changes in simulation first"],
+    "explain": "Dead time plus too much integral action pushed the poles outside the unit circle; the valve limits did the rest."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-opt-gradient",
+    "prompt": "An agent hands you the gradient of a custom loss with a physics term. What's the fastest trustworthy check?",
+    "options": ["Read the derivation carefully", "Compare it with central differences at a random point, relative error below about 10⁻⁶", "Train with it and see whether the loss goes down"],
+    "answer": 1,
+    "concepts": ["jacobians-hessians", "gradient-descent"],
+    "explain": "A numerical check is independent of how the gradient was derived. A falling loss proves little: a gradient off by a constant factor, or even a partly wrong one, can still make the loss fall."
+  },
+  {
+    "kind": "numeric",
+    "id": "ai-opt-sum-mean",
+    "prompt": "Code uses a gradient derived for the summed loss over n = 10,000 samples, while the training loop treats the loss as a mean. By what factor is the effective learning rate too large?",
+    "answer": 10000,
+    "tolerance": 0.01,
+    "concepts": ["gradient-descent"],
+    "critical": true,
+    "explain": "The summed loss's gradient is n times the mean loss's gradient, so every step is n = 10,000 times bigger than intended. A gradient check against the mean loss exposes it at once."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-opt-converged",
+    "prompt": "An agent reports that its optimizer \"converged\". Which evidence would convince you?",
+    "options": ["The loss stopped changing in the last few iterations", "A small gradient norm, a log-scale loss curve, and agreement with a second method (or a known answer)", "The run finished without errors"],
+    "answer": 1,
+    "concepts": ["gradient-descent"],
+    "explain": "Stalling isn't converging: an ill-conditioned problem can creep for millions of iterations. The gradient norm and an independent method or known minimizer confirm the answer."
+  },
+  {
+    "kind": "choice",
+    "id": "ai-opt-controller",
+    "prompt": "An agent proposes new PI gains for the live CRAH loops that are \"30% faster\". What has to happen before they reach the BMS?",
+    "options": ["Nothing: faster is better", "Simulation with saturation, dead time and disturbances, a stability-margin check on the closed-loop eigenvalues, and a reviewed change with rollback", "Try them on one CRAH overnight and see"],
+    "answer": 1,
+    "concepts": ["feedback-control"],
+    "transfer": true,
+    "explain": "Faster usually means less margin, and the BMS upgrade showed how that ends. Test in simulation, check how far the poles sit from the unit circle, and go through change control with a rollback plan."
   }
 ]

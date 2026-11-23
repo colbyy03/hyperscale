@@ -1,0 +1,22 @@
+{
+  "id": "calculus-optimization/huber-regression",
+  "type": "code",
+  "language": "python",
+  "title": "Robust calibration with the Huber loss",
+  "prompt": "A sensor calibration fit is wrecked by a few wild readings (a logger glitch, a sensor touching a hot pipe). The Huber loss is quadratic for small residuals and linear for large ones, so outliers pull far less: ρ(r) = r²/2 when |r| ≤ δ, and δ(|r| − δ/2) otherwise.\n\n1. `huber_loss_grad(w, X, y, delta)` returns `(loss, grad)` for the mean loss (1/n) Σᵢ ρ(xᵢ·w − yᵢ). Its gradient is Xᵀψ(r)/n with ψ(r) = clip(r, −δ, δ). No loops.\n2. `fit_huber(X, y, delta, iters=3000)` runs gradient descent from w = 0 with step 1/L, where L is the largest eigenvalue of XᵀX/n (the Huber loss never curves more than least squares does), and returns w.",
+  "concepts": ["jacobians-hessians", "gradient-descent", "convexity"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "Differentiate ρ piece by piece: what is ρ′(r) inside the band |r| ≤ δ, and what is it outside?",
+    "ρ′(r) = r inside and δ·sign(r) outside, which is exactly clip(r, −δ, δ). The chain rule through r = Xw − y gives Xᵀψ(r)/n. ρ″ is 1 inside and 0 outside, so the Hessian is at most XᵀX/n: step 1/L with L = λ_max(XᵀX/n) is safe.",
+    "r = X @ w - y; a = np.abs(r); loss = np.mean(np.where(a <= delta, 0.5 * r**2, delta * (a - 0.5 * delta))); grad = X.T @ np.clip(r, -delta, delta) / len(y). fit: L = np.linalg.eigvalsh(X.T @ X / n).max(); repeat w = w - huber_loss_grad(w, X, y, delta)[1] / L."
+  ],
+  "misconceptions": {
+    "huber-gradient-clip": "The Huber loss's derivative is clip(r, −δ, δ): residuals beyond δ contribute a fixed pull of size δ, which is why outliers can't dominate the fit."
+  },
+  "sources": ["nocedal2006-numerical-optimization", "boyd2004-convex-optimization"]
+}

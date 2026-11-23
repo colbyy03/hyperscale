@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/closed-loop-eigs",
+  "type": "code",
+  "language": "python",
+  "title": "Is this control loop stable?",
+  "prompt": "A CRAH's supply-air loop, sampled every `ts` seconds, behaves like x₍ₖ₊₁₎ = a·xₖ + b·u₍ₖ₋delay₎: x is the temperature deviation, u the valve signal, and `delay` the dead time in samples. A PI controller sets uₖ = kp·eₖ + ki·sₖ with eₖ = −xₖ (setpoint 0) and an integral sₖ₊₁ = sₖ + ts·eₖ.\n\n1. `closed_loop_matrix(a, b, kp, ki, ts, delay)` returns M with zₖ₊₁ = M zₖ for the state z = (x, s) when delay = 0, and z = (x, s, u₍ₖ₋₁₎, …, u₍ₖ₋delay₎) otherwise: the delayed valve signals ride along in a shift register, newest first.\n2. `spectral_radius(M)` returns the largest |eigenvalue|, and `period(M, ts)` the oscillation period in seconds of the eigenvalue with the largest magnitude (infinity if it's real).\n3. `max_stable_ki(a, b, kp, ts, delay, hi=1.0)` returns the largest integral gain in (0, hi] that keeps the loop stable (spectral radius < 1), by bisection. Assume small positive ki is stable and `hi` isn't.",
+  "concepts": ["feedback-control", "eigendecomposition"],
+  "difficulty": 0.55,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "control"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "Write each new state entry in terms of the old ones. With a delay, the plant sees the valve signal from `delay` steps ago, which therefore has to be part of the state.",
+    "Row x: a in the x column and b in the column of the oldest stored u (or, with no delay, substitute uₖ = −kp·x + ki·s directly: a − b·kp and b·ki). Row s: −ts and 1. The newest stored u is −kp·x + ki·s; each older slot copies the slot before it. Stability means every |eigenvalue| < 1; the period follows from the angle of the dominant eigenvalue, 2π/|angle| samples.",
+    "For delay ≥ 1: n = 2 + delay; M[0, 0] = a; M[0, n - 1] = b; M[1, 0] = -ts; M[1, 1] = 1; M[2, 0] = -kp; M[2, 1] = ki; M[i, i - 1] = 1 for i = 3 … n − 1. period: lam = eigvals[np.argmax(np.abs(eigvals))]; return 2 * np.pi / abs(np.angle(lam)) * ts if abs(np.angle(lam)) > 1e-12 else np.inf."
+  ],
+  "misconceptions": {
+    "deadtime-in-state": "Dead time adds states: the valve signals still in transit are part of the loop's memory, and they're what makes aggressive gains unstable.",
+    "spectral-radius-complex": "A discrete-time loop is stable when every eigenvalue has magnitude below 1; for complex pairs that's |λ|, not the real part."
+  },
+  "sources": ["brunton-kutz-2022", "nocedal2006-numerical-optimization"]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/bounded-least-squares",
+  "type": "code",
+  "language": "python",
+  "title": "Least squares inside bounds",
+  "prompt": "Estimate how far each of four CRAH valves is open (each between 0 and 1) from flow measurements: minimize ½‖Aw − b‖²/n subject to lo ≤ w ≤ hi, elementwise.\n\n1. `bounded_lsq(A, b, lo, hi, iters=5000)` runs projected gradient from the midpoint of the box: a gradient step with step size 1/L (L = largest eigenvalue of AᵀA/n), then clipping into the bounds. Return w.\n2. `kkt_residual(A, b, w, lo, hi)` returns the largest violation of the box KKT conditions at w, with g the gradient: for coordinates strictly inside the box, |gᵢ|; at a lower bound, max(0, −gᵢ); at an upper bound, max(0, gᵢ). (Treat |wᵢ − bound| < 1e-9 as \"at\" the bound.) Zero means optimal.",
+  "concepts": ["constrained-optimization", "gradient-descent"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "sklearn"], "requireVectorized": false, "timeoutMs": 10000 },
+  "hints": [
+    "A gradient step can push a coordinate outside its bounds. What's the closest point inside a box, coordinate by coordinate?",
+    "Projection onto a box is clipping each coordinate to its interval. At the optimum, a coordinate strictly inside has zero gradient; one stuck at its lower bound must have gᵢ ≥ 0 (decreasing it would help but isn't allowed) and one at its upper bound gᵢ ≤ 0.",
+    "w = np.clip((lo + hi) / 2, lo, hi); L = np.linalg.eigvalsh(A.T @ A / n).max(); repeat w = np.clip(w - (A.T @ (A @ w - b) / n) / L, lo, hi). KKT: g = A.T @ (A @ w - b) / n; at_lo = np.abs(w - lo) < 1e-9; at_hi = np.abs(w - hi) < 1e-9; inside = ~(at_lo | at_hi); return max of |g[inside]|, max(0, -g[at_lo]), max(0, g[at_hi])."
+  ],
+  "misconceptions": {
+    "clip-after-fit": "Clipping an unconstrained least-squares solution into the box is generally not the constrained optimum: once one coordinate is fixed at a bound, the others should move to compensate.",
+    "box-kkt-signs": "At a lower bound the gradient must be non-negative, at an upper bound non-positive: the objective would improve only by leaving the box."
+  },
+  "sources": ["boyd2004-convex-optimization", "nocedal2006-numerical-optimization"]
+}

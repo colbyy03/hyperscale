@@ -1,0 +1,78 @@
+---
+id: calculus-optimization/ai-workflow
+title: How I'd do this with AI tools
+minutes: 12
+concepts: [gradient-descent, momentum-adaptive, feedback-control]
+sources: [nocedal2006-numerical-optimization, bottou2018-optimization, astrom-murray2021-feedback-systems]
+cards: [ai-optimization-checks, ai-loss-scaling, ai-converged-claim, ai-controller-deploy]
+---
+
+<Situation from="Mara, site lead">
+The team asks a coding assistant for optimizers, loss functions and now controller code. Last week one "fixed" a diverging training run by cutting the learning rate tenfold, so training took ten times longer. Another said "just use Adam" for a six-parameter calibration. And someone has asked whether an agent could tune the CRAH loops directly on the live BMS. Where do we draw the lines?
+</Situation>
+
+## Every claim in this module is checkable
+
+Optimization and control are unusually friendly to verification, because nearly every result comes with a test you can run in seconds, independent of how the code was written:
+
+| Claim | Check to ask for |
+|---|---|
+| "Here's the gradient (or Jacobian)" | Central differences at a random point, relative error below 10⁻⁶ (Lesson 1) |
+| "The optimizer is implemented correctly" | A quadratic with a known minimizer: converges to A⁻¹b, at the predicted rate; Adam's first step is about lr·sign(g) |
+| "It converged" | The gradient norm, the loss on a log scale, and agreement with a second method (Newton against L-BFGS, say) |
+| "This learning rate is best" | A sweep over learning rates on a log grid, on more than one seed, not a single run |
+| "Here's the constrained optimum" | Feasibility plus the KKT conditions: multiplier signs and complementary slackness (Lesson 6) |
+| "These PI gains are better" | Closed-loop eigenvalues with margin below 1, plus a simulation with saturation, dead time and a disturbance (Lesson 7) |
+
+Ask the agent to produce these checks along with the code, and read the checks first.
+
+## What to watch for
+
+These are the slips that show up in AI-written optimization code, mostly because the code looks standard:
+
+- **Loss scaling.** A gradient derived for the summed loss used with the mean loss (or the reverse) is off by a factor of n: the code runs, and the effective learning rate is wrong by that factor. Lesson 1's checker catches it immediately.
+- **The default optimizer.** "Use Adam" is reasonable advice for neural networks and poor advice for a small smooth problem, where L-BFGS or Newton converges in a handful of iterations (Lesson 5). Ask which method suits the problem's size and noise.
+- **Learning-rate folklore.** Cutting the learning rate stops divergence and also slows everything down. Diagnose first: is it the step size (2/L), the conditioning (standardize), or the gradient (check it)?
+- **Weight decay with Adam.** An L2 penalty folded into the gradient isn't AdamW; ask for decoupled decay explicitly.
+- **Constraints handled afterwards.** Clipping a solution into bounds after an unconstrained fit isn't the constrained optimum; ask for projected gradient or a constrained solver, and the KKT check.
+- **Controllers without guards.** A PI loop with no output limits, no anti-windup or the wrong action sign for a cooling valve will look fine in a short test and fail in the first saturation.
+
+<KeyIdea title="The line for live equipment">
+An agent can propose controller gains and write controller code. Nothing it produces goes onto the live BMS until it has passed a simulation with saturation, dead time and disturbances, a stability-margin check, and a human-reviewed change with a rollback plan. The simulator in this module's build is where that testing happens.
+</KeyIdea>
+
+## A prompt worth keeping
+
+For this module's build, a first prompt might look like this:
+
+```text
+Context: uv project, Python 3.14, hyperscale-sim 0.2 (pip install from the
+course repo), numpy 2.4, pytest 9.
+Task: implement controller/supervisor.py per docs/spec.md: a supervisory
+controller called every 60 s with hall.read() observations that returns
+set_controls() arguments (t_sa_sp, chws_sp).
+Rules:
+- PI loop resetting t_sa_sp from the hottest top-of-rack inlet (target 26.0 C),
+  with output limits 18-27 C, a rate limit of 0.5 C per call, and anti-windup.
+  Error sign: inlet above target means LOWER the supply setpoint.
+- Write tests first: anti-windup (a long saturation followed by recovery),
+  rate limit, limits, and a closed-loop simulation of one scenario that keeps
+  every inlet below 27 C.
+- Report energy and minutes above 27 C for all four scenarios against the
+  fixed baseline, in one table. Don't tune gains on the scoring scenarios.
+- Run `uv run pytest -q` and show the output; don't change tests to pass.
+```
+
+It fixes the interface, the action sign, the limits and the anti-windup, and it keeps a clean evaluation by naming the scenarios the gains mustn't be tuned on.
+
+<Craft title="Review checklist for AI-written optimization and control code">
+- Are gradients checked numerically, with the loss's scaling (sum or mean) stated?
+- Is the method suited to the problem (size, smoothness, noise), and is convergence shown on a log scale?
+- Do learning-rate and optimizer claims rest on a sweep, with the same tuning budget for every method?
+- Are constraints enforced by the method, with feasibility and KKT checked?
+- Do controllers have limits, anti-windup and the right action sign, and were they tested in simulation with a stability margin before anything touches live equipment?
+</Craft>
+
+<Check items={["ai-opt-gradient", "ai-opt-sum-mean", "ai-opt-converged", "ai-opt-controller"]} />
+
+That's Module 3. The checkpoint is next, and the build puts your first controller in charge of the simulated data hall.

@@ -1,0 +1,82 @@
+---
+id: calculus-optimization/feedback
+title: "Feedback as iteration: a PI controller"
+minutes: 40
+concepts: [feedback-control, eigendecomposition]
+sources: [astrom-murray2021-feedback-systems, skogestad2003-simc, brunton-kutz-2022]
+cards: [pi-law, integral-removes-offset, closed-loop-iteration, deadtime-in-state, fopdt-step-test, simc-tuning, integrator-windup, controller-action, z-plane-s-plane, controller-gain-limit]
+---
+
+<Situation from="Dev, controls engineer">
+Since the BMS firmware upgrade, the chilled-water valve on CRAH 2-3 has been hunting: open, closed, open again, about every four minutes, with the supply air swinging ±1.5 °C. The vendor's release notes say the new default PI settings are "optimized for faster response". Before I call them, I'd like to be able to show, with numbers, what's wrong.
+</Situation>
+
+<Predict
+  id="faster-integral"
+  question="The upgrade cut the supply-air loop's integral time from 90 s to 22 s: four times as much integral action, meant to correct errors faster. The loop has about 30 s of dead time. What do you expect?"
+  options={["Tighter control: errors are removed four times faster", "A slow, sustained oscillation: the loop is now unstable, and only the valve's travel limits stop the swings growing", "No visible change: the valve can't move that fast anyway"]}
+  answer={1}
+  explain="With dead time in the loop, the extra integral action arrives too late and overcorrects. The closed loop is a linear iteration, and its dominant eigenvalues moved from inside the unit circle (magnitude 0.88) to just outside (1.016), a growing oscillation with a period of 236 s. The valve saturating at 0% and 100% caps the growth, leaving the four-minute hunt Dev sees."
+/>
+
+## A controller is an iteration that runs a machine
+
+Every 10 seconds the BMS reads the supply-air temperature, compares it with the setpoint and moves the valve. The coil responds, and 10 seconds later the controller reads again. Controller and plant together form a discrete-time dynamical system, $z_{k+1} = M z_k$ near the operating point: exactly Module 2's linear dynamics. So the questions that matter (does it settle, does it ring, does it run away?) are questions about the eigenvalues of $M$.
+
+## The PI controller
+
+The workhorse of building and data-center control is the **PI controller**:
+
+$$
+u_k = u_0 + K_p\, e_k + K_i\, s_k, \qquad s_{k+1} = s_k + T_s\, e_k
+$$
+
+where $e_k$ is the error and $s_k$ its running integral. The proportional term reacts to the present error. The integral term accumulates past errors, and it's what removes the steady-state offset: a proportional-only controller needs a nonzero error to hold the valve anywhere other than $u_0$, so it settles with the temperature permanently off setpoint. Derivative action, the D in PID, is rarely worth it on thermal loops, where it mostly amplifies sensor noise.
+
+One sign convention matters for cooling. Opening a chilled-water valve makes the air *colder*, so the controller must open the valve when the air is too *warm*: the error is measurement − setpoint, the reverse of a heating loop. Get it backwards and the loop drives itself to a limit.
+
+## A model you can measure
+
+To analyse a loop you need a model of the plant, and for most HVAC loops a **first-order-plus-dead-time** model is enough: a gain $K$ (the final change in temperature per unit of valve), a time constant $\tau$ (how long the response takes to reach 63% of that change) and a dead time $\theta$ (how long before anything happens at all). You get all three from one step test: bump the valve with the loop in manual and record the temperature. Dev's CRAH comes out at $K$ = 8 °C per unit of valve, $\tau$ = 90 s and $\theta$ = 30 s.
+
+Sampled every $T_s$ = 10 s, the plant is $x_{k+1} = a\,x_k + b\,u_{k-3}$, with $a = e^{-T_s/\tau}$ and a three-sample delay. The delayed valve signals are still "in the pipe", so they belong in the state: the closed-loop state is the temperature, the integral and the three valve signals in transit, and $M$ is 5 × 5.
+
+<CodeExercise id="calculus-optimization/closed-loop-eigs" />
+
+The numbers answer Dev's question. With the commissioning tuning (integral time 90 s), the spectral radius is 0.883: disturbances shrink by about 12% every 10-second sample. With the upgrade's integral time of 22.5 s it's 1.016: unstable, with a 236 s oscillation period. The loop stays stable only while the integral gain is below 3.45 times the commissioning value.
+
+<Viz name="PILoop" />
+
+## Tuning without trial and error
+
+Skogestad's **SIMC rules** turn the step-test model into PI settings, with one choice to make, the desired closed-loop time constant $\tau_c$:
+
+$$
+K_p = \frac{\tau}{K(\tau_c + \theta)}, \qquad T_i = \min\big(\tau,\ 4(\tau_c + \theta)\big), \qquad K_i = \frac{K_p}{T_i}
+$$
+
+Choosing $\tau_c = \theta$ gives a fast loop with a good margin of robustness. For Dev's CRAH that's $K_p$ = 0.19 and $T_i$ = 90 s, the commissioning values. The rules also make the fundamental limit explicit: dead time caps how fast any loop can safely be, because a correction can't take effect before the delay has passed.
+
+## Saturation and windup
+
+Valves stop at fully closed and fully open. When a load surge demands more cooling than the coil can deliver, the valve sits at 100% and the error persists, and the integral keeps growing. When the surge ends, all that accumulated integral has to unwind before the valve can close again, so the supply air plunges far below setpoint. That's **integrator windup**. In the explorer, choose "No anti-windup" and watch the drop after the surge.
+
+The cure, **anti-windup**, is to stop integrating while the output is saturated in the direction the error is pushing (conditional integration), or to bleed the integral back towards the saturated value (back-calculation). It's a few lines of code, and every production controller needs it.
+
+<CodeExercise id="calculus-optimization/pi-anti-windup" />
+
+<Bridge>
+Your vibrations and control courses analysed stability in the s-plane: poles in the left half-plane are stable. Sampling maps the s-plane to the z-plane through $z = e^{sT_s}$, which sends the left half-plane inside the unit circle, so the same pole-placement intuition carries over, and a pole's angle gives the ringing frequency. Dead time is pure phase lag, and phase lag is what turns a well-damped servo into an oscillating one. There's an optimization echo too: a controller's gain has a stability limit set by the plant's dynamics, just as gradient descent's step size has a limit of 2/L set by the loss's curvature.
+</Bridge>
+
+<Craft title="Control habits worth keeping">
+- Run a step test and fit K, τ and θ before tuning anything; tune from the model, not by feel.
+- Choose robustness over speed (τc ≥ θ), especially on loops with dead time.
+- Every controller needs output limits and anti-windup; check the action sign on cooling loops.
+- Rate-limit setpoint changes and log the controller's output alongside the measurement, so hunting is visible.
+- Test new tuning in simulation before it reaches a live BMS: the module build gives you the simulator to do exactly that.
+</Craft>
+
+<Check items={["fb-offset", "fb-action", "fb-stability", "fb-deadtime", "fb-period", "fb-simc", "fb-windup", "fb-zplane"]} />
+
+Next: how to use AI tools on optimization and control work without letting them hand you a wrong answer.

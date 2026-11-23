@@ -1,0 +1,147 @@
+---
+title: Your first controller
+hours: 8
+sources: [skogestad2003-simc, astrom-murray2021-feedback-systems, femp2024-dc-best-practices, nocedal2006-numerical-optimization, energyplus96-eng-ref-chillers]
+---
+
+<Situation from="Mara, site lead">
+In your first week you tuned the data hall by hand in the Control Room. Now I want a controller that does it all day, every day: one that adapts the plant to the weather and the load, saves energy whenever there's margin, and never lets a rack inlet go above 27 °C. And before we trust anything with the plant, I want to see how well we can model the chillers.
+</Situation>
+
+## What you'll build
+
+A small Python package, `first-controller`, in two parts.
+
+**Part A, about 2 hours: calibrate a chiller model.** Fit a five-parameter physical model of chiller power to noisy data by nonlinear least squares, with a hand-derived Jacobian that you check numerically. Then find out which parameters the data can't pin down, and fix the model.
+
+**Part B, about 6 hours: a supervisory controller.** Two PI loops with limits, rate limits and anti-windup, called every minute with the simulator's sensor readings:
+
+1. a **chilled-water reset**: raise the chilled-water supply setpoint while the most-open CRAH valve has headroom, and lower it when a valve runs out of travel (warmer chilled water makes the chillers more efficient and extends free cooling);
+2. a **containment-pressure reset**: lower the containment differential-pressure setpoint, and with it fan power, while the hottest top-of-rack inlet has margin below its target.
+
+Score it on all four simulated days against fixed setpoints, then try to break it.
+
+## Get set up
+
+Install the course simulator (version 0.2 or later) and the numerical stack:
+
+```bash
+uv add "hyperscale-sim @ git+https://github.com/colbyy03/hyperscale#subdirectory=python/sim" numpy scipy
+```
+
+## Part A: calibrate the chiller model
+
+Generate a dataset from the simulator's chiller model, with 1% meter noise:
+
+```python
+import numpy as np
+from hyperscale_sim import Params
+from hyperscale_sim.hall import chiller_power
+
+p = Params()
+rng = np.random.default_rng(3)
+n = 600
+q = rng.uniform(0.3, 1.0, n) * p.q_ch  # one chiller's cooling duty, W
+t_chw = rng.uniform(14, 20, n)  # leaving chilled water, °C
+t_cw = rng.uniform(20, 32, n)  # leaving condenser water, °C
+power = np.array([chiller_power(p, qi, 1, a, b) for qi, a, b in zip(q, t_chw, t_cw)])
+power *= 1 + rng.normal(0, 0.01, n)  # 1% meter noise
+```
+
+Fit this model, with parameters η (a Carnot efficiency fraction), the evaporator and condenser approach temperatures $a_e$ and $a_c$, and a part-load curve with coefficients $c_1$ and $c_2$:
+
+$$
+P = Q_{\text{cap}}\,\frac{T_c - T_e}{\eta\, T_e}\,\big((1 - c_1 - c_2) + c_1\,\text{PLR} + c_2\,\text{PLR}^2\big)
+$$
+
+where $T_e = T_{\text{chw}} + 273.15 - a_e$ and $T_c = T_{\text{cw}} + 273.15 + a_c$ (in kelvin), $\text{PLR} = Q/Q_{\text{cap}}$ and $Q_{\text{cap}}$ = `p.q_ch`.
+
+1. Derive the Jacobian of the residuals by hand and check it against central differences (Lesson 1's checker), before passing it to `scipy.optimize.least_squares`.
+2. Fit, and report the residual RMS and the parameters. Expect a surprise: our reference fit matched the data to its 1% noise while returning approach temperatures of −12.9 K and +15.9 K, which are physically absurd.
+3. Explain it with the Gauss–Newton matrix JᵀJ: report its condition number (about 3 × 10¹⁰ in our run) and the eigenvector of its smallest eigenvalue. Show which combination of parameters the data actually determine.
+4. Fix the model so every parameter is identifiable (reparameterize, or fix a parameter from a datasheet), refit, and compare.
+
+## Part B: the supervisory controller
+
+The simulator runs its own fast loops (valves holding the supply air, fans holding the containment pressure, chiller staging). Your controller sits on top and moves their setpoints, once a minute:
+
+```python
+from hyperscale_sim import SCENARIOS, Hall
+
+
+def evaluate(make_controller, scenario):
+    """One simulated day; make_controller() returns a callable obs -> set_controls kwargs (or None)."""
+    hall = Hall(scenario, dt=10.0)
+    controller = make_controller() if make_controller else None
+    for minute in range(24 * 60):
+        if controller:
+            hall.set_controls(**controller(hall.read()))
+        hall.run(60)
+    return hall.metrics.summary()  # cooling_mwh, pue, violation_min, max_inlet, ...
+```
+
+`hall.read()` returns every sensor, including `pod1.valve` … `pod4.valve` (CRAH chilled-water valve positions, 0 to 1) and `pod1.inlet_top` … `pod4.inlet_top` (top-of-rack inlet temperatures, °C).
+
+Requirements:
+
+- A reusable `PI` class: positional form, output limits, a rate limit on each change, conditional-integration anti-windup, and an explicit action sign. Unit-test each behaviour on a toy plant before connecting it to the hall.
+- **Chilled-water reset**: measurement = the most-open valve, target 0.85, output = `chws_sp`, limited to 12–20 °C, at most 0.25 K per minute.
+- **Containment-pressure reset**: measurement = the hottest top-of-rack inlet, target 26.0 °C, output = `dp_sp`, limited to 1.5–5 Pa, at most 0.1 Pa per minute. Get the action signs right: a valve near its limit must *lower* the chilled-water setpoint, and inlet margin must *lower* the pressure setpoint.
+- **Tune from models, not by feel.** For each loop, run a step test on the simulator (step the setpoint, hold everything else, record the response), fit a first-order-plus-dead-time model, tune with SIMC, and report the closed-loop poles and their margin from the unit circle.
+- Leave the supply-air setpoint at 24 °C, and explain why: try raising it and look at IT power (the server-fan trap from Induction lesson 3).
+- Tests (pytest) for the PI class, the controller's interface, and one closed-loop day with zero violations.
+
+## Evaluate it honestly
+
+Tune on the summer day only, and report all four days in one table: cooling energy, PUE, minutes above 27 °C and the hottest inlet, for
+
+1. the simulator's fixed default setpoints;
+2. the best *fixed* setpoints from a grid search over `chws_sp` and `dp_sp` on the summer day;
+3. your controller;
+4. your best manual run from the Control Room, for the scenario you played.
+
+For calibration, our reference controller (the two PI resets above) used 35.2 MWh of cooling energy over the four days, against 37.7 MWh for the fixed defaults and 35.7 MWh for the best fixed setpoints (chilled water at 18 °C, 2 Pa), with no minute above 27 °C on any day. It lost narrowly to the best fixed setpoints on the summer day they were tuned for, and won on the other three: adapting matters most on the days you didn't tune for.
+
+Then try to break it: fail a CRAH for three hours on the heat-wave day (`hall.fail_crah(pod, units=1)`, then `hall.restore_crah(pod)`), and make the hottest pod's top-inlet sensor read 1.5 K low (for pod 2, `hall.set_sensor_fault("pod2.inlet_top", bias=-1.5)`). Report what happens, and what guard you'd add.
+
+## Suggested structure
+
+```text
+first-controller/
+  pyproject.toml  uv.lock  README.md
+  src/first_controller/
+    chiller_fit.py   # Part A: model, Jacobian, fit, identifiability
+    pi.py            # the PI class
+    supervisor.py    # the two resets
+    evaluate.py      # scenarios, baselines, the results table
+  tests/
+    test_chiller_fit.py  test_pi.py  test_supervisor.py
+  report/
+    report.qmd       # fit, step tests and tuning, results, failure tests
+```
+
+## Milestones
+
+1. **Part A.** Data, model and Jacobian (checked), fit, the identifiability analysis, the fixed model.
+2. **The PI class**, test-first: limits, rate limit, anti-windup, action sign.
+3. **Step tests and tuning** for both loops, with the closed-loop poles.
+4. **Evaluation** on the four days against the baselines.
+5. **Failure tests** and a short write-up.
+
+## Rubric
+
+| Area | Meets | Strong |
+|---|---|---|
+| Chiller model | Fits to the noise level with a checked Jacobian; finds and explains the unidentifiable combination | Reports parameter uncertainty from JᵀJ for the fixed model, and compares Gauss–Newton with Levenberg–Marquardt |
+| Controller | Two tested PI resets with limits, rate limits and anti-windup; zero violations on all four days | Beats the best fixed setpoints on at least three of the four days, and explains why it loses where it does |
+| Tuning | Step tests, FOPDT fits and SIMC gains, with closed-loop poles inside the unit circle | Shows the stability margin by finding the gain at which each loop goes unstable in simulation |
+| Honesty | Tuned on one day, evaluated on all four, with every baseline in one table | Failure tests reported with a concrete guard (for example, a safety cap or sensor cross-check) and its effect |
+| Code quality | Typed, tested, ruff and type-checker clean | Controller settings in a frozen config; the evaluation runs from one command |
+
+## Using AI tools
+
+Use them the way Lesson 8 describes: specify the interface, the action signs, the limits and the anti-windup in the prompt; write the PI tests yourself; and never let an agent tune the gains on the days you score. In this project the line for live equipment is easy to hold, because everything runs in the simulator. Keep a short note in the README of what you delegated and what you had to fix.
+
+## When you're done
+
+Push it to a GitHub repository named `first-controller`. The simulator's leaderboard arc continues from here: later modules forecast the load, detect faults, optimize the plant and train an RL agent, and every one of them has to beat this controller.

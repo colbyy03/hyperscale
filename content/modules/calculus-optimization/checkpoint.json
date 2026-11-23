@@ -1,0 +1,265 @@
+{
+  "passThreshold": 0.85,
+  "delayedThreshold": 0.8,
+  "allowTestOut": false,
+  "items": [
+    {
+      "kind": "numeric",
+      "id": "cp3-softmax-grad",
+      "prompt": "A classifier's softmax probabilities are (0.5, 0.3, 0.2) and the true class is the second. What is the second component of the cross-entropy gradient with respect to the logits?",
+      "answer": -0.7,
+      "tolerance": 0.01,
+      "concepts": ["jacobians-hessians"],
+      "critical": true,
+      "explain": "The gradient is p − y = (0.5, 0.3 − 1, 0.2) = (0.5, −0.7, 0.2)."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-jacobian-shape",
+      "prompt": "f maps ℝ⁴ to ℝ². What is the shape of its Jacobian?",
+      "options": ["4 × 2", "2 × 4", "4 × 4"],
+      "answer": 1,
+      "concepts": ["jacobians-hessians"],
+      "critical": true,
+      "explain": "One row per output and one column per input: 2 × 4."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-reverse-cost",
+      "prompt": "A scalar loss depends on a million weights. What does reverse-mode automatic differentiation cost to compute the full gradient?",
+      "options": ["About a million evaluations of the loss", "A small constant multiple of one evaluation of the loss", "About a million squared"],
+      "answer": 1,
+      "concepts": ["automatic-differentiation"],
+      "critical": true,
+      "explain": "One forward pass recording the computation and one backward pass give every partial derivative of a scalar output, independent of the number of inputs. The price is the memory for the stored intermediates."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-step-limit",
+      "prompt": "A quadratic loss's Hessian has eigenvalues between 0.1 and 25. Gradient descent converges only for step sizes below what value?",
+      "answer": 0.08,
+      "tolerance": 0.01,
+      "concepts": ["step-size-conditioning"],
+      "critical": true,
+      "explain": "Every |1 − ηλᵢ| < 1 requires η < 2/λ_max = 2/25 = 0.08."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-momentum-speedup",
+      "prompt": "At κ = 400, roughly how many times fewer iterations does tuned heavy-ball momentum need than gradient descent with its best fixed step?",
+      "options": ["About 2", "About 20", "About 400"],
+      "answer": 1,
+      "concepts": ["momentum-adaptive"],
+      "explain": "Gradient descent's iteration count grows like κ and tuned momentum's like √κ, so the ratio is about √400 = 20."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-adam-bias",
+      "prompt": "What does Adam's bias correction do?",
+      "options": ["Removes outliers from the gradient", "Compensates for the running averages starting at zero, so early steps have the right size (the first is about the learning rate in each coordinate)", "Adds weight decay"],
+      "answer": 1,
+      "concepts": ["momentum-adaptive"],
+      "explain": "m and s start at zero, so early averages are biased towards zero; dividing by 1 − βᵗ removes that bias."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-newton-invariant",
+      "prompt": "You refit a logistic regression with one feature measured in kilowatts instead of watts. What happens to Newton's method and to gradient descent?",
+      "options": ["Both are unaffected", "Newton's iterations are unchanged (it's affine invariant); gradient descent's conditioning, and so its speed, changes", "Both slow down by a factor of 1,000"],
+      "answer": 1,
+      "concepts": ["newton-methods", "step-size-conditioning"],
+      "critical": true,
+      "explain": "Newton's step H⁻¹g transforms along with a linear change of variables. Gradient descent's step doesn't, so rescaling a feature changes κ."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-armijo",
+      "prompt": "Backtracking line search on f(x) = x² from x = 1, direction d = −2 (the negative gradient), c = 10⁻⁴, starting at α = 1 and halving. Which α is accepted first?",
+      "answer": 0.5,
+      "tolerance": 0.01,
+      "concepts": ["newton-methods"],
+      "explain": "α = 1 lands on x = −1 with f = 1, which isn't below 1 − 10⁻⁴ × 4 = 0.9996. α = 0.5 lands on x = 0 with f = 0, which is."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-shadow-price",
+      "prompt": "At the optimal chiller dispatch, the multiplier on the total-load constraint is 0.16 kW per kW. What does it mean?",
+      "options": ["The plant's average power per kW of cooling", "About 0.16 kW of extra chiller power for each additional kW of cooling load, at the margin", "The fraction of load on the most efficient chiller"],
+      "answer": 1,
+      "concepts": ["constrained-optimization"],
+      "critical": true,
+      "explain": "A multiplier is the sensitivity of the optimal value to its constraint: a shadow price. Marginal, not average: the average power per kW of cooling is different."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-slackness",
+      "prompt": "In the optimal dispatch, chiller 2 runs at 1,200 kW, well inside its 560–2,800 kW range. What are the multipliers on its two limits?",
+      "options": ["Both zero, by complementary slackness", "Both equal to λ", "One positive and one negative"],
+      "answer": 0,
+      "concepts": ["constrained-optimization"],
+      "explain": "A limit that isn't touched can't be costing anything: μᵢgᵢ = 0 forces its multiplier to zero."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-period",
+      "prompt": "A control loop sampled every 30 s has dominant closed-loop eigenvalues 0.95·e^(±0.3i). What is its oscillation period, in seconds?",
+      "answer": 628.3,
+      "tolerance": 0.02,
+      "unit": "s",
+      "concepts": ["feedback-control"],
+      "explain": "2π/0.3 ≈ 20.9 samples per cycle, times 30 s ≈ 628 s. With |λ| = 0.95 the oscillation decays by 5% per sample."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-pump-loop",
+      "prompt": "A chilled-water pump's differential-pressure loop started hunting after someone shortened its integral time. Which analysis shows whether that change caused it?",
+      "options": ["Raise the proportional gain and watch", "Run a step test, fit a first-order-plus-dead-time model, and compare the closed-loop poles with the old and new settings", "Add a second pressure sensor"],
+      "answer": 1,
+      "concepts": ["feedback-control", "eigendecomposition"],
+      "transfer": true,
+      "explain": "Same method as the CRAH valve: a measured model plus the closed-loop eigenvalues show whether the new integral action moved poles out to (or beyond) the unit circle."
+    },
+    {
+      "kind": "explain",
+      "id": "cp3-explain-conditioning",
+      "prompt": "Explain why gradient descent is slow on ill-conditioned problems, and describe three different ways to fix it.",
+      "concepts": ["step-size-conditioning", "momentum-adaptive", "newton-methods"],
+      "rubric": ["The error along each Hessian eigenvector shrinks by 1 − ηλ per step; stability caps η at 2/L, so the flattest direction shrinks by only about 1 − 1/κ and iterations grow like κ", "Preconditioning: standardize features (or use diagonal/adaptive scaling such as Adam) to reduce κ", "Momentum: tuned heavy ball or Nesterov brings the dependence down to √κ", "Second-order methods: Newton (affine invariant, quadratic convergence) or quasi-Newton (BFGS/L-BFGS) use curvature directly"],
+      "explain": "The geometry sets the speed; fix the geometry, add memory, or use curvature."
+    },
+    {
+      "kind": "exercise",
+      "id": "calculus-optimization/huber-regression"
+    }
+  ],
+  "delayedItems": [
+    {
+      "kind": "numeric",
+      "id": "cp3-softmax-grad-b",
+      "prompt": "A classifier's softmax probabilities are (0.1, 0.6, 0.3) and the true class is the third. What is the second component of the cross-entropy gradient with respect to the logits?",
+      "answer": 0.6,
+      "tolerance": 0.01,
+      "concepts": ["jacobians-hessians"],
+      "critical": true,
+      "explain": "p − y = (0.1, 0.6, 0.3 − 1) = (0.1, 0.6, −0.7): gradient descent lowers the wrongly favoured second logit."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-chain-shape-b",
+      "prompt": "J_f is 3 × 5 and J_g is 5 × 2. What is the Jacobian of h(x) = f(g(x)), and its shape?",
+      "options": ["J_g J_f, 2 × 3", "J_f J_g, 3 × 2", "J_f J_g, 5 × 5"],
+      "answer": 1,
+      "concepts": ["jacobians-hessians", "derivatives-chain-rule"],
+      "critical": true,
+      "explain": "The chain rule multiplies in composition order, outermost first: (3 × 5)(5 × 2) = 3 × 2."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-mode-choice-b",
+      "prompt": "You need the full Jacobian of a simulation with 3 input parameters and 1,000 outputs. Which mode of automatic differentiation fits?",
+      "options": ["Forward mode: 3 passes", "Reverse mode: 1,000 passes", "Either: the costs are equal"],
+      "answer": 0,
+      "concepts": ["automatic-differentiation"],
+      "critical": true,
+      "explain": "Forward mode costs one pass per input, reverse mode one pass per output. Few inputs and many outputs favour forward mode."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-best-step-b",
+      "prompt": "A quadratic's Hessian has eigenvalues between 1 and 9. What is the best fixed step size for gradient descent?",
+      "answer": 0.2,
+      "tolerance": 0.01,
+      "concepts": ["step-size-conditioning"],
+      "critical": true,
+      "explain": "η = 2/(L + μ) = 2/10 = 0.2 balances the two extremes, giving a rate of (κ − 1)/(κ + 1) = 0.8 per step."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-ringing-b",
+      "prompt": "With momentum β = 0.99, the training loss falls while oscillating strongly. What's going on?",
+      "options": ["The learning rate is too small", "Too little damping: the iteration has complex eigenvalues of magnitude about √β, so the iterates ring; reduce β", "The data are shuffled badly"],
+      "answer": 1,
+      "concepts": ["momentum-adaptive"],
+      "explain": "β close to 1 is a nearly frictionless heavy ball; its modes decay at only about √β ≈ 0.995 per step."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-adamw-b",
+      "prompt": "Why use AdamW instead of adding an L2 penalty to the loss when training with Adam?",
+      "options": ["AdamW is faster", "Adam divides the L2 gradient by each coordinate's RMS, weakening it unevenly; AdamW decays every weight directly at the same rate", "Adam ignores L2 penalties"],
+      "answer": 1,
+      "concepts": ["momentum-adaptive"],
+      "explain": "Decoupled decay, w ← w − ηλw, applies outside the adaptive scaling."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-newton-uphill-b",
+      "prompt": "At the current point the Hessian has eigenvalues 5 and −1. What should a robust Newton implementation do before stepping?",
+      "options": ["Nothing: Newton always descends", "Check that gᵀd < 0; if the Newton direction points uphill, fall back to −g (or add a multiple of I to H), then line-search", "Halve the step every time"],
+      "answer": 1,
+      "concepts": ["newton-methods"],
+      "critical": true,
+      "explain": "With an indefinite Hessian the Newton direction can be an ascent direction heading for a saddle. A descent check plus a line search keeps every step downhill."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-newton-step-b",
+      "prompt": "One Newton step on f(x) = x⁴/4 − x from x = 2. Where does it land?",
+      "answer": 1.4167,
+      "tolerance": 0.005,
+      "concepts": ["newton-methods"],
+      "explain": "f′(2) = 2³ − 1 = 7 and f″(2) = 3·2² = 12, so x ← 2 − 7/12 ≈ 1.417. (The minimum is at x = 1.)"
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-equal-marginal-b",
+      "prompt": "What condition does the minimum-power split of a cooling load among chillers satisfy?",
+      "options": ["Equal loads on every chiller", "Equal marginal power, P′ᵢ(Qᵢ) = λ, for every chiller not at a limit", "The most efficient chiller at full load first"],
+      "answer": 1,
+      "concepts": ["constrained-optimization"],
+      "critical": true,
+      "explain": "If two marginal powers differed, shifting load from the higher to the lower would cut the total: that's the Lagrange condition."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-dispatch-b",
+      "prompt": "Two chillers have marginal powers 0.10 + 0.00004·Q₁ and 0.06 + 0.00004·Q₂ (kW per kW, Q in kW) and share 4,000 kW, with neither at a limit. How much load does chiller 2 take, in kW?",
+      "answer": 2500,
+      "tolerance": 0.01,
+      "unit": "kW",
+      "concepts": ["constrained-optimization"],
+      "explain": "Equal marginal power: 0.10 + 0.00004·Q₁ = 0.06 + 0.00004·Q₂ gives Q₂ − Q₁ = 1,000, and Q₁ + Q₂ = 4,000, so Q₂ = 2,500 kW (λ = 0.16)."
+    },
+    {
+      "kind": "numeric",
+      "id": "cp3-simc-b",
+      "prompt": "A step test gives K = 5 °C per unit, τ = 200 s and θ = 25 s. With SIMC and τc = θ, what is Kp?",
+      "answer": 0.8,
+      "tolerance": 0.01,
+      "concepts": ["feedback-control"],
+      "explain": "Kp = τ/(K(τc + θ)) = 200/(5 × 50) = 0.8, with Ti = min(200, 4 × 50) = 200 s."
+    },
+    {
+      "kind": "choice",
+      "id": "cp3-tower-windup-b",
+      "prompt": "A cooling-tower fan's PI loop spends a hot afternoon at 100% speed. In the evening the condenser water overcools for half an hour before the fan slows down. What's the likely cause?",
+      "options": ["A failed temperature sensor", "Integrator windup: the integral grew while the fan was saturated and has to unwind; add anti-windup", "The tower fill is fouled"],
+      "answer": 1,
+      "concepts": ["feedback-control"],
+      "transfer": true,
+      "explain": "The same mechanism as the CRAH valve: a saturated actuator plus a still-integrating controller. Conditional integration or back-calculation fixes it."
+    },
+    {
+      "kind": "explain",
+      "id": "cp3-explain-kkt-b",
+      "prompt": "Using the chiller dispatch at 7,000 kW (chiller 3 at its 2,800 kW limit), explain the KKT conditions and what each multiplier tells the plant's operators.",
+      "concepts": ["constrained-optimization"],
+      "rubric": ["Stationarity: each chiller's marginal power plus its limit multipliers balances λ; interior chillers have P′ᵢ = λ (0.204 here)", "Feasibility and dual feasibility: loads sum to 7,000 kW within limits, and limit multipliers are non-negative", "Complementary slackness: only binding limits have nonzero multipliers; chiller 3's capacity multiplier is λ − P′₃ = 0.204 − 0.172 = 0.032", "Interpretation: λ is the marginal plant power per kW of cooling, and 0.032 is the value of extra capacity on chiller 3"],
+      "explain": "KKT conditions are a certificate of optimality, and their multipliers are prices operators can use."
+    },
+    {
+      "kind": "exercise",
+      "id": "calculus-optimization/bounded-least-squares"
+    }
+  ]
+}

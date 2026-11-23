@@ -449,5 +449,108 @@
     "front": "Marginal power of $P(Q) = a + bQ + cQ^2$?",
     "back": "$P'(Q) = b + 2cQ$ (not b + cQ).",
     "concepts": ["constrained-optimization"]
+  },
+  {
+    "id": "pi-law",
+    "type": "equation",
+    "front": "The discrete PI control law.",
+    "back": "$u_k = u_0 + K_p e_k + K_i s_k$, with the integral $s_{k+1} = s_k + T_s e_k$ and $K_i = K_p/T_i$.",
+    "concepts": ["feedback-control"],
+    "critical": true
+  },
+  {
+    "id": "integral-removes-offset",
+    "type": "concept",
+    "front": "Why does integral action remove steady-state error?",
+    "back": "A proportional term needs a nonzero error to hold the actuator off its bias; the integral can hold any position with zero error.",
+    "concepts": ["feedback-control"]
+  },
+  {
+    "id": "closed-loop-iteration",
+    "type": "concept",
+    "front": "How do you analyse a sampled control loop's stability?",
+    "back": "Near the operating point it's a linear iteration $z_{k+1} = Mz_k$: stable exactly when every eigenvalue of M has magnitude below 1.",
+    "concepts": ["feedback-control", "eigendecomposition"],
+    "critical": true
+  },
+  {
+    "id": "deadtime-in-state",
+    "type": "concept",
+    "front": "How does dead time enter a sampled loop's state?",
+    "back": "The actuator signals still in transit are states (a shift register), one per sample of delay; they're what destabilizes aggressive tuning.",
+    "concepts": ["feedback-control"]
+  },
+  {
+    "id": "fopdt-step-test",
+    "type": "concept",
+    "front": "What does a step test give you for a first-order-plus-dead-time model?",
+    "back": "Gain K (final change per unit input), dead time θ (delay before any response) and time constant τ (time to 63% of the change after the delay).",
+    "concepts": ["feedback-control"]
+  },
+  {
+    "id": "simc-tuning",
+    "type": "equation",
+    "front": "Skogestad's SIMC PI tuning rules.",
+    "back": "$K_p = \\tau/(K(\\tau_c + \\theta))$, $T_i = \\min(\\tau, 4(\\tau_c + \\theta))$; choose $\\tau_c = \\theta$ for a fast, robust loop.",
+    "concepts": ["feedback-control"],
+    "critical": true
+  },
+  {
+    "id": "integrator-windup",
+    "type": "gotcha",
+    "front": "What is integrator windup, and the fix?",
+    "back": "While the actuator is saturated the integral keeps growing, then must unwind, causing a long overshoot. Anti-windup: stop integrating into saturation, or back-calculate.",
+    "concepts": ["feedback-control"],
+    "critical": true
+  },
+  {
+    "id": "controller-action",
+    "type": "gotcha",
+    "front": "Error sign for a chilled-water (cooling) valve controller?",
+    "back": "e = measurement − setpoint: open the valve when the air is too warm (the reverse of a heating loop).",
+    "concepts": ["feedback-control"]
+  },
+  {
+    "id": "z-plane-s-plane",
+    "type": "bridge",
+    "front": "How do s-plane and z-plane stability relate?",
+    "back": "$z = e^{sT}$ maps the left half-plane inside the unit circle; a z-plane pole's angle is the oscillation frequency times the sample time.",
+    "concepts": ["feedback-control"]
+  },
+  {
+    "id": "controller-gain-limit",
+    "type": "concept",
+    "front": "What limits how aggressive a PI controller can be?",
+    "back": "Dead time: corrections take effect only after the delay, so high gains overcorrect. Like gradient descent's 2/L step limit, the plant's dynamics cap the gain.",
+    "concepts": ["feedback-control"]
+  },
+  {
+    "id": "ai-optimization-checks",
+    "type": "concept",
+    "front": "Checks to demand with AI-written optimization code.",
+    "back": "Gradient check; known-answer test (quadratic → A⁻¹b at the predicted rate); log-scale convergence plus a second method; learning-rate sweeps; KKT for constrained solutions.",
+    "concepts": ["gradient-descent"],
+    "critical": true
+  },
+  {
+    "id": "ai-loss-scaling",
+    "type": "gotcha",
+    "front": "A gradient derived for the summed loss, used with the mean loss: what goes wrong?",
+    "back": "Every step is n times too large (or too small the other way round). A gradient check against the actual loss catches it.",
+    "concepts": ["gradient-descent"]
+  },
+  {
+    "id": "ai-converged-claim",
+    "type": "gotcha",
+    "front": "\"The optimizer converged\": what evidence do you need?",
+    "back": "A small gradient norm, a log-scale loss curve and agreement with an independent method or known answer. A stalled loss isn't convergence.",
+    "concepts": ["gradient-descent"]
+  },
+  {
+    "id": "ai-controller-deploy",
+    "type": "concept",
+    "front": "What must an AI-proposed controller change pass before reaching live equipment?",
+    "back": "Simulation with saturation, dead time and disturbances; a stability-margin check (closed-loop eigenvalues well inside the unit circle); a reviewed change with rollback.",
+    "concepts": ["feedback-control"]
   }
 ]

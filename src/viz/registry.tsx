@@ -12,4 +12,5 @@ export const vizRegistry: Record<string, LazyExoticComponent<ComponentType<AnyPr
   ProjectionViz: lazy(() => import("./ProjectionViz")),
   FieldModes: lazy(() => import("./FieldModes")),
   OptimizerRace: lazy(() => import("./OptimizerRace")),
+  PILoop: lazy(() => import("./PILoop")),
 };
