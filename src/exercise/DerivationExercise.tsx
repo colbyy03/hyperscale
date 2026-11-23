@@ -24,10 +24,12 @@ function shapeLabel(shape: number[]): string {
   return shape.length === 0 ? "scalar" : shape.length === 1 ? `vector (${shape[0]})` : `${shape.join("×")} matrix`;
 }
 
+const KIND_LABEL: Record<string, string> = { symmetric: "symmetric ", spd: "positive definite ", positive: "positive ", unit: "unit ", simplex: "probability " };
+
 /** Python that grades the responses and prints one JSON line. */
 export function derivationScript(ex: ExerciseIndexEntry, responses: string[]): string {
   const d = ex.derivation!;
-  const steps = d.steps.map((s) => ({ answer: s.answer }));
+  const steps = d.steps.map((s) => ({ answer: s.answer, name: s.name ?? null }));
   return `import json\nfrom hsgrade.derive import check\nprint(json.dumps(check(json.loads(${JSON.stringify(JSON.stringify(d.variables))}), json.loads(${JSON.stringify(JSON.stringify(steps))}), json.loads(${JSON.stringify(JSON.stringify(responses))}))))`;
 }
 
@@ -92,7 +94,7 @@ export function DerivationExercise({ ex, mode, onResult }: { ex: ExerciseIndexEn
       <div className="mb-4 flex flex-wrap gap-1.5 text-xs">
         {Object.entries(d.variables).map(([name, v]) => (
           <span key={name} className="rounded-md border border-line bg-surface px-2 py-0.5 font-mono">
-            {name} <span className="text-faint">· {v.kind !== "general" ? `${v.kind} ` : ""}{shapeLabel(v.shape)}</span>
+            {name} <span className="text-faint">· {KIND_LABEL[v.kind] ?? ""}{shapeLabel(v.shape)}</span>
           </span>
         ))}
       </div>
@@ -106,6 +108,11 @@ export function DerivationExercise({ ex, mode, onResult }: { ex: ExerciseIndexEn
                 <span className="text-faint tabular-nums">{i + 1}.</span>
                 <div>
                   <InlineText text={step.prompt} />
+                  {step.name && (
+                    <span className="ml-1.5 inline-block rounded-md border border-line bg-surface px-1.5 py-0.5 align-middle font-mono text-xs text-faint" title={`Later steps can use ${step.name}`}>
+                      → {step.name}
+                    </span>
+                  )}
                 </div>
               </div>
               <input
@@ -152,7 +159,10 @@ export function DerivationExercise({ ex, mode, onResult }: { ex: ExerciseIndexEn
           {status.phase === "starting" || status.phase === "busy" ? status.message : status.phase === "ready" ? "Python ready" : ""}
         </span>
       </div>
-      <p className="mt-2 text-xs text-faint">Write NumPy: <code>@</code> multiplies matrices, <code>.T</code> transposes, <code>**</code> is a power. Helpers: <code>inv</code>, <code>trace</code>, <code>outer</code>, <code>eye</code>, <code>exp</code>, <code>log</code>, <code>sqrt</code>.</p>
+      <p className="mt-2 text-xs text-faint">
+        Write NumPy: <code>@</code> multiplies matrices, <code>.T</code> transposes, <code>**</code> is a power. Helpers: <code>inv</code>, <code>trace</code>, <code>outer</code>, <code>diag</code>, <code>eye</code>, <code>exp</code>, <code>log</code>, <code>sqrt</code>, <code>tanh</code>.
+        {d.steps.some((s) => s.name) && " A step marked → name can be used by name in later steps."}
+      </p>
       {error && <p className="mt-2 text-sm text-danger">{error}</p>}
 
       {allowHelp && hintTier > 0 && (

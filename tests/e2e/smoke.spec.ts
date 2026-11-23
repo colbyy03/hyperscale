@@ -25,7 +25,7 @@ test("math and explainers render in the data hall lesson", async ({ page }) => {
 });
 
 test("deep links, sources and settings load", async ({ page }) => {
-  await page.goto("/learn/calculus-optimization");
+  await page.goto("/learn/probability-statistics");
   await expect(page.getByText("This module hasn't been authored yet")).toBeVisible();
   await page.goto("/sources");
   await expect(page.getByText(/verified against Crossref/)).toBeVisible();
@@ -37,7 +37,7 @@ test("deep links, sources and settings load", async ({ page }) => {
 test("no horizontal overflow on any screen", async ({ page }) => {
   // Look ahead into locked modules so their lessons (and explainers) are measured, not the lock screen.
   await page.addInitScript(() => {
-    for (const m of ["python-mle", "linear-algebra"]) sessionStorage.setItem(`hs-peek:${m}`, "1");
+    for (const m of ["python-mle", "linear-algebra", "calculus-optimization"]) sessionStorage.setItem(`hs-peek:${m}`, "1");
   });
   const explainer: Record<string, string> = {
     "/learn/linear-algebra/vectors": "viz-projection",
@@ -45,7 +45,7 @@ test("no horizontal overflow on any screen", async ({ page }) => {
     "/learn/linear-algebra/svd": "svd-steps",
     "/learn/linear-algebra/pca-pod": "viz-fieldmodes",
   };
-  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", ...Object.keys(explainer), "/learn/linear-algebra/matrix-calculus", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
+  for (const path of ["/", "/learn", "/learn/induction", "/learn/induction/data-hall", "/learn/induction/checkpoint", "/learn/linear-algebra", ...Object.keys(explainer), "/learn/linear-algebra/matrix-calculus", "/learn/calculus-optimization/jacobians-hessians", "/learn/calculus-optimization/autodiff", "/practice", "/review", "/review/exit", "/progress", "/facility", "/projects", "/sources", "/settings"]) {
     await page.goto(path);
     await page.locator("main h1").first().waitFor();
     if (explainer[path]) await page.getByTestId(explainer[path]).waitFor();

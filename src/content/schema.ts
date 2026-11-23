@@ -76,7 +76,7 @@ export const exerciseSchema = z.object({
         z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/),
         z.object({
           shape: z.array(z.number().int().positive()).default([]),
-          kind: z.enum(["general", "symmetric", "spd", "positive", "unit"]).default("general"),
+          kind: z.enum(["general", "symmetric", "spd", "positive", "unit", "simplex"]).default("general"),
         }),
       ),
       steps: z
@@ -84,6 +84,8 @@ export const exerciseSchema = z.object({
           z.object({
             prompt: z.string().min(3),
             answer: z.string().min(1),
+            /** Later steps may use this name for this step's (reference) value. */
+            name: z.string().regex(/^[A-Za-z_][A-Za-z0-9_]*$/).optional(),
             hint: z.string().optional(),
             /** Known-wrong answers the checker must reject (verified in CI). */
             wrong: z.array(z.string()).default([]),

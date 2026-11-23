@@ -217,6 +217,14 @@ export function buildContentIndex(root: string): BuildResult {
         }
       }
       if (e.data.type === "derivation" && !e.data.derivation) errors.push(`${erel}: a derivation exercise needs a "derivation" block with variables and steps`);
+      if (e.data.derivation) {
+        const taken = new Set(Object.keys(e.data.derivation.variables));
+        for (const st of e.data.derivation.steps) {
+          if (!st.name) continue;
+          if (taken.has(st.name)) errors.push(`${erel}: step name "${st.name}" is already a variable or an earlier step's name`);
+          taken.add(st.name);
+        }
+      }
       if (e.data.type === "parsons") {
         if (!e.data.parsons) errors.push(`${erel}: a Parsons exercise needs a "parsons" block with its lines`);
         else {

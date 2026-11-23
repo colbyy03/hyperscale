@@ -41,3 +41,20 @@ def test_check_grades_every_step():
     steps = [{"answer": "X @ w - y"}, {"answer": "X.T @ (X @ w - y)"}]
     out = check(VARS, steps, ["X @ w - y", "nonsense +"])
     assert [r["ok"] for r in out] == [True, False]
+
+
+def test_simplex_kind_and_named_steps():
+    """A simplex variable sums to 1, so softmax(z) − y is the cross-entropy gradient; named steps carry forward."""
+    v = {"z": {"shape": [4]}, "y": {"shape": [4], "kind": "simplex"}}
+    steps = [
+        {"answer": "exp(z) / sum(exp(z))", "name": "p"},
+        {"answer": "-(y @ z) + log(sum(exp(z)))"},
+        {"answer": "p - y"},
+        {"answer": "diag(p) - outer(p, p)"},
+    ]
+    out = check(v, steps, ["exp(z) / sum(exp(z))", "-(y @ log(p))", "exp(z) / sum(exp(z)) - y", "np.diag(p) - np.outer(p, p)"])
+    assert all(r["ok"] for r in out), out
+    wrong = check(v, steps, ["z / sum(z)", "-(y @ z)", "y - p", "diag(p)"])
+    assert not any(r["ok"] for r in wrong)
+    assert "negative" in wrong[2]["message"]
+    assert "Use the variables" in check(v, steps, ["", "", "q - y", ""])[2]["message"]

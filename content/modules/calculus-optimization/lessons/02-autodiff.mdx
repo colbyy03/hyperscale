@@ -1,0 +1,84 @@
+---
+id: calculus-optimization/autodiff
+title: The chain rule as a computational graph
+minutes: 35
+concepts: [automatic-differentiation, derivatives-chain-rule]
+sources: [baydin2018-autodiff, goodfellow2016-deep-learning, nocedal2006-numerical-optimization]
+cards: [computational-graph, forward-mode-jvp, reverse-mode-vjp, cheap-gradient, mode-choice, reverse-mode-memory, product-rule-tangent, reflected-operators, tanh-derivative-output, autodiff-pitfalls]
+---
+
+<Situation from="Dev, controls engineer">
+We're about to train a model whose loss includes a physics term, the coil's energy balance, and someone wants to write the gradient by hand. Every framework says it computes gradients "automatically". Before we decide, I want to know what it actually does, what it costs for a model with millions of weights, and where it can go wrong.
+</Situation>
+
+<Predict
+  id="gradient-cost"
+  question="A loss depends on 10 million weights. Roughly what does reverse-mode automatic differentiation cost to compute the full gradient?"
+  options={["About 10 million evaluations of the loss, one per weight", "A small constant multiple of one evaluation of the loss", "Nothing extra: the gradient is a by-product of the loss"]}
+  answer={1}
+  explain="One forward pass to compute the loss and record the operations, then one backward pass that applies the chain rule in reverse order: a small constant multiple of the forward cost, whatever the number of weights. That fact is what makes training models with billions of parameters possible. Finite differences would need two evaluations per weight."
+/>
+
+## Programs are graphs of simple operations
+
+Any loss you can compute is built from primitive operations (add, multiply, tanh, sum), and each primitive has a simple local derivative. Write the computation as a graph, one node per intermediate value, and the chain rule says the derivative of the output with respect to any input is a product of local derivatives along the paths between them.
+
+Here is a one-neuron example, $L = (\tanh(wx + b) - y)^2$ with $x = 2$, $w = 0.5$, $b = -0.2$ and $y = 0.5$, evaluated node by node:
+
+| Node | Forward value | Local derivative | Reverse adjoint ∂L/∂node |
+|---|---|---|---|
+| $u = wx$ | 1.0 | ∂u/∂w = x = 2, ∂u/∂x = w = 0.5 | 0.1834 |
+| $v = u + b$ | 0.8 | ∂v/∂u = 1, ∂v/∂b = 1 | 0.1834 |
+| $a = \tanh v$ | 0.6640 | ∂a/∂v = 1 − a² = 0.5591 | 0.3281 |
+| $e = a - y$ | 0.1640 | ∂e/∂a = 1 | 0.3281 |
+| $L = e^2$ | 0.02691 | ∂L/∂e = 2e = 0.3281 | 1 |
+
+Reading the last column bottom to top gives the gradient: ∂L/∂b = 0.1834, ∂L/∂w = 0.1834 × 2 = 0.3668, ∂L/∂x = 0.1834 × 0.5 = 0.0917. A central difference agrees with ∂L/∂w = 0.3668 to six digits.
+
+## Forward mode: carry the derivative along
+
+**Forward mode** pushes derivatives in the same direction as the values. Give every quantity a tangent, its derivative with respect to one chosen input, and update the tangents with each operation's local rule. Seed $\dot w = 1$, and the tangents in the example run $\dot u = 2$, $\dot v = 2$, $\dot a = 1.1181$, $\dot e = 1.1181$, $\dot L = 0.3668$: the same ∂L/∂w, computed alongside the loss.
+
+One forward pass gives the derivative along one input direction $d$, a **Jacobian-vector product** $Jd$. To get the full gradient of a scalar loss with $n$ inputs, you need $n$ passes. That's ideal for a few inputs and many outputs, and hopeless for a model with millions of weights.
+
+<CodeExercise id="calculus-optimization/dual-numbers" />
+
+## Reverse mode: run the chain rule backwards
+
+**Reverse mode** first runs the computation forwards, recording every operation and intermediate value (the tape). Then it walks the graph backwards from the loss, carrying **adjoints**, $\bar v = \partial L / \partial v$, and applying each node's local derivative. When a value feeds several later nodes, its adjoint is the sum of their contributions. That's the last column of the table.
+
+One backward pass gives the derivative of one output with respect to *every* input, a **vector-Jacobian product** $\bar y^\top J$. For a scalar loss, that's the whole gradient for a small constant multiple of the forward cost, independent of the number of weights. The price is memory: the backward pass needs the intermediates from the forward pass, which is why training a large network uses far more memory than running it, and why frameworks offer checkpointing (recomputing some intermediates instead of storing them).
+
+In matrix terms, both modes multiply the same chain of Jacobians, $J = J_k \cdots J_2 J_1$. Forward mode multiplies from the right, starting with a vector of inputs. Reverse mode multiplies from the left, starting with a row vector at the output. Neither ever forms the big intermediate Jacobians.
+
+So the choice is about shapes. Few inputs and many outputs (sensitivities of a whole simulated temperature field to three parameters): forward mode, or `jax.jacfwd`. Many inputs and one output (every ML loss): reverse mode, `jax.grad` or PyTorch's `backward()`.
+
+<CodeExercise id="calculus-optimization/backprop-by-hand" />
+
+<Bridge>
+Engineering design optimization discovered reverse mode as the **adjoint method**. To get the sensitivity of a single quantity, such as the drag on a wing or the peak temperature on a heat sink, with respect to thousands of shape parameters, you solve one additional "adjoint" problem backwards through the governing equations instead of perturbing each parameter in turn. The cost is about one extra simulation instead of thousands: one output, many inputs, exactly the case reverse mode wins.
+</Bridge>
+
+## Where automatic differentiation goes wrong
+
+Autodiff differentiates exactly the program you wrote, which isn't always the function you meant:
+
+- **Kinks.** `relu`, `abs` and `max` have no derivative at their corners; frameworks return one of the one-sided values, usually silently.
+- **Unstable compositions.** `log(softmax(z))` written in two steps underflows to `log(0)`; the fused `log_softmax` doesn't. `sqrt` and `norm` have infinite derivatives at zero, so the gradient of `norm(x)` at `x = 0` is NaN.
+- **Flat pieces.** Rounding, `argmax`, thresholds and integer casts have zero gradient almost everywhere, so a loss that depends only on them can't be trained by gradient descent.
+- **Control flow.** An `if` on a value is fine, because autodiff differentiates the branch that ran, but the result isn't the derivative across the switching point.
+- **Mutation.** Changing an array in place after it was recorded can corrupt the backward pass; frameworks either forbid it or copy.
+
+For Dev's question, the answer is: let the framework differentiate the physics term, write that term with stable operations, and check the result against finite differences once, the same way you'd check a hand-derived gradient.
+
+<Craft title="Autodiff habits worth keeping">
+- Write losses with the framework's stable building blocks (`logsumexp`, `log_softmax`, fused cross-entropy) instead of composing them yourself.
+- Check a new model's gradients against central differences at least once, on a small instance in float64.
+- Guard `sqrt`, `log`, division and norms near zero, where gradients become infinite or NaN.
+- Use forward mode (`jvp`, `jacfwd`) for few inputs and many outputs; reverse mode (`vjp`, `grad`, `jacrev`) for many inputs and few outputs.
+- Module 11 builds a reverse-mode engine from scratch, so these mechanics will become concrete.
+</Craft>
+
+<Check items={["ad-graph-adjoint", "ad-forward-cost", "ad-reverse-cost", "ad-mode-choice", "ad-memory", "ad-fanout", "ad-pitfall-norm"]} />
+
+Next: why gradient descent is fast on some problems and hopelessly slow on others.

@@ -1,0 +1,22 @@
+{
+  "id": "calculus-optimization",
+  "title": "Calculus and continuous optimization",
+  "summary": "The calculus and optimization behind every model fit and every controller: Jacobians and Hessians, automatic differentiation, convexity and conditioning, gradient descent and its family, Newton and quasi-Newton methods, constrained optimization, and feedback control seen as an iteration.",
+  "objectives": [
+    "Derive the Jacobians and Hessians of common ML functions and check them numerically",
+    "Explain forward- and reverse-mode automatic differentiation and their costs, and implement both on a small scale",
+    "Predict how step size and conditioning govern the convergence of gradient descent, and fix slow convergence by preconditioning",
+    "Implement momentum and Adam from scratch and choose an optimizer for a problem",
+    "Use Newton, Gauss-Newton and quasi-Newton methods with a line search, and know when second-order methods pay",
+    "Solve constrained problems with Lagrange multipliers, KKT conditions and projected gradient, and read multipliers as shadow prices",
+    "Analyse a discrete PI control loop as a linear iteration: stability from eigenvalues, tuning and anti-windup"
+  ],
+  "concepts": ["derivatives-chain-rule", "jacobians-hessians", "automatic-differentiation", "convexity", "gradient-descent", "step-size-conditioning", "stochastic-gradients", "momentum-adaptive", "newton-methods", "constrained-optimization", "feedback-control"],
+  "facilityUnlock": "energy-desk",
+  "incidents": ["oscillating-crah-valve"],
+  "sources": ["nocedal2006-numerical-optimization", "boyd2004-convex-optimization", "bottou2018-optimization", "baydin2018-autodiff", "goodfellow2016-deep-learning"],
+  "build": {
+    "title": "Your first controller",
+    "summary": "A supervisory controller for the simulator: a PI loop that resets the supply-air setpoint from the hottest rack inlet, chilled-water reset and economizer logic, scored against fixed setpoints and your own manual tuning, plus a chiller power curve fitted by nonlinear least squares."
+  }
+}

@@ -88,7 +88,7 @@ async function main() {
       // Every reference answer passes; every known-wrong answer fails.
       const d = ex.derivation!;
       py.globals.set("_v", JSON.stringify(d.variables));
-      py.globals.set("_s", JSON.stringify(d.steps.map((st) => ({ answer: st.answer }))));
+      py.globals.set("_s", JSON.stringify(d.steps.map((st) => ({ answer: st.answer, name: st.name ?? null }))));
       const run = (responses: string[]) => {
         py.globals.set("_r", JSON.stringify(responses));
         return JSON.parse(py.runPython("import json\nfrom hsgrade.derive import check\njson.dumps(check(json.loads(_v), json.loads(_s), json.loads(_r)))") as string) as Array<{ ok: boolean; message: string }>;

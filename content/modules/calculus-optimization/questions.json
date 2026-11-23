@@ -1,0 +1,141 @@
+[
+  {
+    "kind": "choice",
+    "id": "jh-shape",
+    "prompt": "A model maps 3 parameters θ to 200 residuals r(θ), one per meter reading. What shape is the Jacobian of r with respect to θ?",
+    "options": ["3 × 200", "200 × 3", "200 × 200"],
+    "answer": 1,
+    "concepts": ["jacobians-hessians"],
+    "critical": true,
+    "explain": "One row per output (residual) and one column per input (parameter): 200 × 3. That tall matrix is what a least-squares solver asks you for."
+  },
+  {
+    "kind": "choice",
+    "id": "jh-row-meaning",
+    "prompt": "Row i of the Jacobian of a residual vector r(θ) is…",
+    "options": ["the gradient of residual i with respect to all the parameters", "how every residual responds to parameter i", "the Hessian of residual i"],
+    "answer": 0,
+    "concepts": ["jacobians-hessians"],
+    "explain": "Rows are outputs, so row i holds ∂rᵢ/∂θⱼ for every j: the gradient of residual i. Column j is how every residual responds to parameter j."
+  },
+  {
+    "kind": "choice",
+    "id": "jh-chain-shape",
+    "prompt": "g maps ℝ¹⁰ to ℝ⁴ and f maps ℝ⁴ to ℝ². What is the Jacobian of h(x) = f(g(x)), and its shape?",
+    "options": ["J_g J_f, which is 10 × 2", "J_f J_g, which is 2 × 10", "J_f J_g, which is 10 × 2"],
+    "answer": 1,
+    "concepts": ["jacobians-hessians", "derivatives-chain-rule"],
+    "explain": "The chain rule multiplies Jacobians in the order the functions are composed, outermost first: J_f (2 × 4) times J_g (4 × 10) is 2 × 10, one row per output of h."
+  },
+  {
+    "kind": "numeric",
+    "id": "jh-softmax-grad",
+    "prompt": "A classifier's softmax probabilities are p = (0.7, 0.2, 0.1) and the true class is the first. What is the first component of the cross-entropy gradient with respect to the logits?",
+    "answer": -0.3,
+    "tolerance": 0.01,
+    "concepts": ["jacobians-hessians"],
+    "critical": true,
+    "explain": "The gradient is p − y = (0.7 − 1, 0.2, 0.1) = (−0.3, 0.2, 0.1). Gradient descent raises the true class's logit and lowers the others."
+  },
+  {
+    "kind": "choice",
+    "id": "jh-saddle",
+    "prompt": "At a point where the gradient is zero, the Hessian's eigenvalues are 4, 1 and −0.5. What kind of point is it?",
+    "options": ["A local minimum", "A saddle point", "A local maximum"],
+    "answer": 1,
+    "concepts": ["jacobians-hessians", "quadratic-forms"],
+    "explain": "Mixed signs: the loss curves up along two eigenvector directions and down along the third, so moving along that third direction lowers the loss."
+  },
+  {
+    "kind": "choice",
+    "id": "jh-gauss-newton",
+    "prompt": "Calibrating a three-parameter chiller model, the Gauss–Newton matrix JᵀJ has eigenvalues 10⁶, 10³ and 10⁻⁴. What does the smallest tell you?",
+    "options": ["The model is wrong", "One combination of parameters barely changes the fit, so the data barely determine it", "The fit has converged"],
+    "answer": 1,
+    "concepts": ["jacobians-hessians", "conditioning"],
+    "transfer": true,
+    "explain": "JᵀJ approximates the curvature of the squared error. A near-zero eigenvalue is a nearly flat direction: moving the parameters along its eigenvector changes the residuals very little, so that combination is poorly determined (κ = 10¹⁰ here)."
+  },
+  {
+    "kind": "choice",
+    "id": "jh-hvp",
+    "prompt": "How many gradient evaluations does a central-difference Hessian-vector product Hv take for a model with a million parameters?",
+    "options": ["Two", "Two million", "One million"],
+    "answer": 0,
+    "concepts": ["jacobians-hessians"],
+    "explain": "Hv ≈ (∇f(x + εv) − ∇f(x − εv))/2ε needs two gradients, whatever the dimension. Forming H itself would take about a million gradients and 10¹² numbers of storage."
+  },
+  {
+    "kind": "explain",
+    "id": "jh-explain-wrong-jacobian",
+    "prompt": "Explain to Noor why the solver reported success with her hand-derived Jacobian, and how she should protect against it.",
+    "concepts": ["jacobians-hessians"],
+    "rubric": ["The solver uses the supplied Jacobian to choose its steps and has no independent check that it's correct", "With a wrong Jacobian the steps can stop making progress, and small steps trigger the convergence test (xtol or ftol), so it reports success", "Check the Jacobian with central differences at a random point (relative error around 10⁻⁸ or less) before use", "Also sanity-check the result: compare the final cost with a finite-difference run, and look for implausible parameters"],
+    "explain": "Convergence tests detect small steps, not correct answers; a numerical check of the derivatives is the defence."
+  },
+  {
+    "kind": "numeric",
+    "id": "ad-graph-adjoint",
+    "prompt": "In the one-neuron example, ∂L/∂v = 0.1834 and u = wx with x = 2 and w = 0.5. What is ∂L/∂x?",
+    "answer": 0.0917,
+    "tolerance": 0.01,
+    "concepts": ["automatic-differentiation"],
+    "explain": "∂L/∂u = ∂L/∂v × 1 = 0.1834, and ∂u/∂x = w = 0.5, so ∂L/∂x = 0.1834 × 0.5 = 0.0917."
+  },
+  {
+    "kind": "choice",
+    "id": "ad-forward-cost",
+    "prompt": "How many forward-mode passes does the full gradient of a scalar loss with n inputs take?",
+    "options": ["One", "n", "n²"],
+    "answer": 1,
+    "concepts": ["automatic-differentiation"],
+    "explain": "Each forward-mode pass carries the derivative along one input direction (a Jacobian-vector product), so a full gradient needs n of them."
+  },
+  {
+    "kind": "choice",
+    "id": "ad-reverse-cost",
+    "prompt": "What does one reverse-mode backward pass give you for a scalar loss?",
+    "options": ["The derivative with respect to one chosen input", "The gradient with respect to every input, for a small constant multiple of the forward cost", "The full Hessian"],
+    "answer": 1,
+    "concepts": ["automatic-differentiation"],
+    "critical": true,
+    "explain": "Reverse mode computes a vector-Jacobian product; for a scalar output that's the whole gradient, at a cost that doesn't grow with the number of inputs."
+  },
+  {
+    "kind": "choice",
+    "id": "ad-mode-choice",
+    "prompt": "You need the sensitivity of a simulated 288-sensor temperature field to 3 calibration parameters. Which mode fits?",
+    "options": ["Forward mode: 3 passes give the full 288 × 3 Jacobian", "Reverse mode: 288 backward passes", "Finite differences are always better"],
+    "answer": 0,
+    "concepts": ["automatic-differentiation"],
+    "transfer": true,
+    "explain": "Forward mode costs one pass per input (3); reverse mode one pass per output (288). Few inputs and many outputs favour forward mode (jacfwd)."
+  },
+  {
+    "kind": "choice",
+    "id": "ad-memory",
+    "prompt": "Why does training a network take much more memory than running it?",
+    "options": ["The optimizer stores every past gradient", "Reverse mode must keep the forward pass's intermediate values for the backward pass", "Gradients are stored in higher precision"],
+    "answer": 1,
+    "concepts": ["automatic-differentiation"],
+    "explain": "The backward pass needs the intermediates (activations) from the forward pass. Checkpointing trades memory for recomputation."
+  },
+  {
+    "kind": "choice",
+    "id": "ad-fanout",
+    "prompt": "A value v feeds two later nodes, which contribute adjoints 0.3 and −0.1. What is v's adjoint?",
+    "options": ["0.3", "0.2", "−0.03"],
+    "answer": 1,
+    "concepts": ["automatic-differentiation", "derivatives-chain-rule"],
+    "explain": "When a value is used more than once, the chain rule sums the contributions of every path: 0.3 + (−0.1) = 0.2."
+  },
+  {
+    "kind": "choice",
+    "id": "ad-pitfall-norm",
+    "prompt": "A loss uses norm(x), and during training x becomes exactly zero. What does autodiff return for its gradient?",
+    "options": ["Zero", "NaN, because the derivative of the square root is infinite at zero", "A random subgradient"],
+    "answer": 1,
+    "concepts": ["automatic-differentiation"],
+    "explain": "d‖x‖ = x/‖x‖ is 0/0 at the origin. Guard it (for example, sqrt(sum(x²) + ε)) or use a squared norm."
+  }
+]

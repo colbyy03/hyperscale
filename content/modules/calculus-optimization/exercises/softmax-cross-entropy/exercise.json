@@ -1,0 +1,57 @@
+{
+  "id": "calculus-optimization/softmax-cross-entropy",
+  "type": "derivation",
+  "language": "none",
+  "title": "The gradient of softmax cross-entropy",
+  "prompt": "Derive the gradient every classifier trains with. `z` holds 4 logits and `y` is a probability vector (a one-hot label, or soft labels) whose entries sum to 1. Write each step as a NumPy expression; a step marked → name can be used by that name later.",
+  "concepts": ["jacobians-hessians", "derivatives-chain-rule"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": true,
+  "hints": [
+    "Write log pᵢ out in full before differentiating anything: the logarithm of a quotient is a difference of logarithms.",
+    "log pᵢ = zᵢ − log Σⱼ exp(zⱼ). Because the yᵢ sum to 1, the loss becomes −y·z + log Σⱼ exp(zⱼ), and the derivative of log Σⱼ exp(zⱼ) with respect to zₖ is exactly pₖ.",
+    "Loss: -(y @ z) + log(sum(exp(z))). Gradient: p - y. Jacobian of the softmax: diag(p) - outer(p, p). The chain rule step multiplies the transposed Jacobian by ∂L/∂p = −y/p."
+  ],
+  "derivation": {
+    "variables": {
+      "z": { "shape": [4] },
+      "y": { "shape": [4], "kind": "simplex" }
+    },
+    "steps": [
+      {
+        "prompt": "The softmax probabilities pᵢ = exp(zᵢ) / Σⱼ exp(zⱼ).",
+        "answer": "exp(z) / sum(exp(z))",
+        "name": "p",
+        "hint": "Exponentiate every logit, then divide by the total.",
+        "wrong": ["z / sum(z)", "exp(z) / sum(z)", "exp(z)"]
+      },
+      {
+        "prompt": "The cross-entropy loss L = −Σᵢ yᵢ log pᵢ. Then rewrite it in terms of `z`, using log pᵢ = zᵢ − log Σⱼ exp(zⱼ) and Σᵢ yᵢ = 1: both forms are accepted, but the second is the one to differentiate.",
+        "answer": "-(y @ z) + log(sum(exp(z)))",
+        "hint": "−Σ yᵢ(zᵢ − log Σ exp(zⱼ)) = −y·z + (Σ yᵢ) log Σ exp(zⱼ), and Σ yᵢ = 1.",
+        "wrong": ["-(y @ z)", "log(sum(exp(z)))", "-(y @ z) - log(sum(exp(z)))"]
+      },
+      {
+        "prompt": "The gradient of L with respect to `z` (a vector of length 4).",
+        "answer": "p - y",
+        "hint": "Differentiate −y·z (that gives −y) and log Σ exp(zⱼ) (that gives the softmax).",
+        "wrong": ["y - p", "p", "p * (1 - p) - y"]
+      },
+      {
+        "prompt": "The Jacobian of the softmax, J with Jᵢⱼ = ∂pᵢ/∂zⱼ (a 4 × 4 matrix).",
+        "answer": "diag(p) - outer(p, p)",
+        "name": "J",
+        "hint": "∂pᵢ/∂zⱼ = pᵢ(δᵢⱼ − pⱼ): pᵢ on the diagonal minus pᵢpⱼ everywhere.",
+        "wrong": ["diag(p)", "outer(p, p) - diag(p)", "diag(p * (1 - p))"]
+      },
+      {
+        "prompt": "Chain rule check: ∂L/∂p = −y/p, and ∂L/∂z = Jᵀ(∂L/∂p). Write that product. It should equal your answer to step 3.",
+        "answer": "J.T @ (-y / p)",
+        "hint": "Transpose the Jacobian: the gradient flows backwards through it.",
+        "wrong": ["J @ (y / p)", "-y / p"]
+      }
+    ]
+  },
+  "sources": ["goodfellow2016-deep-learning", "deisenroth2020-mml"]
+}

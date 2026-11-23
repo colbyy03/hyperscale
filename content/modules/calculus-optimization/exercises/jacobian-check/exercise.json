@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/jacobian-check",
+  "type": "code",
+  "language": "python",
+  "title": "Check a Jacobian before an optimizer trusts it",
+  "prompt": "Optimizers that take a Jacobian trust it completely: hand one a wrong Jacobian and it can report success at the wrong answer. Write a checker.\n\n1. `numerical_jacobian(f, x, h=1e-6)` estimates the Jacobian of a vector function `f` (input shape (n,), output shape (m,)) at `x` by central differences. Return shape (m, n): row i is the gradient of output i, column j is how every output responds to input j. Don't modify `x`.\n2. `check_jacobian(f, jac, x, tol=1e-6)` returns `(ok, rel_error)` comparing `jac(x)` with your estimate, where rel_error = ‖J − J_num‖ / max(‖J‖, ‖J_num‖, 1e-12). If the shapes differ, return `(False, inf)` instead of raising.\n\nA loop over the n inputs is fine.",
+  "concepts": ["jacobians-hessians"],
+  "difficulty": 0.45,
+  "minutes": 12,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["scipy", "jax", "torch"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "Nudging input j up and down changes every output at once. Which part of the Jacobian does one pair of nudges fill in: a row or a column?",
+    "One pair of evaluations, f(x + h eⱼ) and f(x − h eⱼ), gives column j: (f(x + h eⱼ) − f(x − h eⱼ)) / 2h, a vector of length m. Fill an (m, n) array column by column, working on a float copy of x. Compare shapes before subtracting.",
+    "x = np.asarray(x, dtype=float).copy(); m = np.atleast_1d(f(x)).size; J = np.zeros((m, x.size)); for j in range(x.size): old = x[j]; x[j] = old + h; fp = f(x); x[j] = old - h; fm = f(x); x[j] = old; J[:, j] = (fp - fm) / (2 * h). In check_jacobian, return False, np.inf when J.shape != Jn.shape."
+  ],
+  "misconceptions": {
+    "jacobian-layout": "The Jacobian of f: ℝⁿ → ℝᵐ is m × n: one row per output (its gradient), one column per input. A transposed Jacobian has the wrong shape, or, when m = n, silently wrong entries.",
+    "forward-difference-error": "One-sided differences have error proportional to h; central differences are proportional to h²."
+  },
+  "sources": ["nocedal2006-numerical-optimization", "deisenroth2020-mml"]
+}

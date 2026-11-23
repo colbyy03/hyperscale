@@ -1,0 +1,90 @@
+---
+id: calculus-optimization/jacobians-hessians
+title: Jacobians, Hessians and the second-order view
+minutes: 35
+concepts: [jacobians-hessians, derivatives-chain-rule]
+sources: [nocedal2006-numerical-optimization, deisenroth2020-mml, goodfellow2016-deep-learning, sanderson-3b1b-calculus]
+cards: [jacobian-definition, jacobian-layout, chain-rule-jacobians, softmax-ce-gradient, softmax-jacobian, hessian-definition, taylor-second-order, critical-point-classes, gauss-newton-hessian, hvp-finite-difference]
+---
+
+<Situation from="Noor, energy analyst">
+I'm calibrating our chiller model against a month of meter data with scipy. With finite differences it works, slowly. When I passed in my own hand-derived Jacobian it got faster, said "success", and landed on completely different parameters. And the reliability team wants to know how sure we can be of each parameter. I suspect the answers to both are in the derivatives.
+</Situation>
+
+<Predict
+  id="wrong-jacobian"
+  question="You hand scipy's least-squares solver a Jacobian with the sign of one column flipped. What happens?"
+  options={["It raises an error, because the Jacobian doesn't match the function", "It ignores your Jacobian and falls back to finite differences", "It can stop at a wrong answer and still report success"]}
+  answer={2}
+  explain="The solver trusts the Jacobian you give it, so it can head in a wrong direction and stop when its steps get small. In this course's test on a chiller model, scipy.optimize.least_squares reported success, with the message that the xtol condition was satisfied, at parameters whose squared error was 100 times the true minimum. A Jacobian is a promise the optimizer can't check for you."
+/>
+
+## From gradient to Jacobian
+
+Module 2 defined the gradient of a scalar function by what it does: $f(x + d) \approx f(x) + \nabla f \cdot d$. Most functions in ML and engineering return vectors: a model's residuals at every data point, a softmax's probabilities, a robot arm's position. For $f: \mathbb{R}^n \to \mathbb{R}^m$, the **Jacobian** $J$ plays the gradient's role:
+
+$$
+f(x + d) \approx f(x) + J\,d, \qquad J_{ij} = \frac{\partial f_i}{\partial x_j}
+$$
+
+$J$ is $m \times n$: **one row per output, one column per input**. Row $i$ is the gradient of output $i$. Column $j$ says how every output moves when input $j$ moves. Noor's solver needs exactly this: the Jacobian of the residual vector (one residual per meter reading) with respect to the three model parameters, a tall $m \times 3$ matrix.
+
+The chain rule becomes a matrix product. If $h(x) = f(g(x))$, then
+
+$$
+J_h(x) = J_f(g(x))\, J_g(x)
+$$
+
+and the shapes chain like Module 2's composition of maps: $(m \times k)(k \times n)$. Every gradient a framework computes is a long product of such Jacobians. The order in which you multiply them makes an enormous difference to the cost, which is the subject of the next lesson.
+
+The softmax is worth knowing by heart. Its Jacobian is $\partial p_i / \partial z_j = p_i(\delta_{ij} - p_j)$, or $\operatorname{diag}(p) - pp^\top$, and combined with cross-entropy it gives the cleanest gradient in machine learning.
+
+<CodeExercise id="calculus-optimization/softmax-cross-entropy" />
+
+## The Hessian: curvature
+
+The **Hessian** $H$ is the matrix of second derivatives, $H_{ij} = \partial^2 f / \partial x_i \partial x_j$, which is also the Jacobian of the gradient. For smooth functions it's symmetric, and it completes the local picture of $f$ as a quadratic model:
+
+$$
+f(x + d) \approx f(x) + g^\top d + \tfrac{1}{2}\, d^\top H d
+$$
+
+That's Module 2's quadratic form, now describing the shape of a loss near a point. At a critical point, where $g = 0$, the eigenvalues of $H$ classify it: all positive is a minimum, all negative a maximum, mixed signs a **saddle**. In high dimensions saddles are far more common than local minima: it takes every one of thousands of eigenvalues being positive to make a minimum, and mixed signs are the typical case.
+
+For least squares there's a useful approximation. With residuals $r(\theta)$ and their Jacobian $J$, the Hessian of $\tfrac{1}{2}\|r\|^2$ is $J^\top J$ plus terms weighted by the residuals themselves, which are small near a good fit:
+
+$$
+H \approx J^\top J \qquad \text{(the Gauss–Newton approximation)}
+$$
+
+This answers Noor's second question. Directions where $J^\top J$ has small eigenvalues are directions in parameter space where the fit barely changes, so the data barely determine them: the conditioning story from Module 2, seen from the loss. Module 4 turns that curvature into standard errors.
+
+## Checking derivatives numerically
+
+Every hand-derived Jacobian deserves a check before an optimizer trusts it. Central differences estimate it one column at a time: nudge input $j$ by $\pm h$ and divide the change in every output by $2h$. That costs $2n$ evaluations of $f$, which is cheap for checking and too expensive for a model with a million parameters.
+
+Second derivatives can be checked the same way, one level up. A **Hessian-vector product** needs only two gradient evaluations:
+
+$$
+H v \approx \frac{\nabla f(x + \varepsilon v) - \nabla f(x - \varepsilon v)}{2\varepsilon}
+$$
+
+without ever forming $H$. Newton–CG methods and tools that measure the curvature of neural-network losses are built on that trick.
+
+<CodeExercise id="calculus-optimization/jacobian-check" />
+
+<Bridge>
+Nonlinear finite-element analysis lives on Jacobians. The **tangent stiffness matrix** is the Jacobian of the internal force vector with respect to the nodal displacements, and each Newton–Raphson iteration of a nonlinear solve uses it to correct the displacements. When convergence stalls, a wrong tangent is the usual suspect: the same failure as Noor's hand-coded Jacobian, which still "converges", just badly or to the wrong place.
+</Bridge>
+
+<Craft title="Derivative habits worth keeping">
+- Use the m × n convention (rows are outputs), and write shapes next to every factor in a chain-rule product.
+- Check every hand-written Jacobian or gradient with central differences at a random point before passing it to an optimizer.
+- Scale the difference step to the variable: a parameter of size 10⁻⁴ needs a much smaller absolute step than one of size 10⁴.
+- Prefer automatic differentiation (the next lesson) to hand derivation once a model has more than a few parameters, and still spot-check it.
+- When a fit "converges" to implausible parameters, suspect the derivatives before the data.
+</Craft>
+
+<Check items={["jh-shape", "jh-row-meaning", "jh-chain-shape", "jh-softmax-grad", "jh-saddle", "jh-gauss-newton", "jh-hvp"]} />
+
+Next: how frameworks compute these derivatives automatically, and why they run the chain rule backwards.

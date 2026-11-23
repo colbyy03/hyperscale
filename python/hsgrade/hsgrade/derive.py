@@ -2,8 +2,10 @@
 
 A learner writes each step as an expression in NumPy syntax (`X.T @ (X @ w - y)`, `2 * A @ x`).
 Each step is compared with a reference expression at several random draws of the variables,
-which have declared shapes and kinds (general, symmetric, positive definite, positive). Two
-expressions that agree at random points are, with overwhelming probability, the same function.
+which have declared shapes and kinds (general, symmetric, positive definite, positive, unit,
+simplex). Two expressions that agree at random points are, with overwhelming probability, the
+same function. A step can be given a name (`p`, `z`): later steps may then use that name, which
+stands for the step's reference value.
 """
 from __future__ import annotations
 
@@ -25,6 +27,10 @@ SAFE = {
     "outer": np.outer,
     "eye": np.eye,
     "norm": np.linalg.norm,
+    "diag": np.diag,
+    "tanh": np.tanh,
+    "sin": np.sin,
+    "cos": np.cos,
     "pi": math.pi,
 }
 
@@ -44,6 +50,9 @@ def _sample(spec: dict[str, Any], rng: np.random.Generator) -> Any:
     if kind == "unit":
         v = rng.normal(size=shape)
         return v / np.linalg.norm(v)
+    if kind == "simplex":  # positive entries that sum to 1, such as probabilities or soft labels
+        v = rng.uniform(0.2, 1.0, size=shape)
+        return v / v.sum()
     return rng.normal(size=shape)
 
 
@@ -62,8 +71,19 @@ def _syntax_problem(expr: str) -> str | None:
     return None
 
 
-def check_step(answer: str, reference: str, variables: dict[str, dict[str, Any]], trials: int = 4, seed: int = 0) -> dict[str, Any]:
-    """Compare one expression with a reference at `trials` random draws of the variables."""
+def check_step(
+    answer: str,
+    reference: str,
+    variables: dict[str, dict[str, Any]],
+    trials: int = 4,
+    seed: int = 0,
+    defs: list[tuple[str, str]] | tuple = (),
+) -> dict[str, Any]:
+    """Compare one expression with a reference at `trials` random draws of the variables.
+
+    `defs` are (name, reference expression) pairs from earlier named steps; each is evaluated at
+    the same draw and made available under its name.
+    """
     if not answer.strip():
         return {"ok": False, "message": "No answer yet."}
     problem = _syntax_problem(answer)
@@ -72,11 +92,13 @@ def check_step(answer: str, reference: str, variables: dict[str, dict[str, Any]]
     rng = np.random.default_rng(seed)
     for _ in range(trials):
         env = {name: _sample(spec, rng) for name, spec in variables.items()}
+        for name, expr in defs:
+            env[name] = _evaluate(expr, env)
         want = _evaluate(reference, env)
         try:
             got = _evaluate(answer, env)
         except NameError as e:
-            names = ", ".join(sorted(variables))
+            names = ", ".join([*sorted(variables), *(n for n, _ in defs)])
             return {"ok": False, "message": f"{e}. Use the variables {names}, and np or the helpers inv, trace, outer, eye, exp, log, sqrt."}
         except ValueError as e:
             return {"ok": False, "message": f"NumPy couldn't evaluate it: {e}. Check the shapes on both sides of each @ and +."}
@@ -96,5 +118,13 @@ def check_step(answer: str, reference: str, variables: dict[str, dict[str, Any]]
 
 
 def check(variables: dict[str, dict[str, Any]], steps: list[dict[str, Any]], responses: list[str], trials: int = 4, seed: int = 0) -> list[dict[str, Any]]:
-    """Grade every step of a derivation; each result is {"ok": bool, "message": str}."""
-    return [check_step(responses[i] if i < len(responses) else "", s["answer"], variables, trials, seed + i) for i, s in enumerate(steps)]
+    """Grade every step of a derivation; each result is {"ok": bool, "message": str}.
+
+    A step with a "name" makes that name available, as its reference value, to the steps after it.
+    """
+    results, defs = [], []
+    for i, s in enumerate(steps):
+        results.append(check_step(responses[i] if i < len(responses) else "", s["answer"], variables, trials, seed + i, tuple(defs)))
+        if s.get("name"):
+            defs.append((s["name"], s["answer"]))
+    return results

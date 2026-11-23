@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/dual-numbers",
+  "type": "code",
+  "language": "python",
+  "title": "Forward-mode autodiff with dual numbers",
+  "prompt": "Build forward-mode automatic differentiation in about forty lines. A dual number carries a value and a tangent, `Dual(val, dot)`, and every operation updates both by the rules of calculus.\n\n1. Give `Dual` the operators `+`, `-`, `*` and `/` (with a `Dual` or a plain number on either side), unary `-`, and `**` with a constant exponent.\n2. Write `exp`, `sin` and `log` that work on a `Dual` or a plain float.\n3. Write `derivative(f, x)`, which returns f′(x) by evaluating `f` once on `Dual(x, 1.0)`.",
+  "concepts": ["automatic-differentiation", "derivatives-chain-rule"],
+  "difficulty": 0.45,
+  "minutes": 15,
+  "critical": true,
+  "packages": [],
+  "constraints": { "forbidImports": ["sympy", "jax", "torch", "autograd"], "requireVectorized": false, "timeoutMs": 8000 },
+  "hints": [
+    "If x carries its value and its derivative with respect to the input, what must x·y carry? Think of the product rule.",
+    "Each operation applies one rule to the tangents: (u + v)′ = u′ + v′, (uv)′ = u′v + uv′, (u/v)′ = (u′v − uv′)/v², (uⁿ)′ = n uⁿ⁻¹ u′, exp(u)′ = exp(u) u′, sin(u)′ = cos(u) u′, log(u)′ = u′/u. Wrap plain numbers as Dual(c, 0) so one rule covers both cases, and define __radd__, __rsub__, __rmul__ and __rtruediv__ for numbers on the left.",
+    "def _lift(o): return o if isinstance(o, Dual) else Dual(o, 0.0). __mul__: o = _lift(o); return Dual(self.val * o.val, self.dot * o.val + self.val * o.dot). __rsub__: return _lift(o) - self. derivative: return f(Dual(x, 1.0)).dot."
+  ],
+  "misconceptions": {
+    "product-rule-tangent": "The tangent of a product is u′v + uv′ (the product rule), not u′v′.",
+    "reflected-operators": "Python calls __radd__, __rsub__, __rmul__ and __rtruediv__ when a plain number is on the left (3 − x, 2 / x); without them, those expressions raise TypeError."
+  },
+  "sources": ["baydin2018-autodiff", "goodfellow2016-deep-learning"]
+}

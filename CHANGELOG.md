@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## Phase 6a: Module 3 lessons 1 and 2 (2026-11-22)
+
+- **Derivations can name their steps**: a step marked `"name": "p"` lets later steps write `p` (or `J`) instead of repeating its expression, evaluated at its reference value, so a wrong earlier answer doesn't spoil later steps. A new `simplex` variable kind (positive entries summing to 1) covers probabilities and soft labels; `diag`, `tanh`, `sin` and `cos` join the helpers.
+- **Module 3, lesson 1, "Jacobians, Hessians and the second-order view"**: Jacobians as m × n linearizations, the chain rule as Jacobian products, the softmax Jacobian, Hessians and second-order Taylor models, saddles, the Gauss–Newton approximation and what its small eigenvalues mean for calibration, and Hessian-vector products from two gradients. It opens with a measured surprise: scipy's `least_squares` reports success with a sign-flipped Jacobian column, at 100 times the true minimum cost. Exercises: the softmax cross-entropy gradient (a five-step derivation with named steps) and a Jacobian checker graded on layout, accuracy and shape mismatches.
+- **Lesson 2, "The chain rule as a computational graph"**: a one-neuron graph worked forwards and backwards with real numbers, forward mode (dual numbers, Jacobian-vector products) against reverse mode (adjoints, vector-Jacobian products, the cost and memory of the tape), which mode for which shape, the adjoint method as a bridge, and where autodiff goes wrong (kinks, NaN gradients at zero, flat pieces, mutation). Exercises: forward-mode autodiff with dual numbers, and backpropagation by hand through a two-layer model.
+- 9 new concepts, 20 cards, 15 questions; 4 exercises verified with 9 known-wrong variants and 14 rejected derivation answers.
+
 ## Phase 5c: Module 2 complete (2026-11-19)
 
 - **Lesson 8, "How I'd do this with AI tools"**: check the mathematics with mathematics (an invariant for every result in the module), the conventions to state out loud (orientation, `np.cov`'s `rowvar`, `Vt` vs `V`, signs, solvers, relative tolerances), Module 2's tasks done with an agent, a reusable prompt for the build, and a review checklist.

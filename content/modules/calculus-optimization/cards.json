@@ -1,0 +1,148 @@
+[
+  {
+    "id": "jacobian-definition",
+    "type": "concept",
+    "front": "The Jacobian of $f: \\mathbb{R}^n \\to \\mathbb{R}^m$, defined by what it does.",
+    "back": "$f(x + d) \\approx f(x) + Jd$, with $J_{ij} = \\partial f_i / \\partial x_j$: an $m \\times n$ matrix.",
+    "concepts": ["jacobians-hessians"],
+    "critical": true
+  },
+  {
+    "id": "jacobian-layout",
+    "type": "gotcha",
+    "front": "What are the rows and columns of a Jacobian?",
+    "back": "Row i is the gradient of output i; column j is how every output responds to input j. Shape: outputs × inputs.",
+    "concepts": ["jacobians-hessians"]
+  },
+  {
+    "id": "chain-rule-jacobians",
+    "type": "equation",
+    "front": "The chain rule for $h = f \\circ g$, with Jacobians.",
+    "back": "$J_h(x) = J_f(g(x))\\,J_g(x)$, with shapes $(m \\times k)(k \\times n)$.",
+    "concepts": ["jacobians-hessians", "derivatives-chain-rule"],
+    "critical": true
+  },
+  {
+    "id": "softmax-ce-gradient",
+    "type": "equation",
+    "front": "Gradient of softmax cross-entropy with respect to the logits.",
+    "back": "$p - y$, for labels y that sum to 1 (one-hot or soft).",
+    "concepts": ["jacobians-hessians"],
+    "critical": true
+  },
+  {
+    "id": "softmax-jacobian",
+    "type": "equation",
+    "front": "The Jacobian of the softmax.",
+    "back": "$\\operatorname{diag}(p) - pp^\\top$, that is $\\partial p_i/\\partial z_j = p_i(\\delta_{ij} - p_j)$.",
+    "concepts": ["jacobians-hessians"]
+  },
+  {
+    "id": "hessian-definition",
+    "type": "concept",
+    "front": "What is the Hessian?",
+    "back": "The matrix of second derivatives, $H_{ij} = \\partial^2 f/\\partial x_i \\partial x_j$: the Jacobian of the gradient, symmetric for smooth f.",
+    "concepts": ["jacobians-hessians"]
+  },
+  {
+    "id": "taylor-second-order",
+    "type": "equation",
+    "front": "The second-order Taylor model of f near x.",
+    "back": "$f(x + d) \\approx f(x) + g^\\top d + \\tfrac{1}{2} d^\\top H d$.",
+    "concepts": ["jacobians-hessians"],
+    "critical": true
+  },
+  {
+    "id": "critical-point-classes",
+    "type": "concept",
+    "front": "Classify a critical point (zero gradient) by its Hessian.",
+    "back": "All eigenvalues positive: a minimum. All negative: a maximum. Mixed signs: a saddle, the typical case in high dimensions.",
+    "concepts": ["jacobians-hessians", "quadratic-forms"]
+  },
+  {
+    "id": "gauss-newton-hessian",
+    "type": "concept",
+    "front": "The Gauss–Newton approximation for least squares, and what its small eigenvalues mean.",
+    "back": "$H \\approx J^\\top J$, dropping the residual-weighted second-order terms. Small eigenvalues mark parameter combinations the data barely determine.",
+    "concepts": ["jacobians-hessians"]
+  },
+  {
+    "id": "hvp-finite-difference",
+    "type": "equation",
+    "front": "A Hessian-vector product without forming H.",
+    "back": "$Hv \\approx (\\nabla f(x + \\varepsilon v) - \\nabla f(x - \\varepsilon v))/2\\varepsilon$: two gradient evaluations.",
+    "concepts": ["jacobians-hessians"]
+  },
+  {
+    "id": "computational-graph",
+    "type": "concept",
+    "front": "How does automatic differentiation see a program?",
+    "back": "As a graph of primitive operations, each with a simple local derivative; the chain rule multiplies local derivatives along paths.",
+    "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "forward-mode-jvp",
+    "type": "concept",
+    "front": "What does one forward-mode pass compute?",
+    "back": "A Jacobian-vector product Jd: derivatives along one input direction, carried alongside the values. A full gradient takes n passes.",
+    "concepts": ["automatic-differentiation"],
+    "critical": true
+  },
+  {
+    "id": "reverse-mode-vjp",
+    "type": "concept",
+    "front": "What does one reverse-mode pass compute?",
+    "back": "A vector-Jacobian product ȳᵀJ: for a scalar loss, the gradient with respect to every input, from one backward pass over the recorded tape.",
+    "concepts": ["automatic-differentiation"],
+    "critical": true
+  },
+  {
+    "id": "cheap-gradient",
+    "type": "concept",
+    "front": "Cost of a full gradient of a scalar loss by reverse mode?",
+    "back": "A small constant multiple of one forward evaluation, independent of the number of inputs.",
+    "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "mode-choice",
+    "type": "discrimination",
+    "front": "Forward or reverse mode?",
+    "back": "Few inputs, many outputs: forward (jvp, jacfwd). Many inputs, few outputs, such as any ML loss: reverse (vjp, grad, jacrev).",
+    "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "reverse-mode-memory",
+    "type": "concept",
+    "front": "What does reverse mode cost besides compute?",
+    "back": "Memory: the forward pass's intermediates must be stored for the backward pass (checkpointing trades memory for recomputation).",
+    "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "product-rule-tangent",
+    "type": "gotcha",
+    "front": "Tangent of a product of dual numbers u·v?",
+    "back": "u′v + uv′ (the product rule), not u′v′.",
+    "concepts": ["automatic-differentiation", "derivatives-chain-rule"]
+  },
+  {
+    "id": "reflected-operators",
+    "type": "gotcha",
+    "front": "Why does 3 − x fail for a custom number class that defines only __sub__?",
+    "back": "With a plain number on the left, Python calls x.__rsub__(3); define __radd__, __rsub__, __rmul__ and __rtruediv__.",
+    "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "tanh-derivative-output",
+    "type": "gotcha",
+    "front": "Derivative of a = tanh(z), written for backprop.",
+    "back": "1 − a², using the stored output a (not 1 − z²).",
+    "concepts": ["automatic-differentiation"]
+  },
+  {
+    "id": "autodiff-pitfalls",
+    "type": "concept",
+    "front": "Four ways autodiff gives a gradient you didn't want.",
+    "back": "Kinks (relu, abs at 0), unstable compositions (log(softmax), sqrt or norm at 0 → NaN), flat pieces (argmax, rounding: zero gradient), and in-place mutation.",
+    "concepts": ["automatic-differentiation"]
+  }
+]

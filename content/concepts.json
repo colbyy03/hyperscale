@@ -302,7 +302,89 @@
     "id": "gradient-descent",
     "title": "Gradients and gradient descent",
     "module": "calculus-optimization",
-    "prereqs": []
+    "prereqs": [
+      "derivatives-chain-rule"
+    ]
+  },
+  {
+    "id": "jacobians-hessians",
+    "title": "Jacobians, Hessians and second-order Taylor models",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "derivatives-chain-rule",
+      "matrix-calculus"
+    ]
+  },
+  {
+    "id": "automatic-differentiation",
+    "title": "Computational graphs and automatic differentiation",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "derivatives-chain-rule",
+      "jacobians-hessians"
+    ]
+  },
+  {
+    "id": "convexity",
+    "title": "Convexity, smoothness and strong convexity",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "quadratic-forms",
+      "jacobians-hessians"
+    ]
+  },
+  {
+    "id": "step-size-conditioning",
+    "title": "Step sizes, conditioning and convergence rates",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "gradient-descent",
+      "convexity",
+      "eigendecomposition"
+    ]
+  },
+  {
+    "id": "stochastic-gradients",
+    "title": "Stochastic and mini-batch gradients",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "gradient-descent"
+    ]
+  },
+  {
+    "id": "momentum-adaptive",
+    "title": "Momentum, Nesterov and adaptive methods such as Adam",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "gradient-descent",
+      "step-size-conditioning"
+    ]
+  },
+  {
+    "id": "newton-methods",
+    "title": "Newton, Gauss-Newton and quasi-Newton methods with line search",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "jacobians-hessians",
+      "conditioning"
+    ]
+  },
+  {
+    "id": "constrained-optimization",
+    "title": "Lagrange multipliers, KKT conditions and projected gradient",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "gradient-descent",
+      "convexity"
+    ]
+  },
+  {
+    "id": "feedback-control",
+    "title": "Feedback as iteration: discrete PI control, stability and anti-windup",
+    "module": "calculus-optimization",
+    "prereqs": [
+      "eigendecomposition"
+    ]
   },
   {
     "id": "probability-rules",

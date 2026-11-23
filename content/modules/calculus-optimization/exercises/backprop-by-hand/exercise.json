@@ -1,0 +1,23 @@
+{
+  "id": "calculus-optimization/backprop-by-hand",
+  "type": "code",
+  "language": "python",
+  "title": "Backpropagation by hand",
+  "prompt": "Run the chain rule backwards through a small model, the way a framework does. For one input `x` (shape (n,)) and target `y` (shape (m,)):\n\n- z = W1 @ x, then a = tanh(z), then out = W2 @ a\n- L = ½ ‖out − y‖²\n\nWrite `forward_backward(W1, W2, x, y)`, which returns `(L, dW1, dW2)`: the loss and its gradients with respect to `W1` (shape (h, n)) and `W2` (shape (m, h)). Do one forward pass keeping the intermediates, then one backward pass from the loss to the weights. Don't use finite differences.",
+  "concepts": ["automatic-differentiation", "jacobians-hessians"],
+  "difficulty": 0.5,
+  "minutes": 15,
+  "critical": false,
+  "packages": [],
+  "constraints": { "forbidImports": ["jax", "torch", "autograd"], "requireVectorized": true, "timeoutMs": 8000 },
+  "hints": [
+    "Work backwards one node at a time. What is ∂L/∂out? Then, given ∂L/∂out, what are ∂L/∂W2 and ∂L/∂a?",
+    "∂L/∂out = out − y. For out = W2 a, the weight gradient is an outer product, ∂L/∂W2 = outer(∂L/∂out, a), and the signal passed back is ∂L/∂a = W2ᵀ ∂L/∂out. Through tanh, multiply elementwise by its derivative, 1 − a² (written with the output a, not the input z).",
+    "g_out = out - y; dW2 = np.outer(g_out, a); g_a = W2.T @ g_out; g_z = g_a * (1 - a**2); dW1 = np.outer(g_z, x); L = 0.5 * np.sum(g_out**2)."
+  ],
+  "misconceptions": {
+    "tanh-derivative-output": "d tanh(z)/dz = 1 − tanh(z)², which is 1 − a² in terms of the output a. Writing 1 − z² uses the input instead.",
+    "outer-product-order": "The gradient of out = W a with respect to W is outer(∂L/∂out, a), with the shape of W: rows follow the outputs, columns the inputs."
+  },
+  "sources": ["goodfellow2016-deep-learning", "baydin2018-autodiff"]
+}
